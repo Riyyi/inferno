@@ -1,0 +1,11 @@
+* Engine
+
+Game Engine project.
+
+* Build instructions
+
+#+BEGIN_SRC sh
+  $ mkdir build
+  $ cd build
+  $ cmake .. && make
+#+END_SRC
