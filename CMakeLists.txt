@@ -37,12 +37,12 @@ include_directories(
 	"${ENGINE}/vendor/glad/include"
 	"${ENGINE}/vendor/glfw/include"
 	"${ENGINE}/vendor/glm"
-	"${ENGINE}/"
+	"${ENGINE}/src"
 )
 
 # Add source files
 file(GLOB_RECURSE GLAD "${ENGINE}/vendor/glad/*.c")
-file(GLOB_RECURSE ENGINE_SOURCES "${ENGINE}/src/*.cpp")
+file(GLOB_RECURSE ENGINE_SOURCES "${ENGINE}/src/${ENGINE}/*.cpp")
 file(GLOB_RECURSE GAME_SOURCES "${GAME}/src/*.cpp")
 set(SOURCES ${GLAD} ${ENGINE_SOURCES} ${GAME_SOURCES})
 
@@ -57,7 +57,7 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 # Add GLFW target to project
-add_subdirectory(engine/vendor/glfw)
+add_subdirectory(${ENGINE}/vendor/glfw)
 
 add_library(${ENGINE} STATIC ${SOURCES})
 target_link_libraries(${ENGINE} glfw)
