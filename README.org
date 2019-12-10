@@ -31,3 +31,18 @@ Or
   $ cd build
   $ cmake .. && make
 #+END_SRC
+
+* Libraries
+
+# - [[https://github.com/bulletphysics/bullet3][Bullet]]
+# - [[https://github.com/aseprite/freetype2][FreeType2]]
+- [[https://github.com/Dav1dde/glad][glad]]
+- [[https://github.com/glfw/glfw][GLFW]]
+- [[https://github.com/g-truc/glm][GLM]]
+# - [[https://github.com/nothings/stb][stb]]
+# - [[https://github.com/nlohmann/json][JSON]]
+# - [[https://github.com/lua/lua][Lua]]
+
+* References
+
+- [[https://www.youtube.com/playlist?list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT][Game Engine]] by The Cherno
