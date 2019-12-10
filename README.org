@@ -2,6 +2,28 @@
 
 Game Engine project.
 
+* Download
+
+** Clone
+
+#+BEGIN_SRC sh
+  $ git clone https://gitlab.com/riyyi/engine
+  $ cd engine
+  $ git submodule init
+  $ git submodule update
+#+END_SRC
+Or
+#+BEGIN_SRC sh
+  $ git clone --recursive https://gitlab.com/riyyi/engine
+#+END_SRC
+
+** Update
+
+#+BEGIN_SRC sh
+  $ git pull
+  $ git submodule update --recursive
+#+END_SRC
+
 * Build instructions
 
 #+BEGIN_SRC sh
