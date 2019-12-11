@@ -1,9 +1,16 @@
+/*
+ * `m_` for member variables,
+ * `s_` for static variables,
+ * `g_` for global variables.
+ */
+
 #ifndef ENTRYPOINT_H
 #define ENTRYPOINT_H
 
 #include "application.h"
+#include "log.h"
 
-extern Engine::Application *Engine::CreateApplication();
+extern Engine::Application *Engine::createApplication();
 
 int main(int argc, char *argv[])
 {
@@ -11,8 +18,12 @@ int main(int argc, char *argv[])
 	(void)argc;
 	(void)argv;
 
-	auto app = Engine::CreateApplication();
-	app->Run();
+	// Initialize Log
+	Engine::Log::init();
+
+	// Start application
+	auto app = Engine::createApplication();
+	app->run();
 	delete app;
 
 	return 0;

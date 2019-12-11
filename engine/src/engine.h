@@ -3,7 +3,13 @@
 
 // This file is for use by the game
 
+// -----------------------------------------
+
 #include "engine/application.h"
+#include "engine/log.h"
+
+// -----------------------------------------
+
 #include "engine/entrypoint.h"
 
 #endif // ENGINE_H

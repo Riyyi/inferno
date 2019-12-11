@@ -9,11 +9,11 @@ namespace Engine {
 		Application();
 		virtual ~Application();
 
-		void Run();
+		void run();
 	};
 
 	// To be defined in the game
-	Application *CreateApplication();
+	Application *createApplication();
 
 }
 

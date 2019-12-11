@@ -7,7 +7,7 @@ public:
 	~Game() {};
 };
 
-Engine::Application *Engine::CreateApplication()
+Engine::Application *Engine::createApplication()
 {
 	return new Game();
 }
