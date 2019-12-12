@@ -10,9 +10,9 @@
 #include "application.h"
 #include "log.h"
 
-extern Engine::Application *Engine::createApplication();
+extern Engine::Application* Engine::createApplication();
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
 	// Supress unused warning
 	(void)argc;
@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
 
 	// Initialize Log
 	Engine::Log::init();
+	NF_CORE_INFO("Initialized Log!");
 
 	// Start application
 	auto app = Engine::createApplication();

@@ -3,13 +3,19 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "application.h"
-#include "log.h"
+#include "engine/application.h"
+#include "engine/core.h"
+#include "engine/event/event.h"
+#include "engine/log.h"
 
 namespace Engine {
 
+	Application* Application::s_instance = nullptr;
+
 	Application::Application()
 	{
+		NF_CORE_ASSERT(!s_instance, "Application already exists!");
+		s_instance = this;
 	}
 
 	Application::~Application()
@@ -18,7 +24,9 @@ namespace Engine {
 
 	void Application::run()
 	{
-		LOG_ENGINE_LOG("Startup!");
+		NF_CORE_LOG("Startup!");
+
+		Event event;
 
 		glfwInit();
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -28,14 +36,14 @@ namespace Engine {
 
 		GLFWwindow* window = glfwCreateWindow(1280, 720, "Engine", NULL, NULL);
 		if (window == NULL) {
-			LOG_ENGINE_DANGER("Failed to create GLFW window");
+			NF_CORE_DANGER("Failed to create GLFW window");
 			glfwTerminate();
 			return;// -1;
 		}
 		glfwMakeContextCurrent(window);
 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-			LOG_ENGINE_DANGER("Failed to initialize GLAD");
+			NF_CORE_DANGER("Failed to initialize GLAD");
 			return;// -1;
 		}
 
@@ -56,7 +64,7 @@ namespace Engine {
 
 		glfwTerminate();
 
-		LOG_ENGINE_LOG("Shutdown!");
+		NF_CORE_LOG("Shutdown!");
 	}
 
 }
