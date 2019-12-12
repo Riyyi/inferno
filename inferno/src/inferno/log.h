@@ -14,11 +14,11 @@ namespace Inferno {
 
 // -----------------------------------------
 
-		inline static std::shared_ptr<Logger> &getEngineLogger() { return m_engineLogger; }
+		inline static std::shared_ptr<Logger> &getCoreLogger() { return m_coreLogger; }
 		inline static std::shared_ptr<Logger> &getGameLogger() { return m_gameLogger; }
 
 	private:
-		static std::shared_ptr<Logger> m_engineLogger;
+		static std::shared_ptr<Logger> m_coreLogger;
 		static std::shared_ptr<Logger> m_gameLogger;
 	};
 
@@ -40,11 +40,11 @@ namespace Inferno {
 
 }
 
-#define NF_CORE_LOG(x)     Inferno::Log::getEngineLogger()->log(x)
-#define NF_CORE_INFO(x)    Inferno::Log::getEngineLogger()->info(x)
-#define NF_CORE_WARN(x)    Inferno::Log::getEngineLogger()->warn(x)
-#define NF_CORE_DANGER(x)  Inferno::Log::getEngineLogger()->danger(x)
-#define NF_CORE_SUCCESS(x) Inferno::Log::getEngineLogger()->success(x)
+#define NF_CORE_LOG(x)     Inferno::Log::getCoreLogger()->log(x)
+#define NF_CORE_INFO(x)    Inferno::Log::getCoreLogger()->info(x)
+#define NF_CORE_WARN(x)    Inferno::Log::getCoreLogger()->warn(x)
+#define NF_CORE_DANGER(x)  Inferno::Log::getCoreLogger()->danger(x)
+#define NF_CORE_SUCCESS(x) Inferno::Log::getCoreLogger()->success(x)
 
 #define NF_LOG(x)          Inferno::Log::getGameLogger()->log(x)
 #define NF_INFO(x)         Inferno::Log::getGameLogger()->info(x)

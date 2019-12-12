@@ -5,13 +5,13 @@
 namespace Inferno {
 
 	// Reserve memory
-	std::shared_ptr<Logger> Log::m_engineLogger;
+	std::shared_ptr<Logger> Log::m_coreLogger;
 	std::shared_ptr<Logger> Log::m_gameLogger;
 
 	void Log::init()
 	{
 		// Create engine Logger
-		m_engineLogger = std::make_shared<Logger>("Inferno");
+		m_coreLogger = std::make_shared<Logger>("Inferno");
 		// Create game Logger
 		m_gameLogger = std::make_shared<Logger>("Game");
 	}
