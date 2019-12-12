@@ -40,11 +40,14 @@ include_directories(
 	"${ENGINE}/src"
 )
 
-# Add source files
+# Define engine source files
 file(GLOB_RECURSE GLAD "${ENGINE}/vendor/glad/*.c")
 file(GLOB_RECURSE ENGINE_SOURCES "${ENGINE}/src/${ENGINE}/*.cpp")
+set(ENGINE_SOURCES ${GLAD} ${ENGINE_SOURCES})
+
+# Define game source files
 file(GLOB_RECURSE GAME_SOURCES "${GAME}/src/*.cpp")
-set(SOURCES ${GLAD} ${ENGINE_SOURCES} ${GAME_SOURCES})
+set(GAME_SOURCES ${GAME_SOURCES})
 
 # ------------------------------------------
 
@@ -59,7 +62,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 # Add GLFW target to project
 add_subdirectory(${ENGINE}/vendor/glfw)
 
-add_library(${ENGINE} STATIC ${SOURCES})
+add_library(${ENGINE} STATIC ${ENGINE_SOURCES})
 target_link_libraries(${ENGINE} glfw)
 
 # ------------------------------------------
@@ -67,5 +70,5 @@ target_link_libraries(${ENGINE} glfw)
 project(${GAME})
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(${GAME} ${SOURCES})
+add_executable(${GAME} ${GAME_SOURCES})
 target_link_libraries(${GAME} ${ENGINE})
