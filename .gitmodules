@@ -1,6 +1,6 @@
-[submodule "engine/vendor/glfw"]
-	path = engine/vendor/glfw
+[submodule "inferno/vendor/glfw"]
+	path = inferno/vendor/glfw
 	url = https://github.com/glfw/glfw
-[submodule "engine/vendor/glm"]
-	path = engine/vendor/glm
+[submodule "inferno/vendor/glm"]
+	path = inferno/vendor/glm
 	url = https://github.com/g-truc/glm
