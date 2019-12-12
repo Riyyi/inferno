@@ -7,10 +7,10 @@
 #ifndef ENTRYPOINT_H
 #define ENTRYPOINT_H
 
-#include "application.h"
-#include "log.h"
+#include "inferno/application.h"
+#include "inferno/log.h"
 
-extern Engine::Application* Engine::createApplication();
+extern Inferno::Application* Inferno::createApplication();
 
 int main(int argc, char* argv[])
 {
@@ -19,11 +19,11 @@ int main(int argc, char* argv[])
 	(void)argv;
 
 	// Initialize Log
-	Engine::Log::init();
+	Inferno::Log::init();
 	NF_CORE_INFO("Initialized Log!");
 
 	// Start application
-	auto app = Engine::createApplication();
+	auto app = Inferno::createApplication();
 	app->run();
 	delete app;
 

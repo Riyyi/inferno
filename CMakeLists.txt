@@ -2,7 +2,7 @@
 # ------------------------------------------
 
 # Set engine name
-set(ENGINE "engine")
+set(ENGINE "inferno")
 # Set project name
 set(GAME "game")
 

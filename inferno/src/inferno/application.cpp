@@ -3,12 +3,12 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "engine/application.h"
-#include "engine/core.h"
-#include "engine/event/event.h"
-#include "engine/log.h"
+#include "inferno/application.h"
+#include "inferno/core.h"
+#include "inferno/event/event.h"
+#include "inferno/log.h"
 
-namespace Engine {
+namespace Inferno {
 
 	Application* Application::s_instance = nullptr;
 
@@ -34,7 +34,7 @@ namespace Engine {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-		GLFWwindow* window = glfwCreateWindow(1280, 720, "Engine", NULL, NULL);
+		GLFWwindow* window = glfwCreateWindow(1280, 720, "Inferno", NULL, NULL);
 		if (window == NULL) {
 			NF_CORE_DANGER("Failed to create GLFW window");
 			glfwTerminate();

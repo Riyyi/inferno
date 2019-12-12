@@ -1,13 +1,13 @@
-#include "engine.h"
+#include "inferno.h"
 
-class Game : public Engine::Application
+class Game : public Inferno::Application
 {
 public:
 	Game() {};
 	~Game() {};
 };
 
-Engine::Application* Engine::createApplication()
+Inferno::Application* Inferno::createApplication()
 {
 	return new Game();
 }

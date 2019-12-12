@@ -1,8 +1,8 @@
 #include <cstdio> // printf
 
-#include "log.h"
+#include "inferno/log.h"
 
-namespace Engine {
+namespace Inferno {
 
 	// Reserve memory
 	std::shared_ptr<Logger> Log::m_engineLogger;
@@ -11,7 +11,7 @@ namespace Engine {
 	void Log::init()
 	{
 		// Create engine Logger
-		m_engineLogger = std::make_shared<Logger>("Engine");
+		m_engineLogger = std::make_shared<Logger>("Inferno");
 		// Create game Logger
 		m_gameLogger = std::make_shared<Logger>("Game");
 	}

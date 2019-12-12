@@ -3,7 +3,7 @@
 
 #include <memory>
 
-namespace Engine {
+namespace Inferno {
 
 	class Logger;
 
@@ -40,16 +40,16 @@ namespace Engine {
 
 }
 
-#define NF_CORE_LOG(x)     Engine::Log::getEngineLogger()->log(x)
-#define NF_CORE_INFO(x)    Engine::Log::getEngineLogger()->info(x)
-#define NF_CORE_WARN(x)    Engine::Log::getEngineLogger()->warn(x)
-#define NF_CORE_DANGER(x)  Engine::Log::getEngineLogger()->danger(x)
-#define NF_CORE_SUCCESS(x) Engine::Log::getEngineLogger()->success(x)
+#define NF_CORE_LOG(x)     Inferno::Log::getEngineLogger()->log(x)
+#define NF_CORE_INFO(x)    Inferno::Log::getEngineLogger()->info(x)
+#define NF_CORE_WARN(x)    Inferno::Log::getEngineLogger()->warn(x)
+#define NF_CORE_DANGER(x)  Inferno::Log::getEngineLogger()->danger(x)
+#define NF_CORE_SUCCESS(x) Inferno::Log::getEngineLogger()->success(x)
 
-#define NF_LOG(x)            Engine::Log::getGameLogger()->log(x)
-#define NF_INFO(x)           Engine::Log::getGameLogger()->info(x)
-#define NF_WARN(x)           Engine::Log::getGameLogger()->warn(x)
-#define NF_DANGER(x)         Engine::Log::getGameLogger()->danger(x)
-#define NF_SUCCESS(x)        Engine::Log::getGameLogger()->success(x)
+#define NF_LOG(x)          Inferno::Log::getGameLogger()->log(x)
+#define NF_INFO(x)         Inferno::Log::getGameLogger()->info(x)
+#define NF_WARN(x)         Inferno::Log::getGameLogger()->warn(x)
+#define NF_DANGER(x)       Inferno::Log::getGameLogger()->danger(x)
+#define NF_SUCCESS(x)      Inferno::Log::getGameLogger()->success(x)
 
 #endif // LOG_H

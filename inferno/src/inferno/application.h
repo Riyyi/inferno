@@ -1,7 +1,7 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-namespace Engine {
+namespace Inferno {
 
 	class Application
 	{
@@ -26,7 +26,7 @@ namespace Engine {
 
 // @Todo
 // v Application -> Singleton
-// - Add assert
+// v Add assert
 // - Event class
 // - Event Dispatcher
 //   - template
