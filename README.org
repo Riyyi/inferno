@@ -1,6 +1,6 @@
-* Engine
+* Inferno
 
-Game Engine project.
+Inferno game engine project.
 
 * Download
 
