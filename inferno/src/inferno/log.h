@@ -4,6 +4,7 @@
 #include <cstdio> // sprintf, printf
 #include <cstring> // strlen
 #include <memory> // shared_ptr
+#include <string> // string
 
 namespace Inferno {
 
@@ -39,31 +40,37 @@ namespace Inferno {
 		}
 
 		template<typename ...A>
-		void log(const char* format, A... arguments)
+		void print(const char* color, std::string format, A... arguments)
+		{
+			this->print(color, format.c_str(), arguments...);
+		}
+
+		template<typename T, typename ...A>
+		void log(T format, A... arguments)
 		{
 			this->print("", format, arguments...);
 		}
 
-		template<typename ...A>
-		void info(const char* format, A... arguments)
+		template<typename T, typename ...A>
+		void info(T format, A... arguments)
 		{
 			this->print("\x1B[34m", format, arguments...);
 		}
 
-		template<typename ...A>
-		void warn(const char* format, A... arguments)
+		template<typename T, typename ...A>
+		void warn(T format, A... arguments)
 		{
 			this->print("\x1B[33m", format, arguments...);
 		}
 
-		template<typename ...A>
-		void danger(const char* format, A... arguments)
+		template<typename T, typename ...A>
+		void danger(T format, A... arguments)
 		{
 			this->print("\x1B[31m", format, arguments...);
 		}
 
-		template<typename ...A>
-		void success(const char* format, A... arguments)
+		template<typename T, typename ...A>
+		void success(T format, A... arguments)
 		{
 			this->print("\x1B[32m", format, arguments...);
 		}
