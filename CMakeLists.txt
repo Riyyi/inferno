@@ -28,7 +28,7 @@ else()
 	message("--- Release ---")
 	set(CMAKE_BUILD_TYPE "Release")
 
-	# -O3     = Optimizations that increase compilation time and performance
+	# -O3     = Optimizations that increases compilation time and performance
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 endif()
 

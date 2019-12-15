@@ -45,4 +45,5 @@ Or
 
 * References
 
+- [[https://www.glfw.org/docs/latest/build_guide.html#build_link_cmake_source][Build GLFW using CMake]]
 - [[https://www.youtube.com/playlist?list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT][Game Engine]] by The Cherno

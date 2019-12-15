@@ -11,14 +11,14 @@ namespace Inferno {
 
 		void run();
 
-		inline static Application &get() { return *s_instance; }
+		static inline Application &get() { return *s_instance; }
 
 	private:
 		static Application* s_instance;
 	};
 
 	// To be defined in the game
-	Application* createApplication();
+	extern Application* createApplication();
 
 }
 

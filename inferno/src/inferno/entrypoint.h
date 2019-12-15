@@ -10,8 +10,6 @@
 #include "inferno/application.h"
 #include "inferno/log.h"
 
-extern Inferno::Application* Inferno::createApplication();
-
 int main(int argc, char* argv[])
 {
 	// Supress unused warning
