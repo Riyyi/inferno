@@ -17,8 +17,8 @@
 		#define ABORT_SIGNAL SIGABRT
 	#endif
 
-	#define NF_ASSERT(x, y)      if(!(x)) { NF_DANGER(y); raise(ABORT_SIGNAL); }
-	#define NF_CORE_ASSERT(x, y) if(!(x)) { NF_CORE_DANGER(y); raise(ABORT_SIGNAL); }
+	#define NF_ASSERT(x, y)      if(!(x)) { NF_DANGER("Assert: {%s}, %s", #x, y); raise(ABORT_SIGNAL); }
+	#define NF_CORE_ASSERT(x, y) if(!(x)) { NF_CORE_DANGER("Assert: {%s}, %s", #x, y); raise(ABORT_SIGNAL); }
 #else
 	#define NF_ASSERT(x, y)
 	#define NF_CORE_ASSERT(x, y)

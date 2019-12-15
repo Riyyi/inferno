@@ -1,7 +1,9 @@
 #ifndef LOG_H
 #define LOG_H
 
-#include <memory>
+#include <cstdio> // sprintf, printf
+#include <cstring> // strlen
+#include <memory> // shared_ptr
 
 namespace Inferno {
 
@@ -28,11 +30,43 @@ namespace Inferno {
 		Logger(const char* name);
 		~Logger();
 
-		void log(const char* message, const char* level = "");
-		void info(const char* message);
-		void warn(const char* message);
-		void danger(const char* message);
-		void success(const char* message);
+		template<typename ...A>
+		void print(const char* color, const char* format, A... arguments)
+		{
+			char buffer[10 + strlen(color) + strlen(m_name) + strlen(format)];
+			sprintf(buffer, "%s%s: %s\033[0m\n", color, m_name, format);
+			printf(buffer, arguments...);
+		}
+
+		template<typename ...A>
+		void log(const char* format, A... arguments)
+		{
+			this->print("", format, arguments...);
+		}
+
+		template<typename ...A>
+		void info(const char* format, A... arguments)
+		{
+			this->print("\x1B[34m", format, arguments...);
+		}
+
+		template<typename ...A>
+		void warn(const char* format, A... arguments)
+		{
+			this->print("\x1B[33m", format, arguments...);
+		}
+
+		template<typename ...A>
+		void danger(const char* format, A... arguments)
+		{
+			this->print("\x1B[31m", format, arguments...);
+		}
+
+		template<typename ...A>
+		void success(const char* format, A... arguments)
+		{
+			this->print("\x1B[32m", format, arguments...);
+		}
 
 	private:
 		const char* m_name;
@@ -40,16 +74,16 @@ namespace Inferno {
 
 }
 
-#define NF_CORE_LOG(x)     Inferno::Log::getCoreLogger()->log(x)
-#define NF_CORE_INFO(x)    Inferno::Log::getCoreLogger()->info(x)
-#define NF_CORE_WARN(x)    Inferno::Log::getCoreLogger()->warn(x)
-#define NF_CORE_DANGER(x)  Inferno::Log::getCoreLogger()->danger(x)
-#define NF_CORE_SUCCESS(x) Inferno::Log::getCoreLogger()->success(x)
+#define NF_CORE_LOG(...)     Inferno::Log::getCoreLogger()->log(__VA_ARGS__)
+#define NF_CORE_INFO(...)    Inferno::Log::getCoreLogger()->info(__VA_ARGS__)
+#define NF_CORE_WARN(...)    Inferno::Log::getCoreLogger()->warn(__VA_ARGS__)
+#define NF_CORE_DANGER(...)  Inferno::Log::getCoreLogger()->danger(__VA_ARGS__)
+#define NF_CORE_SUCCESS(...) Inferno::Log::getCoreLogger()->success(__VA_ARGS__)
 
-#define NF_LOG(x)          Inferno::Log::getGameLogger()->log(x)
-#define NF_INFO(x)         Inferno::Log::getGameLogger()->info(x)
-#define NF_WARN(x)         Inferno::Log::getGameLogger()->warn(x)
-#define NF_DANGER(x)       Inferno::Log::getGameLogger()->danger(x)
-#define NF_SUCCESS(x)      Inferno::Log::getGameLogger()->success(x)
+#define NF_LOG(...)          Inferno::Log::getGameLogger()->log(__VA_ARGS__)
+#define NF_INFO(...)         Inferno::Log::getGameLogger()->info(__VA_ARGS__)
+#define NF_WARN(...)         Inferno::Log::getGameLogger()->warn(__VA_ARGS__)
+#define NF_DANGER(...)       Inferno::Log::getGameLogger()->danger(__VA_ARGS__)
+#define NF_SUCCESS(...)      Inferno::Log::getGameLogger()->success(__VA_ARGS__)
 
 #endif // LOG_H
