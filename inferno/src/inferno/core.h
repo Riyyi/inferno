@@ -1,7 +1,12 @@
 #ifndef CORE_H
 #define CORE_H
 
-#include <csignal>
+#include <csignal> // raise
+#include <functional> // bind
+
+#define BIT(x) (1 << x)
+
+#define NF_BIND_EVENT(f) std::bind(&f, this, std::placeholders::_1)
 
 // Debugging defines
 #ifndef NDEBUG
