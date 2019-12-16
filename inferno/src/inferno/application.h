@@ -1,7 +1,14 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#include <memory> // unique_ptr
+
 namespace Inferno {
+
+	class Event;
+	class WindowCloseEvent;
+	class WindowResizeEvent;
+	class Window;
 
 	class Application
 	{
@@ -11,9 +18,17 @@ namespace Inferno {
 
 		void run();
 
+		void onEvent(Event &e);
+		bool onWindowClose(WindowCloseEvent &e);
+		bool onWindowResize(WindowResizeEvent &e);
+
+// -----------------------------------------
+
 		static inline Application &get() { return *s_instance; }
 
 	private:
+		std::unique_ptr<Window> m_window;
+
 		static Application* s_instance;
 	};
 
@@ -23,11 +38,3 @@ namespace Inferno {
 }
 
 #endif // APPLICATION_H
-
-// @Todo
-// v Application -> Singleton
-// v Add assert
-// - Event class
-// - Event Dispatcher
-//   - template
-// - Implement event in Application::OnEvent(Event& e);
