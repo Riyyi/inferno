@@ -4,3 +4,6 @@
 [submodule "inferno/vendor/glm"]
 	path = inferno/vendor/glm
 	url = https://github.com/g-truc/glm
+[submodule "inferno/vendor/json"]
+	path = inferno/vendor/json
+	url = https://github.com/nlohmann/json
