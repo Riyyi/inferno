@@ -7,16 +7,15 @@ namespace Inferno {
 
 	class MouseButtonEvent : public Event {
 	public:
-		MouseButtonEvent(int button) :
-			m_button(button) {}
-
-// -----------------------------------------
-
 		inline int getButton() const { return m_button; }
 
 		EVENT_CLASS_CATEGORY(InputEventCategory | MouseEventCategory | MouseButtonEventCategory)
 
 	protected:
+		MouseButtonEvent(int button) :
+			m_button(button) {}
+
+	private:
 		int m_button;
 	};
 
@@ -28,7 +27,7 @@ namespace Inferno {
 		virtual std::string toString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseButtonPressed: " << m_button;
+			ss << "MouseButtonPressed: " << getButton();
 			return ss.str();
 		}
 
@@ -43,7 +42,7 @@ namespace Inferno {
 		virtual std::string toString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseButtonReleased: " << m_button;
+			ss << "MouseButtonReleased: " << getButton();
 			return ss.str();
 		}
 

@@ -3,6 +3,7 @@
 
 #include "inferno/core.h"
 #include "inferno/event/applicationevent.h"
+#include "inferno/event/keyevent.h"
 #include "inferno/event/mouseevent.h"
 #include "inferno/log.h"
 #include "inferno/settings.h"
@@ -92,7 +93,27 @@ namespace Inferno {
 		});
 
 		// Keyboard callback
-		// glfwSetKeyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods);
+		glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scanCode, int action, int mods) {
+			Window &w = *(Window*)glfwGetWindowUserPointer(window);
+
+			switch (action) {
+				case GLFW_PRESS: {
+					KeyPressEvent event(key);
+					w.m_eventCallback(event);
+					break;
+				}
+				case GLFW_RELEASE: {
+					KeyReleaseEvent event(key);
+					w.m_eventCallback(event);
+					break;
+				}
+				case GLFW_REPEAT: {
+					KeyRepeatEvent event(key);
+					w.m_eventCallback(event);
+					break;
+				}
+			}
+		});
 
 		// Mouse button callback
 		glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods) {
