@@ -12,7 +12,7 @@
 
 int main(int argc, char* argv[])
 {
-	// Supress unused warning
+	// Suppress unused warning
 	(void)argc;
 	(void)argv;
 

@@ -1,4 +1,3 @@
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include "inferno/core.h"
@@ -6,6 +5,7 @@
 #include "inferno/event/keyevent.h"
 #include "inferno/event/mouseevent.h"
 #include "inferno/log.h"
+#include "inferno/render/context.h"
 #include "inferno/settings.h"
 #include "inferno/window.h"
 
@@ -51,22 +51,15 @@ namespace Inferno {
 		s_windowCount++;
 		NF_CORE_ASSERT(m_window, "Failed to create GLFW window!");
 
-		// Initialize glad
-		glfwMakeContextCurrent(m_window);
-		int glad = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		NF_CORE_ASSERT(glad, "Failed to initialize glad!");
+		// Associate the wrapper to the window
+		glfwSetWindowUserPointer(m_window, this);
 
-		// Log OpenGL properties
-		NF_CORE_INFO("OpenGL Info:");
-		NF_CORE_INFO("  Vendor:   %s", glGetString(GL_VENDOR));
-		NF_CORE_INFO("  Renderer: %s", glGetString(GL_RENDERER));
-		NF_CORE_INFO("  Version:  %s", glGetString(GL_VERSION));
+		// Create graphics context
+		m_context = new Context(m_window);
+		m_context->initialize();
 
 		// Capture cursor and hide it
 		// glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-		// Associate the wrapper to the window
-		glfwSetWindowUserPointer(m_window, this);
 
 		// Error callback
 		glfwSetErrorCallback([](int error, const char* description) {
@@ -94,6 +87,10 @@ namespace Inferno {
 
 		// Keyboard callback
 		glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scanCode, int action, int mods) {
+			// Suppress unused warning
+			(void)scanCode;
+			(void)mods;
+
 			Window &w = *(Window*)glfwGetWindowUserPointer(window);
 
 			switch (action) {
@@ -117,6 +114,9 @@ namespace Inferno {
 
 		// Mouse button callback
 		glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods) {
+			// Suppress unused warning
+			(void)mods;
+
 			Window &w = *(Window*)glfwGetWindowUserPointer(window);
 
 			switch (action) {
@@ -148,17 +148,12 @@ namespace Inferno {
 			MouseScrollEvent event(xOffset, yOffset);
 			w.m_eventCallback(event);
 		});
-
-		glViewport(0, 0, width, height);
-
-		// Enable z-buffer / depth buffer
-		glEnable(GL_DEPTH_TEST);
 	}
 
 	void Window::update()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_window);
+		m_context->update();
 	}
 
 	void Window::destroy()

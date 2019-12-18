@@ -7,6 +7,7 @@ struct GLFWwindow;
 
 namespace Inferno {
 
+	class Context;
 	class Event;
 
 	struct WindowProperties {
@@ -36,6 +37,7 @@ namespace Inferno {
 	private:
 		WindowProperties m_windowProperties;
 		GLFWwindow* m_window;
+		Context* m_context;
 
 		std::function<void(Event&)> m_eventCallback;
 

@@ -13,6 +13,10 @@ namespace Inferno {
 		WindowClose,
 		WindowResize,
 
+		KeyPress,
+		KeyRelease,
+		KeyRepeat,
+
 		MouseButtonPress,
 		MouseButtonRelease,
 		MousePosition,
