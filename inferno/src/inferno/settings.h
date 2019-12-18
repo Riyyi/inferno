@@ -7,8 +7,8 @@ namespace Inferno {
 
 	struct SettingsProperties {
 		const char* title = "Inferno default";
-		int width = 1280;
-		int height = 720;
+		unsigned int width = 1280;
+		unsigned int height = 720;
 	};
 
 	class Settings {

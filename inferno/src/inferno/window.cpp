@@ -4,15 +4,21 @@
 #include "inferno/core.h"
 #include "inferno/event/applicationevent.h"
 #include "inferno/log.h"
+#include "inferno/settings.h"
 #include "inferno/window.h"
 
 namespace Inferno {
 
 	unsigned char Window::s_windowCount = 0;
 
-	Window::Window(const WindowProperties &properties) :
-		m_windowProperties(properties)
+	Window::Window()
 	{
+		m_windowProperties = {
+			Settings::get().properties().title,
+			Settings::get().properties().width,
+			Settings::get().properties().height,
+		};
+
 		this->initialize();
 	}
 

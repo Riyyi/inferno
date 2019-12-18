@@ -29,7 +29,7 @@ namespace Inferno {
 		nlohmann::json m_json = this->load();
 
 		try {
-			m_properties.title = m_json["window"]["title"].get<std::string>().c_str();
+			m_properties.title = strdup(m_json["window"]["title"].get<std::string>().c_str());
 			m_properties.width = m_json["window"]["width"].get<int>();
 			m_properties.height = m_json["window"]["height"].get<int>();
 		}
@@ -40,6 +40,8 @@ namespace Inferno {
 
 	void Settings::destroy()
 	{
+		// Delete const char*s created by strdup()
+		delete m_properties.title;
 	}
 
 	nlohmann::json Settings::load() const

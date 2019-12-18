@@ -17,7 +17,7 @@ namespace Inferno {
 
 	class Window {
 	public:
-		Window(const WindowProperties &properties = WindowProperties());
+		Window();
 		virtual ~Window();
 
 		void initialize();
