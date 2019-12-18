@@ -8,6 +8,7 @@
 #include "inferno/event/applicationevent.h"
 #include "inferno/event/event.h"
 #include "inferno/log.h"
+#include "inferno/settings.h"
 #include "inferno/window.h"
 
 namespace Inferno {
@@ -26,7 +27,10 @@ namespace Inferno {
 
 	void Application::run()
 	{
-		NF_CORE_LOG("Application startup!");
+		NF_CORE_LOG("Application startup");
+
+		// Initialize Settings
+		new Settings();
 
 		m_window = std::make_unique<Window>();
 		m_window->setEventCallback(NF_BIND_EVENT(Application::onEvent));
@@ -43,7 +47,7 @@ namespace Inferno {
 			m_window->update();
 		}
 
-		NF_CORE_LOG("Application shutdown!");
+		NF_CORE_LOG("Application shutdown");
 	}
 
 	void Application::onEvent(Event &e)

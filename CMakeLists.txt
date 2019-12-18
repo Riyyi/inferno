@@ -21,7 +21,7 @@ if(DEBUG)
 	# -Wall   = All warnings about contructions that are easily avoidable
 	# -Wextra = Extra warning flags not covered by -Wall
 	# -pg     = Generate profile information for analysis with gprof
-	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -Wall -Wextra -pg")
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -Wall -Wextra -g -pg")
 	# gprof <GAME> gmon.out > profile-data.txt
 else()
 	# cmake -DDEBUG=off .. && make
@@ -37,6 +37,7 @@ include_directories(
 	"${ENGINE}/vendor/glad/include"
 	"${ENGINE}/vendor/glfw/include"
 	"${ENGINE}/vendor/glm"
+	"${ENGINE}/vendor/json/include"
 	"${ENGINE}/src"
 )
 

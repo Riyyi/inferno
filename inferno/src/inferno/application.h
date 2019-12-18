@@ -10,8 +10,7 @@ namespace Inferno {
 	class WindowResizeEvent;
 	class Window;
 
-	class Application
-	{
+	class Application {
 	public:
 		Application();
 		virtual ~Application();
