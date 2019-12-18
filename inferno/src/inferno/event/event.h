@@ -9,13 +9,26 @@ namespace Inferno {
 
 	enum class EventType {
 		None = 0,
+
 		WindowClose,
 		WindowResize,
+
+		MouseButtonPress,
+		MouseButtonRelease,
+		MousePosition,
+		MouseScroll,
 	};
 
 	enum EventCategory {
 		None = 0,
 		ApplicationEventCategory = BIT(0),
+
+		InputEventCategory       = BIT(1),
+
+		KeyEventCategory         = BIT(2),
+
+		MouseEventCategory       = BIT(3),
+		MouseButtonEventCategory = BIT(4),
 	};
 
 	class Event {

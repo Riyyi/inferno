@@ -3,7 +3,7 @@
 
 #include <functional> // std::function
 
-class GLFWwindow;
+struct GLFWwindow;
 
 namespace Inferno {
 

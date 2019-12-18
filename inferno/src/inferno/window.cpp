@@ -3,6 +3,7 @@
 
 #include "inferno/core.h"
 #include "inferno/event/applicationevent.h"
+#include "inferno/event/mouseevent.h"
 #include "inferno/log.h"
 #include "inferno/settings.h"
 #include "inferno/window.h"
@@ -91,16 +92,41 @@ namespace Inferno {
 		});
 
 		// Keyboard callback
-		// glfwSetKeyCallback
-
-		// Mouse position callback
-		// glfwSetCursorPosCallback
+		// glfwSetKeyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods);
 
 		// Mouse button callback
-		// glfwSetMouseButtonCallback
+		glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods) {
+			Window &w = *(Window*)glfwGetWindowUserPointer(window);
+
+			switch (action) {
+				case GLFW_PRESS: {
+					MouseButtonPressEvent event(button);
+					w.m_eventCallback(event);
+					break;
+				}
+				case GLFW_RELEASE: {
+					MouseButtonReleaseEvent event(button);
+					w.m_eventCallback(event);
+					break;
+				}
+			}
+		});
+
+		// Mouse position callback
+		glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xPos, double yPos) {
+			Window &w = *(Window*)glfwGetWindowUserPointer(window);
+
+			MousePositionEvent event(xPos, yPos);
+			w.m_eventCallback(event);
+		});
 
 		// Mouse scroll callback
-		// glfwSetScrollCallback
+		glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xOffset, double yOffset) {
+			Window &w = *(Window*)glfwGetWindowUserPointer(window);
+
+			MouseScrollEvent event(xOffset, yOffset);
+			w.m_eventCallback(event);
+		});
 
 		glViewport(0, 0, width, height);
 
