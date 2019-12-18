@@ -1,8 +1,8 @@
 #ifndef CORE_H
 #define CORE_H
 
-#include <csignal> // raise
-#include <functional> // bind
+#include <csignal>    // raise
+#include <functional> // std::bind
 
 #define BIT(x) (1 << x)
 

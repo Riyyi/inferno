@@ -1,7 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <functional> // function
+#include <functional> // std::function
 
 class GLFWwindow;
 

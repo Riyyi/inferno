@@ -1,6 +1,6 @@
 #include <fstream> // std::ifstream, std::ofstream
 #include <iomanip> // std::setfill, std::setw
-#include <string> // std::string
+#include <string>  // std::string
 
 #include "inferno/core.h"
 #include "inferno/log.h"
@@ -26,7 +26,7 @@ namespace Inferno {
 
 	void Settings::initialize()
 	{
-		nlohmann::json m_json = load();
+		nlohmann::json m_json = this->load();
 
 		try {
 			m_properties.title = m_json["window"]["title"].get<std::string>().c_str();

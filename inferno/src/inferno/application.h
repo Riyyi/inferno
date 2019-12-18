@@ -1,7 +1,7 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include <memory> // unique_ptr
+#include <memory> // std::unique_ptr
 
 namespace Inferno {
 

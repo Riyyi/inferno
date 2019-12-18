@@ -1,7 +1,7 @@
 #ifndef APPLICATIONEVENT_H
 #define APPLICATIONEVENT_H
 
-#include <sstream> // stringstream
+#include <sstream> // std::stringstream
 
 #include "inferno/event/event.h"
 
@@ -18,7 +18,8 @@ namespace Inferno {
 		WindowResizeEvent(int width, int height) :
 			m_width(width), m_height(height) {}
 
-		virtual std::string toString() const override {
+		virtual std::string toString() const override
+		{
 			std::stringstream ss;
 			ss << "WindowResize: " << m_width << "x" << m_height;
 			return ss.str();

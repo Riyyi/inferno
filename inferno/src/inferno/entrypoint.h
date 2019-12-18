@@ -17,8 +17,7 @@ int main(int argc, char* argv[])
 	(void)argv;
 
 	// Initialize Log
-	Inferno::Log::init();
-	NF_CORE_INFO("Initialized Log!");
+	Inferno::Log::initialize();
 
 	// Start application
 	auto app = Inferno::createApplication();

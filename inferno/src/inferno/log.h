@@ -1,19 +1,18 @@
 #ifndef LOG_H
 #define LOG_H
 
-#include <cstdio> // sprintf, printf
+#include <cstdio>  // printf, sprintf
 #include <cstring> // strlen
-#include <memory> // shared_ptr
-#include <string> // string
+#include <memory>  // std::shared_ptr
+#include <string>  // std::string
 
 namespace Inferno {
 
 	class Logger;
 
-	class Log
-	{
+	class Log {
 	public:
-		static void init();
+		static void initialize();
 
 // -----------------------------------------
 
@@ -25,8 +24,7 @@ namespace Inferno {
 		static std::shared_ptr<Logger> m_gameLogger;
 	};
 
-	class Logger
-	{
+	class Logger {
 	public:
 		Logger(const char* name);
 		~Logger();
