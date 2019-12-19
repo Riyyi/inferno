@@ -3,14 +3,12 @@
 
 #include <nlohmann/json.hpp>
 
+#include "inferno/window.h"
+
 namespace Inferno {
 
 	struct SettingsProperties {
-		const char* title = "Inferno default";
-		unsigned int width = 1280;
-		unsigned int height = 720;
-		const char* fullscreen = "windowed"; // windowed/fullscreen/borderless
-		bool vsync = true;
+		WindowProperties window;
 	};
 
 	class Settings {

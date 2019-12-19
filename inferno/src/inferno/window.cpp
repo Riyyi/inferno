@@ -18,9 +18,11 @@ namespace Inferno {
 	Window::Window()
 	{
 		m_windowProperties = {
-			Settings::get().properties().title,
-			Settings::get().properties().width,
-			Settings::get().properties().height,
+			Settings::get().properties().window.title,
+			Settings::get().properties().window.width,
+			Settings::get().properties().window.height,
+			Settings::get().properties().window.fullscreen,
+			Settings::get().properties().window.vsync,
 		};
 
 		this->initialize();
@@ -33,9 +35,11 @@ namespace Inferno {
 
 	void Window::initialize()
 	{
-		const char* title = m_windowProperties.title;
-		unsigned int width = m_windowProperties.width;
-		unsigned int height = m_windowProperties.height;
+		const char* title      = m_windowProperties.title;
+		unsigned int width     = m_windowProperties.width;
+		unsigned int height    = m_windowProperties.height;
+		const char* fullscreen = m_windowProperties.fullscreen;
+		bool vsync             = m_windowProperties.vsync;
 
 		// Only init once
 		if (s_windowCount == 0) {
@@ -52,11 +56,11 @@ namespace Inferno {
 		// Windowed
 		GLFWmonitor* monitor = nullptr;
 		// Fullscreen
-		if (strcmp(Settings::get().properties().fullscreen, "fullscreen") == 0) {
+		if (strcmp(fullscreen, "fullscreen") == 0) {
 			monitor = glfwGetPrimaryMonitor();
 		}
 		// Borderless fullscreen
-		if (strcmp(Settings::get().properties().fullscreen, "borderless") == 0) {
+		if (strcmp(fullscreen, "borderless") == 0) {
 			monitor = glfwGetPrimaryMonitor();
 
 			const GLFWvidmode* mode = glfwGetVideoMode(monitor);
@@ -70,7 +74,7 @@ namespace Inferno {
 		}
 
 		// Vsync
-		if (!Settings::get().properties().vsync) {
+		if (!vsync) {
 			glfwWindowHint(GLFW_DOUBLEBUFFER, GL_FALSE);
 		}
 		// -----------------------------------------

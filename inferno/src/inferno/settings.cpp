@@ -29,11 +29,11 @@ namespace Inferno {
 		nlohmann::json m_json = this->load();
 
 		try {
-			m_properties.title      = strdup(m_json["window"]["title"].get<std::string>().c_str());
-			m_properties.width      = m_json["window"]["width"].get<int>();
-			m_properties.height     = m_json["window"]["height"].get<int>();
-			m_properties.fullscreen = strdup(m_json["window"]["fullscreen"].get<std::string>().c_str());
-			m_properties.vsync      = m_json["window"]["vsync"].get<bool>();
+			m_properties.window.title      = strdup(m_json["window"]["title"].get<std::string>().c_str());
+			m_properties.window.width      = m_json["window"]["width"].get<int>();
+			m_properties.window.height     = m_json["window"]["height"].get<int>();
+			m_properties.window.fullscreen = strdup(m_json["window"]["fullscreen"].get<std::string>().c_str());
+			m_properties.window.vsync      = m_json["window"]["vsync"].get<bool>();
 		}
 		catch (...) {
 			NF_CORE_WARN("Settings syntax error: using default values");
@@ -43,8 +43,8 @@ namespace Inferno {
 	void Settings::destroy()
 	{
 		// Delete const char*s created by strdup()
-		delete m_properties.title;
-		delete m_properties.fullscreen;
+		delete m_properties.window.title;
+		delete m_properties.window.fullscreen;
 	}
 
 	nlohmann::json Settings::load() const
@@ -68,11 +68,11 @@ namespace Inferno {
 	bool Settings::save()
 	{
 		nlohmann::json json;
-		json["window"]["title"]      = m_properties.title;
-		json["window"]["width"]      = m_properties.width;
-		json["window"]["height"]     = m_properties.height;
-		json["window"]["fullscreen"] = m_properties.fullscreen;
-		json["window"]["vsync"]      = m_properties.vsync;
+		json["window"]["title"]      = m_properties.window.title;
+		json["window"]["width"]      = m_properties.window.width;
+		json["window"]["height"]     = m_properties.window.height;
+		json["window"]["fullscreen"] = m_properties.window.fullscreen;
+		json["window"]["vsync"]      = m_properties.window.vsync;
 
 		std::ofstream file (m_path);
 		NF_CORE_ASSERT(file.is_open(), "Could not open settings file!");
