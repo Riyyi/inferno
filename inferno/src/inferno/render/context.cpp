@@ -26,8 +26,14 @@ namespace Inferno {
 		NF_CORE_INFO("  Renderer: %s", glGetString(GL_RENDERER));
 		NF_CORE_INFO("  Version:  %s", glGetString(GL_VERSION));
 
-		// Set viewport
 		Window &w = *(Window*)glfwGetWindowUserPointer(m_window);
+
+		// Disable vsync
+		if (!w.isVSync()) {
+			glfwSwapInterval(0);
+		}
+
+		// Set viewport
 		glViewport(0, 0, w.getWidth(), w.getHeight());
 
 		// Enable z-buffer / depth buffer

@@ -30,8 +30,12 @@ namespace Inferno {
 
 // -----------------------------------------
 
+		void setWindowMonitor();
+
 		inline int getWidth() const { return m_windowProperties.width; }
 		inline int getHeight() const { return m_windowProperties.height; }
+		inline bool isVSync() const { return m_windowProperties.vsync; }
+
 		inline GLFWwindow* getWindow() const { return m_window; }
 
 		inline void setEventCallback(std::function<void(Event&)> callback) { m_eventCallback = callback; }

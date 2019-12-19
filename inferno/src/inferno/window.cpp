@@ -38,8 +38,6 @@ namespace Inferno {
 		const char* title      = m_windowProperties.title;
 		unsigned int width     = m_windowProperties.width;
 		unsigned int height    = m_windowProperties.height;
-		const char* fullscreen = m_windowProperties.fullscreen;
-		bool vsync             = m_windowProperties.vsync;
 
 		// Only init once
 		if (s_windowCount == 0) {
@@ -47,42 +45,18 @@ namespace Inferno {
 		}
 
 		// Set window properties
-		// -----------------------------------------
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
-		// Windowed
-		GLFWmonitor* monitor = nullptr;
-		// Fullscreen
-		if (strcmp(fullscreen, "fullscreen") == 0) {
-			monitor = glfwGetPrimaryMonitor();
-		}
-		// Borderless fullscreen
-		if (strcmp(fullscreen, "borderless") == 0) {
-			monitor = glfwGetPrimaryMonitor();
-
-			const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-			width = mode->width;
-			height = mode->height;
-
-			glfwWindowHint(GLFW_RED_BITS, mode->redBits);
-			glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
-			glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
-			glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
-		}
-
-		// Vsync
-		if (!vsync) {
-			glfwWindowHint(GLFW_DOUBLEBUFFER, GL_FALSE);
-		}
-		// -----------------------------------------
+		// glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 		// Create GLFW window
-		m_window = glfwCreateWindow(width, height, title, monitor, nullptr);
+		m_window = glfwCreateWindow(width, height, title, nullptr, nullptr);
 		s_windowCount++;
 		NF_CORE_ASSERT(m_window, "Failed to create GLFW window!");
+
+		// Set windowed/fullscreen/borderless
+		this->setWindowMonitor();
 
 		// Associate the wrapper to the window
 		glfwSetWindowUserPointer(m_window, this);
@@ -197,6 +171,38 @@ namespace Inferno {
 		if (s_windowCount == 0) {
 			glfwTerminate();
 		}
+	}
+
+	void Window::setWindowMonitor()
+	{
+		GLFWmonitor* monitor   = glfwGetPrimaryMonitor();
+		int xPos               = 0;
+		int yPos               = 0;
+		unsigned int width     = m_windowProperties.width;
+		unsigned int height    = m_windowProperties.height;
+		int refresh            = GLFW_DONT_CARE;
+
+		const char* fullscreen = m_windowProperties.fullscreen;
+		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+		if (strcmp(fullscreen, "windowed") == 0) {
+			monitor = nullptr;
+			// Put window in the center of the monitor
+			xPos = (mode->width - width) / 2;
+			yPos = (mode->height - height) / 2;
+		}
+
+		if (strcmp(fullscreen, "fullscreen") == 0) {
+			refresh = mode->refreshRate;
+		}
+
+		if (strcmp(fullscreen, "borderless") == 0) {
+			width = mode->width;
+			height = mode->height;
+			refresh = mode->refreshRate;
+		}
+
+		glfwSetWindowMonitor(m_window, monitor, xPos, yPos, width, height, refresh);
 	}
 
 }

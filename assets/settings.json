@@ -1,7 +1,9 @@
 {
 	"window": {
+		"fullscreen": "windowed",
 		"height": 720,
 		"title": "Inferno",
+		"vsync": true,
 		"width": 1280
 	}
 }
