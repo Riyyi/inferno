@@ -1,3 +1,5 @@
+#include <cstring>
+
 #include <GLFW/glfw3.h>
 
 #include "inferno/core.h"
@@ -41,13 +43,40 @@ namespace Inferno {
 		}
 
 		// Set window properties
+		// -----------------------------------------
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
+		// Windowed
+		GLFWmonitor* monitor = nullptr;
+		// Fullscreen
+		if (strcmp(Settings::get().properties().fullscreen, "fullscreen") == 0) {
+			monitor = glfwGetPrimaryMonitor();
+		}
+		// Borderless fullscreen
+		if (strcmp(Settings::get().properties().fullscreen, "borderless") == 0) {
+			monitor = glfwGetPrimaryMonitor();
+
+			const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+			width = mode->width;
+			height = mode->height;
+
+			glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+			glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+			glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+			glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+		}
+
+		// Vsync
+		if (!Settings::get().properties().vsync) {
+			glfwWindowHint(GLFW_DOUBLEBUFFER, GL_FALSE);
+		}
+		// -----------------------------------------
+
 		// Create GLFW window
-		m_window = glfwCreateWindow(width, height, title, NULL, NULL);
+		m_window = glfwCreateWindow(width, height, title, monitor, nullptr);
 		s_windowCount++;
 		NF_CORE_ASSERT(m_window, "Failed to create GLFW window!");
 

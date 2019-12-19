@@ -14,6 +14,8 @@ namespace Inferno {
 		const char* title = "Inferno";
 		unsigned int width = 1280;
 		unsigned int height = 720;
+		const char* fullscreen = "windowed"; // windowed/fullscreen/borderless
+		bool vsync = true;
 	};
 
 	class Window {

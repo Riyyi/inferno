@@ -9,6 +9,8 @@ namespace Inferno {
 		const char* title = "Inferno default";
 		unsigned int width = 1280;
 		unsigned int height = 720;
+		const char* fullscreen = "windowed"; // windowed/fullscreen/borderless
+		bool vsync = true;
 	};
 
 	class Settings {
