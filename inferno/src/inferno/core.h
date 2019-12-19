@@ -2,6 +2,8 @@
 #define CORE_H
 
 #include <csignal>    // raise
+#include <cstdio>     // sprintf
+#include <cstring>    // strlen
 #include <functional> // std::bind
 
 #define BIT(x) (1 << x)
@@ -22,8 +24,14 @@
 		#define ABORT_SIGNAL SIGABRT
 	#endif
 
-	#define NF_ASSERT(x, y)      if(!(x)) { NF_DANGER("Assert: {%s}, %s", #x, y); raise(ABORT_SIGNAL); }
-	#define NF_CORE_ASSERT(x, y) if(!(x)) { NF_CORE_DANGER("Assert: {%s}, %s", #x, y); raise(ABORT_SIGNAL); }
+	#define NF_ASSERT(x, y, ...) if(!(x)) { \
+		char buffer[15 + strlen(y)]; \
+		sprintf(buffer, "Assert: {%%s}, %s", y); \
+		NF_DANGER(buffer, #x, ##__VA_ARGS__); raise(ABORT_SIGNAL); }
+	#define NF_CORE_ASSERT(x, y, ...) if(!(x)) { \
+		char buffer[15 + strlen(y)]; \
+		sprintf(buffer, "Assert: {%%s}, %s", y); \
+		NF_CORE_DANGER(buffer, #x, ##__VA_ARGS__); raise(ABORT_SIGNAL); }
 #else
 	#define NF_ASSERT(x, y)
 	#define NF_CORE_ASSERT(x, y)
