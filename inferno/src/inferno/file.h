@@ -18,7 +18,7 @@ namespace Inferno {
 		static void ioRead(T &t, const std::string &path)
 		{
 			std::ifstream file(path);
-			NF_CORE_ASSERT(file.is_open(), "File could not open: %s", path.c_str());
+			NF_CORE_ASSERT(file.is_open(), "File could not open! %s", path.c_str());
 
 			if (file.is_open()) {
 				file >> t;
@@ -30,7 +30,7 @@ namespace Inferno {
 		static void ioWrite(T &t, const std::string &path)
 		{
 			std::ofstream file (path);
-			NF_CORE_ASSERT(file.is_open(), "File could not open: %s", path.c_str());
+			NF_CORE_ASSERT(file.is_open(), "File could not open! %s", path.c_str());
 
 			if (file.is_open()) {
 				// Write file with single tabs, nicely formatted

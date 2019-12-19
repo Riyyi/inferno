@@ -9,7 +9,7 @@ namespace Inferno {
 	{
 		// Create input stream object and open file
 		std::ifstream file(path.c_str());
-		NF_CORE_ASSERT(file.is_open(), "File could not open: %s", path.c_str());
+		NF_CORE_ASSERT(file.is_open(), "File could not open! %s", path.c_str());
 
 		// Check if file exists
 		if (!file.is_open()) {
@@ -20,7 +20,7 @@ namespace Inferno {
 		file.seekg(0, std::ios::end);
 		int length = file.tellg();
 		file.seekg(0, std::ios::beg);
-		NF_CORE_ASSERT(length != -1, "File could not determine length: %s", path.c_str());
+		NF_CORE_ASSERT(length != -1, "File could not determine length! %s", path.c_str());
 
 		// Check for valid file length
 		if (length == -1) {
