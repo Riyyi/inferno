@@ -185,21 +185,20 @@ namespace Inferno {
 		const char* fullscreen = m_windowProperties.fullscreen;
 		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
-		if (strcmp(fullscreen, "windowed") == 0) {
+		if (strcmp(fullscreen, "fullscreen") == 0) {
+			refresh = mode->refreshRate;
+		}
+		else if (strcmp(fullscreen, "borderless") == 0) {
+			width = mode->width;
+			height = mode->height;
+			refresh = mode->refreshRate;
+		}
+		// Default window state is windowed
+		else {
 			monitor = nullptr;
 			// Put window in the center of the monitor
 			xPos = (mode->width - width) / 2;
 			yPos = (mode->height - height) / 2;
-		}
-
-		if (strcmp(fullscreen, "fullscreen") == 0) {
-			refresh = mode->refreshRate;
-		}
-
-		if (strcmp(fullscreen, "borderless") == 0) {
-			width = mode->width;
-			height = mode->height;
-			refresh = mode->refreshRate;
 		}
 
 		glfwSetWindowMonitor(m_window, monitor, xPos, yPos, width, height, refresh);
