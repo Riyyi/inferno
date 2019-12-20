@@ -13,6 +13,8 @@ namespace Inferno {
 	{
 	}
 
+// -----------------------------------------
+
 	void Context::initialize()
 	{
 		// Initialize glad
@@ -34,7 +36,7 @@ namespace Inferno {
 		}
 
 		// Set viewport
-		glViewport(0, 0, w.getWidth(), w.getHeight());
+		this->setViewport(0, 0, w.getWidth(), w.getHeight());
 
 		// Enable z-buffer / depth buffer
 		glEnable(GL_DEPTH_TEST);
@@ -49,4 +51,10 @@ namespace Inferno {
 	{
 	}
 
+// -----------------------------------------
+
+	void Context::setViewport(int x, int y, int width, int height) const
+	{
+		glViewport(x, y, width, height);
+	}
 }

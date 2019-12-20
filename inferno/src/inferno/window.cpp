@@ -33,6 +33,8 @@ namespace Inferno {
 		this->destroy();
 	}
 
+// -----------------------------------------
+
 	void Window::initialize()
 	{
 		const char* title      = m_windowProperties.title;
@@ -172,6 +174,8 @@ namespace Inferno {
 			glfwTerminate();
 		}
 	}
+
+// -----------------------------------------
 
 	void Window::setWindowMonitor()
 	{

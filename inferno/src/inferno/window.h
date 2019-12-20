@@ -12,8 +12,8 @@ namespace Inferno {
 
 	struct WindowProperties {
 		const char* title = "Inferno";
-		unsigned int width = 1280;
-		unsigned int height = 720;
+		int width = 1280;
+		int height = 720;
 		const char* fullscreen = "windowed"; // windowed/fullscreen/borderless
 		bool vsync = true;
 	};
@@ -22,6 +22,8 @@ namespace Inferno {
 	public:
 		Window();
 		virtual ~Window();
+
+// -----------------------------------------
 
 		void initialize();
 		void update();
@@ -37,6 +39,7 @@ namespace Inferno {
 		inline bool isVSync() const { return m_windowProperties.vsync; }
 
 		inline GLFWwindow* getWindow() const { return m_window; }
+		inline Context* getContext() const { return m_context; }
 
 		inline void setEventCallback(std::function<void(Event&)> callback) { m_eventCallback = callback; }
 
