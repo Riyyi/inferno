@@ -6,6 +6,8 @@ namespace Inferno {
 	std::shared_ptr<Logger> Log::m_coreLogger;
 	std::shared_ptr<Logger> Log::m_gameLogger;
 
+// -----------------------------------------
+
 	void Log::initialize()
 	{
 		// Create engine Logger
@@ -15,6 +17,8 @@ namespace Inferno {
 
 		NF_CORE_INFO("Log initialized");
 	}
+
+// -----------------------------------------
 
 	Logger::Logger(const char* name) :
 		m_name(name)

@@ -12,4 +12,6 @@
 
 #include "inferno/entrypoint.h"
 
+// -----------------------------------------
+
 #endif // INFERNO_H

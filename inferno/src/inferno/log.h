@@ -12,6 +12,9 @@ namespace Inferno {
 
 	class Log {
 	public:
+
+// -----------------------------------------
+
 		static void initialize();
 
 // -----------------------------------------
