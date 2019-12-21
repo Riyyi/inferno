@@ -1,8 +1,6 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#define INFO_LOG_SIZE 512
-
 #include <cstdint> // std::int32_t, std::uint32_t
 #include <string>  // std::string
 

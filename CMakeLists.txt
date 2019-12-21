@@ -20,6 +20,7 @@ if(DEBUG)
 	# -Og     = Optimizations that do not interfere with debugging
 	# -Wall   = All warnings about contructions that are easily avoidable
 	# -Wextra = Extra warning flags not covered by -Wall
+	# -g      = Produce debugging information in OS's native format
 	# -pg     = Generate profile information for analysis with gprof
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -Wall -Wextra -g -pg")
 	# gprof <GAME> gmon.out > profile-data.txt
