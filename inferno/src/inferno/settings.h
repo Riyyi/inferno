@@ -16,7 +16,11 @@ namespace Inferno {
 		Settings(const char* path = "assets/settings.json");
 		virtual ~Settings();
 
+// -----------------------------------------
+
 		void initialize();
+		void update();
+		// void render();
 		void destroy();
 
 		nlohmann::json load() const;

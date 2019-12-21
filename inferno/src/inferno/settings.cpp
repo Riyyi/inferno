@@ -25,7 +25,14 @@ namespace Inferno {
 		this->destroy();
 	}
 
+// -----------------------------------------
+
 	void Settings::initialize()
+	{
+		this->update();
+	}
+
+	void Settings::update()
 	{
 		nlohmann::json json = this->load();
 
@@ -72,4 +79,7 @@ namespace Inferno {
 
 		return true;
 	}
+
+// -----------------------------------------
+
 }
