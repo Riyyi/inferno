@@ -21,6 +21,9 @@ namespace Inferno {
 		MouseButtonRelease,
 		MousePosition,
 		MouseScroll,
+
+		JoystickConnected,
+		JoystickDisconnected,
 	};
 
 	enum EventCategory {
@@ -33,6 +36,8 @@ namespace Inferno {
 
 		MouseEventCategory       = BIT(3),
 		MouseButtonEventCategory = BIT(4),
+
+		JoystickEventCatergory   = BIT(5),
 	};
 
 	class Event {
