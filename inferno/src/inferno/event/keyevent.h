@@ -1,6 +1,8 @@
 #ifndef KEYEVENT_H
 #define KEYEVENT_H
 
+#include <sstream> // std::stringstream
+
 #include "inferno/event/event.h"
 
 namespace Inferno {

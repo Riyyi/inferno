@@ -1,6 +1,8 @@
 #ifndef MOUSEEVENT_H
 #define MOUSEEVENT_H
 
+#include <sstream> // std::stringstream
+
 #include "inferno/event/event.h"
 
 namespace Inferno {

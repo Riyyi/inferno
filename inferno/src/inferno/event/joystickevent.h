@@ -1,6 +1,8 @@
 #ifndef JOYSTICKEVENT_H
 #define JOYSTICKEVENT_H
 
+#include <sstream> // std::stringstream
+
 #include "inferno/event/event.h"
 
 namespace Inferno {
@@ -50,6 +52,5 @@ namespace Inferno {
 	};
 
 }
-
 
 #endif // JOYSTICKEVENT_H
