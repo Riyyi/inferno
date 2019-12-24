@@ -10,6 +10,8 @@ set(GAME "game")
 
 cmake_minimum_required(VERSION 3.1)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Check if the build should include debugging symbols
 option(DEBUG "" ON)
 if(DEBUG)
