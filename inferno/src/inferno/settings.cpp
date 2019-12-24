@@ -1,47 +1,37 @@
-#include <fstream> // std::ifstream, std::ofstream
-#include <iomanip> // std::setfill, std::setw
 #include <string>  // std::string
 
-#include "inferno/core.h"
 #include "inferno/file.h"
 #include "inferno/log.h"
 #include "inferno/settings.h"
 
 namespace Inferno {
 
-	Settings* Settings::s_instance = nullptr;
+	bool Settings::m_initialized = false;
 
-	Settings::Settings(const char* path) :
-		m_path(path)
-	{
-		NF_CORE_ASSERT(!s_instance, "Settings already exists!");
-		s_instance = this;
-
-		this->initialize();
-	}
-
-	Settings::~Settings()
-	{
-		this->destroy();
-	}
-
-// -----------------------------------------
+	const char* Settings::m_path = "assets/settings.json";
+	SettingsProperties Settings::m_properties = {};
 
 	void Settings::initialize()
 	{
-		this->update();
+		Settings::update();
+
+		m_initialized = true;
 	}
 
 	void Settings::update()
 	{
-		nlohmann::json json = this->load();
+		if (m_initialized) {
+			Settings::destroy();
+		}
+
+		nlohmann::json json = Settings::load();
 
 		try {
-			m_properties.window.title      = strdup(json["window"]["title"].get<std::string>().c_str());
-			m_properties.window.width      = json["window"]["width"].get<int>();
-			m_properties.window.height     = json["window"]["height"].get<int>();
-			m_properties.window.fullscreen = strdup(json["window"]["fullscreen"].get<std::string>().c_str());
-			m_properties.window.vsync      = json["window"]["vsync"].get<bool>();
+			m_properties.window.title       = strdup(json["window"]["title"].get<std::string>().c_str());
+			m_properties.window.width       = json["window"]["width"].get<int>();
+			m_properties.window.height      = json["window"]["height"].get<int>();
+			m_properties.window.fullscreen  = strdup(json["window"]["fullscreen"].get<std::string>().c_str()) ;
+			m_properties.window.vsync       = json["window"]["vsync"].get<bool>();
 		}
 		catch (...) {
 			NF_CORE_WARN("Settings syntax error: using default values");
@@ -55,7 +45,7 @@ namespace Inferno {
 		delete m_properties.window.fullscreen;
 	}
 
-	nlohmann::json Settings::load() const
+	nlohmann::json Settings::load()
 	{
 		nlohmann::json json;
 
@@ -68,18 +58,16 @@ namespace Inferno {
 	bool Settings::save()
 	{
 		nlohmann::json json;
-		json["window"]["title"]      = m_properties.window.title;
-		json["window"]["width"]      = m_properties.window.width;
-		json["window"]["height"]     = m_properties.window.height;
-		json["window"]["fullscreen"] = m_properties.window.fullscreen;
-		json["window"]["vsync"]      = m_properties.window.vsync;
+		json["window"]["title"]       = m_properties.window.title;
+		json["window"]["width"]       = m_properties.window.width;
+		json["window"]["height"]      = m_properties.window.height;
+		json["window"]["fullscreen"]  = m_properties.window.fullscreen;
+		json["window"]["vsync"]       = m_properties.window.vsync;
 
 		File::ioWrite(json, m_path);
 		NF_CORE_INFO("Settings saved");
 
 		return true;
 	}
-
-// -----------------------------------------
 
 }

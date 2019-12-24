@@ -13,30 +13,22 @@ namespace Inferno {
 
 	class Settings {
 	public:
-		Settings(const char* path = "assets/settings.json");
-		virtual ~Settings();
+		static void initialize();
+		static void update();
+		static void destroy();
+
+		static nlohmann::json load();
+		static bool save();
 
 // -----------------------------------------
 
-		void initialize();
-		void update();
-		// void render();
-		void destroy();
-
-		nlohmann::json load() const;
-		bool save();
-
-// -----------------------------------------
-
-		static inline Settings &get() { return *s_instance; }
-
-		inline SettingsProperties &properties() { return m_properties; }
+		static inline SettingsProperties &get() { return m_properties; }
 
 	private:
-		const char* m_path;
-		SettingsProperties m_properties;
+		static bool m_initialized;
 
-		static Settings* s_instance;
+		static const char* m_path;
+		static SettingsProperties m_properties;
 	};
 
 }

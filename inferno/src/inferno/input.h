@@ -19,6 +19,8 @@ namespace Inferno {
 		static float getMouseX();
 		static float getMouseY();
 
+// -----------------------------------------
+
 		static inline float getXOffset() { return m_xOffset; }
 		static inline float getYOffset() { return m_yOffset; }
 

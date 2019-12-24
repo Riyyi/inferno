@@ -18,11 +18,11 @@ namespace Inferno {
 	Window::Window()
 	{
 		m_windowProperties = {
-			Settings::get().properties().window.title,
-			Settings::get().properties().window.width,
-			Settings::get().properties().window.height,
-			Settings::get().properties().window.fullscreen,
-			Settings::get().properties().window.vsync,
+			Settings::get().window.title,
+			Settings::get().window.width,
+			Settings::get().window.height,
+			Settings::get().window.fullscreen,
+			Settings::get().window.vsync,
 		};
 
 		this->initialize();
