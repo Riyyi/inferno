@@ -56,7 +56,7 @@ set(GAME_SOURCES ${GAME_SOURCES})
 # ------------------------------------------
 
 project(${ENGINE})
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 # GLFW
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -72,7 +72,7 @@ target_link_libraries(${ENGINE} glfw)
 # ------------------------------------------
 
 project(${GAME})
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 add_executable(${GAME} ${GAME_SOURCES})
 target_link_libraries(${GAME} ${ENGINE})
