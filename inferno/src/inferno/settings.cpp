@@ -34,7 +34,7 @@ namespace Inferno {
 			m_properties.window.vsync       = json["window"]["vsync"].get<bool>();
 		}
 		catch (...) {
-			NF_CORE_WARN("Settings syntax error: using default values");
+			dbg(Log::Warn) << "Settings syntax error: using default values";
 		}
 	}
 
@@ -50,7 +50,7 @@ namespace Inferno {
 		nlohmann::json json;
 
 		File::ioRead(json, m_path);
-		NF_CORE_INFO("Settings loaded");
+		dbg(Log::Info) << "Settings loaded";
 
 		return json;
 	}
@@ -65,7 +65,7 @@ namespace Inferno {
 		json["window"]["vsync"]       = m_properties.window.vsync;
 
 		File::ioWrite(json, m_path);
-		NF_CORE_INFO("Settings saved");
+		dbg(Log::Info) << "Settings saved";
 
 		return true;
 	}

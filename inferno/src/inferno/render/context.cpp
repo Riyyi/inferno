@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "inferno/assertions.h"
 #include "inferno/core.h"
 #include "inferno/log.h"
 #include "inferno/render/context.h"
@@ -20,13 +21,13 @@ namespace Inferno {
 		// Initialize glad
 		glfwMakeContextCurrent(m_window);
 		int glad = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		NF_CORE_ASSERT(glad, "Failed to initialize glad!");
+		ASSERT(glad, "Failed to initialize glad!");
 
 		// Log OpenGL properties
-		NF_CORE_INFO("OpenGL Info:");
-		NF_CORE_INFO("  Vendor:   %s", glGetString(GL_VENDOR));
-		NF_CORE_INFO("  Renderer: %s", glGetString(GL_RENDERER));
-		NF_CORE_INFO("  Version:  %s", glGetString(GL_VERSION));
+		dbg(Log::Info) << "OpenGL Info:";
+		dbg(Log::Info) << "  Vendor:   " << glGetString(GL_VENDOR);
+		dbg(Log::Info) << "  Renderer: " << glGetString(GL_RENDERER);
+		dbg(Log::Info) << "  Version:  " << glGetString(GL_VERSION);
 
 		Window &w = *(Window*)glfwGetWindowUserPointer(m_window);
 

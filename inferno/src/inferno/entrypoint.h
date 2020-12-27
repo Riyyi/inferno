@@ -16,9 +16,6 @@ int main(int argc, char* argv[])
 	(void)argc;
 	(void)argv;
 
-	// Initialize Log
-	Inferno::Log::initialize();
-
 	// Start application
 	auto app = Inferno::createApplication();
 	app->run();

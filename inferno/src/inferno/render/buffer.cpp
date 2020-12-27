@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 
+#include "inferno/assertions.h"
 #include "inferno/core.h"
 #include "inferno/log.h"
 #include "inferno/render/buffer.h"
@@ -48,7 +49,7 @@ namespace Inferno {
 			case BufferElementType::Vec4: return sizeof(float) * 4;
 		};
 
-		NF_CORE_ASSERT(false, "BufferElement unknown BufferElementType size!");
+		ASSERT(false, "BufferElement unknown BufferElementType size!");
 		return 0;
 	}
 
@@ -68,7 +69,7 @@ namespace Inferno {
 			case BufferElementType::Vec4: return 4;
 		};
 
-		NF_CORE_ASSERT(false, "BufferElement unknown BufferElementType count!");
+		ASSERT(false, "BufferElement unknown BufferElementType count!");
 		return 0;
 	}
 
@@ -88,7 +89,7 @@ namespace Inferno {
 			case BufferElementType::Vec4: return GL_FLOAT;
 		};
 
-		NF_CORE_ASSERT(false, "BufferElement unknown BufferElementType GL!");
+		ASSERT(false, "BufferElement unknown BufferElementType GL!");
 		return 0;
 	}
 

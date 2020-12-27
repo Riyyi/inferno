@@ -1,6 +1,7 @@
 #include <GLFW/glfw3.h>
 
 #include "inferno/application.h"
+#include "inferno/assertions.h"
 #include "inferno/core.h"
 #include "inferno/event/applicationevent.h"
 #include "inferno/event/event.h"
@@ -19,7 +20,7 @@ namespace Inferno {
 
 	Application::Application()
 	{
-		NF_CORE_ASSERT(!s_instance, "Application already exists!");
+		ASSERT(!s_instance, "Application already exists!");
 		s_instance = this;
 
 		// Initialize Settings
@@ -62,7 +63,7 @@ namespace Inferno {
 
 	void Application::run()
 	{
-		NF_CORE_LOG("Application startup");
+		dbg() << "Application startup";
 
 		while(!glfwWindowShouldClose(m_window->getWindow())) {
 
@@ -81,7 +82,7 @@ namespace Inferno {
 			m_window->update();
 		}
 
-		NF_CORE_LOG("Application shutdown");
+		dbg() << "Application shutdown";
 	}
 
 	void Application::onEvent(Event &e)
@@ -96,7 +97,7 @@ namespace Inferno {
 		// Suppress unused warning
 		(void)e;
 
-		NF_CORE_INFO("WindowCloseEvent triggered");
+		dbg(Log::Info) << "WindowCloseEvent triggered";
 
 		glfwSetWindowShouldClose(m_window->getWindow(), GL_TRUE);
 
@@ -108,7 +109,7 @@ namespace Inferno {
 		// Suppress unused warning
 		(void)e;
 
-		NF_CORE_INFO("WindowResizeEvent %dx%d triggered", e.getWidth(), e.getHeight());
+		dbg(Log::Info) << "WindowResizeEvent %dx%d triggered", e.getWidth(), e.getHeight();
 
 		m_window->getContext()->setViewport(0, 0, e.getWidth(), e.getHeight());
 

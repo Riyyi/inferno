@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 
+#include "inferno/assertions.h"
 #include "inferno/core.h"
 #include "inferno/file.h"
 #include "inferno/log.h"
@@ -129,10 +130,10 @@ namespace Inferno {
 				? glGetShaderInfoLog(check, maxLength, nullptr, &infoLog[0])
 				: glGetProgramInfoLog(check, maxLength, nullptr, &infoLog[0]);
 
-			NF_CORE_WARN("Shader %s", infoLog.data());
+			dbg(Log::Warn) << "Shader " << infoLog.data();
 		}
 
-		NF_CORE_ASSERT(success == GL_TRUE, "Shader program creation failed!")
+		ASSERT(success == GL_TRUE, "Shader program creation failed!");
 
 		return success;
 	}

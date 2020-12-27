@@ -2,6 +2,7 @@
 
 #include <GLFW/glfw3.h>
 
+#include "inferno/assertions.h"
 #include "inferno/core.h"
 #include "inferno/event/applicationevent.h"
 #include "inferno/event/keyevent.h"
@@ -55,7 +56,7 @@ namespace Inferno {
 		// Create GLFW window
 		m_window = glfwCreateWindow(width, height, title, nullptr, nullptr);
 		s_windowCount++;
-		NF_CORE_ASSERT(m_window, "Failed to create GLFW window!");
+		ASSERT(m_window, "Failed to create GLFW window!");
 
 		// Set windowed/fullscreen/borderless
 		this->setWindowMonitor();
@@ -72,7 +73,7 @@ namespace Inferno {
 
 		// Error callback
 		glfwSetErrorCallback([](int error, const char* description) {
-			NF_CORE_LOG("GLFW Error %d: %s", error, description);
+			dbgln("GLFW Error {}: {}", error, description);
 		});
 
 		// Window close callback
