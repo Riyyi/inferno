@@ -64,11 +64,11 @@ namespace Inferno {
 // ----------------------------------------
 
 	const LogStream& operator<<(const LogStream& stream, const char* value);
+	const LogStream& operator<<(const LogStream& stream, const unsigned char* value);
 	const LogStream& operator<<(const LogStream& stream, const std::string& value);
 	const LogStream& operator<<(const LogStream& stream, const std::string_view& value);
 	const LogStream& operator<<(const LogStream& stream, char value);
 	const LogStream& operator<<(const LogStream& stream, unsigned char value);
-	const LogStream& operator<<(const LogStream& stream, const unsigned char* value);
 	const LogStream& operator<<(const LogStream& stream, int value);
 	const LogStream& operator<<(const LogStream& stream, long int value);
 	const LogStream& operator<<(const LogStream& stream, long long int value);
