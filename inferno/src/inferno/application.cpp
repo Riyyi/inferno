@@ -109,7 +109,7 @@ namespace Inferno {
 		// Suppress unused warning
 		(void)e;
 
-		dbg(Log::Info) << "WindowResizeEvent %dx%d triggered", e.getWidth(), e.getHeight();
+		dbgln(Log::Info, "WindowResizeEvent {}x{} triggered", e.getWidth(), e.getHeight());
 
 		m_window->getContext()->setViewport(0, 0, e.getWidth(), e.getHeight());
 
