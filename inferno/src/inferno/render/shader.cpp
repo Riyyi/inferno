@@ -1,6 +1,7 @@
 #include <vector> // std::vector
 
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp> // glm::value_ptr
 
 #include "inferno/assertions.h"
 #include "inferno/core.h"
@@ -10,7 +11,7 @@
 
 namespace Inferno {
 
-	Shader::Shader(const std::string &vertexSource, const std::string &fragmentSource) :
+	Shader::Shader(const std::string& vertexSource, const std::string& fragmentSource) :
 		m_program(0)
 	{
 		// Get file contents
@@ -40,6 +41,64 @@ namespace Inferno {
 
 // -----------------------------------------
 
+	void Shader::setInt(const std::string &name, int value)
+	{
+		// Set unifrom int
+		GLint location = glGetUniformLocation(m_program, name.c_str());
+		glUniform1i(location, value);
+	}
+
+	void Shader::setFloat(const std::string &name, float f1) const
+	{
+		// Set uniform float
+		GLint location = glGetUniformLocation(m_program, name.c_str());
+		glUniform1f(location, f1);
+	}
+
+	void Shader::setFloat(const std::string &name, float f1, float f2, float f3, float f4) const
+	{
+		// Set uniform vec4 data
+		GLint location = glGetUniformLocation(m_program, name.c_str());
+		glUniform4f(location, f1, f2, f3, f4);
+	}
+
+	void Shader::setFloat(const std::string &name, glm::vec2 value) const
+	{
+		// Set uniform vec2 data
+		GLint location = glGetUniformLocation(m_program, name.c_str());
+		glUniform2f(location, value.x, value.y);
+	}
+
+	void Shader::setFloat(const std::string &name, glm::vec3 value) const
+	{
+		// Set uniform vec3 data
+		GLint location = glGetUniformLocation(m_program, name.c_str());
+		glUniform3f(location, value.x, value.y, value.z);
+	}
+
+	void Shader::setFloat(const std::string &name, glm::vec4 value) const
+	{
+		// Set uniform vec4 data
+		GLint location = glGetUniformLocation(m_program, name.c_str());
+		glUniform4f(location, value.x, value.y, value.z, value.w);
+	}
+
+	void Shader::setFloat(const std::string &name, glm::mat3 matrix) const
+	{
+		// Set uniform mat3 data
+		GLint location = glGetUniformLocation(m_program, name.c_str());
+		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
+	void Shader::setFloat(const std::string &name, glm::mat4 matrix) const
+	{
+		// Set uniform mat4 data
+		GLint location = glGetUniformLocation(m_program, name.c_str());
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
+// -----------------------------------------
+
 	void Shader::bind() const
 	{
 		glUseProgram(m_program);
@@ -48,13 +107,6 @@ namespace Inferno {
 	void Shader::unbind() const
 	{
 		glUseProgram(0);
-	}
-
-// -----------------------------------------
-
-	uint32_t Shader::getProgram() const
-	{
-		return m_program;
 	}
 
 // -----------------------------------------

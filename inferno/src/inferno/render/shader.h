@@ -15,12 +15,24 @@ namespace Inferno {
 
 // -----------------------------------------
 
+		// Set uniform data
+		void setInt(const std::string& name, int value);
+		void setFloat(const std::string &name, float f1) const;
+		void setFloat(const std::string &name, float f1, float f2, float f3, float f4) const;
+		void setFloat(const std::string &name, glm::vec2 v) const;
+		void setFloat(const std::string &name, glm::vec3 v) const;
+		void setFloat(const std::string &name, glm::vec4 v) const;
+		void setFloat(const std::string &name, glm::mat3 m) const;
+		void setFloat(const std::string &name, glm::mat4 m) const;
+
+// -----------------------------------------
+
 		void bind() const;
 		void unbind() const;
 
 // -----------------------------------------
 
-		uint32_t getProgram() const;
+		inline uint32_t getProgram() const { return m_program; }
 
 // -----------------------------------------
 
