@@ -61,7 +61,7 @@ namespace Inferno {
 		virtual const char* getName() const = 0;
 		virtual EventType getType() const = 0;
 
-	protected:
+	private:
 		bool handled = false;
 	};
 
