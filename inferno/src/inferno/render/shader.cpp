@@ -48,18 +48,18 @@ namespace Inferno {
 		glUniform1i(location, value);
 	}
 
-	void Shader::setFloat(const std::string &name, float f1) const
+	void Shader::setFloat(const std::string &name, float value) const
 	{
 		// Set uniform float
 		GLint location = glGetUniformLocation(m_program, name.c_str());
-		glUniform1f(location, f1);
+		glUniform1f(location, value);
 	}
 
-	void Shader::setFloat(const std::string &name, float f1, float f2, float f3, float f4) const
+	void Shader::setFloat(const std::string &name, float v1, float v2, float v3, float v4) const
 	{
 		// Set uniform vec4 data
 		GLint location = glGetUniformLocation(m_program, name.c_str());
-		glUniform4f(location, f1, f2, f3, f4);
+		glUniform4f(location, v1, v2, v3, v4);
 	}
 
 	void Shader::setFloat(const std::string &name, glm::vec2 value) const
