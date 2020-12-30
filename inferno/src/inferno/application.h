@@ -6,9 +6,11 @@
 namespace Inferno {
 
 	class Event;
+	class Texture;
+	class TextureManager;
+	class Window;
 	class WindowCloseEvent;
 	class WindowResizeEvent;
-	class Window;
 
 	class VertexArray;
 	class Shader;
@@ -20,22 +22,25 @@ namespace Inferno {
 
 		void run();
 
-		void onEvent(Event &e);
-		bool onWindowClose(WindowCloseEvent &e);
-		bool onWindowResize(WindowResizeEvent &e);
+		void onEvent(Event& e);
+		bool onWindowClose(WindowCloseEvent& e);
+		bool onWindowResize(WindowResizeEvent& e);
 
 // -----------------------------------------
 
-		inline Window &getWindow() { return *m_window; }
+		inline Window& getWindow() const { return *m_window; }
 
-		static inline Application &get() { return *s_instance; }
+		static inline Application& get() { return *s_instance; }
 
 	private:
 		std::unique_ptr<Window> m_window;
 
 		//
-		std::shared_ptr<VertexArray> m_vertexArray;
-		std::unique_ptr<Shader> m_shader;
+		std::shared_ptr<VertexArray> m_vertexArrayColor;
+		std::shared_ptr<VertexArray> m_vertexArrayTexture;
+		std::shared_ptr<Shader> m_shaderSimple;
+		std::shared_ptr<Shader> m_shaderTexture;
+		std::shared_ptr<Texture> m_texture;
 		//
 
 		static Application* s_instance;
