@@ -41,6 +41,7 @@ include_directories(
 	"${ENGINE}/vendor/glfw/include"
 	"${ENGINE}/vendor/glm"
 	"${ENGINE}/vendor/json/include"
+	"${ENGINE}/vendor/stb"
 	"${ENGINE}/src"
 )
 

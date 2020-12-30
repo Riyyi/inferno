@@ -39,9 +39,9 @@ Or
 - [[https://github.com/Dav1dde/glad][glad]]
 - [[https://github.com/glfw/glfw][GLFW]]
 - [[https://github.com/g-truc/glm][GLM]]
-# - [[https://github.com/nothings/stb][stb]]
 - [[https://github.com/nlohmann/json][JSON]]
 # - [[https://github.com/lua/lua][Lua]]
+- [[https://github.com/nothings/stb][stb]]
 
 * References
 

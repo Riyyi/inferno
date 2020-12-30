@@ -7,3 +7,6 @@
 [submodule "inferno/vendor/json"]
 	path = inferno/vendor/json
 	url = https://github.com/nlohmann/json
+[submodule "inferno/vendor/stb"]
+	path = inferno/vendor/stb
+	url = https://github.com/nothings/stb
