@@ -29,6 +29,15 @@ namespace Inferno {
 		dbg(Log::Info) << "  Renderer: " << glGetString(GL_RENDERER);
 		dbg(Log::Info) << "  Version:  " << glGetString(GL_VERSION);
 
+#ifdef NF_ENABLE_ASSERTS
+		int versionMajor;
+		int versionMinor;
+		glGetIntegerv(GL_MAJOR_VERSION, &versionMajor);
+		glGetIntegerv(GL_MINOR_VERSION, &versionMinor);
+		ASSERT(versionMajor > 4 || (versionMajor == 4 && versionMinor >= 5),
+		       "Inferno requires at least OpenGL version 4.5!");
+#endif
+
 		Window &w = *(Window*)glfwGetWindowUserPointer(m_window);
 
 		// Disable vsync
