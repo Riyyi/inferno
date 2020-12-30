@@ -5,6 +5,15 @@
 set(ENGINE "inferno")
 # Set project name
 set(GAME "game")
+# Set debugging, ON/OFF
+set(DEBUG "ON")
+
+# ------------------------------------------
+
+# Add 'make run' target
+add_custom_target(run
+    COMMAND ${GAME}
+)
 
 # ------------------------------------------
 
@@ -13,7 +22,7 @@ cmake_minimum_required(VERSION 3.1)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Check if the build should include debugging symbols
-option(DEBUG "" ON)
+option(DEBUG "" ${DEBUG})
 if(DEBUG)
 	# cmake -DDEBUG=on .. && make
 	message("--- Debug ---")
