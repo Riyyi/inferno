@@ -89,8 +89,9 @@ namespace Inferno {
 
 // -----------------------------------------
 
-		m_shaderSimple = std::make_shared<Shader>("assets/glsl/simple.vert", "assets/glsl/simple.frag");
-		m_shaderTexture = std::make_shared<Shader>("assets/glsl/texture.vert", "assets/glsl/texture.frag");
+		ShaderManager shaderManager;
+		m_shaderSimple = shaderManager.load("assets/glsl/simple");
+		m_shaderTexture = shaderManager.load("assets/glsl/texture");
 		m_shaderTexture->setInt("u_texture", m_texture->id());
 	}
 

@@ -11,12 +11,12 @@
 
 namespace Inferno {
 
-	Shader::Shader(const std::string& vertexSource, const std::string& fragmentSource) :
-		m_program(0)
+	Shader::Shader(const std::string& name)
+		: m_id(0)
 	{
 		// Get file contents
-		std::string vertexSrc = File::read(vertexSource);
-		std::string fragmentSrc = File::read(fragmentSource);
+		std::string vertexSrc = File::read(name + ".vert");
+		std::string fragmentSrc = File::read(name + ".frag");
 
 		// Compile shaders
 		uint32_t vertexID = compileShader(GL_VERTEX_SHADER, vertexSrc.c_str());
@@ -24,7 +24,7 @@ namespace Inferno {
 
 		// Link shaders
 		if (vertexID > 0 && fragmentID > 0) {
-			m_program = linkShader(vertexID, fragmentID);
+			m_id = linkShader(vertexID, fragmentID);
 		}
 		// Clear resources
 		else if (vertexID > 0)   glDeleteShader(vertexID);
@@ -33,83 +33,76 @@ namespace Inferno {
 
 	Shader::~Shader()
 	{
-		if (m_program > 0) {
-			glDeleteProgram(m_program);
-			m_program = 0;
+		if (m_id > 0) {
+			glDeleteProgram(m_id);
+			m_id = 0;
 		}
 	}
 
-// -----------------------------------------
+	int32_t Shader::findUniform(const std::string& name) const
+	{
+		int32_t location = glGetUniformLocation(m_id, name.c_str());
+		ASSERT(location != -1, "Shader could not find uniform '{}'", name.c_str());
+		return location;
+	}
 
 	void Shader::setInt(const std::string &name, int value)
 	{
 		// Set unifrom int
-		GLint location = glGetUniformLocation(m_program, name.c_str());
-		glUniform1i(location, value);
+		glUniform1i(findUniform(name), value);
 	}
 
 	void Shader::setFloat(const std::string &name, float value) const
 	{
 		// Set uniform float
-		GLint location = glGetUniformLocation(m_program, name.c_str());
-		glUniform1f(location, value);
+		glUniform1f(findUniform(name), value);
 	}
 
 	void Shader::setFloat(const std::string &name, float v1, float v2, float v3, float v4) const
 	{
 		// Set uniform vec4 data
-		GLint location = glGetUniformLocation(m_program, name.c_str());
-		glUniform4f(location, v1, v2, v3, v4);
+		glUniform4f(findUniform(name), v1, v2, v3, v4);
 	}
 
 	void Shader::setFloat(const std::string &name, glm::vec2 value) const
 	{
 		// Set uniform vec2 data
-		GLint location = glGetUniformLocation(m_program, name.c_str());
-		glUniform2f(location, value.x, value.y);
+		glUniform2f(findUniform(name), value.x, value.y);
 	}
 
 	void Shader::setFloat(const std::string &name, glm::vec3 value) const
 	{
 		// Set uniform vec3 data
-		GLint location = glGetUniformLocation(m_program, name.c_str());
-		glUniform3f(location, value.x, value.y, value.z);
+		glUniform3f(findUniform(name), value.x, value.y, value.z);
 	}
 
 	void Shader::setFloat(const std::string &name, glm::vec4 value) const
 	{
 		// Set uniform vec4 data
-		GLint location = glGetUniformLocation(m_program, name.c_str());
-		glUniform4f(location, value.x, value.y, value.z, value.w);
+		glUniform4f(findUniform(name), value.x, value.y, value.z, value.w);
 	}
 
 	void Shader::setFloat(const std::string &name, glm::mat3 matrix) const
 	{
 		// Set uniform mat3 data
-		GLint location = glGetUniformLocation(m_program, name.c_str());
-		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+		glUniformMatrix3fv(findUniform(name), 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
 	void Shader::setFloat(const std::string &name, glm::mat4 matrix) const
 	{
 		// Set uniform mat4 data
-		GLint location = glGetUniformLocation(m_program, name.c_str());
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+		glUniformMatrix4fv(findUniform(name), 1, GL_FALSE, glm::value_ptr(matrix));
 	}
-
-// -----------------------------------------
 
 	void Shader::bind() const
 	{
-		glUseProgram(m_program);
+		glUseProgram(m_id);
 	}
 
 	void Shader::unbind() const
 	{
 		glUseProgram(0);
 	}
-
-// -----------------------------------------
 
 	uint32_t Shader::compileShader(int32_t type, const char* source) const
 	{
@@ -188,6 +181,73 @@ namespace Inferno {
 		ASSERT(success == GL_TRUE, "Shader program creation failed!");
 
 		return success;
+	}
+
+// -----------------------------------------
+
+	void ShaderManager::add(const std::string& name, const std::shared_ptr<Shader>& shader)
+	{
+		// Construct (key, value) pair and insert it into the unordered_map
+		m_shaderList.emplace(name, shader);
+	}
+
+	std::shared_ptr<Shader> ShaderManager::load(const std::string& name)
+	{
+		if (exists(name)) {
+			return get(name);
+		}
+
+		std::shared_ptr<Shader> shader = std::make_shared<Shader>(name);
+		add(name, shader);
+		return get(name);
+	}
+
+	std::shared_ptr<Shader> ShaderManager::load(const std::string& vertexSource,
+	                                            const std::string& fragmentSource)
+	{
+		std::string name = computeName(vertexSource, fragmentSource);
+		return load(name);
+	}
+
+	std::shared_ptr<Shader> ShaderManager::get(const std::string& name)
+	{
+		return exists(name) ? m_shaderList.at(name) : nullptr;
+	}
+
+	bool ShaderManager::exists(const std::string& name)
+	{
+		return m_shaderList.find(name) != m_shaderList.end();
+	}
+
+	void ShaderManager::remove(const std::string& name)
+	{
+		if (exists(name)) {
+			m_shaderList.erase(name);
+		}
+	}
+
+	void ShaderManager::remove(const std::shared_ptr<Shader>& shader)
+	{
+		if (exists(shader->name())) {
+			m_shaderList.erase(shader->name());
+		}
+	}
+
+	std::string ShaderManager::computeName(const std::string& vertexSource,
+	                                       const std::string& fragmentSource)
+	{
+		auto vertexPos = vertexSource.find_last_of('.');
+		auto fragmentPos = fragmentSource.find_last_of('.');
+
+		ASSERT(vertexPos != std::string::npos, "Shader did not have file extension: '{}'", vertexSource);
+		ASSERT(fragmentPos != std::string::npos, "Shader did not have file extension: '{}'", fragmentSource);
+
+		auto vertexName = vertexSource.substr(0, vertexPos);
+		auto fragmentName = vertexSource.substr(0, fragmentPos);
+
+		ASSERT(vertexName == fragmentName, "Shader names did not match: {} {}", vertexSource, fragmentSource);
+
+		return vertexName;
 	}
 
 }
