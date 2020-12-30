@@ -46,6 +46,7 @@ endif()
 
 # Include all headers
 include_directories(
+	"${ENGINE}/vendor/freetype/include"
 	"${ENGINE}/vendor/glad/include"
 	"${ENGINE}/vendor/glfw/include"
 	"${ENGINE}/vendor/glm"
