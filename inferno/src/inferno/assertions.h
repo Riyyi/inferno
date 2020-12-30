@@ -46,9 +46,9 @@ namespace Inferno {
 		dbg(Log::Danger, false) << "ASSERTION FAILED: " << message;
 
 		if (sizeof...(P) > 0) {
-			dbg(Log::Danger, false) << ", \"";
+			dbg(Log::Danger, false) << ": ";
 			dbgln(Log::Danger, false, parameters...);
-			dbg(Log::Danger, false) << "\"";
+			dbg(Log::Danger, false);
 		}
 
 		dbg(Log::Danger) << "\n\t" << file << ":" << line << ": " << function;
