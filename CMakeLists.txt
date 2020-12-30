@@ -77,8 +77,11 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 # Add GLFW target to project
 add_subdirectory(${ENGINE}/vendor/glfw)
 
+# Add FreeType2 target to project
+add_subdirectory(${ENGINE}/vendor/freetype)
+
 add_library(${ENGINE} STATIC ${ENGINE_SOURCES})
-target_link_libraries(${ENGINE} glfw)
+target_link_libraries(${ENGINE} glfw freetype)
 
 # ------------------------------------------
 
