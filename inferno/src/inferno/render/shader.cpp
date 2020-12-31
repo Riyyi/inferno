@@ -46,49 +46,49 @@ namespace Inferno {
 		return location;
 	}
 
-	void Shader::setInt(const std::string &name, int value)
+	void Shader::setInt(const std::string& name, int value)
 	{
 		// Set unifrom int
 		glUniform1i(findUniform(name), value);
 	}
 
-	void Shader::setFloat(const std::string &name, float value) const
+	void Shader::setFloat(const std::string& name, float value) const
 	{
 		// Set uniform float
 		glUniform1f(findUniform(name), value);
 	}
 
-	void Shader::setFloat(const std::string &name, float v1, float v2, float v3, float v4) const
+	void Shader::setFloat(const std::string& name, float v1, float v2, float v3, float v4) const
 	{
 		// Set uniform vec4 data
 		glUniform4f(findUniform(name), v1, v2, v3, v4);
 	}
 
-	void Shader::setFloat(const std::string &name, glm::vec2 value) const
+	void Shader::setFloat(const std::string& name, glm::vec2 value) const
 	{
 		// Set uniform vec2 data
 		glUniform2f(findUniform(name), value.x, value.y);
 	}
 
-	void Shader::setFloat(const std::string &name, glm::vec3 value) const
+	void Shader::setFloat(const std::string& name, glm::vec3 value) const
 	{
 		// Set uniform vec3 data
 		glUniform3f(findUniform(name), value.x, value.y, value.z);
 	}
 
-	void Shader::setFloat(const std::string &name, glm::vec4 value) const
+	void Shader::setFloat(const std::string& name, glm::vec4 value) const
 	{
 		// Set uniform vec4 data
 		glUniform4f(findUniform(name), value.x, value.y, value.z, value.w);
 	}
 
-	void Shader::setFloat(const std::string &name, glm::mat3 matrix) const
+	void Shader::setFloat(const std::string& name, glm::mat3 matrix) const
 	{
 		// Set uniform mat3 data
 		glUniformMatrix3fv(findUniform(name), 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
-	void Shader::setFloat(const std::string &name, glm::mat4 matrix) const
+	void Shader::setFloat(const std::string& name, glm::mat4 matrix) const
 	{
 		// Set uniform mat4 data
 		glUniformMatrix4fv(findUniform(name), 1, GL_FALSE, glm::value_ptr(matrix));

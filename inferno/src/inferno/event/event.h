@@ -67,19 +67,19 @@ namespace Inferno {
 
 	class EventDispatcher {
 	public:
-		EventDispatcher(Event &e) : m_event(e) {}
+		EventDispatcher(Event& e) : m_event(e) {}
 
 		// Easily dispatch all type of Events, call with:
 		// dispatch<T>(std::bind(&F, this, std::placeholders::_1));
 		// T is the type of Event
-		// F is the function to call, signature: bool name(T &e);
+		// F is the function to call, signature: bool name(T& e);
 		template<typename T, typename F>
-		bool dispatch(const F &function)
+		bool dispatch(const F& function)
 		{
 			// If <constructed> type is same as member variable type
 			if (T::getTypeStatic() == m_event.getType()) {
 				// Call the function
-				m_event.handled = function(static_cast<T &>(m_event));
+				m_event.handled = function(static_cast<T& >(m_event));
 				return true;
 			}
 
@@ -87,7 +87,7 @@ namespace Inferno {
 		}
 
 	private:
-		Event &m_event;
+		Event& m_event;
 	};
 
 	// Add class type functions macro
@@ -101,7 +101,7 @@ namespace Inferno {
 	virtual char getCategoryFlags() const override { return category; }
 
 	// Make Events easily printable
-	inline std::ostream& operator<<(std::ostream &os, const Event &e)
+	inline std::ostream& operator<<(std::ostream& os, const Event& e)
 	{
 		return os << e.toString();
 	}

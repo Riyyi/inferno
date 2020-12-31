@@ -11,7 +11,7 @@ namespace Inferno {
 	public:
 		static void update();
 
-		static bool onMousePosition(MousePositionEvent &e);
+		static bool onMousePosition(MousePositionEvent& e);
 
 		static bool isKeyPressed(int key);
 		static bool isMouseButtonPressed(int button);

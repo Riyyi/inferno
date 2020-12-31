@@ -38,7 +38,7 @@ namespace Inferno {
 		       "Inferno requires at least OpenGL version 4.5!");
 #endif
 
-		Window &w = *(Window*)glfwGetWindowUserPointer(m_window);
+		Window& w = *(Window*)glfwGetWindowUserPointer(m_window);
 
 		// Disable vsync
 		if (!w.isVSync()) {

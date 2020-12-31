@@ -36,11 +36,11 @@ namespace Inferno {
 		inline uint32_t getOffset() const { return m_offset; }
 		inline bool getNormalized() const { return m_normalized; }
 
-		inline void setType(const BufferElementType &type) { m_type = type; }
-		inline void setName(const std::string &name) { m_name = name; }
-		inline void setSize(const uint32_t &size) { m_size = size; }
-		inline void setOffset(const uint32_t &offset) { m_offset = offset; }
-		inline void setNormalized(const bool &normalized) { m_normalized = normalized; }
+		inline void setType(const BufferElementType& type) { m_type = type; }
+		inline void setName(const std::string& name) { m_name = name; }
+		inline void setSize(const uint32_t& size) { m_size = size; }
+		inline void setOffset(const uint32_t& offset) { m_offset = offset; }
+		inline void setNormalized(const bool& normalized) { m_normalized = normalized; }
 
 	private:
 		BufferElementType m_type;
@@ -56,9 +56,9 @@ namespace Inferno {
 	class BufferLayout {
 	public:
 		BufferLayout() {}
-		BufferLayout(const std::initializer_list<BufferElement> &elements);
+		BufferLayout(const std::initializer_list<BufferElement>& elements);
 
-		inline const std::vector<BufferElement> &getElements() const { return m_elements; }
+		inline const std::vector<BufferElement>& getElements() const { return m_elements; }
 		inline uint32_t getStride() const { return m_stride; }
 
 		// Iterators
@@ -86,9 +86,9 @@ namespace Inferno {
 		void bind() const;
 		void unbind() const;
 
-		inline BufferLayout const &getLayout() const { return m_layout; }
+		inline const BufferLayout& getLayout() const { return m_layout; }
 
-		inline void setLayout(const BufferLayout &layout) { m_layout = layout; }
+		inline void setLayout(const BufferLayout& layout) { m_layout = layout; }
 
 	private:
 		uint32_t m_id;
@@ -124,11 +124,11 @@ namespace Inferno {
 		void bind() const;
 		void unbind() const;
 
-		void addVertexBuffer(const std::shared_ptr<VertexBuffer> &vertexBuffer);
-		void setIndexBuffer(const std::shared_ptr<IndexBuffer> &indexBuffer);
+		void addVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer);
+		void setIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer);
 
-		const std::vector<std::shared_ptr<VertexBuffer>> &getVertexBuffers() const { return m_vertexBuffers; }
-		const std::shared_ptr<IndexBuffer> &getIndexBuffer() const { return m_indexBuffer; }
+		const std::vector<std::shared_ptr<VertexBuffer>>& getVertexBuffers() const { return m_vertexBuffers; }
+		const std::shared_ptr<IndexBuffer>& getIndexBuffer() const { return m_indexBuffer; }
 
 	private:
 		uint32_t m_id;

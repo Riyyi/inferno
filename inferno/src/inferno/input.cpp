@@ -19,7 +19,7 @@ namespace Inferno {
 		m_yOffset = 0.0f;
 	}
 
-	bool Input::onMousePosition(MousePositionEvent &e)
+	bool Input::onMousePosition(MousePositionEvent& e)
 	{
 		// Prevent weird jump on first cursor window enter
 		if(m_firstMousePos) {

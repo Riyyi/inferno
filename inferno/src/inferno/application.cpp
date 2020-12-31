@@ -132,14 +132,14 @@ namespace Inferno {
 		dbg() << "Application shutdown";
 	}
 
-	void Application::onEvent(Event &e)
+	void Application::onEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.dispatch<WindowCloseEvent>(NF_BIND_EVENT(Application::onWindowClose));
 		dispatcher.dispatch<WindowResizeEvent>(NF_BIND_EVENT(Application::onWindowResize));
 	}
 
-	bool Application::onWindowClose(WindowCloseEvent &e)
+	bool Application::onWindowClose(WindowCloseEvent& e)
 	{
 		// Suppress unused warning
 		(void)e;
@@ -151,7 +151,7 @@ namespace Inferno {
 		return true;
 	}
 
-	bool Application::onWindowResize(WindowResizeEvent &e)
+	bool Application::onWindowResize(WindowResizeEvent& e)
 	{
 		// Suppress unused warning
 		(void)e;

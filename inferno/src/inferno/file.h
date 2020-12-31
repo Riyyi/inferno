@@ -13,10 +13,10 @@ namespace Inferno {
 
 	class File {
 	public:
-		static std::string read(const std::string &path);
+		static std::string read(const std::string& path);
 
 		template<typename T>
-		static void ioRead(T &t, const std::string &path)
+		static void ioRead(T& t, const std::string& path)
 		{
 			std::ifstream file(path);
 			ASSERT(file.is_open(), "File could not open! {}", path.c_str());
@@ -28,7 +28,7 @@ namespace Inferno {
 		}
 
 		template<typename T>
-		static void ioWrite(T &t, const std::string &path)
+		static void ioWrite(T& t, const std::string& path)
 		{
 			std::ofstream file (path);
 			ASSERT(file.is_open(), "File could not open! {}", path.c_str());

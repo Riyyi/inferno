@@ -78,7 +78,7 @@ namespace Inferno {
 
 		// Window close callback
 		glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window) {
-			Window &w = *(Window*)glfwGetWindowUserPointer(window);
+			Window& w = *(Window*)glfwGetWindowUserPointer(window);
 
 			WindowCloseEvent event;
 			w.m_eventCallback(event);
@@ -86,7 +86,7 @@ namespace Inferno {
 
 		// Window resize callback
 		glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height) {
-			Window &w = *(Window*)glfwGetWindowUserPointer(window);
+			Window& w = *(Window*)glfwGetWindowUserPointer(window);
 
 			w.m_windowProperties.width = width;
 			w.m_windowProperties.height = height;
@@ -101,7 +101,7 @@ namespace Inferno {
 			(void)scanCode;
 			(void)mods;
 
-			Window &w = *(Window*)glfwGetWindowUserPointer(window);
+			Window& w = *(Window*)glfwGetWindowUserPointer(window);
 
 			switch (action) {
 				case GLFW_PRESS: {
@@ -127,7 +127,7 @@ namespace Inferno {
 			// Suppress unused warning
 			(void)mods;
 
-			Window &w = *(Window*)glfwGetWindowUserPointer(window);
+			Window& w = *(Window*)glfwGetWindowUserPointer(window);
 
 			switch (action) {
 				case GLFW_PRESS: {
@@ -145,7 +145,7 @@ namespace Inferno {
 
 		// Mouse position callback
 		glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xPos, double yPos) {
-			Window &w = *(Window*)glfwGetWindowUserPointer(window);
+			Window& w = *(Window*)glfwGetWindowUserPointer(window);
 
 			MousePositionEvent event(xPos, yPos);
 			w.m_eventCallback(event);
@@ -153,7 +153,7 @@ namespace Inferno {
 
 		// Mouse scroll callback
 		glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xOffset, double yOffset) {
-			Window &w = *(Window*)glfwGetWindowUserPointer(window);
+			Window& w = *(Window*)glfwGetWindowUserPointer(window);
 
 			MouseScrollEvent event(xOffset, yOffset);
 			w.m_eventCallback(event);
