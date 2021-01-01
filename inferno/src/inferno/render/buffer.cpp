@@ -203,7 +203,7 @@ namespace Inferno {
 				element.getTypeGL(),
 				element.getNormalized() ? GL_TRUE : GL_FALSE,
 				vertexBuffer->getLayout().getStride(),
-				(const void*)element.getOffset());
+				reinterpret_cast<const void*>(element.getOffset()));
 
 			index++;
 		}
