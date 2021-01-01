@@ -11,6 +11,7 @@ namespace Inferno {
 
 	enum class BufferElementType {
 		None = 0,
+		Bool,
 		Int, Int2, Int3, Int4,
 		Mat3, Mat4,
 		Vec, Vec2, Vec3, Vec4,

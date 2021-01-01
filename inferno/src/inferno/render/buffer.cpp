@@ -37,6 +37,7 @@ namespace Inferno {
 	{
 		switch (type) {
 			case BufferElementType::None: return 0;
+			case BufferElementType::Bool: return sizeof(bool);
 			case BufferElementType::Int:  return sizeof(int32_t);
 			case BufferElementType::Int2: return sizeof(int32_t) * 2;
 			case BufferElementType::Int3: return sizeof(int32_t) * 3;
@@ -57,6 +58,7 @@ namespace Inferno {
 	{
 		switch (type) {
 			case BufferElementType::None: return 0;
+			case BufferElementType::Bool: return 1;
 			case BufferElementType::Int:  return 1;
 			case BufferElementType::Int2: return 2;
 			case BufferElementType::Int3: return 3;
@@ -77,6 +79,7 @@ namespace Inferno {
 	{
 		switch (type) {
 			case BufferElementType::None: return GL_NONE;
+			case BufferElementType::Bool: return GL_BOOL;
 			case BufferElementType::Int:  return GL_INT;
 			case BufferElementType::Int2: return GL_INT;
 			case BufferElementType::Int3: return GL_INT;
