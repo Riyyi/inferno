@@ -191,18 +191,21 @@ namespace Inferno {
 
 	void VertexArray::addVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
 	{
+		const auto& layout = vertexBuffer->getLayout();
+		ASSERT(layout.getElements().size(), "VertexBuffer has no layout");
+
 		this->bind();
 		vertexBuffer->bind();
 
 		uint32_t index = 0;
-		for (const auto& element : vertexBuffer->getLayout()) {
+		for (const auto& element : layout) {
 			glEnableVertexAttribArray(index);
 			glVertexAttribPointer(
 				index,
 				element.getTypeCount(),
 				element.getTypeGL(),
 				element.getNormalized() ? GL_TRUE : GL_FALSE,
-				vertexBuffer->getLayout().getStride(),
+				layout.getStride(),
 				reinterpret_cast<const void*>(element.getOffset()));
 
 			index++;
