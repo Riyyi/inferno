@@ -9,12 +9,22 @@ namespace Inferno {
 
 	const LogStream& operator<<(const LogStream& stream, const char* value)
 	{
+		if (value == nullptr) {
+			stream.write("(null)", 6);
+			return stream;
+		}
+
 		stream.write(value, strlen(value));
 		return stream;
 	}
 
 	const LogStream& operator<<(const LogStream& stream, const unsigned char* value)
 	{
+		if (value == nullptr) {
+			stream.write("(null)", 6);
+			return stream;
+		}
+
 		stream.write(value, strlen((const char*)value));
 		return stream;
 	}
