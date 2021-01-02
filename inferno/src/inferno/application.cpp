@@ -25,11 +25,13 @@ namespace Inferno {
 		s_instance = this;
 
 		// Initialize
+
 		Settings::initialize();
-		Input::initialize();
 
 		m_window = std::make_unique<Window>();
 		m_window->setEventCallback(NF_BIND_EVENT(Application::onEvent));
+
+		Input::initialize();
 
 		TextureManager textureManager;
 		m_texture = textureManager.load("assets/gfx/test.png");
