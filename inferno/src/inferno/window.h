@@ -33,6 +33,8 @@ namespace Inferno {
 // -----------------------------------------
 
 		void setWindowMonitor();
+		bool shouldClose() const;
+		void setShouldClose(bool close) const;
 
 		inline int getWidth() const { return m_windowProperties.width; }
 		inline int getHeight() const { return m_windowProperties.height; }

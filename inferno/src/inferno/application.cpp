@@ -5,6 +5,7 @@
 #include "inferno/core.h"
 #include "inferno/event/applicationevent.h"
 #include "inferno/event/event.h"
+#include "inferno/event/keyevent.h"
 #include "inferno/input.h"
 #include "inferno/log.h"
 #include "inferno/settings.h"
@@ -103,11 +104,7 @@ namespace Inferno {
 	{
 		dbg() << "Application startup";
 
-		while(!glfwWindowShouldClose(m_window->getWindow())) {
-
-			if(glfwGetKey(m_window->getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-				glfwSetWindowShouldClose(m_window->getWindow(), GL_TRUE);
-			}
+		while(!m_window->shouldClose()) {
 
 			Command::clearColor({ 0.2f, 0.3f, 0.3f, 1.0f });
 			Command::clear();
@@ -137,6 +134,7 @@ namespace Inferno {
 		EventDispatcher dispatcher(e);
 		dispatcher.dispatch<WindowCloseEvent>(NF_BIND_EVENT(Application::onWindowClose));
 		dispatcher.dispatch<WindowResizeEvent>(NF_BIND_EVENT(Application::onWindowResize));
+		dispatcher.dispatch<KeyPressEvent>(NF_BIND_EVENT(Application::onKeyPress));
 	}
 
 	bool Application::onWindowClose(WindowCloseEvent& e)
@@ -163,4 +161,20 @@ namespace Inferno {
 		return true;
 	}
 
+	bool Application::onKeyPress(KeyPressEvent& e)
+	{
+		// Suppress unused warning
+		(void)e;
+
+		dbgln(Log::Info, "KeyPressEvent {} ({}) triggered",
+		      Input::getKeyName(e.getKey()),
+		      e.getKey());
+
+		// Stop the main loop on 'Escape' keypress
+		if (e.getKey() == GLFW_KEY_ESCAPE) {
+			m_window->setShouldClose(true);
+		}
+
+		return true;
+	}
 }

@@ -209,4 +209,13 @@ namespace Inferno {
 		glfwSetWindowMonitor(m_window, monitor, xPos, yPos, width, height, refresh);
 	}
 
+	bool Window::shouldClose() const {
+		return glfwWindowShouldClose(m_window);
+	}
+
+	void Window::setShouldClose(bool close) const
+	{
+		glfwSetWindowShouldClose(m_window, close ? GL_TRUE : GL_FALSE);
+	}
+
 }

@@ -19,6 +19,9 @@ namespace Inferno {
 		static float getMouseX();
 		static float getMouseY();
 
+		static const char* getKeyName(int key);
+		static int getKeyScancode(int key);
+
 // -----------------------------------------
 
 		static inline float getXOffset() { return m_xOffset; }

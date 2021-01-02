@@ -68,4 +68,14 @@ namespace Inferno {
 		return getMousePosition().second;
 	}
 
+	const char* Input::getKeyName(int key)
+	{
+		return glfwGetKeyName(key, getKeyScancode(key));
+	}
+
+	int Input::getKeyScancode(int key)
+	{
+		return glfwGetKeyScancode(key);
+	}
+
 }

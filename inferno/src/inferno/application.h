@@ -6,6 +6,7 @@
 namespace Inferno {
 
 	class Event;
+	class KeyPressEvent;
 	class Texture;
 	class TextureManager;
 	class Window;
@@ -25,6 +26,7 @@ namespace Inferno {
 		void onEvent(Event& e);
 		bool onWindowClose(WindowCloseEvent& e);
 		bool onWindowResize(WindowResizeEvent& e);
+		bool onKeyPress(KeyPressEvent& e);
 
 // -----------------------------------------
 
