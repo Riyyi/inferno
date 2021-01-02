@@ -13,7 +13,7 @@ namespace Inferno {
 		Transform() {}
 		Transform(glm::vec3 translate, glm::vec3 rotate, glm::vec3 scale)
 			: m_translate(translate), m_rotate(rotate), m_scale(scale) {}
-		virtual ~Transform() { dbg(Log::Danger) << "KILLED TRANSFORM"; }
+		virtual ~Transform() {}
 
 		virtual void update();
 
