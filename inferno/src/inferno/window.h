@@ -27,7 +27,7 @@ namespace Inferno {
 
 		void initialize();
 		void update();
-		// void render();
+		void render();
 		void destroy();
 
 // -----------------------------------------
@@ -36,9 +36,10 @@ namespace Inferno {
 		bool shouldClose() const;
 		void setShouldClose(bool close) const;
 
-		inline int getWidth() const { return m_windowProperties.width; }
-		inline int getHeight() const { return m_windowProperties.height; }
-		inline bool isVSync() const { return m_windowProperties.vsync; }
+		inline int getAspect() const { return m_properties.width / m_properties.height; }
+		inline int getWidth() const { return m_properties.width; }
+		inline int getHeight() const { return m_properties.height; }
+		inline bool isVSync() const { return m_properties.vsync; }
 
 		inline GLFWwindow* getWindow() const { return m_window; }
 		inline Context* getContext() const { return m_context; }
@@ -46,7 +47,7 @@ namespace Inferno {
 		inline void setEventCallback(std::function<void(Event&)> callback) { m_eventCallback = callback; }
 
 	private:
-		WindowProperties m_windowProperties;
+		WindowProperties m_properties;
 		GLFWwindow* m_window;
 		Context* m_context;
 

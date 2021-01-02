@@ -14,7 +14,7 @@ namespace Inferno {
 
 		void initialize();
 		void update();
-		// void render();
+		void render();
 		void destroy();
 
 // -----------------------------------------

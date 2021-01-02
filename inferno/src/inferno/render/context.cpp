@@ -54,6 +54,10 @@ namespace Inferno {
 
 	void Context::update()
 	{
+	}
+
+	void Context::render()
+	{
 		glfwSwapBuffers(m_window);
 	}
 

@@ -7,6 +7,8 @@
 #include "inferno/event/applicationevent.h"
 #include "inferno/event/keyevent.h"
 #include "inferno/event/mouseevent.h"
+#include "inferno/input.h"
+#include "inferno/inputcodes.h"
 #include "inferno/log.h"
 #include "inferno/render/context.h"
 #include "inferno/settings.h"
@@ -18,7 +20,7 @@ namespace Inferno {
 
 	Window::Window()
 	{
-		m_windowProperties = {
+		m_properties = {
 			Settings::get().window.title,
 			Settings::get().window.width,
 			Settings::get().window.height,
@@ -38,9 +40,9 @@ namespace Inferno {
 
 	void Window::initialize()
 	{
-		const char* title      = m_windowProperties.title;
-		unsigned int width     = m_windowProperties.width;
-		unsigned int height    = m_windowProperties.height;
+		const char* title      = m_properties.title;
+		unsigned int width     = m_properties.width;
+		unsigned int height    = m_properties.height;
 
 		// Only init once
 		if (s_windowCount == 0) {
@@ -88,8 +90,8 @@ namespace Inferno {
 		glfwSetWindowSizeCallback(m_window, [](GLFWwindow* window, int width, int height) {
 			Window& w = *(Window*)glfwGetWindowUserPointer(window);
 
-			w.m_windowProperties.width = width;
-			w.m_windowProperties.height = height;
+			w.m_properties.width = width;
+			w.m_properties.height = height;
 
 			WindowResizeEvent event(width, height);
 			w.m_eventCallback(event);
@@ -163,7 +165,20 @@ namespace Inferno {
 	void Window::update()
 	{
 		glfwPollEvents();
-		m_context->update();
+
+		// Lock mouse in window
+		if (Input::isKeyPressed(KeyCode("GLFW_KEY_LEFT_SUPER"))) {
+			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+		else {
+			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+
+	}
+
+	void Window::render()
+	{
+		m_context->render();
 	}
 
 	void Window::destroy()
@@ -183,11 +198,11 @@ namespace Inferno {
 		GLFWmonitor* monitor   = glfwGetPrimaryMonitor();
 		int xPos               = 0;
 		int yPos               = 0;
-		unsigned int width     = m_windowProperties.width;
-		unsigned int height    = m_windowProperties.height;
+		unsigned int width     = m_properties.width;
+		unsigned int height    = m_properties.height;
 		int refresh            = GLFW_DONT_CARE;
 
-		const char* fullscreen = m_windowProperties.fullscreen;
+		const char* fullscreen = m_properties.fullscreen;
 		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
 		if (strcmp(fullscreen, "fullscreen") == 0) {
