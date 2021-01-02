@@ -9,6 +9,7 @@ namespace Inferno {
 
 	class Input {
 	public:
+		static void initialize();
 		static void update();
 
 		static bool onMousePosition(MousePositionEvent& e);

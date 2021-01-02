@@ -24,8 +24,9 @@ namespace Inferno {
 		ASSERT(!s_instance, "Application already exists!");
 		s_instance = this;
 
-		// Initialize Settings
+		// Initialize
 		Settings::initialize();
+		Input::initialize();
 
 		m_window = std::make_unique<Window>();
 		m_window->setEventCallback(NF_BIND_EVENT(Application::onEvent));

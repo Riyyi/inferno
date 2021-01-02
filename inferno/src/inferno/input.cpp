@@ -3,6 +3,7 @@
 #include "inferno/application.h"
 #include "inferno/event/mouseevent.h"
 #include "inferno/input.h"
+#include "inferno/log.h"
 #include "inferno/window.h"
 
 namespace Inferno {
@@ -13,8 +14,18 @@ namespace Inferno {
 	float Input::m_xOffset = 0.0f;
 	float Input::m_yOffset = 0.0f;
 
+	void Input::initialize()
+	{
+		// Set cursor in the middle of the screen
+		m_xPosLast = Application::get().getWindow().getWidth() / 2.0f;
+		m_yPosLast = Application::get().getWindow().getHeight() / 2.0f;
+
+		dbg(Log::Info) << "Input initialized";
+	}
+
 	void Input::update()
 	{
+		// Stop infinite mouse movement
 		m_xOffset = 0.0f;
 		m_yOffset = 0.0f;
 	}
