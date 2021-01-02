@@ -3,11 +3,9 @@
 
 #define MAP_KEY(key) #key, key
 
-#include <unordered_map> // std::unordered_map
-
 namespace Inferno {
 
-	extern std::unordered_map<const char*, int> KeyCode;
+	int KeyCode(const char* name);
 
 }
 

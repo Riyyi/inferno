@@ -170,7 +170,7 @@ namespace Inferno {
 		      e.getKey());
 
 		// Stop the main loop on 'Escape' keypress
-		if (e.getKey() == KeyCode["GLFW_KEY_ESCAPE"]) {
+		if (e.getKey() == KeyCode("GLFW_KEY_ESCAPE")) {
 			m_window->setShouldClose(true);
 		}
 
