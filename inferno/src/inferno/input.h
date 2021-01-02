@@ -22,8 +22,6 @@ namespace Inferno {
 		static const char* getKeyName(int key);
 		static int getKeyScancode(int key);
 
-// -----------------------------------------
-
 		static inline float getXOffset() { return m_xOffset; }
 		static inline float getYOffset() { return m_yOffset; }
 

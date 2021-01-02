@@ -1,5 +1,3 @@
-#include <GLFW/glfw3.h>
-
 #include "inferno/application.h"
 #include "inferno/assertions.h"
 #include "inferno/core.h"
@@ -7,6 +5,7 @@
 #include "inferno/event/event.h"
 #include "inferno/event/keyevent.h"
 #include "inferno/input.h"
+#include "inferno/inputcodes.h"
 #include "inferno/log.h"
 #include "inferno/settings.h"
 #include "inferno/render/buffer.h"
@@ -144,7 +143,7 @@ namespace Inferno {
 
 		dbg(Log::Info) << "WindowCloseEvent triggered";
 
-		glfwSetWindowShouldClose(m_window->getWindow(), GL_TRUE);
+		m_window->setShouldClose(true);
 
 		return true;
 	}
@@ -171,7 +170,7 @@ namespace Inferno {
 		      e.getKey());
 
 		// Stop the main loop on 'Escape' keypress
-		if (e.getKey() == GLFW_KEY_ESCAPE) {
+		if (e.getKey() == KeyCode["GLFW_KEY_ESCAPE"]) {
 			m_window->setShouldClose(true);
 		}
 
