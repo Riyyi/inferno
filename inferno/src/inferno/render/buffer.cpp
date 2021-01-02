@@ -117,7 +117,7 @@ namespace Inferno {
 
 	VertexBuffer::VertexBuffer(float* vertices, size_t size)
 	{
-		glCreateBuffers(1, &m_id);
+		glGenBuffers(1, &m_id);
 		this->bind();
 
 		// Upload data to the GPU
