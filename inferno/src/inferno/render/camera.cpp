@@ -1,4 +1,5 @@
-#include <memory> // std::make_shared
+#include <algorithm> // std::max, std::min
+#include <memory>    // std::make_shared
 
 #include <glm/ext/matrix_clip_space.hpp> // glm::perspective, glm::ortho
 #include <glm/ext/matrix_transform.hpp>  // glm::radians, glm::lookAt
@@ -39,8 +40,10 @@ namespace Inferno {
 
 	void OrthographicCamera::initialize()
 	{
+		m_zoomLevel = 1.0f;
+
 		// Set the roatation axis
-		m_rotate = glm::vec3(0.0f, 0.0f, 1.0f);
+		m_rotateAxis = glm::vec3(0.0f, 0.0f, 1.0f);
 
 		dbg(Log::Info) << "OrthographicCamera initialized";
 	}
@@ -91,18 +94,31 @@ namespace Inferno {
 
 		transform()->setTranslate(translate);
 
+		// Update camera zoom
+
+		float zoomSpeed = ZOOM_SENSITIVITY * deltaTime;
+
+		if (Input::isKeyPressed(KeyCode("GLFW_KEY_EQUAL"))) {
+			m_zoomLevel -= zoomSpeed;
+		}
+		if (Input::isKeyPressed(KeyCode("GLFW_KEY_MINUS"))) {
+			m_zoomLevel += zoomSpeed;
+		}
+		m_zoomLevel = std::max(m_zoomLevel, 0.25f);
+		m_zoomLevel = std::min(m_zoomLevel, 10.0f);
+
 		// Update camera matrix
 
 		// Local space -> World space: model matrix
 		// Is done in Object::update()
 
 		// World space -> View space: view matrix
-		transform()->setTransform(glm::translate(glm::mat4(1.0f), translate) * glm::rotate(glm::mat4(1.0f), glm::radians(rotate.z), m_rotate));
+		transform()->setTransform(glm::translate(glm::mat4(1.0f), translate) * glm::rotate(glm::mat4(1.0f), glm::radians(rotate.z), m_rotateAxis));
 		transform()->setTransform(glm::inverse(transform()->transform()));
 
 		// View space -> Clip space: projection matrix
 		float aspectRatio = Application::get().getWindow().getAspect();
-		setProjection(glm::ortho(-aspectRatio, aspectRatio, -1.0f, 1.0f, -1.0f, 1.0f));
+		setProjection(glm::ortho(-aspectRatio * m_zoomLevel, aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel, -1.0f, 1.0f));
 
 		// Clip space -> Screen space: viewport transform
 		// Is done in the fragment shader using the settings of glViewport
@@ -137,8 +153,8 @@ namespace Inferno {
 	void PerspectiveCamera::update(float deltaTime)
 	{
 		// Get mouse movement offset compared to last frame
-		float xOffset = Input::getXOffset() * SENSITIVITY;
-		float yOffset = Input::getYOffset() * SENSITIVITY;
+		float xOffset = Input::getXOffset() * MOUSE_SENSITIVITY;
+		float yOffset = Input::getYOffset() * MOUSE_SENSITIVITY;
 		m_yaw += xOffset;
 		m_pitch += yOffset;
 

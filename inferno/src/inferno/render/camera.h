@@ -1,10 +1,10 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "inferno/log.h" // @@@@@@@@@@
 #define TRANSLATE_SPEED 2.5f
 #define ROTATE_SPEED 90.0f
-#define SENSITIVITY 0.25f
+#define ZOOM_SENSITIVITY 2.5f
+#define MOUSE_SENSITIVITY 0.25f
 #define NEAR_PLANE 0.1f
 #define FAR_PLANE 100.0f
 
@@ -21,7 +21,7 @@ namespace Inferno {
 	public:
 		Camera();
 		Camera(glm::vec3 translate, glm::vec3 rotate);
-		virtual ~Camera() { dbg(Log::Danger) << "KILLED CAMERA"; }
+		virtual ~Camera() {}
 
 		virtual void initialize() = 0;
 		virtual void update(float deltaTime) = 0;
@@ -44,7 +44,7 @@ namespace Inferno {
 	public:
 		OrthographicCamera();
 		OrthographicCamera(glm::vec3 translate, glm::vec3 rotate);
-		virtual ~OrthographicCamera() { dbg(Log::Danger) << "KILLED ORTHOGRAPHICCAMERA"; }
+		virtual ~OrthographicCamera() {}
 
 		virtual void initialize() override;
 		virtual void update(float deltaTime) override;
@@ -52,7 +52,8 @@ namespace Inferno {
 		// virtual void destroy() override;
 
 	private:
-		glm::vec3 m_rotate;
+		float m_zoomLevel;
+		glm::vec3 m_rotateAxis;
 	};
 
 // ----------------------------------------
@@ -61,7 +62,7 @@ namespace Inferno {
 	public:
 		PerspectiveCamera();
 		PerspectiveCamera(glm::vec3 translate, glm::vec3 rotate);
-		virtual ~PerspectiveCamera() { dbg(Log::Danger) << "KILLED PERSPECTIVECAMERA"; }
+		virtual ~PerspectiveCamera() {}
 
 		virtual void initialize() override;
 		virtual void update(float deltaTime) override;
@@ -83,5 +84,4 @@ namespace Inferno {
 
 // @Todo:
 // - Add sensitivity, fov to settings:camera
-// - Add zoom to ortho camera
 // - Change ortho view matrix to use glm::lookAt()
