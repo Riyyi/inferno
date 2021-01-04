@@ -17,7 +17,7 @@ add_custom_target(run
 
 # ------------------------------------------
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.16)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -90,3 +90,24 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(${GAME} ${GAME_SOURCES})
 target_link_libraries(${GAME} ${ENGINE})
+
+# ------------------------------------------
+
+target_precompile_headers(${ENGINE} PRIVATE
+	"$<$<COMPILE_LANGUAGE:CXX>:<algorithm$<ANGLE-R>>"
+	"$<$<COMPILE_LANGUAGE:CXX>:<array$<ANGLE-R>>"
+	"$<$<COMPILE_LANGUAGE:CXX>:<csignal$<ANGLE-R>>"
+	"$<$<COMPILE_LANGUAGE:CXX>:<cstddef$<ANGLE-R>>"
+	"$<$<COMPILE_LANGUAGE:CXX>:<cstdint$<ANGLE-R>>"
+	"$<$<COMPILE_LANGUAGE:CXX>:<functional$<ANGLE-R>>"
+	"$<$<COMPILE_LANGUAGE:CXX>:<iostream$<ANGLE-R>>"
+	"$<$<COMPILE_LANGUAGE:CXX>:<memory$<ANGLE-R>>"
+	"$<$<COMPILE_LANGUAGE:CXX>:<ostream$<ANGLE-R>>"
+	"$<$<COMPILE_LANGUAGE:CXX>:<sstream$<ANGLE-R>>"
+	"$<$<COMPILE_LANGUAGE:CXX>:<string$<ANGLE-R>>"
+	"$<$<COMPILE_LANGUAGE:CXX>:<string_view$<ANGLE-R>>"
+	"$<$<COMPILE_LANGUAGE:CXX>:<unordered_map$<ANGLE-R>>"
+	"$<$<COMPILE_LANGUAGE:CXX>:<vector$<ANGLE-R>>"
+)
+
+target_precompile_headers(${GAME} REUSE_FROM ${ENGINE})
