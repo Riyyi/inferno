@@ -16,6 +16,8 @@ namespace Inferno {
 		Settings::update();
 
 		m_initialized = true;
+
+		dbg(Log::Info) << "Settings initialized";
 	}
 
 	void Settings::update()
@@ -50,7 +52,6 @@ namespace Inferno {
 		nlohmann::json json;
 
 		File::ioRead(json, m_path);
-		dbg(Log::Info) << "Settings loaded";
 
 		return json;
 	}
