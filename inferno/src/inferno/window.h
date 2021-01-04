@@ -36,7 +36,7 @@ namespace Inferno {
 		bool shouldClose() const;
 		void setShouldClose(bool close) const;
 
-		inline int getAspect() const { return m_properties.width / m_properties.height; }
+		inline float getAspect() const { return static_cast<float>(m_properties.width) / static_cast<float>(m_properties.height); }
 		inline int getWidth() const { return m_properties.width; }
 		inline int getHeight() const { return m_properties.height; }
 		inline bool isVSync() const { return m_properties.vsync; }
