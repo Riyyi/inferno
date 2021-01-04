@@ -1,12 +1,12 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <cstdint> // std::int32_t, std::uint32_t
-#include <memory>
-#include <string>  // std::string
+#include <cstdint>       // std::int32_t, std::uint32_t
+#include <memory>        // std::shared_ptr
+#include <string>        // std::string
+#include <unordered_map> // std::unordered_map
 
 #include <glm/glm.hpp>
-#include <unordered_map>
 
 namespace Inferno {
 
@@ -62,7 +62,7 @@ namespace Inferno {
 
 	private:
 		std::unordered_map<std::string, std::shared_ptr<Shader>> m_shaderList;
-        };
+	};
 
 }
 
