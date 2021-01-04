@@ -1,8 +1,7 @@
 #include <memory> // std::make_shared
 
 #include <glm/ext/matrix_clip_space.hpp> // glm::perspective, glm::ortho
-#include <glm/ext/matrix_transform.hpp>  // glm::radians
-#include <glm/gtx/transform.hpp>         // glm::lookAt, glm::perspective
+#include <glm/ext/matrix_transform.hpp>  // glm::radians, glm::lookAt
 
 #include "inferno/application.h"
 #include "inferno/component/transform.h"
