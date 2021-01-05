@@ -18,7 +18,8 @@ namespace Inferno {
 
 	void Settings::update()
 	{
-		nlohmann::json json = Settings::load();
+		nlohmann::json json;
+		Settings::load(json);
 
 		try {
 			m_properties.window.title       = json["window"]["title"].get<std::string>();
@@ -36,13 +37,11 @@ namespace Inferno {
 	{
 	}
 
-	nlohmann::json Settings::load()
+	bool Settings::load(nlohmann::json& json)
 	{
-		nlohmann::json json;
-
 		File::ioRead(json, m_path);
 
-		return json;
+		return true;
 	}
 
 	bool Settings::save()

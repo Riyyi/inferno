@@ -17,7 +17,7 @@ namespace Inferno {
 		static void update();
 		static void destroy();
 
-		static nlohmann::json load();
+		static bool load(nlohmann::json& json);
 		static bool save();
 
 		static inline SettingsProperties& get() { return m_properties; }
