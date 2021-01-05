@@ -2,6 +2,7 @@
 #define WINDOW_H
 
 #include <functional> // std::function
+#include <memory>     // std::shared_ptr
 
 struct GLFWwindow;
 
@@ -42,14 +43,14 @@ namespace Inferno {
 		inline bool isVSync() const { return m_properties.vsync; }
 
 		inline GLFWwindow* getWindow() const { return m_window; }
-		inline Context* getContext() const { return m_context; }
+		inline const std::shared_ptr<Context>& getContext() const { return m_context; }
 
 		inline void setEventCallback(std::function<void(Event&)> callback) { m_eventCallback = callback; }
 
 	private:
 		WindowProperties m_properties;
 		GLFWwindow* m_window;
-		Context* m_context;
+		std::shared_ptr<Context> m_context;
 
 		std::function<void(Event&)> m_eventCallback;
 

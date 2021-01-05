@@ -1,5 +1,3 @@
-#include <cstring>
-
 #include <GLFW/glfw3.h>
 
 #include "inferno/assertions.h"
@@ -67,7 +65,7 @@ namespace Inferno {
 		glfwSetWindowUserPointer(m_window, this);
 
 		// Create graphics context
-		m_context = new Context(m_window);
+		m_context = std::make_shared<Context>(m_window);
 		m_context->initialize();
 
 		// Capture cursor and hide it
