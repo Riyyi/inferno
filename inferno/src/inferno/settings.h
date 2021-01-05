@@ -20,13 +20,9 @@ namespace Inferno {
 		static nlohmann::json load();
 		static bool save();
 
-// -----------------------------------------
-
-		static inline SettingsProperties &get() { return m_properties; }
+		static inline SettingsProperties& get() { return m_properties; }
 
 	private:
-		static bool m_initialized;
-
 		static const char* m_path;
 		static SettingsProperties m_properties;
 	};

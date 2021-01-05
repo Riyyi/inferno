@@ -38,7 +38,7 @@ namespace Inferno {
 
 	void Window::initialize()
 	{
-		const char* title      = m_properties.title;
+		std::string title      = m_properties.title;
 		unsigned int width     = m_properties.width;
 		unsigned int height    = m_properties.height;
 
@@ -54,7 +54,7 @@ namespace Inferno {
 		// glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 		// Create GLFW window
-		m_window = glfwCreateWindow(width, height, title, nullptr, nullptr);
+		m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 		s_windowCount++;
 		ASSERT(m_window, "Failed to create GLFW window!");
 
@@ -200,13 +200,13 @@ namespace Inferno {
 		unsigned int height    = m_properties.height;
 		int refresh            = GLFW_DONT_CARE;
 
-		const char* fullscreen = m_properties.fullscreen;
+		std::string fullscreen = m_properties.fullscreen;
 		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
-		if (strcmp(fullscreen, "fullscreen") == 0) {
+		if (fullscreen.compare("fullscreen") == 0) {
 			refresh = mode->refreshRate;
 		}
-		else if (strcmp(fullscreen, "borderless") == 0) {
+		else if (fullscreen.compare("borderless") == 0) {
 			width = mode->width;
 			height = mode->height;
 			refresh = mode->refreshRate;

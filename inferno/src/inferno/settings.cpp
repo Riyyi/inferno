@@ -1,12 +1,10 @@
-#include <string>  // std::string
+#include <string> // std::string
 
 #include "inferno/file.h"
 #include "inferno/log.h"
 #include "inferno/settings.h"
 
 namespace Inferno {
-
-	bool Settings::m_initialized = false;
 
 	const char* Settings::m_path = "assets/settings.json";
 	SettingsProperties Settings::m_properties = {};
@@ -15,24 +13,18 @@ namespace Inferno {
 	{
 		Settings::update();
 
-		m_initialized = true;
-
 		dbg(Log::Info) << "Settings initialized";
 	}
 
 	void Settings::update()
 	{
-		if (m_initialized) {
-			Settings::destroy();
-		}
-
 		nlohmann::json json = Settings::load();
 
 		try {
-			m_properties.window.title       = strdup(json["window"]["title"].get<std::string>().c_str());
+			m_properties.window.title       = json["window"]["title"].get<std::string>();
 			m_properties.window.width       = json["window"]["width"].get<int>();
 			m_properties.window.height      = json["window"]["height"].get<int>();
-			m_properties.window.fullscreen  = strdup(json["window"]["fullscreen"].get<std::string>().c_str()) ;
+			m_properties.window.fullscreen  = json["window"]["fullscreen"].get<std::string>();
 			m_properties.window.vsync       = json["window"]["vsync"].get<bool>();
 		}
 		catch (...) {
@@ -42,9 +34,6 @@ namespace Inferno {
 
 	void Settings::destroy()
 	{
-		// Delete const char*s created by strdup()
-		delete m_properties.window.title;
-		delete m_properties.window.fullscreen;
 	}
 
 	nlohmann::json Settings::load()

@@ -3,6 +3,7 @@
 
 #include <functional> // std::function
 #include <memory>     // std::shared_ptr
+#include <string>     // std::string
 
 struct GLFWwindow;
 
@@ -12,10 +13,10 @@ namespace Inferno {
 	class Event;
 
 	struct WindowProperties {
-		const char* title = "Inferno";
+		std::string title = "Inferno";
 		int width = 1280;
 		int height = 720;
-		const char* fullscreen = "windowed"; // windowed/fullscreen/borderless
+		std::string fullscreen = "windowed"; // windowed/fullscreen/borderless
 		bool vsync = true;
 	};
 
