@@ -30,7 +30,7 @@ namespace Inferno {
 		void unbind() const;
 
 		inline std::string name() const { return m_name; }
-		inline uint32_t program() const { return m_id; }
+		inline uint32_t id() const { return m_id; }
 
 	protected:
 		uint32_t compileShader(int32_t type, const char* shaderSource) const;
