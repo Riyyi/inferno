@@ -115,6 +115,17 @@ namespace Inferno {
 
 // -----------------------------------------
 
+	VertexBuffer::VertexBuffer(size_t size)
+	{
+		glGenBuffers(1, &m_id);
+		this->bind();
+
+		// Reserve data on the GPU
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+
+		this->unbind();
+	}
+
 	VertexBuffer::VertexBuffer(float* vertices, size_t size)
 	{
 		glGenBuffers(1, &m_id);
@@ -139,6 +150,16 @@ namespace Inferno {
 	void VertexBuffer::unbind() const
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+
+	void VertexBuffer::uploadData(const void* data, uint32_t size)
+	{
+		this->bind();
+
+		// Upload data to the GPU
+		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+
+		this->unbind();
 	}
 
 // -----------------------------------------

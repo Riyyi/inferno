@@ -81,11 +81,14 @@ namespace Inferno {
 	// GPU memory which holds raw vertex data
 	class VertexBuffer {
 	public:
+		VertexBuffer(size_t size);
 		VertexBuffer(float* vertices, size_t size);
 		~VertexBuffer();
 
 		void bind() const;
 		void unbind() const;
+
+		void uploadData(const void* data, uint32_t size);
 
 		inline const BufferLayout& getLayout() const { return m_layout; }
 
