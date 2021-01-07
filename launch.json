@@ -1,0 +1,12 @@
+{
+	"configurations": [
+		{
+			"name": "Debug Inferno",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/build/game",
+			"cwd": "${workspaceFolder}/build",
+			"MIMode": "gdb"
+		}
+	]
+}
