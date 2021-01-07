@@ -1,7 +1,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <cstdint>       // std::int32_t, std::uint32_t
+#include <cstdint>       // int32_t, uint32_t
 #include <memory>        // std::shared_ptr
 #include <string>        // std::string
 #include <unordered_map> // std::unordered_map
@@ -18,6 +18,7 @@ namespace Inferno {
 		int32_t findUniform(const std::string& name) const;
 
 		void setInt(const std::string& name, int value);
+		void setInt(const std::string& name, int* values, uint32_t count);
 		void setFloat(const std::string& name, float value) const;
 		void setFloat(const std::string& name, float v1, float v2, float v3, float v4) const;
 		void setFloat(const std::string& name, glm::vec2 value) const;

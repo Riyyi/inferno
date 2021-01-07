@@ -52,6 +52,12 @@ namespace Inferno {
 		glUniform1i(findUniform(name), value);
 	}
 
+	void Shader::setInt(const std::string& name, int* values, uint32_t count)
+	{
+		// Set unifrom int array
+		glUniform1iv(findUniform(name), count, values);
+	}
+
 	void Shader::setFloat(const std::string& name, float value) const
 	{
 		// Set uniform float
