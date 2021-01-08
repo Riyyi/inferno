@@ -1,20 +1,24 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
-#include <cstddef> // std::size_t
-#include <cstdint> // std::uint32_t
+#include <cstddef> // size_t
+#include <cstdint> // int32_t, uint32_t
 #include <memory>  // std::shared_ptr
 #include <string>  // std::string
 #include <vector>  // std::vector
 
 namespace Inferno {
 
+	// https://www.khronos.org/opengl/wiki/Data_Type_(GLSL)
 	enum class BufferElementType {
 		None = 0,
-		Bool,
-		Int, Int2, Int3, Int4,
-		Mat3, Mat4,
-		Vec, Vec2, Vec3, Vec4,
+		Bool, Bool2, Bool3, Bool4,          // bvec
+		Int, Int2, Int3, Int4,              // ivec
+		Uint, Uint2, Uint3, Uint4,          // uvec
+		Float, Vec2, Vec3, Vec4,            // vec
+		Double, Double2, Double3, Double4,  // dvec
+		Mat2, Mat3, Mat4,                   // mat
+		DoubleMat2, DoubleMat3, DoubleMat4, // dmat
 	};
 
 // -----------------------------------------
