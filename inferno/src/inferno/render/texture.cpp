@@ -45,9 +45,15 @@ namespace Inferno {
 		glDeleteTextures(1, &m_id);
 	}
 
-	void Texture::bind() const
+	void Texture::bind(uint32_t unit) const
 	{
+		// Set active unit
+		glActiveTexture(GL_TEXTURE0 + unit);
+
 		glBindTexture(GL_TEXTURE_2D, m_id);
+
+		// Reset unit
+		glActiveTexture(GL_TEXTURE0);
 	}
 
 	void Texture::unbind() const

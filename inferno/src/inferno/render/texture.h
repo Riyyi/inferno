@@ -13,7 +13,7 @@ namespace Inferno {
 		Texture(const std::string& path);
 		virtual ~Texture();
 
-		void bind() const;
+		void bind(uint32_t unit = 0) const;
 		void unbind() const;
 
 		inline std::string path() const { return m_path; }
