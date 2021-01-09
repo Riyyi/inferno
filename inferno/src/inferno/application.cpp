@@ -1,18 +1,22 @@
 #include "inferno/application.h"
 #include "inferno/assertions.h"
+#include "inferno/component/transform.h"
 #include "inferno/core.h"
 #include "inferno/event/applicationevent.h"
 #include "inferno/event/event.h"
 #include "inferno/event/keyevent.h"
+#include "inferno/event/mouseevent.h"
 #include "inferno/input.h"
 #include "inferno/inputcodes.h"
 #include "inferno/log.h"
 #include "inferno/settings.h"
 #include "inferno/render/buffer.h"
+#include "inferno/render/camera.h"
 #include "inferno/render/context.h"
 #include "inferno/render/renderer.h"
 #include "inferno/render/shader.h"
 #include "inferno/render/texture.h"
+#include "inferno/time.h"
 #include "inferno/window.h"
 
 namespace Inferno {
@@ -33,99 +37,72 @@ namespace Inferno {
 
 		Input::initialize();
 
+		m_cameraO = std::make_shared<OrthographicCamera>();
+		m_cameraP = std::make_shared<PerspectiveCamera>();
+
 		TextureManager textureManager;
 		m_texture = textureManager.load("assets/gfx/test.png");
+		m_texture2 = textureManager.load("assets/gfx/test-inverted.png");
 
-// -----------------------------------------
-
-		float verticesColor[] = {
-			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-			 0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-			-0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		};
-
-		uint32_t indicesColor[] = {
-			0, 1, 2, 2, 3, 0
-		};
-
-		m_vertexArrayColor = std::make_shared<VertexArray>();
-
-		std::shared_ptr<VertexBuffer> vertexBufferColor = std::make_shared<VertexBuffer>(verticesColor, sizeof(verticesColor));
-		vertexBufferColor->setLayout({
-			{ BufferElementType::Vec3, "a_position" },
-			{ BufferElementType::Vec4, "a_color" },
-		});
-
-		m_vertexArrayColor->addVertexBuffer(vertexBufferColor);
-
-		std::shared_ptr<IndexBuffer> indexBufferColor = std::make_shared<IndexBuffer>(indicesColor, sizeof(indicesColor));
-
-		m_vertexArrayColor->setIndexBuffer(indexBufferColor);
-
-// -----------------------------------------
-
-		m_vertexArrayTexture = std::make_shared<VertexArray>();
-
-		float verticesTexture[] = {
-			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-		};
-
-		uint32_t indicesTexture[] = {
-			0, 1, 2, 2, 3, 0
-		};
-
-		std::shared_ptr<VertexBuffer> vertexBufferTexture = std::make_shared<VertexBuffer>(verticesTexture, sizeof(verticesTexture));
-		vertexBufferTexture->setLayout({
-			{ BufferElementType::Vec3, "a_position" },
-			{ BufferElementType::Vec2, "a_texCoord" },
-		});
-
-		m_vertexArrayTexture->addVertexBuffer(vertexBufferTexture);
-
-		std::shared_ptr<IndexBuffer> indexBufferTexture = std::make_shared<IndexBuffer>(indicesTexture, sizeof(indicesTexture));
-
-		m_vertexArrayTexture->setIndexBuffer(indexBufferTexture);
-
-// -----------------------------------------
-
-		ShaderManager shaderManager;
-		m_shaderSimple = shaderManager.load("assets/glsl/simple");
-		m_shaderTexture = shaderManager.load("assets/glsl/texture");
-		m_shaderTexture->setInt("u_texture", m_texture->id());
+		Renderer2D::initialize();
 	}
 
 	Application::~Application()
 	{
+		Renderer2D::destroy();
+		// Input::destroy();
+		Settings::destroy();
 	}
 
 	void Application::run()
 	{
 		dbg() << "Application startup";
 
+		glm::mat4 colors = {
+			1.0f, 0.0f, 1.0f, 1.0f, // Lower left corner: purple
+			1.0f, 1.0f, 0.0f, 1.0f,
+			0.0f, 1.0f, 1.0f, 1.0f,
+			1.0f, 1.0f, 1.0f, 1.0f,
+		};
+
+		Transform cube({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f});
+		cube.update();
+
+		Transform cube2({1.1f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f});
+		cube2.update();
+
+		Transform cube3({2.2f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f});
+		cube3.update();
+
 		while(!m_window->shouldClose()) {
 
-			Command::clearColor({ 0.2f, 0.3f, 0.3f, 1.0f });
-			Command::clear();
+			float time = Time::time();
+			float deltaTime = time - m_lastFrameTime;
+			m_lastFrameTime = time;
+			// dbg() << "Frametime " << deltaTime * 1000 << "ms";
 
-			// Renderer::beginScene(); // camera, lights, environment
+			// Update
 
-			// m_shaderSimple->bind();
-			// Renderer::submit(m_vertexArrayColor);
-			// m_shaderSimple->unbind();
-
-			m_shaderTexture->bind();
-			m_texture->bind();
-			Renderer::submit(m_vertexArrayTexture);
-			m_texture->unbind();
-			m_shaderTexture->unbind();
-
-			// Renderer::endScene();
-
+			Input::update();
 			m_window->update();
+			m_cameraO->update(deltaTime);
+			m_cameraP->update(deltaTime);
+
+			// Render
+
+			RenderCommand::clearColor({ 0.2f, 0.3f, 0.3f, 1.0f });
+			RenderCommand::clear();
+
+			Renderer2D::beginScene(m_cameraP); // camera, lights, environment
+
+			Renderer2D::drawQuad(std::make_shared<Transform>(cube), colors);
+			Renderer2D::drawQuad(std::make_shared<Transform>(cube2), { 0.5f, 0.6f, 0.8f, 1.0f }, m_texture);
+			Renderer2D::drawQuad(std::make_shared<Transform>(cube3), { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture2);
+
+			Renderer2D::endScene();
+
+			m_window->render();
+
 		}
 
 		dbg() << "Application shutdown";
@@ -137,6 +114,7 @@ namespace Inferno {
 		dispatcher.dispatch<WindowCloseEvent>(NF_BIND_EVENT(Application::onWindowClose));
 		dispatcher.dispatch<WindowResizeEvent>(NF_BIND_EVENT(Application::onWindowResize));
 		dispatcher.dispatch<KeyPressEvent>(NF_BIND_EVENT(Application::onKeyPress));
+		dispatcher.dispatch<MousePositionEvent>(NF_BIND_EVENT(Application::onMousePosition));
 	}
 
 	bool Application::onWindowClose(WindowCloseEvent& e)
@@ -179,4 +157,10 @@ namespace Inferno {
 
 		return true;
 	}
+
+	bool Application::onMousePosition(MousePositionEvent& e)
+	{
+		return Input::onMousePosition(e);
+	}
+
 }

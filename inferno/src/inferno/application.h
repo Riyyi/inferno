@@ -7,6 +7,9 @@ namespace Inferno {
 
 	class Event;
 	class KeyPressEvent;
+	class MousePositionEvent;
+	class OrthographicCamera;
+	class PerspectiveCamera;
 	class Texture;
 	class TextureManager;
 	class Window;
@@ -27,6 +30,7 @@ namespace Inferno {
 		bool onWindowClose(WindowCloseEvent& e);
 		bool onWindowResize(WindowResizeEvent& e);
 		bool onKeyPress(KeyPressEvent& e);
+		bool onMousePosition(MousePositionEvent& e);
 
 // -----------------------------------------
 
@@ -36,13 +40,15 @@ namespace Inferno {
 
 	private:
 		std::unique_ptr<Window> m_window;
+		// std::unique_ptr<Camera> m_camera;
+		std::shared_ptr<OrthographicCamera> m_cameraO;
+		std::shared_ptr<PerspectiveCamera> m_cameraP;
+
+		float m_lastFrameTime = 0.0f;
 
 		//
-		std::shared_ptr<VertexArray> m_vertexArrayColor;
-		std::shared_ptr<VertexArray> m_vertexArrayTexture;
-		std::shared_ptr<Shader> m_shaderSimple;
-		std::shared_ptr<Shader> m_shaderTexture;
 		std::shared_ptr<Texture> m_texture;
+		std::shared_ptr<Texture> m_texture2;
 		//
 
 		static Application* s_instance;
@@ -54,6 +60,13 @@ namespace Inferno {
 }
 
 #endif // APPLICATION_H
+
+// C++17 features used:
+//   - std::string:view, log.h
+//   - std::shared_ptr array management, renderer.h
+
+// OpenGL 4.5 features used:
+//   -
 
 // Gameplan
 // v Entrypoint
@@ -81,3 +94,5 @@ namespace Inferno {
 
 // @Todo
 // - Settings should contain all file paths (ex: shaders)
+// - RefPtr<>
+// - Rename Application::get() to Application::the() for singleton
