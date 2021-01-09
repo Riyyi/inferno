@@ -67,10 +67,10 @@ namespace Inferno {
 		inline uint32_t getStride() const { return m_stride; }
 
 		// Iterators
-		std::vector<BufferElement>::iterator begin() { return m_elements.begin(); }
-		std::vector<BufferElement>::iterator end() { return m_elements.end(); }
-		std::vector<BufferElement>::const_iterator begin() const { return m_elements.begin(); }
-		std::vector<BufferElement>::const_iterator end() const { return m_elements.end(); }
+		inline std::vector<BufferElement>::iterator begin() { return m_elements.begin(); }
+		inline std::vector<BufferElement>::iterator end() { return m_elements.end(); }
+		inline std::vector<BufferElement>::const_iterator begin() const { return m_elements.begin(); }
+		inline std::vector<BufferElement>::const_iterator end() const { return m_elements.end(); }
 
 	protected:
 		void calculateOffsetsAndStride();
@@ -135,8 +135,8 @@ namespace Inferno {
 		void addVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer);
 		void setIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer);
 
-		const std::vector<std::shared_ptr<VertexBuffer>>& getVertexBuffers() const { return m_vertexBuffers; }
-		const std::shared_ptr<IndexBuffer>& getIndexBuffer() const { return m_indexBuffer; }
+		inline const std::vector<std::shared_ptr<VertexBuffer>>& getVertexBuffers() const { return m_vertexBuffers; }
+		inline const std::shared_ptr<IndexBuffer>& getIndexBuffer() const { return m_indexBuffer; }
 
 	private:
 		uint32_t m_id;
