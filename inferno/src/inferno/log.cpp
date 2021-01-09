@@ -126,7 +126,7 @@ namespace Inferno {
 	const LogStream& operator<<(const LogStream& stream, Log value)
 	{
 		switch (value) {
-		case Log::Log:
+		case Log::None:
 			return stream << "Log";
 		case Log::Info:
 			return stream << "Info";
@@ -136,6 +136,8 @@ namespace Inferno {
 			return stream << "Danger";
 		case Log::Success:
 			return stream << "Success";
+		case Log::Comment:
+			return stream << "Comment";
 		default:
 			ASSERT_NOT_REACHED();
 			return stream;
@@ -218,7 +220,7 @@ namespace Inferno {
 
 	DebugLogStream::~DebugLogStream()
 	{
-		if (m_type != Log::Log) {
+		if (m_type != Log::None) {
 			write("\033[0m", 4);
 		}
 
@@ -242,6 +244,9 @@ namespace Inferno {
 		}
 		else if (m_type == Log::Success) {
 			color = "\x1B[32m";
+		}
+		else if (m_type == Log::Comment) {
+			color = "\x1B[37m";
 		}
 
 		if (color[0] != '\0') {

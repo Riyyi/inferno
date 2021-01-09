@@ -8,11 +8,12 @@
 namespace Inferno {
 
 	enum class Log {
-		Log,
+		None,
 		Info,
 		Warn,
 		Danger,
 		Success,
+		Comment,
 	};
 
 // ----------------------------------------
@@ -31,9 +32,9 @@ namespace Inferno {
 	class DebugLogStream final : public LogStream{
 	public:
 		DebugLogStream():
-			m_newline(true), m_type(Log::Log) {}
+			m_newline(true), m_type(Log::None) {}
 		DebugLogStream(bool newline):
-			m_newline(newline), m_type(Log::Log) {}
+			m_newline(newline), m_type(Log::None) {}
 		DebugLogStream(Log type):
 			m_newline(true), m_type(type) { color(); }
 		DebugLogStream(Log type, bool newline):
@@ -102,7 +103,7 @@ namespace Inferno {
 	template<typename T, typename... P>
 	void dbgln(const char* format, T value, const P&... parameters)
 	{
-		dbgln(Log::Log, true, format, value, parameters...);
+		dbgln(Log::None, true, format, value, parameters...);
 	}
 
 	template<typename T, typename... P>
