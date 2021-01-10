@@ -107,6 +107,7 @@ target_precompile_headers(${ENGINE} PRIVATE
 	"$<$<COMPILE_LANGUAGE:CXX>:<string$<ANGLE-R>>"
 	"$<$<COMPILE_LANGUAGE:CXX>:<string_view$<ANGLE-R>>"
 	"$<$<COMPILE_LANGUAGE:CXX>:<unordered_map$<ANGLE-R>>"
+	"$<$<COMPILE_LANGUAGE:CXX>:<utility$<ANGLE-R>>"
 	"$<$<COMPILE_LANGUAGE:CXX>:<vector$<ANGLE-R>>"
 )
 

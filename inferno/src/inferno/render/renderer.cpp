@@ -1,4 +1,5 @@
 #include <algorithm> // std::min
+#include <utility>   // std::move
 
 #include <glad/glad.h>
 
@@ -47,10 +48,10 @@ namespace Inferno {
 // -----------------------------------------
 
 		// Create array for storing quads vertices
-		s_quadBatch->vertexBufferBase = std::shared_ptr<QuadVertex[]>(new QuadVertex[QuadBatch::vertexCount]);
+		s_quadBatch->vertexBufferBase = std::unique_ptr<QuadVertex[]>(new QuadVertex[QuadBatch::vertexCount]);
 		s_quadBatch->vertexBufferPtr = s_quadBatch->vertexBufferBase.get();
 
-		// Set basic quad vertex positions
+		// Set default quad vertex positions
 		s_quadBatch->vertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
 		s_quadBatch->vertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
 		s_quadBatch->vertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
@@ -74,7 +75,7 @@ namespace Inferno {
 // -----------------------------------------
 
 		// Create shader
-		s_quadBatch->shader = std::make_shared<Shader>("assets/glsl/batch-quad");
+		s_quadBatch->shader = std::make_unique<Shader>("assets/glsl/batch-quad");
 		s_quadBatch->shader->bind();
 		s_quadBatch->shader->setInt("u_textures", samplers, s_quadBatch->textureUnitPerBatch);
 		s_quadBatch->shader->unbind();
@@ -83,14 +84,14 @@ namespace Inferno {
 		s_quadBatch->vertexArray = std::make_shared<VertexArray>();
 
 		// Create vertex buffer
-		s_quadBatch->vertexBuffer = std::make_shared<VertexBuffer>(sizeof(QuadVertex) * QuadBatch::vertexCount);
-		s_quadBatch->vertexBuffer->setLayout({
+		auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(QuadVertex) * QuadBatch::vertexCount);
+		vertexBuffer->setLayout({
 			{ BufferElementType::Vec3,  "a_position" },
 			{ BufferElementType::Vec4,  "a_color" },
 			{ BufferElementType::Vec2,  "a_textureCoordinates" },
 			{ BufferElementType::Float, "a_textureIndex" },
 		});
-		s_quadBatch->vertexArray->addVertexBuffer(s_quadBatch->vertexBuffer);
+		s_quadBatch->vertexArray->addVertexBuffer(std::move(vertexBuffer));
 
 		// Generate indices
 
@@ -109,7 +110,7 @@ namespace Inferno {
 		}
 
 		// Create index buffer
-		std::shared_ptr<IndexBuffer> indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(uint32_t) * QuadBatch::indexCount);
+		auto indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(uint32_t) * QuadBatch::indexCount);
 		s_quadBatch->vertexArray->setIndexBuffer(indexBuffer);
 		delete[] indices;
 
@@ -226,7 +227,7 @@ namespace Inferno {
 		}
 
 		// Upload vertex data to GPU
-		s_quadBatch->vertexBuffer->uploadData(
+		s_quadBatch->vertexArray->getVertexBuffers().at(0)->uploadData(
 			s_quadBatch->vertexBufferBase.get(),
 			s_quadBatch->quadCount * QuadBatch::vertexPerQuad * sizeof(QuadVertex));
 

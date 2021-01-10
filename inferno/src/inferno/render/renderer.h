@@ -2,7 +2,7 @@
 #define RENDERER_H
 
 #include <cstdint> // std::uint32_t
-#include <memory>  // std::shared_ptr
+#include <memory>  // std::shared_ptr, std::unique_ptr
 
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
 #include "glm/ext/vector_float2.hpp"   // glm::vec2
@@ -33,18 +33,21 @@ namespace Inferno {
 		static const uint32_t indexCount = quads * indexPerQuad;
 		static const uint32_t textureUnitPerBatch = 32;
 
+		// CPU quad vertices
 		uint32_t quadCount = 0;
-		std::shared_ptr<QuadVertex[]> vertexBufferBase = nullptr;
+		std::unique_ptr<QuadVertex[]> vertexBufferBase = nullptr;
 		QuadVertex* vertexBufferPtr = nullptr;
 
+		// Default quad vertex positions
 		glm::vec4 vertexPositions[vertexPerQuad];
 
+		// Texture units
 		uint32_t supportedTextureUnitPerBatch = 0;
 		uint32_t textureUnitIndex = 1;
 		std::array<std::shared_ptr<Texture>, textureUnitPerBatch> textureUnits;
 
-		std::shared_ptr<Shader> shader = nullptr;
-		std::shared_ptr<VertexBuffer> vertexBuffer = nullptr;
+		// GPU objects
+		std::unique_ptr<Shader> shader = nullptr;
 		std::shared_ptr<VertexArray> vertexArray = nullptr;
 	};
 
