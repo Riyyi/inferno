@@ -117,7 +117,7 @@ namespace Inferno {
 		transform()->setTransform(glm::inverse(transform()->transform()));
 
 		// View space -> Clip space: projection matrix
-		float aspectRatio = Application::get().getWindow().getAspect();
+		float aspectRatio = Application::the().getWindow().getAspect();
 		setProjection(glm::ortho(-aspectRatio * m_zoomLevel, aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel, -1.0f, 1.0f));
 
 		// Clip space -> Screen space: viewport transform
@@ -214,7 +214,7 @@ namespace Inferno {
 		transform()->setTransform(glm::lookAt(transform()->translate(), transform()->translate() + transform()->rotate(), m_up));
 
 		// View space -> Clip space: projection matrix
-		float aspect = Application::get().getWindow().getAspect();
+		float aspect = Application::the().getWindow().getAspect();
 		setProjection(glm::perspective(glm::radians(m_fov), aspect, NEAR_PLANE, FAR_PLANE));
 
 		// Clip space -> Screen space: viewport transform

@@ -36,7 +36,7 @@ namespace Inferno {
 
 		inline Window& getWindow() const { return *m_window; }
 
-		static inline Application& get() { return *s_instance; }
+		static inline Application& the() { return *s_instance; }
 
 	private:
 		std::unique_ptr<Window> m_window;

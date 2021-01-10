@@ -17,8 +17,8 @@ namespace Inferno {
 	void Input::initialize()
 	{
 		// Set cursor in the middle of the screen
-		m_xPosLast = Application::get().getWindow().getWidth() / 2.0f;
-		m_yPosLast = Application::get().getWindow().getHeight() / 2.0f;
+		m_xPosLast = Application::the().getWindow().getWidth() / 2.0f;
+		m_yPosLast = Application::the().getWindow().getHeight() / 2.0f;
 
 		dbg(Log::Info) << "Input initialized";
 	}
@@ -50,19 +50,19 @@ namespace Inferno {
 
 	bool Input::isKeyPressed(int key)
 	{
-		GLFWwindow* w = Application::get().getWindow().getWindow();
+		GLFWwindow* w = Application::the().getWindow().getWindow();
 		return glfwGetKey(w, key) == GLFW_PRESS;
 	}
 
 	bool Input::isMouseButtonPressed(int button)
 	{
-		GLFWwindow* w = Application::get().getWindow().getWindow();
+		GLFWwindow* w = Application::the().getWindow().getWindow();
 		return glfwGetMouseButton(w, button) == GLFW_PRESS;
 	}
 
 	std::pair<float, float> Input::getMousePosition()
 	{
-		GLFWwindow* w = Application::get().getWindow().getWindow();
+		GLFWwindow* w = Application::the().getWindow().getWindow();
 		double xPos;
 		double yPos;
 		glfwGetCursorPos(w, &xPos, &yPos);
