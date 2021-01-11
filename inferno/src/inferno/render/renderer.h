@@ -15,7 +15,6 @@ namespace Inferno {
 	class Shader;
 	class Texture;
 	class Transform;
-	class VertexBuffer;
 	class VertexArray;
 
 	struct QuadVertex {
@@ -23,32 +22,6 @@ namespace Inferno {
 		glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 		glm::vec2 textureCoordinates = { 0.0f, 0.0f };
 		float textureIndex = 0; // @Todo get int to pass to fragment correctly
-	};
-
-	struct QuadBatch {
-		static const uint32_t vertexPerQuad = 4;
-		static const uint32_t indexPerQuad = 6;
-		static const uint32_t quads = 1000;
-		static const uint32_t vertexCount = quads * vertexPerQuad;
-		static const uint32_t indexCount = quads * indexPerQuad;
-		static const uint32_t textureUnitPerBatch = 32;
-
-		// CPU quad vertices
-		uint32_t quadCount = 0;
-		std::unique_ptr<QuadVertex[]> vertexBufferBase = nullptr;
-		QuadVertex* vertexBufferPtr = nullptr;
-
-		// Default quad vertex positions
-		glm::vec4 vertexPositions[vertexPerQuad];
-
-		// Texture units
-		uint32_t supportedTextureUnitPerBatch = 0;
-		uint32_t textureUnitIndex = 1;
-		std::array<std::shared_ptr<Texture>, textureUnitPerBatch> textureUnits;
-
-		// GPU objects
-		std::shared_ptr<Shader> shader = nullptr;
-		std::shared_ptr<VertexArray> vertexArray = nullptr;
 	};
 
 // -----------------------------------------
@@ -65,30 +38,72 @@ namespace Inferno {
 
 // -----------------------------------------
 
-	class Renderer2D {
+	class Renderer {
 	public:
-		static void initialize();
-		static void destroy();
+		static const uint32_t vertexPerQuad = 4;
+		static const uint32_t indexPerQuad = 6;
+		static const uint32_t textureUnitPerBatch = 32;
 
-		static void beginScene(const std::shared_ptr<Camera>& camera);
-		static void endScene();
+	protected:
+		virtual void initialize() = 0;
+		virtual void destroy() = 0;
 
-		static void drawQuad(std::shared_ptr<Transform> transform, glm::vec4 color);
-		static void drawQuad(std::shared_ptr<Transform> transform, glm::mat4 color);
-		static void drawQuad(std::shared_ptr<Transform> transform, glm::vec4 color, std::shared_ptr<Texture> texture);
-		static void drawQuad(std::shared_ptr<Transform> transform, glm::mat4 color, std::shared_ptr<Texture> texture);
+		uint32_t addTextureUnit(std::shared_ptr<Texture> texture);
+
+		void bind();
+		void unbind();
+		virtual void flush() = 0;
+		virtual void startBatch() = 0;
+		virtual void nextBatch() = 0;
+
+		uint32_t m_quadIndex = 0;
+
+		// Texture units
+		static uint32_t m_supportedTextureUnitPerBatch;
+		uint32_t m_textureUnitIndex = 1;
+		std::array<std::shared_ptr<Texture>, textureUnitPerBatch> m_textureUnits;
+
+		// GPU objects
+		std::shared_ptr<Shader> m_shader = nullptr;
+		std::shared_ptr<VertexArray> m_vertexArray = nullptr;
+	};
+
+// -----------------------------------------
+
+	class Renderer2D final : public Renderer {
+	public:
+		static const uint32_t quadCount = 1000;
+		static const uint32_t vertexCount = quadCount * vertexPerQuad;
+		static const uint32_t indexCount = quadCount * indexPerQuad;
+
+		void initialize() override;
+		void destroy() override;
+
+		void beginScene(const std::shared_ptr<Camera>& camera);
+		void endScene();
+
+		void drawQuad(std::shared_ptr<Transform> transform, glm::vec4 color);
+		void drawQuad(std::shared_ptr<Transform> transform, glm::mat4 color);
+		void drawQuad(std::shared_ptr<Transform> transform, glm::vec4 color, std::shared_ptr<Texture> texture);
+		void drawQuad(std::shared_ptr<Transform> transform, glm::mat4 color, std::shared_ptr<Texture> texture);
+
+		static inline Renderer2D& the() { return *s_instance; }
 
 	private:
-		static uint32_t addTextureUnit(std::shared_ptr<Texture> texture);
+		void flush() override;
+		void startBatch() override;
+		void nextBatch() override;
 
-		static void bind();
-		static void unbind();
-		static void flush();
-		static void startBatch();
-		static void nextBatch();
+		std::shared_ptr<Camera> s_camera;
 
-		static std::shared_ptr<Camera> s_camera;
-		static QuadBatch* s_quadBatch;
+		// CPU quad vertices
+		std::unique_ptr<QuadVertex[]> m_vertexBufferBase = nullptr;
+		QuadVertex* m_vertexBufferPtr = nullptr;
+
+		// Default quad vertex positions
+		glm::vec4 m_vertexPositions[vertexPerQuad];
+
+		static Renderer2D* s_instance;
 	};
 
 }

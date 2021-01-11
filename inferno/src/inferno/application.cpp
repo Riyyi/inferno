@@ -46,7 +46,8 @@ namespace Inferno {
 		m_cameraO = std::make_shared<OrthographicCamera>();
 		m_cameraP = std::make_shared<PerspectiveCamera>();
 
-		Renderer2D::initialize();
+		Renderer2D* renderer2D = new Renderer2D();
+		renderer2D->initialize();
 
 		// Load assets
 
@@ -56,7 +57,7 @@ namespace Inferno {
 
 	Application::~Application()
 	{
-		Renderer2D::destroy();
+		Renderer2D::the().destroy();
 		TextureManager::the().destroy();
 		ShaderManager::the().destroy();
 		// Input::destroy();
@@ -102,13 +103,13 @@ namespace Inferno {
 			RenderCommand::clearColor({ 0.2f, 0.3f, 0.3f, 1.0f });
 			RenderCommand::clear();
 
-			Renderer2D::beginScene(m_cameraP); // camera, lights, environment
+			Renderer2D::the().beginScene(m_cameraP); // camera, lights, environment
 
-			Renderer2D::drawQuad(std::make_shared<Transform>(cube), colors);
-			Renderer2D::drawQuad(std::make_shared<Transform>(cube2), { 0.5f, 0.6f, 0.8f, 1.0f }, m_texture);
-			Renderer2D::drawQuad(std::make_shared<Transform>(cube3), { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture2);
+			Renderer2D::the().drawQuad(std::make_shared<Transform>(cube), colors);
+			Renderer2D::the().drawQuad(std::make_shared<Transform>(cube2), { 0.5f, 0.6f, 0.8f, 1.0f }, m_texture);
+			Renderer2D::the().drawQuad(std::make_shared<Transform>(cube3), { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture2);
 
-			Renderer2D::endScene();
+			Renderer2D::the().endScene();
 
 			m_window->render();
 
