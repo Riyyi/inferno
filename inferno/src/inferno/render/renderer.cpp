@@ -75,7 +75,7 @@ namespace Inferno {
 // -----------------------------------------
 
 		// Create shader
-		s_quadBatch->shader = std::make_unique<Shader>("assets/glsl/batch-quad");
+		s_quadBatch->shader = ShaderManager::the().load("assets/glsl/batch-quad");
 		s_quadBatch->shader->bind();
 		s_quadBatch->shader->setInt("u_textures", samplers, s_quadBatch->textureUnitPerBatch);
 		s_quadBatch->shader->unbind();

@@ -47,7 +47,7 @@ namespace Inferno {
 		std::array<std::shared_ptr<Texture>, textureUnitPerBatch> textureUnits;
 
 		// GPU objects
-		std::unique_ptr<Shader> shader = nullptr;
+		std::shared_ptr<Shader> shader = nullptr;
 		std::shared_ptr<VertexArray> vertexArray = nullptr;
 	};
 
