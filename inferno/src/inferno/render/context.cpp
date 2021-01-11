@@ -24,10 +24,10 @@ namespace Inferno {
 		ASSERT(glad, "Failed to initialize glad!");
 
 		// Log OpenGL properties
-		dbg(Log::Info) << "OpenGL Info:";
-		dbg(Log::Info) << "  Vendor:   " << glGetString(GL_VENDOR);
-		dbg(Log::Info) << "  Renderer: " << glGetString(GL_RENDERER);
-		dbg(Log::Info) << "  Version:  " << glGetString(GL_VERSION);
+		dbg(Log::Comment) << "OpenGL Info:";
+		dbg(Log::Comment) << "  Vendor:   " << glGetString(GL_VENDOR);
+		dbg(Log::Comment) << "  Renderer: " << glGetString(GL_RENDERER);
+		dbg(Log::Comment) << "  Version:  " << glGetString(GL_VERSION);
 
 #ifdef NF_ENABLE_ASSERTS
 		int versionMajor;
