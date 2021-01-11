@@ -37,19 +37,28 @@ namespace Inferno {
 
 		Input::initialize();
 
+		ShaderManager* shaderManager = new ShaderManager();
+		shaderManager->initialize();
+
+		TextureManager* textureManager = new TextureManager();
+		textureManager->initialize();
+
 		m_cameraO = std::make_shared<OrthographicCamera>();
 		m_cameraP = std::make_shared<PerspectiveCamera>();
 
-		TextureManager textureManager;
-		m_texture = textureManager.load("assets/gfx/test.png");
-		m_texture2 = textureManager.load("assets/gfx/test-inverted.png");
-
 		Renderer2D::initialize();
+
+		// Load assets
+
+		m_texture = TextureManager::the().load("assets/gfx/test.png");
+		m_texture2 = TextureManager::the().load("assets/gfx/test-inverted.png");
 	}
 
 	Application::~Application()
 	{
 		Renderer2D::destroy();
+		TextureManager::the().destroy();
+		ShaderManager::the().destroy();
 		// Input::destroy();
 		Settings::destroy();
 	}

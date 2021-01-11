@@ -101,6 +101,22 @@ namespace Inferno {
 
 // -----------------------------------------
 
+	TextureManager* TextureManager::s_instance = nullptr;
+
+	void TextureManager::initialize()
+	{
+		ASSERT(!s_instance, "TextureManager already exists!");
+		s_instance = this;
+
+		dbg(Log::Info) << "TextureManager initialized";
+	}
+
+	void TextureManager::destroy()
+	{
+		delete s_instance;
+		s_instance = nullptr;
+	}
+
 	void TextureManager::add(const std::string& path, const std::shared_ptr<Texture>& texture)
 	{
 		// Construct (key, value) pair and insert it into the unordered_map

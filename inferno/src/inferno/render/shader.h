@@ -47,6 +47,9 @@ namespace Inferno {
 
 	class ShaderManager {
 	public:
+		void initialize();
+		void destroy();
+
 		void add(const std::string& name, const std::shared_ptr<Shader>& shader);
 		std::shared_ptr<Shader> load(const std::string& name);
 		std::shared_ptr<Shader> load(const std::string& vertexSource,
@@ -57,12 +60,16 @@ namespace Inferno {
 		void remove(const std::string& name);
 		void remove(const std::shared_ptr<Shader>& shader);
 
+		static inline ShaderManager& the() { return *s_instance; }
+
 	protected:
 		std::string computeName(const std::string& vertexSource,
 		                        const std::string& fragmentSource);
 
 	private:
 		std::unordered_map<std::string, std::shared_ptr<Shader>> m_shaderList;
+
+		static ShaderManager* s_instance;
 	};
 
 }

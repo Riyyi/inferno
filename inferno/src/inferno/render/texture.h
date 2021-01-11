@@ -39,6 +39,9 @@ namespace Inferno {
 
 	class TextureManager {
 	public:
+		void initialize();
+		void destroy();
+
 		void add(const std::string& path, const std::shared_ptr<Texture>& texture);
 		std::shared_ptr<Texture> load(const std::string& path);
 		std::shared_ptr<Texture> get(const std::string& path);
@@ -47,8 +50,12 @@ namespace Inferno {
 		void remove(const std::string& path);
 		void remove(const std::shared_ptr<Texture>& texture);
 
+		static inline TextureManager& the() { return *s_instance; }
+
 	private:
 		std::unordered_map<std::string, std::shared_ptr<Texture>> m_textureList;
+
+		static TextureManager* s_instance;
 	};
 
 }

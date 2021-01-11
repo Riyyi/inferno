@@ -191,6 +191,22 @@ namespace Inferno {
 
 // -----------------------------------------
 
+	ShaderManager* ShaderManager::s_instance = nullptr;
+
+	void ShaderManager::initialize()
+	{
+		ASSERT(!s_instance, "ShaderManager already exists!");
+		s_instance = this;
+
+		dbg(Log::Info) << "ShaderManager initialized";
+	}
+
+	void ShaderManager::destroy()
+	{
+		delete s_instance;
+		s_instance = nullptr;
+	}
+
 	void ShaderManager::add(const std::string& name, const std::shared_ptr<Shader>& shader)
 	{
 		// Construct (key, value) pair and insert it into the unordered_map
