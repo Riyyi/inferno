@@ -47,6 +47,9 @@ namespace Inferno {
 		uint32_t gpuTextureUnitCount = RenderCommand::textureUnitAmount();
 		m_supportedTextureUnitPerBatch = std::min(constTextureUnitCount, gpuTextureUnitCount);
 
+		// Texture unit 0 is reserved for no texture
+		m_textureUnits[0] = nullptr;
+
 		// Create texture unit samplers
 		int32_t samplers[textureUnitPerBatch];
 		for (uint32_t i = 0; i < textureUnitPerBatch; i++) {
@@ -135,9 +138,6 @@ namespace Inferno {
 		m_vertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
 		m_vertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
 		m_vertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
-
-		// Texture unit 0 is reserved for no texture
-		m_textureUnits[0] = nullptr;
 
 // GPU
 // -----------------------------------------
