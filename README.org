@@ -35,7 +35,6 @@ Or
 * Libraries
 
 # - [[https://github.com/bulletphysics/bullet3][Bullet]]
-- [[https://github.com/aseprite/freetype2][FreeType2]]
 - [[https://github.com/Dav1dde/glad][glad]]
 - [[https://github.com/glfw/glfw][GLFW]]
 - [[https://github.com/g-truc/glm][GLM]]

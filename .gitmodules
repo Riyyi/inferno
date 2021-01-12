@@ -10,6 +10,3 @@
 [submodule "inferno/vendor/stb"]
 	path = inferno/vendor/stb
 	url = https://github.com/nothings/stb
-[submodule "inferno/vendor/freetype"]
-	path = inferno/vendor/freetype
-	url = https://github.com/aseprite/freetype2
