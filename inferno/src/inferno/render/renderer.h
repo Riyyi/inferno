@@ -9,6 +9,8 @@
 #include "glm/ext/vector_float3.hpp"   // glm::vec3
 #include "glm/ext/vector_float4.hpp"   // glm::vec4
 
+#include "inferno/scene/components.h"
+
 namespace Inferno {
 
 	class Camera;
@@ -95,10 +97,10 @@ namespace Inferno {
 		void beginScene(glm::mat4 cameraProjectionView);
 		void endScene();
 
-		void drawQuad(std::shared_ptr<Transform> transform, glm::vec4 color);
-		void drawQuad(std::shared_ptr<Transform> transform, glm::mat4 color);
-		void drawQuad(std::shared_ptr<Transform> transform, glm::vec4 color, std::shared_ptr<Texture> texture);
-		void drawQuad(std::shared_ptr<Transform> transform, glm::mat4 color, std::shared_ptr<Texture> texture);
+		void drawQuad(const TransformComponent& transform, glm::vec4 color);
+		void drawQuad(const TransformComponent& transform, glm::mat4 color);
+		void drawQuad(const TransformComponent& transform, glm::vec4 color, std::shared_ptr<Texture> texture);
+		void drawQuad(const TransformComponent& transform, glm::mat4 color, std::shared_ptr<Texture> texture);
 
 		static inline Renderer2D& the() { return *s_instance; }
 

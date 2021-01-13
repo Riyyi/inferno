@@ -32,8 +32,8 @@ namespace Inferno {
 		Entity camera = createEntity("Camera Entity");
 		camera.add<PerspectiveCameraComponent>();
 		auto& cameraTransform = camera.get<TransformComponent>();
-		cameraTransform.translate = { 0.0f, 0.0f, 1.0f };
-		cameraTransform.rotate = { 0.0f, 0.0f, -1.0f };
+		cameraTransform.translate.z = 1.0f;
+		cameraTransform.rotate.z = -1.0f;
 	}
 
 	void Scene::update(float deltaTime)

@@ -4,7 +4,6 @@
 #include <glad/glad.h>
 
 #include "inferno/assertions.h"
-#include "inferno/component/transform.h"
 #include "inferno/render/buffer.h"
 #include "inferno/render/renderer.h"
 #include "inferno/render/shader.h"
@@ -196,22 +195,22 @@ namespace Inferno {
 		nextBatch();
 	}
 
-	void Renderer2D::drawQuad(std::shared_ptr<Transform> transform, glm::vec4 color)
+	void Renderer2D::drawQuad(const TransformComponent& transform, glm::vec4 color)
 	{
 		drawQuad(transform, color, nullptr);
 	}
 
-	void Renderer2D::drawQuad(std::shared_ptr<Transform> transform, glm::mat4 color)
+	void Renderer2D::drawQuad(const TransformComponent& transform, glm::mat4 color)
 	{
 		drawQuad(transform, color, nullptr);
 	}
 
-	void Renderer2D::drawQuad(std::shared_ptr<Transform> transform, glm::vec4 color, std::shared_ptr<Texture> texture)
+	void Renderer2D::drawQuad(const TransformComponent& transform, glm::vec4 color, std::shared_ptr<Texture> texture)
 	{
 		drawQuad(transform, glm::mat4(color, color, color, color), texture);
 	}
 
-	void Renderer2D::drawQuad(std::shared_ptr<Transform> transform, glm::mat4 color, std::shared_ptr<Texture> texture)
+	void Renderer2D::drawQuad(const TransformComponent& transform, glm::mat4 color, std::shared_ptr<Texture> texture)
 	{
 		// Create a new batch if the quad limit has been reached
 		if (m_quadIndex >= quadCount) {
@@ -226,7 +225,7 @@ namespace Inferno {
 
 		// Add the quads 4 vertices
 		for (uint32_t i = 0; i < vertexPerQuad; i++) {
-			m_vertexBufferPtr->position =  transform->transform() * m_vertexPositions[i];
+			m_vertexBufferPtr->position =  transform.transform * m_vertexPositions[i];
 			m_vertexBufferPtr->color = color[i];
 			m_vertexBufferPtr->textureCoordinates = textureCoordinates[i];
 			m_vertexBufferPtr->textureIndex = (float)textureUnitIndex;

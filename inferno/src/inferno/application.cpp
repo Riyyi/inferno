@@ -1,6 +1,5 @@
 #include "inferno/application.h"
 #include "inferno/assertions.h"
-#include "inferno/component/transform.h"
 #include "inferno/core.h"
 #include "inferno/event/applicationevent.h"
 #include "inferno/event/event.h"
@@ -15,6 +14,8 @@
 #include "inferno/render/renderer.h"
 #include "inferno/render/shader.h"
 #include "inferno/render/texture.h"
+#include "inferno/scene/components.h"
+#include "inferno/scene/entity.h"
 #include "inferno/scene/scene.h"
 #include "inferno/settings.h"
 #include "inferno/time.h"
@@ -86,17 +87,15 @@ namespace Inferno {
 			1.0f, 1.0f, 1.0f, 1.0f,
 		};
 
-		Transform cube({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f});
-		cube.update();
+		Entity quad = m_scene->createEntity("Quad");
 
-		Transform cube2({1.1f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f});
-		cube2.update();
+		Entity quad2 = m_scene->createEntity("Quad 2");
+		auto& quad2Transform = quad2.get<TransformComponent>();
+		quad2Transform.translate.x = 1.1f;
 
-		Transform cube3({2.2f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f});
-		cube3.update();
-
-		Transform cube4({0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f});
-		cube4.update();
+		Entity quad3 = m_scene->createEntity("Quad 3");
+		auto& quad3Transform = quad3.get<TransformComponent>();
+		quad3Transform.translate.x = 2.2f;
 
 		std::array<CharacterVertex, Renderer::vertexPerQuad> character;
 
@@ -172,9 +171,9 @@ namespace Inferno {
 			Renderer2D::the().beginScene(m_scene->cameraProjectionView()); // camera, lights, environment
 			RendererCharacter::the().beginScene();
 
-			Renderer2D::the().drawQuad(std::make_shared<Transform>(cube), colors);
-			Renderer2D::the().drawQuad(std::make_shared<Transform>(cube2), { 0.5f, 0.6f, 0.8f, 1.0f }, m_texture);
-			Renderer2D::the().drawQuad(std::make_shared<Transform>(cube3), { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture2);
+			Renderer2D::the().drawQuad(quad.get<TransformComponent>(), colors);
+			Renderer2D::the().drawQuad(quad2.get<TransformComponent>(), { 0.5f, 0.6f, 0.8f, 1.0f }, m_texture);
+			Renderer2D::the().drawQuad(quad3.get<TransformComponent>(), { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture2);
 
 			RendererCharacter::the().drawCharacter(character, {1,1,1,1}, f->texture());
 
