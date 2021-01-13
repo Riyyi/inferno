@@ -54,10 +54,12 @@ namespace Inferno {
 			return m_registry.lock()->get_or_emplace<T>(m_entity, std::forward<P>(parameters)...);
 		}
 
+		// Casts
 		inline operator bool() const { return m_entity != entt::null; }
 		inline operator entt::entity() const { return m_entity; }
 		inline operator uint32_t() const { return static_cast<uint32_t>(m_entity); }
-		inline uint32_t operator ()() const { return static_cast<uint32_t>(m_entity); } // ()
+		// Functor()
+		inline uint32_t operator ()() const { return static_cast<uint32_t>(m_entity); }
 
 	private:
 		entt::entity m_entity = entt::null;
