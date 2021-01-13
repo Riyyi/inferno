@@ -332,7 +332,7 @@ namespace Inferno {
 		m_vertexArray->setIndexBuffer(indexBuffer);
 		delete[] indices;
 
-		dbg() << "RendererCharacter initialized";
+		dbg(Log::Info) << "RendererCharacter initialized";
 	}
 
 	void RendererCharacter::destroy()
