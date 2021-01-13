@@ -4,6 +4,7 @@
 #include <cstdio>      // printf
 #include <string>      // std::string
 #include <string_view> // std::string_view
+#include <utility>     // std::forward
 
 namespace Inferno {
 
@@ -101,15 +102,15 @@ namespace Inferno {
 	void dbgln(Log type, bool newline, std::string_view format);
 
 	template<typename T, typename... P>
-	void dbgln(const char* format, T value, const P&... parameters)
+	void dbgln(const char* format, T value, P&&... parameters)
 	{
-		dbgln(Log::None, true, format, value, parameters...);
+		dbgln(Log::None, true, format, value, std::forward<P>(parameters)...);
 	}
 
 	template<typename T, typename... P>
-	void dbgln(Log type, const char* format, T value, const P&... parameters)
+	void dbgln(Log type, const char* format, T value, P&&... parameters)
 	{
-		dbgln(type, true, format, value, parameters...);
+		dbgln(type, true, format, value, std::forward<P>(parameters)...);
 	}
 
 	// https://en.cppreference.com/w/cpp/language/parameter_pack#Example
@@ -132,39 +133,39 @@ namespace Inferno {
 	}
 
 	template<typename T, typename... P>
-	void dbgln(std::string format, T value, const P&... parameters)
+	void dbgln(std::string format, T value, P&&... parameters)
 	{
-		dbgln(format.c_str(), value, parameters...);
+		dbgln(format.c_str(), value, std::forward<P>(parameters)...);
 	}
 
 	template<typename T, typename... P>
-	void dbgln(Log type, std::string format, T value, const P&... parameters)
+	void dbgln(Log type, std::string format, T value, P&&... parameters)
 	{
-		dbgln(type, format.c_str(), value, parameters...);
+		dbgln(type, format.c_str(), value, std::forward<P>(parameters)...);
 	}
 
 	template<typename T, typename... P>
-	void dbgln(Log type, bool newline, std::string format, T value, const P&... parameters)
+	void dbgln(Log type, bool newline, std::string format, T value, P&&... parameters)
 	{
-		dbgln(type, newline, format.c_str(), value, parameters...);
+		dbgln(type, newline, format.c_str(), value, std::forward<P>(parameters)...);
 	}
 
 	template<typename T, typename... P>
-	void dbgln(std::string_view format, T value, const P&... parameters)
+	void dbgln(std::string_view format, T value, P&&... parameters)
 	{
-		dbgln(format.data(), value, parameters...);
+		dbgln(format.data(), value, std::forward<P>(parameters)...);
 	}
 
 	template<typename T, typename... P>
-	void dbgln(Log type, std::string_view format, T value, const P&... parameters)
+	void dbgln(Log type, std::string_view format, T value, P&&... parameters)
 	{
-		dbgln(type, format.data(), value, parameters...);
+		dbgln(type, format.data(), value, std::forward<P>(parameters)...);
 	}
 
 	template<typename T, typename... P>
-	void dbgln(Log type, bool newline, std::string_view format, T value, const P&... parameters)
+	void dbgln(Log type, bool newline, std::string_view format, T value, P&&... parameters)
 	{
-		dbgln(type, newline, format.data(), value, parameters...);
+		dbgln(type, newline, format.data(), value, std::forward<P>(parameters)...);
 	}
 
 }
