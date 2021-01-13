@@ -6,6 +6,7 @@
 namespace Inferno {
 
 	class Event;
+	class Font;
 	class KeyPressEvent;
 	class MousePositionEvent;
 	class OrthographicCamera;
@@ -49,6 +50,7 @@ namespace Inferno {
 		//
 		std::shared_ptr<Texture> m_texture;
 		std::shared_ptr<Texture> m_texture2;
+		std::shared_ptr<Font> m_font;
 		//
 
 		static Application* s_instance;

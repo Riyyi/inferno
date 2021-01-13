@@ -9,13 +9,14 @@
 #include "inferno/input.h"
 #include "inferno/inputcodes.h"
 #include "inferno/log.h"
-#include "inferno/settings.h"
 #include "inferno/render/buffer.h"
 #include "inferno/render/camera.h"
 #include "inferno/render/context.h"
+#include "inferno/render/font.h"
 #include "inferno/render/renderer.h"
 #include "inferno/render/shader.h"
 #include "inferno/render/texture.h"
+#include "inferno/settings.h"
 #include "inferno/time.h"
 #include "inferno/window.h"
 
@@ -49,14 +50,24 @@ namespace Inferno {
 		Renderer2D* renderer2D = new Renderer2D();
 		renderer2D->initialize();
 
+		RendererCharacter* rendererCharacter = new RendererCharacter();
+		rendererCharacter->initialize();
+
+		FontManager* fontManager = new FontManager();
+		fontManager->initialize();
+
 		// Load assets
 
 		m_texture = TextureManager::the().load("assets/gfx/test.png");
 		m_texture2 = TextureManager::the().load("assets/gfx/test-inverted.png");
+
+		m_font = FontManager::the().load("assets/fnt/dejavu-sans");
 	}
 
 	Application::~Application()
 	{
+		FontManager::the().destroy();
+		RendererCharacter::the().destroy();
 		Renderer2D::the().destroy();
 		TextureManager::the().destroy();
 		ShaderManager::the().destroy();
@@ -84,6 +95,63 @@ namespace Inferno {
 		Transform cube3({2.2f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f});
 		cube3.update();
 
+		Transform cube4({0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f});
+		cube4.update();
+
+		std::array<CharacterVertex, Renderer::vertexPerQuad> character;
+
+		// character.at(0).quad.textureCoordinates = { 0.0f, 0.0f }; // bottom left
+		// character.at(1).quad.textureCoordinates = { 1.0f, 0.0f };
+		// character.at(2).quad.textureCoordinates = { 1.0f, 1.0f }; // top right
+		// character.at(3).quad.textureCoordinates = { 0.0f, 1.0f };
+
+		auto f = FontManager::the().get("assets/fnt/dejavu-sans");
+		auto c = f->get('5');
+		dbg() << c->position << " " << c->size;
+
+		uint32_t textureWidth = f->texture()->width();
+		uint32_t textureHeight = f->texture()->height();
+		ASSERT(textureWidth == textureHeight, "Invalid font texture!");
+
+		float quadWidth  = (c->size.x / (float)textureWidth) - 0.04; // @Todo something wrong with the width
+		float quadHeight = c->size.y / (float)textureHeight;
+
+		character.at(0).quad.position = { -quadWidth, -quadHeight, 0.0f }; // bottom left
+		character.at(1).quad.position = {  quadWidth, -quadHeight, 0.0f }; // bottom right
+		character.at(2).quad.position = {  quadWidth,  quadHeight, 0.0f }; // top right
+		character.at(3).quad.position = { -quadWidth,  quadHeight, 0.0f }; // top left
+
+		glm::vec2 x {
+			1 - (textureWidth - c->position.x) / (float)textureWidth,
+			1 - (textureWidth - c->position.x - c->size.x) / (float)textureWidth
+		};
+		glm::vec2 y {
+			(textureHeight - c->position.y - c->size.y) / (float)textureHeight,
+			(textureHeight - c->position.y) / (float)textureHeight
+		};
+
+		dbg() << y;
+
+		character.at(0).quad.textureCoordinates = { x.x, y.x };
+		character.at(1).quad.textureCoordinates = { x.y, y.x };
+		character.at(2).quad.textureCoordinates = { x.y, y.y };
+		character.at(3).quad.textureCoordinates = { x.x, y.y };
+
+		character.at(0).quad.textureIndex = 1.0f;
+		character.at(1).quad.textureIndex = 1.0f;
+		character.at(2).quad.textureIndex = 1.0f;
+		character.at(3).quad.textureIndex = 1.0f;
+
+		// pos
+		// texcoords
+		//
+		// width
+		// edge
+		// borderwidth
+		// borderedge
+		// bordercolor
+		// offse
+
 		while(!m_window->shouldClose()) {
 
 			float time = Time::time();
@@ -104,12 +172,16 @@ namespace Inferno {
 			RenderCommand::clear();
 
 			Renderer2D::the().beginScene(m_cameraP); // camera, lights, environment
+			RendererCharacter::the().beginScene();
 
 			Renderer2D::the().drawQuad(std::make_shared<Transform>(cube), colors);
 			Renderer2D::the().drawQuad(std::make_shared<Transform>(cube2), { 0.5f, 0.6f, 0.8f, 1.0f }, m_texture);
 			Renderer2D::the().drawQuad(std::make_shared<Transform>(cube3), { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture2);
 
+			RendererCharacter::the().drawCharacter(character, {1,1,1,1}, f->texture());
+
 			Renderer2D::the().endScene();
+			RendererCharacter::the().endScene();
 
 			m_window->render();
 

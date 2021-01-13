@@ -24,6 +24,18 @@ namespace Inferno {
 		float textureIndex = 0; // @Todo get int to pass to fragment correctly
 	};
 
+	struct CharacterVertex {
+		QuadVertex quad;
+
+		float width = 0.44f;
+		float edge = 0.15f;
+
+		float borderWidth = 0.7f;
+		float borderEdge = 0.1f;
+		glm::vec4 borderColor { 1.0f, 1.0f, 1.0f, 1.0f };
+		float offset = 0.0f;
+	};
+
 // -----------------------------------------
 
 	class RenderCommand {
@@ -52,6 +64,7 @@ namespace Inferno {
 
 		void bind();
 		void unbind();
+		virtual void loadShader() = 0;
 		virtual void flush() = 0;
 		virtual void startBatch() = 0;
 		virtual void nextBatch() = 0;
@@ -90,6 +103,7 @@ namespace Inferno {
 		static inline Renderer2D& the() { return *s_instance; }
 
 	private:
+		void loadShader() override;
 		void flush() override;
 		void startBatch() override;
 		void nextBatch() override;
@@ -104,6 +118,38 @@ namespace Inferno {
 		glm::vec4 m_vertexPositions[vertexPerQuad];
 
 		static Renderer2D* s_instance;
+	};
+
+// -----------------------------------------
+
+	class RendererCharacter final : public Renderer {
+	public:
+		static const uint32_t quadCount = 1000;
+		static const uint32_t vertexCount = quadCount * vertexPerQuad;
+		static const uint32_t indexCount = quadCount * indexPerQuad;
+
+		void initialize() override;
+		void destroy() override;
+
+		void beginScene();
+		void endScene();
+
+		void drawCharacter(std::array<CharacterVertex, vertexPerQuad>& characterQuad, glm::vec4 color, std::shared_ptr<Texture> texture);
+		void drawCharacter(std::array<CharacterVertex, vertexPerQuad>& characterQuad, glm::mat4 color, std::shared_ptr<Texture> texture);
+
+		static inline RendererCharacter& the() { return *s_instance; }
+
+	private:
+		void loadShader() override;
+		void flush() override;
+		void startBatch() override;
+		void nextBatch() override;
+
+		// CPU quad vertices
+		std::unique_ptr<CharacterVertex[]> m_vertexBufferBase = nullptr;
+		CharacterVertex* m_vertexBufferPtr = nullptr;
+
+		static RendererCharacter* s_instance;
 	};
 
 }

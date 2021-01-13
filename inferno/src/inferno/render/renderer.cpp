@@ -57,10 +57,13 @@ namespace Inferno {
 		}
 
 		// Create shader
-		m_shader = ShaderManager::the().load("assets/glsl/batch-quad");
+		loadShader();
 		m_shader->bind();
 		m_shader->setInt("u_textures", samplers, textureUnitPerBatch);
 		m_shader->unbind();
+
+		// Create vertex array
+		m_vertexArray = std::make_shared<VertexArray>();
 	}
 
 	void Renderer::destroy()
@@ -121,13 +124,13 @@ namespace Inferno {
 
 	void Renderer2D::initialize()
 	{
-		ASSERT(!s_instance, "ShaderManager already exists!");
+		ASSERT(!s_instance, "RendererCharacter already exists!");
 		s_instance = this;
 
 		Renderer::initialize();
 
-// CPU
-// -----------------------------------------
+		// CPU
+		// ---------------------------------
 
 		// Create array for storing quads vertices
 		m_vertexBufferBase = std::unique_ptr<QuadVertex[]>(new QuadVertex[vertexCount]);
@@ -138,22 +141,6 @@ namespace Inferno {
 		m_vertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
 		m_vertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
 		m_vertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
-
-// GPU
-// -----------------------------------------
-
-		// Create vertex array
-		m_vertexArray = std::make_shared<VertexArray>();
-
-		// Create vertex buffer
-		auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(QuadVertex) * vertexCount);
-		vertexBuffer->setLayout({
-			{ BufferElementType::Vec3,  "a_position" },
-			{ BufferElementType::Vec4,  "a_color" },
-			{ BufferElementType::Vec2,  "a_textureCoordinates" },
-			{ BufferElementType::Float, "a_textureIndex" },
-		});
-		m_vertexArray->addVertexBuffer(std::move(vertexBuffer));
 
 		// Generate indices
 
@@ -170,6 +157,19 @@ namespace Inferno {
 
 			offset += vertexPerQuad;
 		}
+
+		// GPU
+		// ---------------------------------
+
+		// Create vertex buffer
+		auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(QuadVertex) * vertexCount);
+		vertexBuffer->setLayout({
+			{ BufferElementType::Vec3,  "a_position" },
+			{ BufferElementType::Vec4,  "a_color" },
+			{ BufferElementType::Vec2,  "a_textureCoordinates" },
+			{ BufferElementType::Float, "a_textureIndex" },
+		});
+		m_vertexArray->addVertexBuffer(std::move(vertexBuffer));
 
 		// Create index buffer
 		auto indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(uint32_t) * indexCount);
@@ -235,6 +235,11 @@ namespace Inferno {
 		m_quadIndex++;
 	}
 
+	void Renderer2D::loadShader()
+	{
+		m_shader = ShaderManager::the().load("assets/glsl/batch-quad");
+	}
+
 	void Renderer2D::flush()
 	{
 		if (m_quadIndex == 0) {
@@ -244,13 +249,13 @@ namespace Inferno {
 		// Upload vertex data to GPU
 		m_vertexArray->getVertexBuffers().at(0)->uploadData(
 			m_vertexBufferBase.get(),
-			quadCount * vertexPerQuad * sizeof(QuadVertex));
+			m_quadIndex * vertexPerQuad * sizeof(QuadVertex));
 
 		bind();
 
 		// Render
 		m_shader->setFloat("u_projectionView", s_camera->projection() * s_camera->transform()->transform());
-		RenderCommand::drawIndexed(m_vertexArray, quadCount * indexPerQuad);
+		RenderCommand::drawIndexed(m_vertexArray, m_quadIndex * indexPerQuad);
 
 		unbind();
 	}
@@ -264,6 +269,154 @@ namespace Inferno {
 	}
 
 	void Renderer2D::nextBatch()
+	{
+		flush();
+		startBatch();
+	}
+
+// -----------------------------------------
+
+	RendererCharacter* RendererCharacter::s_instance = nullptr;
+
+	void RendererCharacter::initialize()
+	{
+		ASSERT(!s_instance, "RendererCharacter already exists!");
+		s_instance = this;
+
+		Renderer::initialize();
+
+		// CPU
+		// ---------------------------------
+
+		// Create array for storing quads vertices
+		m_vertexBufferBase = std::unique_ptr<CharacterVertex[]>(new CharacterVertex[vertexCount]);
+		m_vertexBufferPtr = m_vertexBufferBase.get();
+
+		// Generate indices
+
+		uint32_t* indices = new uint32_t[indexCount];
+
+		uint32_t offset = 0;
+		for (uint32_t i = 0; i < indexCount; i += indexPerQuad) {
+			indices[i + 0] = offset + 0;
+			indices[i + 1] = offset + 1;
+			indices[i + 2] = offset + 2;
+			indices[i + 3] = offset + 2;
+			indices[i + 4] = offset + 3;
+			indices[i + 5] = offset + 0;
+
+			offset += vertexPerQuad;
+		}
+
+		// GPU
+		// ---------------------------------
+
+		// Create vertex buffer
+		auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(CharacterVertex) * vertexCount);
+		vertexBuffer->setLayout({
+			{ BufferElementType::Vec3,  "a_position" },
+			{ BufferElementType::Vec4,  "a_color" },
+			{ BufferElementType::Vec2,  "a_textureCoordinates" },
+			{ BufferElementType::Float, "a_textureIndex" },
+			{ BufferElementType::Float, "a_width" },
+			{ BufferElementType::Float, "a_edge" },
+			{ BufferElementType::Float, "a_borderWidth" },
+			{ BufferElementType::Float, "a_borderEdge" },
+			{ BufferElementType::Vec4,  "a_borderColor" },
+			{ BufferElementType::Float, "a_offset" },
+		});
+		m_vertexArray->addVertexBuffer(std::move(vertexBuffer));
+
+		// Create index buffer
+		auto indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(uint32_t) * indexCount);
+		m_vertexArray->setIndexBuffer(indexBuffer);
+		delete[] indices;
+
+		dbg() << "RendererCharacter initialized";
+	}
+
+	void RendererCharacter::destroy()
+	{
+		delete s_instance;
+		s_instance = nullptr;
+	}
+
+	void RendererCharacter::beginScene()
+	{
+	}
+
+	void RendererCharacter::endScene()
+	{
+		nextBatch();
+	}
+
+	void RendererCharacter::drawCharacter(std::array<CharacterVertex, vertexPerQuad>& characterQuad, glm::vec4 color, std::shared_ptr<Texture> texture)
+	{
+		drawCharacter(characterQuad, glm::mat4 { color, color, color, color }, texture);
+	}
+
+	void RendererCharacter::drawCharacter(std::array<CharacterVertex, vertexPerQuad>& characterQuad, glm::mat4 color, std::shared_ptr<Texture> texture)
+	{
+		// Create a new batch if the quad limit has been reached
+		if (m_quadIndex >= quadCount) {
+			nextBatch();
+		}
+
+		uint32_t textureUnitIndex = addTextureUnit(texture);
+
+		// Add the quads 4 vertices
+		for (uint32_t i = 0; i < vertexPerQuad; i++) {
+			m_vertexBufferPtr->quad.position = characterQuad[i].quad.position;
+			m_vertexBufferPtr->quad.color = characterQuad[i].quad.color;
+			m_vertexBufferPtr->quad.textureCoordinates = characterQuad[i].quad.textureCoordinates;
+			m_vertexBufferPtr->quad.textureIndex = (float)textureUnitIndex;
+
+			m_vertexBufferPtr->width = characterQuad[i].width;
+			m_vertexBufferPtr->edge = characterQuad[i].edge;
+			m_vertexBufferPtr->borderWidth = characterQuad[i].borderWidth;
+			m_vertexBufferPtr->borderEdge = characterQuad[i].borderEdge;
+			m_vertexBufferPtr->borderColor = characterQuad[i].borderColor;
+			m_vertexBufferPtr->offset = characterQuad[i].offset;
+
+			m_vertexBufferPtr++;
+		}
+
+		m_quadIndex++;
+	}
+
+	void RendererCharacter::loadShader()
+	{
+		m_shader = ShaderManager::the().load("assets/glsl/batch-font");
+	}
+
+	void RendererCharacter::flush()
+	{
+		if (m_quadIndex == 0) {
+			return;
+		}
+
+		// Upload vertex data to GPU
+		m_vertexArray->getVertexBuffers().at(0)->uploadData(
+			m_vertexBufferBase.get(),
+			m_quadIndex * vertexPerQuad * sizeof(CharacterVertex));
+
+		bind();
+
+		// Render
+		RenderCommand::drawIndexed(m_vertexArray, m_quadIndex * indexPerQuad);
+
+		unbind();
+	}
+
+	void RendererCharacter::startBatch()
+	{
+		m_quadIndex = 0;
+		m_vertexBufferPtr = m_vertexBufferBase.get();
+
+		m_textureUnitIndex = 1;
+	}
+
+	void RendererCharacter::nextBatch()
 	{
 		flush();
 		startBatch();
