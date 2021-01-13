@@ -18,9 +18,9 @@ namespace Inferno {
 	class VertexArray;
 
 	struct QuadVertex {
-		glm::vec3 position = { 0.0f, 0.0f, 0.0f };
-		glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
-		glm::vec2 textureCoordinates = { 0.0f, 0.0f };
+		glm::vec3 position { 0.0f, 0.0f, 0.0f };
+		glm::vec4 color { 1.0f, 1.0f, 1.0f, 1.0f };
+		glm::vec2 textureCoordinates { 0.0f, 0.0f };
 		float textureIndex = 0; // @Todo get int to pass to fragment correctly
 	};
 

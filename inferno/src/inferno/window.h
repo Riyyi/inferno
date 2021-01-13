@@ -13,10 +13,10 @@ namespace Inferno {
 	class Event;
 
 	struct WindowProperties {
-		std::string title = "Inferno";
+		std::string title { "Inferno" };
 		int width = 1280;
 		int height = 720;
-		std::string fullscreen = "windowed"; // windowed/fullscreen/borderless
+		std::string fullscreen { "windowed" }; // windowed/fullscreen/borderless
 		bool vsync = true;
 	};
 
