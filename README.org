@@ -7,14 +7,14 @@ Inferno game engine project.
 ** Clone
 
 #+BEGIN_SRC sh
-  $ git clone https://gitlab.com/riyyi/engine
-  $ cd engine
+  $ git clone https://gitlab.com/riyyi/inferno
+  $ cd inferno
   $ git submodule init
   $ git submodule update
 #+END_SRC
 Or
 #+BEGIN_SRC sh
-  $ git clone --recursive https://gitlab.com/riyyi/engine
+  $ git clone --recursive https://gitlab.com/riyyi/inferno
 #+END_SRC
 
 ** Update
