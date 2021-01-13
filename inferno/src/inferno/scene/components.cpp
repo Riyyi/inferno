@@ -16,4 +16,12 @@ namespace Inferno {
 		return stream;
 	}
 
+	const LogStream& operator<<(const LogStream& stream, const TransformComponent& value)
+	{
+		return stream << "transform "
+		              << value.translate << " t\n          "
+		              << value.rotate << " r\n          "
+		              << value.scale << " s";
+	}
+
 }
