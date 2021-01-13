@@ -10,12 +10,12 @@
 #include "inferno/inputcodes.h"
 #include "inferno/log.h"
 #include "inferno/render/buffer.h"
-#include "inferno/render/camera.h"
 #include "inferno/render/context.h"
 #include "inferno/render/font.h"
 #include "inferno/render/renderer.h"
 #include "inferno/render/shader.h"
 #include "inferno/render/texture.h"
+#include "inferno/scene/scene.h"
 #include "inferno/settings.h"
 #include "inferno/time.h"
 #include "inferno/window.h"
@@ -44,8 +44,7 @@ namespace Inferno {
 		TextureManager* textureManager = new TextureManager();
 		textureManager->initialize();
 
-		m_cameraO = std::make_shared<OrthographicCamera>();
-		m_cameraP = std::make_shared<PerspectiveCamera>();
+		m_scene = std::make_shared<Scene>();
 
 		Renderer2D* renderer2D = new Renderer2D();
 		renderer2D->initialize();
@@ -69,6 +68,7 @@ namespace Inferno {
 		FontManager::the().destroy();
 		RendererCharacter::the().destroy();
 		Renderer2D::the().destroy();
+		m_scene->destroy();
 		TextureManager::the().destroy();
 		ShaderManager::the().destroy();
 		// Input::destroy();
@@ -107,7 +107,7 @@ namespace Inferno {
 
 		auto f = FontManager::the().get("assets/fnt/dejavu-sans");
 		auto c = f->get('5');
-		dbg() << c->position << " " << c->size;
+		// dbg() << c->position << " " << c->size;
 
 		uint32_t textureWidth = f->texture()->width();
 		uint32_t textureHeight = f->texture()->height();
@@ -129,8 +129,7 @@ namespace Inferno {
 			(textureHeight - c->position.y - c->size.y) / (float)textureHeight,
 			(textureHeight - c->position.y) / (float)textureHeight
 		};
-
-		dbg() << y;
+		// dbg() < y;
 
 		character.at(0).quad.textureCoordinates = { x.x, y.x };
 		character.at(1).quad.textureCoordinates = { x.y, y.x };
@@ -163,15 +162,14 @@ namespace Inferno {
 
 			Input::update();
 			m_window->update();
-			m_cameraO->update(deltaTime);
-			m_cameraP->update(deltaTime);
+			m_scene->update(deltaTime);
 
 			// Render
 
 			RenderCommand::clearColor({ 0.2f, 0.3f, 0.3f, 1.0f });
 			RenderCommand::clear();
 
-			Renderer2D::the().beginScene(m_cameraP); // camera, lights, environment
+			Renderer2D::the().beginScene(m_scene->cameraProjectionView()); // camera, lights, environment
 			RendererCharacter::the().beginScene();
 
 			Renderer2D::the().drawQuad(std::make_shared<Transform>(cube), colors);

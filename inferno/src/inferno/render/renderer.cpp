@@ -6,7 +6,6 @@
 #include "inferno/assertions.h"
 #include "inferno/component/transform.h"
 #include "inferno/render/buffer.h"
-#include "inferno/render/camera.h"
 #include "inferno/render/renderer.h"
 #include "inferno/render/shader.h"
 #include "inferno/render/texture.h"
@@ -185,9 +184,11 @@ namespace Inferno {
 		s_instance = nullptr;
 	}
 
-	void Renderer2D::beginScene(const std::shared_ptr<Camera>& camera)
+	void Renderer2D::beginScene(glm::mat4 cameraProjectionView)
 	{
-		s_camera = camera;
+		m_shader->bind();
+		m_shader->setFloat("u_projectionView", cameraProjectionView);
+		m_shader->unbind();
 	}
 
 	void Renderer2D::endScene()
@@ -254,7 +255,6 @@ namespace Inferno {
 		bind();
 
 		// Render
-		m_shader->setFloat("u_projectionView", s_camera->projection() * s_camera->transform()->transform());
 		RenderCommand::drawIndexed(m_vertexArray, m_quadIndex * indexPerQuad);
 
 		unbind();

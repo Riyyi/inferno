@@ -92,7 +92,7 @@ namespace Inferno {
 		void initialize() override;
 		void destroy() override;
 
-		void beginScene(const std::shared_ptr<Camera>& camera);
+		void beginScene(glm::mat4 cameraProjectionView);
 		void endScene();
 
 		void drawQuad(std::shared_ptr<Transform> transform, glm::vec4 color);
@@ -107,8 +107,6 @@ namespace Inferno {
 		void flush() override;
 		void startBatch() override;
 		void nextBatch() override;
-
-		std::shared_ptr<Camera> s_camera;
 
 		// CPU quad vertices
 		std::unique_ptr<QuadVertex[]> m_vertexBufferBase = nullptr;

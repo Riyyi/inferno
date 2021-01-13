@@ -11,6 +11,7 @@ namespace Inferno {
 	class MousePositionEvent;
 	class OrthographicCamera;
 	class PerspectiveCamera;
+	class Scene;
 	class Texture;
 	class TextureManager;
 	class Window;
@@ -41,9 +42,7 @@ namespace Inferno {
 
 	private:
 		std::unique_ptr<Window> m_window;
-		// std::unique_ptr<Camera> m_camera;
-		std::shared_ptr<OrthographicCamera> m_cameraO;
-		std::shared_ptr<PerspectiveCamera> m_cameraP;
+		std::shared_ptr<Scene> m_scene;
 
 		float m_lastFrameTime = 0.0f;
 
