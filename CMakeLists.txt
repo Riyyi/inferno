@@ -46,12 +46,13 @@ endif()
 
 # Include all headers
 include_directories(
+	"${ENGINE}/src"
+	"${ENGINE}/vendor/entt/src"
 	"${ENGINE}/vendor/glad/include"
 	"${ENGINE}/vendor/glfw/include"
 	"${ENGINE}/vendor/glm"
 	"${ENGINE}/vendor/json/include"
 	"${ENGINE}/vendor/stb"
-	"${ENGINE}/src"
 )
 
 # Define engine source files

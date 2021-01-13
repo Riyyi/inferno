@@ -35,6 +35,7 @@ Or
 * Libraries
 
 # - [[https://github.com/bulletphysics/bullet3][Bullet]]
+- [[https://github.com/skypjack/entt][EnTT]]
 - [[https://github.com/Dav1dde/glad][glad]]
 - [[https://github.com/glfw/glfw][GLFW]]
 - [[https://github.com/g-truc/glm][GLM]]
