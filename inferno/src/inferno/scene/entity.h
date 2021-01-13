@@ -17,11 +17,13 @@ namespace Inferno {
 		Entity(const std::shared_ptr<entt::registry>& registry, entt::entity handle);
 		Entity(const std::shared_ptr<entt::registry>& registry, uint32_t handle);
 
+		void expired() const;
 		void valid() const;
 
 		template<typename... T>
 		[[nodiscard]] bool has() const
 		{
+			expired();
 			valid();
 			return m_registry.lock()->has<T...>(m_entity);
 		}
@@ -29,6 +31,7 @@ namespace Inferno {
 		template<typename... T>
 		[[nodiscard]] bool any() const
 		{
+			expired();
 			valid();
 			return m_registry.lock()->any<T...>(m_entity);
 		}
@@ -36,6 +39,7 @@ namespace Inferno {
 		template<typename T, typename... P>
 		T& add(P&&... parameters) const
 		{
+			expired();
 			valid();
 			return m_registry.lock()->emplace_or_replace<T>(m_entity, std::forward<P>(parameters)...);
 		};
@@ -43,6 +47,7 @@ namespace Inferno {
 		template<typename T>
 		size_t remove() const
 		{
+			expired();
 			valid();
 			return m_registry.lock()->remove_if_exists<T>(m_entity);
 		}
@@ -50,6 +55,7 @@ namespace Inferno {
 		template<typename T, typename... P>
 		T& get(P&&... parameters) const
 		{
+			expired();
 			valid();
 			return m_registry.lock()->get_or_emplace<T>(m_entity, std::forward<P>(parameters)...);
 		}
