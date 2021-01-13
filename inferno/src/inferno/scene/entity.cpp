@@ -32,7 +32,8 @@ namespace Inferno {
 
 	void Entity::valid() const
 	{
-		ASSERT(m_registry.lock()->valid(m_entity));
+		expired();
+		ASSERT(m_registry.lock()->valid(m_entity), "Entity is not valid");
 	}
 
 // ----------------------------------------
