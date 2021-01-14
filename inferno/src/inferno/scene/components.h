@@ -1,12 +1,14 @@
 #ifndef COMPONENTS_H
 #define COMPONENTS_H
 
+#include <memory> // std::shared_ptr
 #include <string> // std::string
 
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
 #include "glm/ext/vector_float3.hpp"   // glm::vec3
 
 #include "inferno/log.h"
+#include "inferno/render/texture.h"
 
 namespace Inferno {
 
@@ -39,6 +41,11 @@ namespace Inferno {
 		float yaw = -90.0f;
 		glm::vec3 up { 0.0f, 1.0f, 0.0f };
 		glm::mat4 projection { 1.0f }; // Identity matrix
+	};
+
+	struct SpriteComponent {
+		glm::vec4 color;
+		std::shared_ptr<Texture> texture;
 	};
 
 // ----------------------------------------

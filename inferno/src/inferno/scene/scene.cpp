@@ -3,6 +3,7 @@
 #include "inferno/scene/entity.h"
 #include "inferno/scene/scene.h"
 #include "inferno/systems/camera.h"
+#include "inferno/systems/render.h"
 #include "inferno/systems/transform.h"
 
 namespace Inferno {
@@ -34,20 +35,29 @@ namespace Inferno {
 		auto& cameraTransform = camera.get<TransformComponent>();
 		cameraTransform.translate.z = 1.0f;
 		cameraTransform.rotate.z = -1.0f;
+
+		RenderSystem* renderSystem = new RenderSystem();
+		renderSystem->initialize();
+		RenderSystem::the().setRegistry(m_registry);
 	}
 
 	void Scene::update(float deltaTime)
 	{
+		(void)deltaTime;
+
 		TransformSystem::the().update();
 		CameraSystem::the().update();
 	}
 
 	void Scene::render()
 	{
+		RenderSystem::the().render();
 	}
 
 	void Scene::destroy()
 	{
+		RenderSystem::the().destroy();
+		CameraSystem::the().destroy();
 		TransformSystem::the().destroy();
 	}
 

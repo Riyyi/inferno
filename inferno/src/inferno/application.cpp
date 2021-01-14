@@ -80,22 +80,18 @@ namespace Inferno {
 	{
 		dbg() << "Application startup";
 
-		glm::mat4 colors = {
-			1.0f, 0.0f, 1.0f, 1.0f, // Lower left corner: purple
-			1.0f, 1.0f, 0.0f, 1.0f,
-			0.0f, 1.0f, 1.0f, 1.0f,
-			1.0f, 1.0f, 1.0f, 1.0f,
-		};
-
 		Entity quad = m_scene->createEntity("Quad");
+		quad.add<SpriteComponent>(glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture);
 
 		Entity quad2 = m_scene->createEntity("Quad 2");
 		auto& quad2Transform = quad2.get<TransformComponent>();
 		quad2Transform.translate.x = 1.1f;
+		quad2.add<SpriteComponent>(glm::vec4 { 0.5f, 0.6f, 0.8f, 1.0f }, m_texture);
 
 		Entity quad3 = m_scene->createEntity("Quad 3");
 		auto& quad3Transform = quad3.get<TransformComponent>();
 		quad3Transform.translate.x = 2.2f;
+		quad3.add<SpriteComponent>(glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture2);
 
 		std::array<CharacterVertex, Renderer::vertexPerQuad> character;
 
@@ -171,10 +167,7 @@ namespace Inferno {
 			Renderer2D::the().beginScene(m_scene->cameraProjectionView()); // camera, lights, environment
 			RendererCharacter::the().beginScene();
 
-			Renderer2D::the().drawQuad(quad.get<TransformComponent>(), colors);
-			Renderer2D::the().drawQuad(quad2.get<TransformComponent>(), { 0.5f, 0.6f, 0.8f, 1.0f }, m_texture);
-			Renderer2D::the().drawQuad(quad3.get<TransformComponent>(), { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture2);
-
+			m_scene->render();
 			RendererCharacter::the().drawCharacter(character, f->texture());
 
 			Renderer2D::the().endScene();
