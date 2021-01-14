@@ -7,6 +7,11 @@ namespace Inferno {
 		return stream << "{ " << value.x << ", " << value.y << ", " << value.z << " }";
 	}
 
+	const LogStream& operator<<(const LogStream& stream, const glm::vec4& value)
+	{
+		return stream << "{ " << value.x << ", " << value.y << ", " << value.z << ", " << value.w << " }";
+	}
+
 	const LogStream& operator<<(const LogStream& stream, const glm::mat4& value)
 	{
 		return stream << "mat4 "
