@@ -43,7 +43,7 @@ namespace Inferno {
 		s_instance = nullptr;
 	}
 
-	glm::mat4 CameraSystem::cameraProjectionView()
+	glm::mat4 CameraSystem::projectionView()
 	{
 		auto orthoView = m_registry->view<TransformComponent, OrthographicCameraComponment>();
 

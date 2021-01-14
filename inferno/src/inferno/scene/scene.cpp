@@ -105,7 +105,7 @@ namespace Inferno {
 
 	glm::mat4 Scene::cameraProjectionView()
 	{
-		return CameraSystem::the().cameraProjectionView();
+		return CameraSystem::the().projectionView();
 	}
 
 }
