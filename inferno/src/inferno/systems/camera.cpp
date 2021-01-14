@@ -64,7 +64,80 @@ namespace Inferno {
 
 	void CameraSystem::updateOrthographic(TransformComponent& transform, OrthographicCameraComponment& orthographic)
 	{
+		// Update camera rotation
 
+		float cameraRotateSpeed = ROTATE_SPEED * (1.0f/ 60.0f);
+
+		if (Input::isKeyPressed(KeyCode("GLFW_KEY_Q"))) {
+			transform.rotate.z += cameraRotateSpeed;
+		}
+		if (Input::isKeyPressed(KeyCode("GLFW_KEY_E"))) {
+			transform.rotate.z -= cameraRotateSpeed;
+		}
+
+		if (transform.rotate.z > 180.0f) {
+			transform.rotate.z -= 360.0f;
+		}
+		else if (transform.rotate.z <= -180.0f) {
+			transform.rotate.z += 360.0f;
+		}
+
+		// Update camera translation
+
+		float cameraTranslateSpeed = TRANSLATE_SPEED * (1.0f / 60.0f);
+
+		// WASD movement
+		if (Input::isKeyPressed(KeyCode("GLFW_KEY_W"))) {
+			transform.translate.x += -sin(glm::radians(transform.rotate.z)) * cameraTranslateSpeed;
+			transform.translate.y +=  cos(glm::radians(transform.rotate.z)) * cameraTranslateSpeed;
+		}
+		if (Input::isKeyPressed(KeyCode("GLFW_KEY_S"))) {
+			transform.translate.x -= -sin(glm::radians(transform.rotate.z)) * cameraTranslateSpeed;
+			transform.translate.y -=  cos(glm::radians(transform.rotate.z)) * cameraTranslateSpeed;
+		}
+		if (Input::isKeyPressed(KeyCode("GLFW_KEY_A"))) {
+			transform.translate.x -= cos(glm::radians(transform.rotate.z)) * cameraTranslateSpeed;
+			transform.translate.y -= sin(glm::radians(transform.rotate.z)) * cameraTranslateSpeed;
+		}
+		if (Input::isKeyPressed(KeyCode("GLFW_KEY_D"))) {
+			transform.translate.x += cos(glm::radians(transform.rotate.z)) * cameraTranslateSpeed;
+			transform.translate.y += sin(glm::radians(transform.rotate.z)) * cameraTranslateSpeed;
+		}
+
+		// Update camera zoom
+
+		float zoomSpeed = ZOOM_SENSITIVITY * (1.0f / 60.0f);
+
+		if (Input::isKeyPressed(KeyCode("GLFW_KEY_EQUAL"))) {
+			orthographic.zoomLevel -= zoomSpeed;
+		}
+		if (Input::isKeyPressed(KeyCode("GLFW_KEY_MINUS"))) {
+			orthographic.zoomLevel += zoomSpeed;
+		}
+		orthographic.zoomLevel = std::max(orthographic.zoomLevel, 0.25f);
+		orthographic.zoomLevel = std::min(orthographic.zoomLevel, 10.0f);
+
+		// Update camera matrix
+
+		// Local space -> World space: model matrix
+		// Is done in Object::update()
+
+		// World space -> View space: view matrix
+		transform.transform = {
+			glm::translate(glm::mat4(1.0f), transform.translate) *
+			glm::rotate(glm::mat4(1.0f), glm::radians(transform.rotate.z), orthographic.rotateAxis)
+		};
+		transform.transform = { glm::inverse(transform.transform) };
+
+		// View space -> Clip space: projection matrix
+		float aspectRatio = Application::the().getWindow().getAspect();
+		orthographic.projection = {
+			glm::ortho(-aspectRatio * orthographic.zoomLevel, aspectRatio * orthographic.zoomLevel,
+			           -orthographic.zoomLevel, orthographic.zoomLevel, -1.0f, 1.0f)
+		};
+
+		// Clip space -> Screen space: viewport transform
+		// Is done in the fragment shader using the settings of glViewport
 	}
 
 	void CameraSystem::updatePerspective(TransformComponent& transform, PerspectiveCameraComponent& perspective)

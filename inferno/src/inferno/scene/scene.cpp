@@ -23,11 +23,17 @@ namespace Inferno {
 		cameraSystem->initialize();
 		CameraSystem::the().setRegistry(m_registry);
 
+#if 1
 		Entity camera = createEntity("Camera Entity");
 		camera.add<PerspectiveCameraComponent>();
 		auto& cameraTransform = camera.get<TransformComponent>();
 		cameraTransform.translate.z = 1.0f;
-		cameraTransform.rotate.z = -1.0f;
+#else
+		Entity camera = createEntity("Camera Entity");
+		camera.add<OrthographicCameraComponment>();
+		auto& cameraTransform = camera.get<TransformComponent>();
+		cameraTransform.translate.z = -1.0f;
+#endif
 
 		RenderSystem* renderSystem = new RenderSystem();
 		renderSystem->initialize();
