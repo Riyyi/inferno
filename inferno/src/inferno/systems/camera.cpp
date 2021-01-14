@@ -43,6 +43,25 @@ namespace Inferno {
 		s_instance = nullptr;
 	}
 
+	glm::mat4 CameraSystem::cameraProjectionView()
+	{
+		auto orthoView = m_registry->view<TransformComponent, OrthographicCameraComponment>();
+
+		for(auto&& [entity, transform, orthographic] : orthoView.each()) {
+			return orthographic.projection * transform.transform;
+		}
+
+		auto perspectiveView = m_registry->view<TransformComponent, PerspectiveCameraComponent>();
+
+		for(auto&& [entity, transform, perspective] : perspectiveView.each()) {
+			return perspective.projection * transform.transform;
+		}
+
+		ASSERT_NOT_REACHED();
+
+		return glm::mat4 { 1.0f };
+	}
+
 	void CameraSystem::updateOrthographic(TransformComponent& transform, OrthographicCameraComponment& orthographic)
 	{
 

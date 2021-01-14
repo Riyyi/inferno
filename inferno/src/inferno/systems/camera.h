@@ -24,6 +24,8 @@ namespace Inferno {
 		void update();
 		void destroy();
 
+		glm::mat4 cameraProjectionView();
+
 		void setRegistry(const std::shared_ptr<entt::registry>& registry) { m_registry = registry; };
 
 		static inline CameraSystem& the() { return *s_instance; }

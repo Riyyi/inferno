@@ -99,13 +99,7 @@ namespace Inferno {
 
 	glm::mat4 Scene::cameraProjectionView()
 	{
-		auto view = m_registry->view<TransformComponent, PerspectiveCameraComponent>();
-
-		for(auto&& [entity, transform, perspective] : view.each()) {
-			return perspective.projection * transform.transform;
-		}
-
-		return glm::mat4 { 1.0f };
+		return CameraSystem::the().cameraProjectionView();
 	}
 
 }
