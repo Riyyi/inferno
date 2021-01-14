@@ -46,6 +46,7 @@ namespace Inferno {
 		textureManager->initialize();
 
 		m_scene = std::make_shared<Scene>();
+		m_scene->initialize();
 
 		Renderer2D* renderer2D = new Renderer2D();
 		renderer2D->initialize();
@@ -57,9 +58,6 @@ namespace Inferno {
 		fontManager->initialize();
 
 		// Load assets
-
-		m_texture = TextureManager::the().load("assets/gfx/test.png");
-		m_texture2 = TextureManager::the().load("assets/gfx/test-inverted.png");
 
 		m_font = FontManager::the().load("assets/fnt/dejavu-sans");
 	}
@@ -79,19 +77,6 @@ namespace Inferno {
 	void Application::run()
 	{
 		dbg() << "Application startup";
-
-		Entity quad = m_scene->createEntity("Quad");
-		quad.add<SpriteComponent>(glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture);
-
-		Entity quad2 = m_scene->createEntity("Quad 2");
-		auto& quad2Transform = quad2.get<TransformComponent>();
-		quad2Transform.translate.x = 1.1f;
-		quad2.add<SpriteComponent>(glm::vec4 { 0.5f, 0.6f, 0.8f, 1.0f }, m_texture);
-
-		Entity quad3 = m_scene->createEntity("Quad 3");
-		auto& quad3Transform = quad3.get<TransformComponent>();
-		quad3Transform.translate.x = 2.2f;
-		quad3.add<SpriteComponent>(glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture2);
 
 		std::array<CharacterVertex, Renderer::vertexPerQuad> character;
 
@@ -130,11 +115,6 @@ namespace Inferno {
 		character.at(1).quad.textureCoordinates = { x.y, y.x };
 		character.at(2).quad.textureCoordinates = { x.y, y.y };
 		character.at(3).quad.textureCoordinates = { x.x, y.y };
-
-		character.at(0).quad.textureIndex = 1.0f;
-		character.at(1).quad.textureIndex = 1.0f;
-		character.at(2).quad.textureIndex = 1.0f;
-		character.at(3).quad.textureIndex = 1.0f;
 
 		// pos
 		// texcoords

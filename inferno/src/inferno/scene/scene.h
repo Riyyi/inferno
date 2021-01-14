@@ -11,12 +11,10 @@ namespace Inferno {
 
 	class Camera;
 	class Entity;
+	class Texture;
 
 	class Scene {
 	public:
-		Scene();
-		virtual ~Scene();
-
 		void initialize();
 		void update(float deltaTime);
 		void render();
@@ -29,6 +27,9 @@ namespace Inferno {
 		glm::mat4 cameraProjectionView();
 
 	private:
+		std::shared_ptr<Texture> m_texture;
+		std::shared_ptr<Texture> m_texture2;
+
 		std::shared_ptr<entt::registry> m_registry;
 	};
 

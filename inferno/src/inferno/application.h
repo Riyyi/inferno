@@ -47,8 +47,6 @@ namespace Inferno {
 		float m_lastFrameTime = 0.0f;
 
 		//
-		std::shared_ptr<Texture> m_texture;
-		std::shared_ptr<Texture> m_texture2;
 		std::shared_ptr<Font> m_font;
 		//
 

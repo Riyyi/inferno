@@ -8,18 +8,11 @@
 
 namespace Inferno {
 
-	Scene::Scene()
-	{
-		initialize();
-	}
-
-	Scene::~Scene()
-	{
-		destroy();
-	}
-
 	void Scene::initialize()
 	{
+		// Initialize
+		// ---------------------------------
+
 		m_registry = std::make_shared<entt::registry>();
 
 		TransformSystem* transformSystem = new TransformSystem();
@@ -39,6 +32,30 @@ namespace Inferno {
 		RenderSystem* renderSystem = new RenderSystem();
 		renderSystem->initialize();
 		RenderSystem::the().setRegistry(m_registry);
+
+		// Load assets
+		// ---------------------------------
+
+		m_texture = TextureManager::the().load("assets/gfx/test.png");
+		m_texture2 = TextureManager::the().load("assets/gfx/test-inverted.png");
+
+		// Construct entities
+		// ---------------------------------
+
+		Entity quad = createEntity("Quad");
+		quad.add<SpriteComponent>(glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture);
+
+		Entity quad2 = createEntity("Quad 2");
+		auto& quad2Transform = quad2.get<TransformComponent>();
+		quad2Transform.translate.x = 1.1f;
+		quad2.add<SpriteComponent>(glm::vec4 { 0.5f, 0.6f, 0.8f, 1.0f }, m_texture);
+
+		Entity quad3 = createEntity("Quad 3");
+		auto& quad3Transform = quad3.get<TransformComponent>();
+		quad3Transform.translate.x = 2.2f;
+		quad3.add<SpriteComponent>(glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture2);
+
+		dbg(Log::Info) << "Scene initialized";
 	}
 
 	void Scene::update(float deltaTime)
