@@ -134,8 +134,7 @@ namespace Inferno {
 		void beginScene();
 		void endScene();
 
-		void drawCharacter(std::array<CharacterVertex, vertexPerQuad>& characterQuad, glm::vec4 color, std::shared_ptr<Texture> texture);
-		void drawCharacter(std::array<CharacterVertex, vertexPerQuad>& characterQuad, glm::mat4 color, std::shared_ptr<Texture> texture);
+		void drawCharacter(std::array<CharacterVertex, vertexPerQuad>& characterQuad, std::shared_ptr<Texture> texture);
 
 		static inline RendererCharacter& the() { return *s_instance; }
 

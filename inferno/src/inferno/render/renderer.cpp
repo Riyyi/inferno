@@ -349,12 +349,7 @@ namespace Inferno {
 		nextBatch();
 	}
 
-	void RendererCharacter::drawCharacter(std::array<CharacterVertex, vertexPerQuad>& characterQuad, glm::vec4 color, std::shared_ptr<Texture> texture)
-	{
-		drawCharacter(characterQuad, glm::mat4 { color, color, color, color }, texture);
-	}
-
-	void RendererCharacter::drawCharacter(std::array<CharacterVertex, vertexPerQuad>& characterQuad, glm::mat4 color, std::shared_ptr<Texture> texture)
+	void RendererCharacter::drawCharacter(std::array<CharacterVertex, vertexPerQuad>& characterQuad, std::shared_ptr<Texture> texture)
 	{
 		// Create a new batch if the quad limit has been reached
 		if (m_quadIndex >= quadCount) {

@@ -175,7 +175,7 @@ namespace Inferno {
 			Renderer2D::the().drawQuad(quad2.get<TransformComponent>(), { 0.5f, 0.6f, 0.8f, 1.0f }, m_texture);
 			Renderer2D::the().drawQuad(quad3.get<TransformComponent>(), { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture2);
 
-			RendererCharacter::the().drawCharacter(character, {1,1,1,1}, f->texture());
+			RendererCharacter::the().drawCharacter(character, f->texture());
 
 			Renderer2D::the().endScene();
 			RendererCharacter::the().endScene();
