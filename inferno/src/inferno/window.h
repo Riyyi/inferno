@@ -46,7 +46,7 @@ namespace Inferno {
 		inline GLFWwindow* getWindow() const { return m_window; }
 		inline const std::shared_ptr<Context>& getContext() const { return m_context; }
 
-		inline void setEventCallback(std::function<void(Event&)> callback) { m_eventCallback = callback; }
+		inline void setEventCallback(const std::function<void(Event&)>& callback) { m_eventCallback = callback; }
 
 	private:
 		WindowProperties m_properties;
