@@ -23,7 +23,7 @@ namespace Inferno {
 	{
 		auto group = m_registry->group<TransformComponent, SpriteComponent>();
 
-		for(auto&& [entity, transform, sprite] : group.each()) {
+		for (auto [entity, transform, sprite] : group.each()) {
 			Renderer2D::the().drawQuad(transform, sprite.color, sprite.texture);
 		}
 	}

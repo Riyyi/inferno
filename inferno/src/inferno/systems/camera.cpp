@@ -26,13 +26,13 @@ namespace Inferno {
 	{
 		auto orthoView = m_registry->view<TransformComponent, OrthographicCameraComponment>();
 
-		for(auto&& [entity, transform, orthographic] : orthoView.each()) {
+		for (auto [entity, transform, orthographic] : orthoView.each()) {
 			updateOrthographic(transform, orthographic);
 		}
 
 		auto perspectiveView = m_registry->view<TransformComponent, PerspectiveCameraComponent>();
 
-		for(auto&& [entity, transform, perspective] : perspectiveView.each()) {
+		for (auto [entity, transform, perspective] : perspectiveView.each()) {
 			updatePerspective(transform, perspective);
 		}
 	}
@@ -47,13 +47,13 @@ namespace Inferno {
 	{
 		auto orthoView = m_registry->view<TransformComponent, OrthographicCameraComponment>();
 
-		for(auto&& [entity, transform, orthographic] : orthoView.each()) {
+		for (auto [entity, transform, orthographic] : orthoView.each()) {
 			return orthographic.projection * transform.transform;
 		}
 
 		auto perspectiveView = m_registry->view<TransformComponent, PerspectiveCameraComponent>();
 
-		for(auto&& [entity, transform, perspective] : perspectiveView.each()) {
+		for (auto [entity, transform, perspective] : perspectiveView.each()) {
 			return perspective.projection * transform.transform;
 		}
 

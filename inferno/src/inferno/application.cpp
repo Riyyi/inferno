@@ -126,7 +126,7 @@ namespace Inferno {
 		// bordercolor
 		// offse
 
-		while(!m_window->shouldClose()) {
+		while (!m_window->shouldClose()) {
 
 			float time = Time::time();
 			float deltaTime = time - m_lastFrameTime;

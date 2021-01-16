@@ -104,7 +104,7 @@ namespace Inferno {
 	template<typename T, typename... P>
 	void dbgln(const char* format, T value, P&&... parameters)
 	{
-		dbgln(Log::None, true, format, value, std::forward<P>(parameters)...);
+		dbgln(Log::None, format, value, std::forward<P>(parameters)...);
 	}
 
 	template<typename T, typename... P>
@@ -115,7 +115,7 @@ namespace Inferno {
 
 	// https://en.cppreference.com/w/cpp/language/parameter_pack#Example
 	template<typename T, typename... P>
-	void dbgln(Log type, bool newline, const char* format, T value, const P&... parameters)
+	void dbgln(Log type, bool newline, const char* format, T value, P&&... parameters)
 	{
 		std::string_view view { format };
 
