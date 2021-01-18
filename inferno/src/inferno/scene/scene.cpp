@@ -1,4 +1,3 @@
-#include "inferno/log.h"
 #include "inferno/scene/components.h"
 #include "inferno/scene/scene.h"
 #include "inferno/script/cameracontroller.h"
