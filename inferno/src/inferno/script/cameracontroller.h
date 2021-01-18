@@ -8,11 +8,6 @@
 #define NEAR_PLANE 0.1f
 #define FAR_PLANE 100.0f
 
-#include <glm/ext/matrix_clip_space.hpp> // glm::perspective, glm::ortho
-#include <glm/ext/matrix_transform.hpp>  // glm::radians, glm::lookAt
-
-#include "inferno/input.h"
-#include "inferno/inputcodes.h"
 #include "inferno/scene/components.h"
 #include "inferno/script/nativescript.h"
 
@@ -20,12 +15,6 @@ namespace Inferno {
 
 	class CameraController final : public NativeScript {
 	public:
-		CameraController() {}
-		virtual ~CameraController() {}
-
-		virtual void initialize() override
-		{
-		}
 
 		virtual void update(float deltaTime) override
 		{

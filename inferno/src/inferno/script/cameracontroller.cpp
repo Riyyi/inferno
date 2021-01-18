@@ -1,3 +1,8 @@
+#include <glm/ext/matrix_clip_space.hpp> // glm::perspective, glm::ortho
+#include <glm/ext/matrix_transform.hpp>  // glm::radians, glm::lookAt
+
+#include "inferno/input.h"
+#include "inferno/inputcodes.h"
 #include "inferno/script/cameracontroller.h"
 
 namespace Inferno {
