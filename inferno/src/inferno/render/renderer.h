@@ -2,7 +2,7 @@
 #define RENDERER_H
 
 #include <cstdint> // std::uint32_t
-#include <memory>  // std::shared_ptr, std::unique_ptr
+#include <memory>  // std::shared_ptr, std::unique_ptr, std::make_shared, std::make_unique
 
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
 #include "glm/ext/vector_float2.hpp"   // glm::vec2

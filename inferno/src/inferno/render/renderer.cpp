@@ -131,7 +131,7 @@ namespace Inferno {
 		// ---------------------------------
 
 		// Create array for storing quads vertices
-		m_vertexBufferBase = std::unique_ptr<QuadVertex[]>(new QuadVertex[vertexCount]);
+		m_vertexBufferBase = std::make_unique<QuadVertex[]>(vertexCount);
 		m_vertexBufferPtr = m_vertexBufferBase.get();
 
 		// Set default quad vertex positions
@@ -288,7 +288,7 @@ namespace Inferno {
 		// ---------------------------------
 
 		// Create array for storing quads vertices
-		m_vertexBufferBase = std::unique_ptr<CharacterVertex[]>(new CharacterVertex[vertexCount]);
+		m_vertexBufferBase = std::make_unique<CharacterVertex[]>(vertexCount);
 		m_vertexBufferPtr = m_vertexBufferBase.get();
 
 		// Generate indices
