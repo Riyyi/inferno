@@ -5,6 +5,7 @@
 #include "inferno/script/nativescript.h"
 #include "inferno/systems/camera.h"
 #include "inferno/systems/render.h"
+#include "inferno/systems/script.h"
 #include "inferno/systems/transform.h"
 
 namespace Inferno {
@@ -34,6 +35,10 @@ namespace Inferno {
 		renderSystem->initialize();
 		RenderSystem::the().setRegistry(m_registry);
 
+		ScriptSystem* scriptSystem = new ScriptSystem();
+		scriptSystem->initialize();
+		ScriptSystem::the().setScene(this);
+
 		// Load assets
 		// ---------------------------------
 
@@ -61,7 +66,7 @@ namespace Inferno {
 
 	void Scene::update(float deltaTime)
 	{
-		(void)deltaTime;
+		ScriptSystem::the().update(deltaTime);
 
 		TransformSystem::the().update();
 		CameraSystem::the().update();
@@ -74,6 +79,7 @@ namespace Inferno {
 
 	void Scene::destroy()
 	{
+		ScriptSystem::the().destroy();
 		RenderSystem::the().destroy();
 		CameraSystem::the().destroy();
 		TransformSystem::the().destroy();
@@ -88,14 +94,13 @@ namespace Inferno {
 		return entity;
 	}
 
-	Entity Scene::createEntity(entt::entity handle)
+	void Scene::destroyEntity(uint32_t entity)
 	{
-		return Entity(m_registry, handle);
-	}
+		if (hasComponent<NativeScript>(entity)) {
+			ScriptSystem::the().cleanup(entity);
+		}
 
-	Entity Scene::createEntity(uint32_t handle)
-	{
-		return Entity(m_registry, handle);
+		m_registry->destroy(entt::entity { entity });
 	}
 
 	glm::mat4 Scene::cameraProjectionView()
