@@ -57,59 +57,6 @@ namespace Inferno {
 
 	void CameraSystem::updateOrthographic(TransformComponent& transform, CameraComponent& camera)
 	{
-		// Update camera rotation
-
-		float cameraRotateSpeed = ROTATE_SPEED * (1.0f/ 60.0f);
-
-		if (Input::isKeyPressed(KeyCode("GLFW_KEY_Q"))) {
-			transform.rotate.z += cameraRotateSpeed;
-		}
-		if (Input::isKeyPressed(KeyCode("GLFW_KEY_E"))) {
-			transform.rotate.z -= cameraRotateSpeed;
-		}
-
-		if (transform.rotate.z > 180.0f) {
-			transform.rotate.z -= 360.0f;
-		}
-		else if (transform.rotate.z <= -180.0f) {
-			transform.rotate.z += 360.0f;
-		}
-
-		// Update camera translation
-
-		float cameraTranslateSpeed = TRANSLATE_SPEED * (1.0f / 60.0f);
-
-		// WASD movement
-		if (Input::isKeyPressed(KeyCode("GLFW_KEY_W"))) {
-			transform.translate.x += -sin(glm::radians(transform.rotate.z)) * cameraTranslateSpeed;
-			transform.translate.y +=  cos(glm::radians(transform.rotate.z)) * cameraTranslateSpeed;
-		}
-		if (Input::isKeyPressed(KeyCode("GLFW_KEY_S"))) {
-			transform.translate.x -= -sin(glm::radians(transform.rotate.z)) * cameraTranslateSpeed;
-			transform.translate.y -=  cos(glm::radians(transform.rotate.z)) * cameraTranslateSpeed;
-		}
-		if (Input::isKeyPressed(KeyCode("GLFW_KEY_A"))) {
-			transform.translate.x -= cos(glm::radians(transform.rotate.z)) * cameraTranslateSpeed;
-			transform.translate.y -= sin(glm::radians(transform.rotate.z)) * cameraTranslateSpeed;
-		}
-		if (Input::isKeyPressed(KeyCode("GLFW_KEY_D"))) {
-			transform.translate.x += cos(glm::radians(transform.rotate.z)) * cameraTranslateSpeed;
-			transform.translate.y += sin(glm::radians(transform.rotate.z)) * cameraTranslateSpeed;
-		}
-
-		// Update camera zoom
-
-		float zoomSpeed = ZOOM_SENSITIVITY * (1.0f / 60.0f);
-
-		if (Input::isKeyPressed(KeyCode("GLFW_KEY_EQUAL"))) {
-			camera.zoomLevel -= zoomSpeed;
-		}
-		if (Input::isKeyPressed(KeyCode("GLFW_KEY_MINUS"))) {
-			camera.zoomLevel += zoomSpeed;
-		}
-		camera.zoomLevel = std::max(camera.zoomLevel, 0.25f);
-		camera.zoomLevel = std::min(camera.zoomLevel, 10.0f);
-
 		// Update camera matrix
 
 		// Local space -> World space: model matrix
@@ -135,60 +82,6 @@ namespace Inferno {
 
 	void CameraSystem::updatePerspective(TransformComponent& transform, CameraComponent& camera)
 	{
-		// Get mouse movement offset compared to last frame
-		float xOffset = Input::getXOffset() * MOUSE_SENSITIVITY;
-		float yOffset = Input::getYOffset() * MOUSE_SENSITIVITY;
-		camera.yaw += xOffset;
-		camera.pitch += yOffset;
-
-		// Prevent gimbal lock
-		if (camera.pitch > 89.0f) camera.pitch = 89.0f;
-		if (camera.pitch < -89.0f) camera.pitch = -89.0f;
-
-		// Update camera rotation, by calculating direction vector via yaw and pitch
-
-		transform.rotate = {
-			cos(glm::radians(camera.pitch)) * cos(glm::radians(camera.yaw)),
-			sin(glm::radians(camera.pitch)),
-			cos(glm::radians(camera.pitch)) * sin(glm::radians(camera.yaw))
-		};
-		transform.rotate = glm::normalize(transform.rotate);
-		// The direction vector is based on
-		// Camera direction (z): normalize(position - target)
-		// Right axis       (x): normalize(cross(up, direction))
-		// Up axis          (y): cross(direction, right)
-
-		// Source: https://learnopengl.com/img/getting-started/camera_axes.png
-
-		// Cross = combination of two vectors in 3D space,
-		//         where result is always perpendicular to both of the vectors
-
-		// Update camera translation
-
-		float cameraSpeed = TRANSLATE_SPEED * (1.0f / 60.0f);
-		// WASD movement
-		if (Input::isKeyPressed(KeyCode("GLFW_KEY_W"))) {
-			transform.translate = { transform.translate + cameraSpeed * transform.rotate };
-		}
-		if (Input::isKeyPressed(KeyCode("GLFW_KEY_S"))) {
-			transform.translate = { transform.translate - cameraSpeed * transform.rotate };
-		}
-		if (Input::isKeyPressed(KeyCode("GLFW_KEY_A"))) {
-			transform.translate = { transform.translate -
-				glm::normalize(glm::cross(transform.rotate, camera.up)) * cameraSpeed };
-		}
-		if (Input::isKeyPressed(KeyCode("GLFW_KEY_D"))) {
-			transform.translate = { transform.translate +
-				glm::normalize(glm::cross(transform.rotate, camera.up)) * cameraSpeed };
-		}
-		// Up / down movement
-		if (Input::isKeyPressed(KeyCode("GLFW_KEY_SPACE"))) {
-			transform.translate = { transform.translate.x, transform.translate.y + cameraSpeed, transform.translate.z };
-		}
-		if (Input::isKeyPressed(KeyCode("GLFW_KEY_LEFT_SHIFT"))) {
-			transform.translate = { transform.translate.x, transform.translate.y - cameraSpeed, transform.translate.z };
-		}
-
 		// Update camera matrix
 
 		// Local space -> World space: model matrix

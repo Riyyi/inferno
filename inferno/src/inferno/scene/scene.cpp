@@ -27,8 +27,8 @@ namespace Inferno {
 
 		uint32_t camera = createEntity("Camera Entity");
 		auto& cameraTransform = getComponent<TransformComponent>(camera);
-		cameraTransform.translate.z = -1.0f;
-		addComponent<CameraComponent>(camera, CameraType::Orthographic);
+		cameraTransform.translate.z = 1.0f;
+		addComponent<CameraComponent>(camera, CameraType::Perspective);
 		addComponent<NativeScriptComponent>(camera).bind<CameraController>();
 
 		RenderSystem* renderSystem = new RenderSystem();

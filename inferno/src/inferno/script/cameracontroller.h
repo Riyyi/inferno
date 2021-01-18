@@ -39,66 +39,8 @@ namespace Inferno {
 			}
 		}
 
-		void updateOrthographic(float deltaTime)
-		{
-			// Update camera rotation
-
-			float cameraRotateSpeed = ROTATE_SPEED * (1.0f/ 60.0f);
-
-			if (Input::isKeyPressed(KeyCode("GLFW_KEY_Q"))) {
-				transform->rotate.z += cameraRotateSpeed;
-			}
-			if (Input::isKeyPressed(KeyCode("GLFW_KEY_E"))) {
-				transform->rotate.z -= cameraRotateSpeed;
-			}
-
-			if (transform->rotate.z > 180.0f) {
-				transform->rotate.z -= 360.0f;
-			}
-			else if (transform->rotate.z <= -180.0f) {
-				transform->rotate.z += 360.0f;
-			}
-
-			// Update camera translation
-
-			float cameraTranslateSpeed = TRANSLATE_SPEED * deltaTime;
-
-			// WASD movement
-			if (Input::isKeyPressed(KeyCode("GLFW_KEY_W"))) {
-				transform->translate.x += -sin(glm::radians(transform->rotate.z)) * cameraTranslateSpeed;
-				transform->translate.y +=  cos(glm::radians(transform->rotate.z)) * cameraTranslateSpeed;
-			}
-			if (Input::isKeyPressed(KeyCode("GLFW_KEY_S"))) {
-				transform->translate.x -= -sin(glm::radians(transform->rotate.z)) * cameraTranslateSpeed;
-				transform->translate.y -=  cos(glm::radians(transform->rotate.z)) * cameraTranslateSpeed;
-			}
-			if (Input::isKeyPressed(KeyCode("GLFW_KEY_A"))) {
-				transform->translate.x -= cos(glm::radians(transform->rotate.z)) * cameraTranslateSpeed;
-				transform->translate.y -= sin(glm::radians(transform->rotate.z)) * cameraTranslateSpeed;
-			}
-			if (Input::isKeyPressed(KeyCode("GLFW_KEY_D"))) {
-				transform->translate.x += cos(glm::radians(transform->rotate.z)) * cameraTranslateSpeed;
-				transform->translate.y += sin(glm::radians(transform->rotate.z)) * cameraTranslateSpeed;
-			}
-
-			// Update camera zoom
-
-			float zoomSpeed = ZOOM_SENSITIVITY * (1.0f / 60.0f);
-
-			if (Input::isKeyPressed(KeyCode("GLFW_KEY_EQUAL"))) {
-				m_camera->zoomLevel -= zoomSpeed;
-			}
-			if (Input::isKeyPressed(KeyCode("GLFW_KEY_MINUS"))) {
-				m_camera->zoomLevel += zoomSpeed;
-			}
-			m_camera->zoomLevel = std::max(m_camera->zoomLevel, 0.25f);
-			m_camera->zoomLevel = std::min(m_camera->zoomLevel, 10.0f);
-		}
-
-		void updatePerspective(float deltaTime)
-		{
-
-		}
+		void updateOrthographic(float deltaTime);
+		void updatePerspective(float deltaTime);
 
 	private:
 		CameraComponent* m_camera;
