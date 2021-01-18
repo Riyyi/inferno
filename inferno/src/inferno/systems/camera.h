@@ -31,8 +31,8 @@ namespace Inferno {
 		static inline CameraSystem& the() { return *s_instance; }
 
 	private:
-		void updateOrthographic(TransformComponent& transform, OrthographicCameraComponment& orthographic);
-		void updatePerspective(TransformComponent& transform, PerspectiveCameraComponent& perspective);
+		void updateOrthographic(TransformComponent& transform, CameraComponent& camera);
+		void updatePerspective(TransformComponent& transform, CameraComponent& camera);
 
 		std::shared_ptr<entt::registry> m_registry;
 

@@ -24,16 +24,16 @@ namespace Inferno {
 
 	void CameraSystem::update()
 	{
-		auto orthoView = m_registry->view<TransformComponent, OrthographicCameraComponment>();
+		auto view = m_registry->view<TransformComponent, CameraComponent>();
 
-		for (auto [entity, transform, orthographic] : orthoView.each()) {
-			updateOrthographic(transform, orthographic);
-		}
+		for (auto [entity, transform, camera] : view.each()) {
 
-		auto perspectiveView = m_registry->view<TransformComponent, PerspectiveCameraComponent>();
-
-		for (auto [entity, transform, perspective] : perspectiveView.each()) {
-			updatePerspective(transform, perspective);
+			if (camera.type == CameraType::Orthographic) {
+				updateOrthographic(transform, camera);
+			}
+			else if (camera.type == CameraType::Perspective) {
+				updatePerspective(transform, camera);
+			}
 		}
 	}
 
@@ -45,16 +45,10 @@ namespace Inferno {
 
 	glm::mat4 CameraSystem::projectionView()
 	{
-		auto orthoView = m_registry->view<TransformComponent, OrthographicCameraComponment>();
+		auto view = m_registry->view<TransformComponent, CameraComponent>();
 
-		for (auto [entity, transform, orthographic] : orthoView.each()) {
-			return orthographic.projection * transform.transform;
-		}
-
-		auto perspectiveView = m_registry->view<TransformComponent, PerspectiveCameraComponent>();
-
-		for (auto [entity, transform, perspective] : perspectiveView.each()) {
-			return perspective.projection * transform.transform;
+		for (auto [entity, transform, camera] : view.each()) {
+			return camera.projection * transform.transform;
 		}
 
 		ASSERT_NOT_REACHED();
@@ -62,7 +56,7 @@ namespace Inferno {
 		return glm::mat4 { 1.0f };
 	}
 
-	void CameraSystem::updateOrthographic(TransformComponent& transform, OrthographicCameraComponment& orthographic)
+	void CameraSystem::updateOrthographic(TransformComponent& transform, CameraComponent& camera)
 	{
 		// Update camera rotation
 
@@ -109,13 +103,13 @@ namespace Inferno {
 		float zoomSpeed = ZOOM_SENSITIVITY * (1.0f / 60.0f);
 
 		if (Input::isKeyPressed(KeyCode("GLFW_KEY_EQUAL"))) {
-			orthographic.zoomLevel -= zoomSpeed;
+			camera.zoomLevel -= zoomSpeed;
 		}
 		if (Input::isKeyPressed(KeyCode("GLFW_KEY_MINUS"))) {
-			orthographic.zoomLevel += zoomSpeed;
+			camera.zoomLevel += zoomSpeed;
 		}
-		orthographic.zoomLevel = std::max(orthographic.zoomLevel, 0.25f);
-		orthographic.zoomLevel = std::min(orthographic.zoomLevel, 10.0f);
+		camera.zoomLevel = std::max(camera.zoomLevel, 0.25f);
+		camera.zoomLevel = std::min(camera.zoomLevel, 10.0f);
 
 		// Update camera matrix
 
@@ -125,39 +119,39 @@ namespace Inferno {
 		// World space -> View space: view matrix
 		transform.transform = {
 			glm::translate(glm::mat4(1.0f), transform.translate) *
-			glm::rotate(glm::mat4(1.0f), glm::radians(transform.rotate.z), orthographic.rotateAxis)
+			glm::rotate(glm::mat4(1.0f), glm::radians(transform.rotate.z), camera.rotateAxis)
 		};
 		transform.transform = { glm::inverse(transform.transform) };
 
 		// View space -> Clip space: projection matrix
 		float aspectRatio = Application::the().getWindow().getAspect();
-		orthographic.projection = {
-			glm::ortho(-aspectRatio * orthographic.zoomLevel, aspectRatio * orthographic.zoomLevel,
-			           -orthographic.zoomLevel, orthographic.zoomLevel, -1.0f, 1.0f)
+		camera.projection = {
+			glm::ortho(-aspectRatio * camera.zoomLevel, aspectRatio * camera.zoomLevel,
+			           -camera.zoomLevel, camera.zoomLevel, -1.0f, 1.0f)
 		};
 
 		// Clip space -> Screen space: viewport transform
 		// Is done in the fragment shader using the settings of glViewport
 	}
 
-	void CameraSystem::updatePerspective(TransformComponent& transform, PerspectiveCameraComponent& perspective)
+	void CameraSystem::updatePerspective(TransformComponent& transform, CameraComponent& camera)
 	{
 		// Get mouse movement offset compared to last frame
 		float xOffset = Input::getXOffset() * MOUSE_SENSITIVITY;
 		float yOffset = Input::getYOffset() * MOUSE_SENSITIVITY;
-		perspective.yaw += xOffset;
-		perspective.pitch += yOffset;
+		camera.yaw += xOffset;
+		camera.pitch += yOffset;
 
 		// Prevent gimbal lock
-		if (perspective.pitch > 89.0f) perspective.pitch = 89.0f;
-		if (perspective.pitch < -89.0f) perspective.pitch = -89.0f;
+		if (camera.pitch > 89.0f) camera.pitch = 89.0f;
+		if (camera.pitch < -89.0f) camera.pitch = -89.0f;
 
 		// Update camera rotation, by calculating direction vector via yaw and pitch
 
 		transform.rotate = {
-			cos(glm::radians(perspective.pitch)) * cos(glm::radians(perspective.yaw)),
-			sin(glm::radians(perspective.pitch)),
-			cos(glm::radians(perspective.pitch)) * sin(glm::radians(perspective.yaw))
+			cos(glm::radians(camera.pitch)) * cos(glm::radians(camera.yaw)),
+			sin(glm::radians(camera.pitch)),
+			cos(glm::radians(camera.pitch)) * sin(glm::radians(camera.yaw))
 		};
 		transform.rotate = glm::normalize(transform.rotate);
 		// The direction vector is based on
@@ -182,11 +176,11 @@ namespace Inferno {
 		}
 		if (Input::isKeyPressed(KeyCode("GLFW_KEY_A"))) {
 			transform.translate = { transform.translate -
-				glm::normalize(glm::cross(transform.rotate, perspective.up)) * cameraSpeed };
+				glm::normalize(glm::cross(transform.rotate, camera.up)) * cameraSpeed };
 		}
 		if (Input::isKeyPressed(KeyCode("GLFW_KEY_D"))) {
 			transform.translate = { transform.translate +
-				glm::normalize(glm::cross(transform.rotate, perspective.up)) * cameraSpeed };
+				glm::normalize(glm::cross(transform.rotate, camera.up)) * cameraSpeed };
 		}
 		// Up / down movement
 		if (Input::isKeyPressed(KeyCode("GLFW_KEY_SPACE"))) {
@@ -202,11 +196,11 @@ namespace Inferno {
 		// Is done in Object::update()
 
 		// World space -> View space: view matrix
-		transform.transform = { glm::lookAt(transform.translate, transform.translate + transform.rotate, perspective.up) };
+		transform.transform = { glm::lookAt(transform.translate, transform.translate + transform.rotate, camera.up) };
 
 		// View space -> Clip space: projection matrix
 		float aspect = Application::the().getWindow().getAspect();
-		perspective.projection = { glm::perspective(glm::radians(perspective.fov), aspect, NEAR_PLANE, FAR_PLANE) };
+		camera.projection = { glm::perspective(glm::radians(camera.fov), aspect, NEAR_PLANE, FAR_PLANE) };
 
 		// Clip space -> Screen space: viewport transform
 		// Is done in the fragment shader using the settings of glViewport
