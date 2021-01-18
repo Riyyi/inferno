@@ -4,7 +4,6 @@
 #include "inferno/log.h"
 #include "inferno/render/renderer.h"
 #include "inferno/scene/components.h"
-#include "inferno/scene/entity.h"
 #include "inferno/systems/render.h"
 
 namespace Inferno {
