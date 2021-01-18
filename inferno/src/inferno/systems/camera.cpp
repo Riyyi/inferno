@@ -6,7 +6,6 @@
 #include "inferno/input.h"
 #include "inferno/inputcodes.h"
 #include "inferno/log.h"
-#include "inferno/scene/entity.h"
 #include "inferno/systems/camera.h"
 #include "inferno/window.h"
 

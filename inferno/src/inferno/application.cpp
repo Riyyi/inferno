@@ -15,7 +15,6 @@
 #include "inferno/render/shader.h"
 #include "inferno/render/texture.h"
 #include "inferno/scene/components.h"
-#include "inferno/scene/entity.h"
 #include "inferno/scene/scene.h"
 #include "inferno/settings.h"
 #include "inferno/time.h"

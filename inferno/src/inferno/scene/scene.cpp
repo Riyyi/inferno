@@ -1,7 +1,8 @@
 #include "inferno/log.h"
 #include "inferno/scene/components.h"
-#include "inferno/scene/entity.h"
 #include "inferno/scene/scene.h"
+#include "inferno/script/cameracontroller.h"
+#include "inferno/script/nativescript.h"
 #include "inferno/systems/camera.h"
 #include "inferno/systems/render.h"
 #include "inferno/systems/transform.h"
@@ -23,10 +24,11 @@ namespace Inferno {
 		cameraSystem->initialize();
 		CameraSystem::the().setRegistry(m_registry);
 
-		Entity camera = createEntity("Camera Entity");
-		camera.add<CameraComponent>();
-		auto& cameraTransform = camera.get<TransformComponent>();
-		cameraTransform.translate.z = 1.0f;
+		uint32_t camera = createEntity("Camera Entity");
+		auto& cameraTransform = getComponent<TransformComponent>(camera);
+		cameraTransform.translate.z = -1.0f;
+		addComponent<CameraComponent>(camera, CameraType::Orthographic);
+		addComponent<NativeScriptComponent>(camera).bind<CameraController>();
 
 		RenderSystem* renderSystem = new RenderSystem();
 		renderSystem->initialize();
@@ -41,18 +43,18 @@ namespace Inferno {
 		// Construct entities
 		// ---------------------------------
 
-		Entity quad = createEntity("Quad");
-		quad.add<SpriteComponent>(glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture);
+		uint32_t quad = createEntity("Quad");
+		addComponent<SpriteComponent>(quad, glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture);
 
-		Entity quad2 = createEntity("Quad 2");
-		auto& quad2Transform = quad2.get<TransformComponent>();
+		uint32_t quad2 = createEntity("Quad 2");
+		auto& quad2Transform = getComponent<TransformComponent>(quad2);
 		quad2Transform.translate.x = 1.1f;
-		quad2.add<SpriteComponent>(glm::vec4 { 0.5f, 0.6f, 0.8f, 1.0f }, m_texture);
+		addComponent<SpriteComponent>(quad2, glm::vec4 { 0.5f, 0.6f, 0.8f, 1.0f }, m_texture);
 
-		Entity quad3 = createEntity("Quad 3");
-		auto& quad3Transform = quad3.get<TransformComponent>();
+		uint32_t quad3 = createEntity("Quad 3");
+		auto& quad3Transform = getComponent<TransformComponent>(quad3);
 		quad3Transform.translate.x = 2.2f;
-		quad3.add<SpriteComponent>(glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture2);
+		addComponent<SpriteComponent>(quad3, glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture2);
 
 		dbg(Log::Info) << "Scene initialized";
 	}
@@ -77,11 +79,11 @@ namespace Inferno {
 		TransformSystem::the().destroy();
 	}
 
-	Entity Scene::createEntity(const std::string& name)
+	uint32_t Scene::createEntity(const std::string& name)
 	{
-		Entity entity = Entity(m_registry);
-		entity.add<TagComponent>(name.empty() ? "Unnamed Entity" : name);
-		entity.add<TransformComponent>();
+		uint32_t entity = static_cast<uint32_t>(m_registry->create());
+		addComponent<TagComponent>(entity, name.empty() ? "Unnamed Entity" : name);
+		addComponent<TransformComponent>(entity);
 
 		return entity;
 	}
@@ -99,6 +101,18 @@ namespace Inferno {
 	glm::mat4 Scene::cameraProjectionView()
 	{
 		return CameraSystem::the().projectionView();
+	}
+
+	void Scene::validEntity(uint32_t entity) const
+	{
+		ASSERT(m_registry->valid(entt::entity {entity}), "Entity is not valid");
+	}
+
+// ----------------------------------------
+
+	const LogStream& operator<<(const LogStream& stream, entt::entity entity)
+	{
+		return stream << static_cast<uint32_t>(entity);
 	}
 
 }
