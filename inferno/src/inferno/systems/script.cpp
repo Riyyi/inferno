@@ -40,7 +40,7 @@ namespace Inferno {
 
 			// Create script if not initialized
 			if (!nativeScript.instance) {
-				nativeScript.initialize();
+				nativeScript.instance = nativeScript.initialize();
 				nativeScript.instance->transform = &transform;
 				nativeScript.instance->m_scene = m_scene;
 				nativeScript.instance->m_entity = static_cast<uint32_t>(entity);
@@ -56,7 +56,7 @@ namespace Inferno {
 	{
 		auto& nativeScript = m_scene->getComponent<NativeScriptComponent>(entity);
 
-		if (!nativeScript.instance) {
+		if (nativeScript.instance) {
 			nativeScript.instance->destroy();
 			nativeScript.destroy();
 		}

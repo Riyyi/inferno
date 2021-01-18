@@ -95,7 +95,7 @@ namespace Inferno {
 
 	void Scene::destroyEntity(uint32_t entity)
 	{
-		if (hasComponent<NativeScript>(entity)) {
+		if (hasComponent<NativeScriptComponent>(entity)) {
 			ScriptSystem::the().cleanup(entity);
 		}
 

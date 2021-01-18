@@ -61,8 +61,7 @@ namespace Inferno {
 	struct NativeScriptComponent {
 		NativeScript* instance = nullptr;
 
-		std::function<void()> initialize = nullptr;
-		std::function<void()> destroy = nullptr;
+		NativeScript* (*initialize)();
 
 		// Dont allow manually setting instance during construction
 		NativeScriptComponent() {}
@@ -70,9 +69,14 @@ namespace Inferno {
 		template<typename T>
 		void bind()
 		{
-			ASSERT(initialize == nullptr && destroy == nullptr, "NativeScript already bound");
-			initialize = [&]() { instance = static_cast<NativeScript*>(new T()); };
-			destroy = [&]() { delete instance; instance = nullptr; initialize = nullptr; destroy = nullptr; };
+			ASSERT(instance == nullptr, "NativeScript already bound");
+			initialize = []() { return static_cast<NativeScript*>(new T()); };
+		}
+
+		void destroy() {
+			ASSERT(instance, "Attempting to destroy an uninitialized NativeScript");
+			delete instance;
+			instance = nullptr;
 		}
 	};
 
