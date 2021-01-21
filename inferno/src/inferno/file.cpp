@@ -9,8 +9,8 @@ namespace Inferno {
 	std::string File::read(const std::string &path)
 	{
 		// Create input stream object and open file
-		std::ifstream file(path.c_str());
-		ASSERT(file.is_open(), "File could not open: '{}'", path.c_str());
+		std::ifstream file(path);
+		ASSERT(file.is_open(), "File could not open: '{}'", path);
 
 		// Check if file exists
 		if (!file.is_open()) {
@@ -21,7 +21,7 @@ namespace Inferno {
 		file.seekg(0, std::ios::end);
 		int length = file.tellg();
 		file.seekg(0, std::ios::beg);
-		ASSERT(length != -1, "File could not determine length: '{}'", path.c_str());
+		ASSERT(length != -1, "File could not determine length: '{}'", path);
 
 		// Check for valid file length
 		if (length == -1) {
