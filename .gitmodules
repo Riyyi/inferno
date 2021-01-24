@@ -13,3 +13,6 @@
 [submodule "inferno/vendor/entt"]
 	path = inferno/vendor/entt
 	url = https://github.com/skypjack/entt
+[submodule "inferno/vendor/lua/lua"]
+	path = inferno/vendor/lua/lua
+	url = https://github.com/lua/lua

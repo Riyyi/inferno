@@ -52,13 +52,16 @@ include_directories(
 	"${ENGINE}/vendor/glfw/include"
 	"${ENGINE}/vendor/glm"
 	"${ENGINE}/vendor/json/include"
+	"${ENGINE}/vendor/lua"
 	"${ENGINE}/vendor/stb"
 )
 
 # Define engine source files
 file(GLOB_RECURSE GLAD "${ENGINE}/vendor/glad/*.c")
+file(GLOB_RECURSE LUA "${ENGINE}/vendor/lua/*.c")
+list(REMOVE_ITEM LUA "${CMAKE_SOURCE_DIR}/${ENGINE}/vendor/lua/lua/lua.c") # Do not compile stand-alone main()
 file(GLOB_RECURSE ENGINE_SOURCES "${ENGINE}/src/${ENGINE}/*.cpp")
-set(ENGINE_SOURCES ${GLAD} ${ENGINE_SOURCES})
+set(ENGINE_SOURCES ${GLAD} ${LUA} ${ENGINE_SOURCES})
 
 # Define game source files
 file(GLOB_RECURSE GAME_SOURCES "${GAME}/src/*.cpp")
