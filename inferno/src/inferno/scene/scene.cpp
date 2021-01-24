@@ -24,12 +24,6 @@ namespace Inferno {
 		cameraSystem->initialize();
 		CameraSystem::the().setRegistry(m_registry);
 
-		uint32_t camera = createEntity("Camera Entity");
-		auto& cameraTransform = getComponent<TransformComponent>(camera);
-		cameraTransform.translate.z = 1.0f;
-		addComponent<CameraComponent>(camera, CameraType::Perspective);
-		addComponent<NativeScriptComponent>(camera).bind<CameraController>();
-
 		RenderSystem* renderSystem = new RenderSystem();
 		renderSystem->initialize();
 		RenderSystem::the().setRegistry(m_registry);
@@ -46,6 +40,14 @@ namespace Inferno {
 
 		// Construct entities
 		// ---------------------------------
+
+		uint32_t camera = createEntity("Camera Entity");
+		auto& cameraTransform = getComponent<TransformComponent>(camera);
+		cameraTransform.rotate.z = -1.0f;
+		cameraTransform.translate.z = 1.0f;
+		addComponent<CameraComponent>(camera, CameraType::Perspective);
+		addComponent<NativeScriptComponent>(camera).bind<CameraController>();
+		// addComponent<LuaScriptComponent>(camera, "assets/lua/cameracontroller.lua");
 
 		uint32_t quad = createEntity("Quad");
 		addComponent<SpriteComponent>(quad, glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture);
@@ -95,10 +97,7 @@ namespace Inferno {
 
 	void Scene::destroyEntity(uint32_t entity)
 	{
-		if (hasComponent<NativeScriptComponent>(entity)) {
-			ScriptSystem::the().cleanup(entity);
-		}
-
+		ScriptSystem::the().cleanup(entity);
 		m_registry->destroy(entt::entity { entity });
 	}
 

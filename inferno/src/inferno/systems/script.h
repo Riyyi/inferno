@@ -1,9 +1,12 @@
 #ifndef SCRIPT_SYSTEM_H
 #define SCRIPT_SYSTEM_H
 
-#include <memory> //std::shared_ptr
+#include <cstdint> // uint32_t
 
 namespace Inferno {
+
+	struct NativeScriptComponent;
+	struct LuaScriptComponent;
 
 	class Scene;
 
@@ -14,6 +17,8 @@ namespace Inferno {
 		void update(float deltaTime);
 
 		void cleanup(uint32_t entity);
+		void cleanup(NativeScriptComponent& nativeScript);
+		void cleanup(LuaScriptComponent& luaScript);
 
 		void setScene(Scene* scene) { m_scene = scene; }
 

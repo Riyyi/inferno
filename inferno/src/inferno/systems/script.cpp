@@ -2,9 +2,10 @@
 
 #include "inferno/assertions.h"
 #include "inferno/scene/components.h"
+#include "inferno/scene/scene.h"
+#include "inferno/script/lua.h"
 #include "inferno/script/nativescript.h"
 #include "inferno/systems/script.h"
-#include <bits/stdint-uintn.h>
 
 namespace Inferno {
 
@@ -20,11 +21,16 @@ namespace Inferno {
 
 	void ScriptSystem::destroy()
 	{
-		auto view = m_scene->registry()->view<NativeScriptComponent>();
+		auto nativeScriptView = m_scene->registry()->view<NativeScriptComponent>();
 
-		// @Todo change the getComponent() call to retrieve from the view for more performance
-		for (auto entity : view) {
-			cleanup(static_cast<uint32_t>(entity));
+		for (auto entity : nativeScriptView) {
+			cleanup(nativeScriptView.get<NativeScriptComponent>(entity));
+		}
+
+		auto luaScriptView = m_scene->registry()->view<LuaScriptComponent>();
+
+		for (auto entity : luaScriptView) {
+			cleanup(luaScriptView.get<LuaScriptComponent>(entity));
 		}
 
 		delete s_instance;
@@ -34,11 +40,11 @@ namespace Inferno {
 	void ScriptSystem::update(float deltaTime)
 	{
 		// @Todo figure out why group doesn't work here
-		auto view = m_scene->registry()->view<TransformComponent, NativeScriptComponent>();
+		auto nativeScriptView = m_scene->registry()->view<TransformComponent, NativeScriptComponent>();
 
-		for (auto [entity, transform, nativeScript] : view.each()) {
+		for (auto [entity, transform, nativeScript] : nativeScriptView.each()) {
 
-			// Create script if not initialized
+			// Create native script if not initialized
 			if (!nativeScript.instance) {
 				nativeScript.instance = nativeScript.initialize();
 				nativeScript.instance->transform = &transform;
@@ -50,15 +56,52 @@ namespace Inferno {
 			nativeScript.instance->transform = &transform;
 			nativeScript.instance->update(deltaTime);
 		}
+
+		auto luaScriptView = m_scene->registry()->view<TransformComponent, LuaScriptComponent>();
+
+		for (auto [entity, transform, luaScript] : luaScriptView.each()) {
+
+			// Create Lua script if not initialized
+			if (!luaScript.instance) {
+				luaScript.instance = new Lua();
+				luaScript.instance->transform = &transform;
+				luaScript.instance->m_scene = m_scene;
+				luaScript.instance->m_entity = static_cast<uint32_t>(entity);
+				luaScript.instance->m_path = luaScript.path;
+				luaScript.instance->initialize();
+			}
+
+			luaScript.instance->update(deltaTime);
+		}
+
 	}
 
 	void ScriptSystem::cleanup(uint32_t entity)
 	{
-		auto& nativeScript = m_scene->getComponent<NativeScriptComponent>(entity);
+		if (m_scene->hasComponent<NativeScriptComponent>(entity)) {
+			auto& nativeScript = m_scene->getComponent<NativeScriptComponent>(entity);
+			cleanup(nativeScript);
+		}
 
+		if (m_scene->hasComponent<LuaScriptComponent>(entity)) {
+			auto& luaScript = m_scene->getComponent<LuaScriptComponent>(entity);
+			cleanup(luaScript);
+		}
+	}
+
+	void ScriptSystem::cleanup(NativeScriptComponent& nativeScript)
+	{
 		if (nativeScript.instance) {
 			nativeScript.instance->destroy();
 			nativeScript.destroy();
+		}
+	}
+
+	void ScriptSystem::cleanup(LuaScriptComponent& luaScript)
+	{
+		if (luaScript.instance) {
+			luaScript.instance->destroy();
+			delete luaScript.instance;
 		}
 	}
 
