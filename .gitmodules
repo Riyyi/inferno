@@ -16,3 +16,6 @@
 [submodule "inferno/vendor/lua/lua"]
 	path = inferno/vendor/lua/lua
 	url = https://github.com/lua/lua
+[submodule "inferno/vendor/sol2"]
+	path = inferno/vendor/sol2
+	url = https://github.com/ThePhD/sol2

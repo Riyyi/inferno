@@ -53,6 +53,7 @@ include_directories(
 	"${ENGINE}/vendor/glm"
 	"${ENGINE}/vendor/json/include"
 	"${ENGINE}/vendor/lua"
+	"${ENGINE}/vendor/sol2/include"
 	"${ENGINE}/vendor/stb"
 )
 
