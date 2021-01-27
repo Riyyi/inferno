@@ -4,12 +4,12 @@
 #include "inferno/file.h"
 #include "inferno/scene/components.h"
 #include "inferno/scene/scene.h"
-#include "inferno/script/lua.h"
+#include "inferno/script/luascript.h"
 #include "inferno/script/registration.h"
 
 namespace Inferno {
 
-	void Lua::initialize()
+	void LuaScript::initialize()
 	{
 		// Type registration
 		// ---------------------------------
@@ -32,7 +32,7 @@ namespace Inferno {
 			return &m_scene->getComponent<TransformComponent>(m_entity);
 		});
 
-		// (*m_state).set_function("GetComponent", &Lua::getComponentSol);
+		// (*m_state).set_function("GetComponent", &LuaScript::getComponentSol);
 		m_state.set_function("getCameraComponent", [this]() -> CameraComponent* {
 			return &m_scene->getComponent<CameraComponent>(m_entity);
 		});
@@ -49,29 +49,29 @@ namespace Inferno {
 		callFunction("LuaScript", "initialize");
 	}
 
-	void Lua::destroy()
+	void LuaScript::destroy()
 	{
 		callFunction("LuaScript", "destroy");
 	}
 
-	void Lua::update(float deltaTime)
+	void LuaScript::update(float deltaTime)
 	{
 		m_state["LuaScript"]["transform"] = &m_scene->getComponent<TransformComponent>(m_entity);
 		callFunction("LuaScript", "update", deltaTime);
 	}
 
-	void Lua::loadScript()
+	void LuaScript::loadScript()
 	{
 		std::string script = File::read(m_path);
 		auto result = m_state.script(script.c_str(),
 			[](lua_State*, sol::protected_function_result pfr) { return pfr; });
-		ASSERT(result.valid(), "Lua script {}", ((sol::error)result).what());
+		ASSERT(result.valid(), "LuaScript {}", ((sol::error)result).what());
 	}
 
-	sol::table Lua::getTable(const char* name)
+	sol::table LuaScript::getTable(const char* name)
 	{
 		sol::table table = m_state[name];
-		ASSERT(table.valid(), "Lua table does not exist");
+		ASSERT(table.valid(), "LuaScript table does not exist");
 		return table;
 	}
 

@@ -3,7 +3,7 @@
 #include "inferno/assertions.h"
 #include "inferno/scene/components.h"
 #include "inferno/scene/scene.h"
-#include "inferno/script/lua.h"
+#include "inferno/script/luascript.h"
 #include "inferno/script/nativescript.h"
 #include "inferno/systems/script.h"
 
@@ -63,7 +63,7 @@ namespace Inferno {
 
 			// Create Lua script if not initialized
 			if (!luaScript.instance) {
-				luaScript.instance = new Lua();
+				luaScript.instance = new LuaScript();
 				luaScript.instance->transform = &transform;
 				luaScript.instance->m_scene = m_scene;
 				luaScript.instance->m_entity = static_cast<uint32_t>(entity);

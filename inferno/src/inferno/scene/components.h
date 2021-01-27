@@ -15,7 +15,7 @@
 
 namespace Inferno {
 
-	class Lua;
+	class LuaScript;
 
 	struct TagComponent {
 		std::string tag;
@@ -83,7 +83,7 @@ namespace Inferno {
 	};
 
 	struct LuaScriptComponent {
-		Lua* instance = nullptr;
+		LuaScript* instance = nullptr;
 		std::string path;
 
 		// Dont allow manually setting instance during construction

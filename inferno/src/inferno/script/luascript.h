@@ -1,5 +1,5 @@
-#ifndef LUA_H
-#define LUA_H
+#ifndef LUA_SCRIPT_H
+#define LUA_SCRIPT_H
 
 #include <cstdint> // uint32_t
 #include <string>  // std::string
@@ -18,7 +18,7 @@ namespace Inferno {
 
 	class Scene;
 
-	class Lua {
+	class LuaScript {
 	public:
 		void initialize();
 		void destroy();
@@ -54,4 +54,4 @@ namespace Inferno {
 
 }
 
-#endif // LUA_H
+#endif // LUA_SCRIPT_H
