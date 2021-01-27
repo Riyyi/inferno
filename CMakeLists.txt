@@ -58,7 +58,7 @@ include_directories(
 
 # Define engine source files
 file(GLOB_RECURSE GLAD "${ENGINE}/vendor/glad/*.c")
-file(GLOB_RECURSE LUA "${ENGINE}/vendor/lua/*.c")
+file(GLOB LUA "${ENGINE}/vendor/lua/lua/*.c")
 list(REMOVE_ITEM LUA "${CMAKE_SOURCE_DIR}/${ENGINE}/vendor/lua/lua/lua.c") # Do not compile stand-alone main()
 file(GLOB_RECURSE ENGINE_SOURCES "${ENGINE}/src/${ENGINE}/*.cpp")
 set(ENGINE_SOURCES ${GLAD} ${LUA} ${ENGINE_SOURCES})
@@ -72,7 +72,7 @@ set(GAME_SOURCES ${GAME_SOURCES})
 project(${ENGINE})
 set(CMAKE_CXX_STANDARD 17)
 
-# GLFW
+# GLFW options
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
