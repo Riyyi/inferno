@@ -1,10 +1,16 @@
 #ifndef LUA_H
 #define LUA_H
 
-#include <cstdint> // int32_t, uint32_t
+#include <cstdint> // uint32_t
 #include <string>  // std::string
 
-#include <lua/lua.h> // lua_State
+#define SOL_ALL_SAFETIES_ON 1
+#include "sol/protected_function.hpp"
+#include "sol/protected_function_result.hpp"
+#include "sol/state.hpp"
+#include "sol/table.hpp"
+
+#include "inferno/assertions.h"
 
 namespace Inferno {
 
@@ -18,21 +24,26 @@ namespace Inferno {
 		void destroy();
 		void update(float deltaTime);
 
-		void valid(int32_t error);
 		void loadScript();
-		void getFunction(const char* table, const char* function);
-		void callFunction(int32_t parameters = 0);
 
 	private:
-		static void isTable(lua_State* state, int32_t table);
-		static void isTable(lua_State* state, const char* table);
+		sol::table getTable(const char* name);
 
-		static int32_t getComponent(lua_State* state);
-		static int32_t componentIndex(lua_State* state);
-		static int32_t componentNewIndex(lua_State* state);
+		template<typename... P>
+		void callFunction(const char* table, const char* function, P&&... parameters)
+		{
+			sol::table solTable = getTable(table);
+			sol::protected_function solFunction = solTable[function];
 
+			// Only call function if it exists
+			if (solFunction.valid()) {
+				sol::protected_function_result result = solFunction(solTable, parameters...);
+				ASSERT(result.valid(), "Lua function {}", ((sol::error)result).what());
+			}
+		}
+
+		sol::state m_state;
 		std::string m_path = "";
-		lua_State* m_state = nullptr;
 
 		Scene* m_scene = nullptr;
 		uint32_t m_entity = 0;
