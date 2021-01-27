@@ -30,7 +30,7 @@ namespace Inferno {
 
 // ----------------------------------------
 
-	class DebugLogStream final : public LogStream{
+	class DebugLogStream final : public LogStream {
 	public:
 		DebugLogStream():
 			m_newline(true), m_type(Log::None) {}
@@ -44,14 +44,14 @@ namespace Inferno {
 
 		void color() const;
 
-		virtual void write(const char* characters, int length) const override
+		inline virtual void write(const char* characters, int length) const override
 		{
 			for (int i = 0; i < length; i++) {
 				printf("%c", characters[i]);
 			}
 		}
 
-		virtual void write(const unsigned char* characters, int length) const override
+		inline virtual void write(const unsigned char* characters, int length) const override
 		{
 			for (int i = 0; i < length; i++) {
 				printf("%c", characters[i]);
