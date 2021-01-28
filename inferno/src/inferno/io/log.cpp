@@ -1,11 +1,98 @@
 #include "inferno/assert.h"
 #include "inferno/io/log.h"
 
-#include <cstring>     // strlen
+#include <cstddef>     // size_t
+#include <cstdio>      // fwrite, snprintf
+#include <cstdlib>     // malloc, free
+#include <cstring>     // memcpy, strlen
 #include <string>      // std::string
 #include <string_view> // std::string_view
 
 namespace Inferno {
+
+	BufferedLogStream::~BufferedLogStream()
+	{
+		// Free buffer memory
+		if (m_capacity > sizeof(m_buffer.stack)) {
+			free(m_buffer.heap);
+		}
+	}
+
+	void BufferedLogStream::grow(size_t bytes) const
+	{
+		// Bitwise & ~ example, we use 127 as binary starts at 0
+		// 0b001111111 127 ~
+		// 0b100000100 260 &
+		// -----------
+		// 0b110000000 384
+		// 0b100000100 260 &
+		// -----------
+		// 0b100000000 256
+
+		// Buffer is is chunks of 128 bytes
+		size_t newCapacity = (m_count + bytes + BUFFER_SIZE - 1) & ~(BUFFER_SIZE - 1);
+
+		unsigned char* newBuffer = static_cast<unsigned char*>(malloc(newCapacity));
+
+		// Copy the non-heap data into the new buffer
+		if (m_capacity <= sizeof(m_buffer.stack)) {
+			memcpy(newBuffer, m_buffer.stack, m_count);
+		}
+		// Copy old heap-buffer data into the new buffer, free old heap-buffer
+		else if (m_buffer.heap) {
+			memcpy(newBuffer, m_buffer.heap, m_count);
+			free(m_buffer.heap);
+		}
+
+		m_buffer.heap = newBuffer;
+		m_capacity = newCapacity;
+	}
+
+// -----------------------------------------
+
+	DebugLogStream::~DebugLogStream()
+	{
+		if (empty()) {
+			return;
+		}
+
+		if (m_type != Log::None) {
+			const char* clear = "\033[0m";
+			write(clear, strlen(clear));
+		}
+
+		if (m_newline) {
+			char newline = '\n';
+			write(&newline, 1);
+		}
+
+		fwrite(buffer(), 1, count(), stdout);
+	}
+
+	void DebugLogStream::color() const
+	{
+		const char* color = "";
+
+		if (m_type == Log::Info) {
+			color = "\x1B[34m";
+		}
+		else if (m_type == Log::Warn) {
+			color = "\x1B[33m";
+		}
+		else if (m_type == Log::Danger) {
+			color = "\x1B[31m";
+		}
+		else if (m_type == Log::Success) {
+			color = "\x1B[32m";
+		}
+		else if (m_type == Log::Comment) {
+			color = "\x1B[37m";
+		}
+
+		write(color, strlen(color));
+	}
+
+// -----------------------------------------
 
 	const LogStream& operator<<(const LogStream& stream, const char* value)
 	{
@@ -166,6 +253,8 @@ namespace Inferno {
 		return DebugLogStream(type, newline);
 	}
 
+// -----------------------------------------
+
 	void dbgln(Log type, bool newline) {
 		(void)type;
 		dbg(newline);
@@ -214,44 +303,6 @@ namespace Inferno {
 	void dbgln(Log type, bool newline, std::string_view format)
 	{
 		dbg(type, newline) << format;
-	}
-
-// -----------------------------------------
-
-	DebugLogStream::~DebugLogStream()
-	{
-		if (m_type != Log::None) {
-			write("\033[0m", 4);
-		}
-
-		if (m_newline) {
-			char newline = '\n';
-			write(&newline, 1);
-		}
-	}
-
-	void DebugLogStream::color() const
-	{
-		const char* color = "";
-		if (m_type == Log::Info) {
-			color = "\x1B[34m";
-		}
-		else if (m_type == Log::Warn) {
-			color = "\x1B[33m";
-		}
-		else if (m_type == Log::Danger) {
-			color = "\x1B[31m";
-		}
-		else if (m_type == Log::Success) {
-			color = "\x1B[32m";
-		}
-		else if (m_type == Log::Comment) {
-			color = "\x1B[37m";
-		}
-
-		if (color[0] != '\0') {
-			write(color, 5);
-		}
 	}
 
 }

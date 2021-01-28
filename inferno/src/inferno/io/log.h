@@ -1,7 +1,10 @@
 #ifndef LOG_H
 #define LOG_H
 
-#include <cstdio>      // printf
+#define BUFFER_SIZE 128
+
+#include <cstddef>     // size_t
+#include <cstring>     // memcpy
 #include <string>      // std::string
 #include <string_view> // std::string_view
 #include <utility>     // std::forward
@@ -17,7 +20,7 @@ namespace Inferno {
 		Comment,
 	};
 
-// ----------------------------------------
+// -----------------------------------------
 
 	class LogStream {
 	public:
@@ -28,9 +31,59 @@ namespace Inferno {
 		virtual void write(const unsigned char* characters, int length) const = 0;
 	};
 
-// ----------------------------------------
+// -----------------------------------------
 
-	class DebugLogStream final : public LogStream {
+	class BufferedLogStream : public LogStream {
+	public:
+		BufferedLogStream() {}
+		virtual ~BufferedLogStream();
+
+		inline virtual void write(const char* characters, int length) const override
+		{
+			write(reinterpret_cast<const unsigned char*>(characters), length);
+		}
+
+		inline virtual void write(const unsigned char* characters, int length) const override
+		{
+			size_t newSize = m_count + length;
+
+			if (newSize > m_capacity) {
+				grow(length);
+			}
+
+			// Append to buffer
+			memcpy(buffer() + m_count, characters, length);
+
+			m_count = newSize;
+		}
+
+	protected:
+		inline unsigned char* buffer() const
+		{
+			if (m_capacity <= sizeof(m_buffer.stack)) {
+				return m_buffer.stack;
+			}
+
+			return m_buffer.heap;
+		}
+
+		inline bool empty() const { return m_count == 0; }
+		inline size_t count() const { return m_count; }
+
+	private:
+		void grow(size_t bytes) const;
+
+		mutable size_t m_count { 0 };
+		mutable size_t m_capacity { BUFFER_SIZE };
+		union {
+			mutable unsigned char* heap { nullptr };
+			mutable unsigned char stack[BUFFER_SIZE];
+		} m_buffer;
+	};
+
+// -----------------------------------------
+
+	class DebugLogStream final : public BufferedLogStream {
 	public:
 		DebugLogStream():
 			m_newline(true), m_type(Log::None) {}
@@ -44,26 +97,12 @@ namespace Inferno {
 
 		void color() const;
 
-		inline virtual void write(const char* characters, int length) const override
-		{
-			for (int i = 0; i < length; i++) {
-				printf("%c", characters[i]);
-			}
-		}
-
-		inline virtual void write(const unsigned char* characters, int length) const override
-		{
-			for (int i = 0; i < length; i++) {
-				printf("%c", characters[i]);
-			}
-		}
-
 	private:
 		bool m_newline;
 		Log m_type;
 	};
 
-// ----------------------------------------
+// -----------------------------------------
 
 	const LogStream& operator<<(const LogStream& stream, const char* value);
 	const LogStream& operator<<(const LogStream& stream, const unsigned char* value);
@@ -83,12 +122,14 @@ namespace Inferno {
 	const LogStream& operator<<(const LogStream& stream, bool value);
 	const LogStream& operator<<(const LogStream& stream, Log value);
 
-// ----------------------------------------
+// -----------------------------------------
 
 	DebugLogStream dbg();
 	DebugLogStream dbg(bool newline);
 	DebugLogStream dbg(Log type);
 	DebugLogStream dbg(Log type, bool newline);
+
+// -----------------------------------------
 
 	void dbgln(Log type, bool newline);
 	void dbgln(const char* format);
