@@ -46,8 +46,8 @@ namespace Inferno {
 		cameraTransform.rotate.z = -1.0f;
 		cameraTransform.translate.z = 1.0f;
 		addComponent<CameraComponent>(camera, CameraType::Perspective);
-		addComponent<NativeScriptComponent>(camera).bind<CameraController>();
-		// addComponent<LuaScriptComponent>(camera, "assets/lua/cameracontroller.lua");
+		// addComponent<NativeScriptComponent>(camera).bind<CameraController>();
+		addComponent<LuaScriptComponent>(camera, "assets/lua/cameracontroller.lua");
 
 		uint32_t quad = createEntity("Quad");
 		addComponent<SpriteComponent>(quad, glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture);

@@ -19,7 +19,7 @@ namespace Inferno {
 		// Load libraries
 		// ---------------------------------
 
-		m_state.open_libraries(sol::lib::base);
+		m_state.open_libraries(sol::lib::base, sol::lib::math);
 
 		// Component get functions
 		// ---------------------------------
@@ -32,7 +32,6 @@ namespace Inferno {
 			return &m_scene->getComponent<TransformComponent>(m_entity);
 		});
 
-		// (*m_state).set_function("GetComponent", &LuaScript::getComponentSol);
 		m_state.set_function("getCameraComponent", [this]() -> CameraComponent* {
 			return &m_scene->getComponent<CameraComponent>(m_entity);
 		});

@@ -95,6 +95,7 @@ namespace Inferno {
 		// Update camera translation
 
 		float cameraSpeed = TRANSLATE_SPEED * deltaTime;
+
 		// WASD movement
 		if (Input::isKeyPressed(KeyCode("GLFW_KEY_W"))) {
 			transform->translate = { transform->translate + cameraSpeed * transform->rotate };

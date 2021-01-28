@@ -13,6 +13,7 @@ namespace Inferno {
 	private:
 		static void glm(sol::state_view& state);
 		static void component(sol::state_view& state);
+		static void input(sol::state_view& state);
 
 		template<typename T, typename V>
 		static auto addition()
