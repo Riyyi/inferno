@@ -1,7 +1,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <nlohmann/json.hpp>
+#include "nlohmann/json.hpp"
 
 #include "inferno/window.h"
 
