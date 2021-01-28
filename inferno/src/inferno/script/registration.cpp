@@ -33,7 +33,8 @@ namespace Inferno {
 			"__add", addition<glm::vec2, float>(),
 			"__sub", subtraction<glm::vec2, float>(),
 			"__mul", multiplication<glm::vec2, float>(),
-			"__div", division<glm::vec2, float>()
+			"__div", division<glm::vec2, float>(),
+			"__tostring", string<glm::vec2>
 		);
 
 		auto vec3 = glm.new_usertype<glm::vec3>(
@@ -45,8 +46,8 @@ namespace Inferno {
 			"__add", addition<glm::vec3, float>(),
 			"__sub", subtraction<glm::vec3, float>(),
 			"__mul", multiplication<glm::vec3, float>(),
-			"__div", division<glm::vec3, float>()
-			// "__tostring", [](glm::vec3 self) { return self.x; } // Template!!! convert via logstream
+			"__div", division<glm::vec3, float>(),
+			"__tostring", string<glm::vec3>
 		);
 
 		auto vec4 = glm.new_usertype<glm::vec4>(
@@ -58,7 +59,8 @@ namespace Inferno {
 			"__add", addition<glm::vec4, float>(),
 			"__sub", subtraction<glm::vec4, float>(),
 			"__mul", multiplication<glm::vec4, float>(),
-			"__div", division<glm::vec4, float>()
+			"__div", division<glm::vec4, float>(),
+			"__tostring", string<glm::vec4>
 		);
 
 		glm.set_function("radians", sol::overload(
@@ -110,7 +112,6 @@ namespace Inferno {
 	void Registration::input(sol::state_view& state)
 	{
 		state.set_function("keyCode", &keyCode);
-		// state["keyCode"] = &KeyCode;
 
 		auto input = state.new_usertype<Input>("Input", sol::no_constructor);
 		input["isKeyPressed"] = &Input::isKeyPressed;

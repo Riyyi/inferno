@@ -18,6 +18,7 @@ LuaScript = {
 	end,
 
 	update = function(self, deltaTime)
+
 		self.camera = getCameraComponent()
 
 		if self.camera.type == CameraType.Orthographic then
@@ -25,6 +26,7 @@ LuaScript = {
 		elseif self.camera.type == CameraType.Perspective then
 			LuaScript:updatePerspective(deltaTime)
 		end
+
 	end,
 
 	updateOrthographic = function(self, deltaTime)

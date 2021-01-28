@@ -2,6 +2,11 @@
 
 namespace Inferno {
 
+	const LogStream& operator<<(const LogStream& stream, const glm::vec2& value)
+	{
+		return stream << "{ " << value.x << ", " << value.y << " }";
+	}
+
 	const LogStream& operator<<(const LogStream& stream, const glm::vec3& value)
 	{
 		return stream << "{ " << value.x << ", " << value.y << ", " << value.z << " }";

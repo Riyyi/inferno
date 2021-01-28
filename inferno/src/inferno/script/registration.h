@@ -4,6 +4,8 @@
 #include "sol/overload.hpp"   // sol::overload
 #include "sol/state_view.hpp" // sol::state_view
 
+#include "inferno/io/log.h"
+
 namespace Inferno {
 
 	class Registration final {
@@ -53,6 +55,14 @@ namespace Inferno {
 				[](const T& lhs, const V& rhs) { return lhs / rhs; },
 				[](const V& lhs, const T& rhs) { return lhs / rhs; }
 			);
+		}
+
+		template<typename T>
+		static std::string string(const T& t)
+		{
+			std::string result;
+			str(&result) << t;
+			return result;
 		}
 	};
 

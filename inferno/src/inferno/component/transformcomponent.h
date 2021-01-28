@@ -17,6 +17,7 @@ namespace Inferno {
 
 // -----------------------------------------
 
+	const LogStream& operator<<(const LogStream& stream, const glm::vec2& value);
 	const LogStream& operator<<(const LogStream& stream, const glm::vec3& value);
 	const LogStream& operator<<(const LogStream& stream, const glm::vec4& value);
 	const LogStream& operator<<(const LogStream& stream, const glm::mat4& value);
