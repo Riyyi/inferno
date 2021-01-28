@@ -75,7 +75,7 @@ namespace Inferno {
 		std::shared_ptr<entt::registry> m_registry;
 	};
 
-// ----------------------------------------
+// -----------------------------------------
 
 	const LogStream& operator<<(const LogStream& stream, entt::entity handle);
 

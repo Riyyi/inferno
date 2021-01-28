@@ -70,7 +70,7 @@ class Texture;
 	};
 
 
-// ----------------------------------------
+// -----------------------------------------
 
 	const LogStream& operator<<(const LogStream& stream, const glm::ivec2& value);
 

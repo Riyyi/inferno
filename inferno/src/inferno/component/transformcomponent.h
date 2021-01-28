@@ -15,7 +15,7 @@ namespace Inferno {
 		glm::mat4 transform { 1.0f }; // Identity matrix
 	};
 
-// ----------------------------------------
+// -----------------------------------------
 
 	const LogStream& operator<<(const LogStream& stream, const glm::vec3& value);
 	const LogStream& operator<<(const LogStream& stream, const glm::vec4& value);
