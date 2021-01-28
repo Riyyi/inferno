@@ -9,7 +9,7 @@
 
 #include "glm/ext/vector_int2.hpp" // glm::ivec2
 
-#include "inferno/log.h"
+#include "inferno/io/log.h"
 
 namespace Inferno {
 

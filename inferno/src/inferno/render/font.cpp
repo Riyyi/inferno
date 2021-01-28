@@ -1,8 +1,8 @@
 #include <bits/stdint-uintn.h>
 #include <string> // std::getline
 
-#include "inferno/assertions.h"
-#include "inferno/file.h"
+#include "inferno/assert.h"
+#include "inferno/io/file.h"
 #include "inferno/render/font.h"
 #include "inferno/render/texture.h"
 

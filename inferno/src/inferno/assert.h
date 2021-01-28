@@ -4,7 +4,7 @@
 #include <csignal> // raise
 
 #include "inferno/core.h"
-#include "inferno/log.h"
+#include "inferno/io/log.h"
 
 #ifndef NDEBUG
 	#define NF_ENABLE_ASSERTS

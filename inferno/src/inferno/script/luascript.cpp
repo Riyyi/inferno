@@ -1,7 +1,6 @@
 #include "sol/unsafe_function_result.hpp"
 
-#include "inferno/assertions.h"
-#include "inferno/file.h"
+#include "inferno/io/file.h"
 #include "inferno/scene/components.h"
 #include "inferno/scene/scene.h"
 #include "inferno/script/luascript.h"

@@ -2,8 +2,8 @@
 
 #include "inferno/application.h"
 #include "inferno/event/mouseevent.h"
-#include "inferno/input.h"
-#include "inferno/log.h"
+#include "inferno/io/input.h"
+#include "inferno/io/log.h"
 #include "inferno/window.h"
 
 namespace Inferno {

@@ -5,7 +5,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include "inferno/assertions.h"
+#include "inferno/assert.h"
 #include "inferno/render/texture.h"
 
 namespace Inferno {

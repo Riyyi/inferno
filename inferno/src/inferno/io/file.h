@@ -5,9 +5,9 @@
 #include <iomanip> // std::setfill, std::setw
 #include <string>  // std::string
 
-#include "inferno/assertions.h"
+#include "inferno/assert.h"
 #include "inferno/core.h"
-#include "inferno/log.h"
+#include "inferno/io/log.h"
 
 namespace Inferno {
 

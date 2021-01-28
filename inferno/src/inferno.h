@@ -6,7 +6,7 @@
 // -----------------------------------------
 
 #include "inferno/application.h"
-#include "inferno/log.h"
+#include "inferno/io/log.h"
 
 // -----------------------------------------
 

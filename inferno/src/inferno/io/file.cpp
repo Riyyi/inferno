@@ -1,8 +1,8 @@
 #include <iostream> // std::ios
 #include <memory>   // std::make_unique
 
-#include "inferno/assertions.h"
-#include "inferno/file.h"
+#include "inferno/assert.h"
+#include "inferno/io/file.h"
 
 namespace Inferno {
 

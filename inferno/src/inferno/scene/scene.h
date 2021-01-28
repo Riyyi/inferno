@@ -7,7 +7,7 @@
 #include "entt/entity/registry.hpp"    // entt::entity, entt::registry
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
 
-#include "inferno/log.h"
+#include "inferno/io/log.h"
 
 namespace Inferno {
 

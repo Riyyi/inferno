@@ -3,10 +3,10 @@
 #include "glad/glad.h"
 #include "glm/gtc/type_ptr.hpp" // glm::value_ptr
 
-#include "inferno/assertions.h"
+#include "inferno/assert.h"
 #include "inferno/core.h"
-#include "inferno/file.h"
-#include "inferno/log.h"
+#include "inferno/io/file.h"
+#include "inferno/io/log.h"
 #include "inferno/render/shader.h"
 
 namespace Inferno {

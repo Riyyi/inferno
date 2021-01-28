@@ -1,8 +1,8 @@
 #include "glad/glad.h"
 
-#include "inferno/assertions.h"
+#include "inferno/assert.h"
 #include "inferno/core.h"
-#include "inferno/log.h"
+#include "inferno/io/log.h"
 #include "inferno/render/buffer.h"
 
 namespace Inferno {

@@ -10,7 +10,7 @@
 #include "sol/state.hpp"
 #include "sol/table.hpp"
 
-#include "inferno/assertions.h"
+#include "inferno/assert.h"
 
 namespace Inferno {
 

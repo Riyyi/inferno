@@ -8,8 +8,8 @@
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
 #include "glm/ext/vector_float3.hpp"   // glm::vec3
 
-#include "inferno/assertions.h"
-#include "inferno/log.h"
+#include "inferno/assert.h"
+#include "inferno/io/log.h"
 #include "inferno/render/texture.h"
 #include "inferno/script/nativescript.h"
 

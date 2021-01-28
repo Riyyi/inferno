@@ -3,7 +3,7 @@
 
 #include "GLFW/glfw3.h"
 
-#include "inferno/assertions.h"
+#include "inferno/assert.h"
 #include "inferno/inputcodes.h"
 
 namespace Inferno {

@@ -1,5 +1,5 @@
-#include "inferno/assertions.h"
-#include "inferno/log.h"
+#include "inferno/assert.h"
+#include "inferno/io/log.h"
 
 #include <cstring>     // strlen
 #include <string>      // std::string

@@ -8,7 +8,6 @@
 #define ENTRYPOINT_H
 
 #include "inferno/application.h"
-#include "inferno/log.h"
 
 int main(int argc, char* argv[])
 {

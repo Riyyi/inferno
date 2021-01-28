@@ -1,7 +1,7 @@
 #include <string> // std::string
 
-#include "inferno/file.h"
-#include "inferno/log.h"
+#include "inferno/io/file.h"
+#include "inferno/io/log.h"
 #include "inferno/settings.h"
 
 namespace Inferno {

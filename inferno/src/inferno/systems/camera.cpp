@@ -2,10 +2,10 @@
 #include "glm/ext/matrix_transform.hpp"  // glm::radians, glm::lookAt
 
 #include "inferno/application.h"
-#include "inferno/assertions.h"
-#include "inferno/input.h"
+#include "inferno/assert.h"
 #include "inferno/inputcodes.h"
-#include "inferno/log.h"
+#include "inferno/io/input.h"
+#include "inferno/io/log.h"
 #include "inferno/systems/camera.h"
 #include "inferno/window.h"
 
