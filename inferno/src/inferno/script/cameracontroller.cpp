@@ -1,7 +1,9 @@
 #include "glm/ext/matrix_transform.hpp"  // glm::radians
 
-#include "inferno/keycodes.h"
+#include "inferno/components/cameracomponent.h"
+#include "inferno/components/transformcomponent.h"
 #include "inferno/io/input.h"
+#include "inferno/keycodes.h"
 #include "inferno/script/cameracontroller.h"
 
 namespace Inferno {

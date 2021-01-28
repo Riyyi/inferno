@@ -9,7 +9,7 @@
 #include "glm/ext/vector_float3.hpp"   // glm::vec3
 #include "glm/ext/vector_float4.hpp"   // glm::vec4
 
-#include "inferno/scene/components.h"
+#include "inferno/components/transformcomponent.h"
 
 namespace Inferno {
 

@@ -1,7 +1,10 @@
 #include "sol/unsafe_function_result.hpp"
 
+#include "inferno/components/cameracomponent.h"
+#include "inferno/components/spritecomponent.h"
+#include "inferno/components/tagcomponent.h"
+#include "inferno/components/transformcomponent.h"
 #include "inferno/io/file.h"
-#include "inferno/scene/components.h"
 #include "inferno/scene/scene.h"
 #include "inferno/script/luascript.h"
 #include "inferno/script/registration.h"

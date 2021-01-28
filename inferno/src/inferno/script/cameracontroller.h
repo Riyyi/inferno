@@ -8,10 +8,11 @@
 #define NEAR_PLANE 0.1f
 #define FAR_PLANE 100.0f
 
-#include "inferno/scene/components.h"
 #include "inferno/script/nativescript.h"
 
 namespace Inferno {
+
+	struct CameraComponent;
 
 	class CameraController final : public NativeScript {
 	public:

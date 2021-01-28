@@ -1,4 +1,4 @@
-#include "inferno/scene/components.h"
+#include "inferno/components/transformcomponent.h"
 
 namespace Inferno {
 

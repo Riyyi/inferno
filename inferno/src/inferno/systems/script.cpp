@@ -1,8 +1,10 @@
 #include "entt/entity/registry.hpp" // entt::entity, entt::registry
 
 #include "inferno/assert.h"
+#include "inferno/components/luascriptcomponent.h"
+#include "inferno/components/nativescriptcomponent.h"
+#include "inferno/components/transformcomponent.h"
 #include "inferno/io/log.h"
-#include "inferno/scene/components.h"
 #include "inferno/scene/scene.h"
 #include "inferno/script/luascript.h"
 #include "inferno/script/nativescript.h"

@@ -12,7 +12,6 @@
 namespace Inferno {
 
 	class Camera;
-	class Entity;
 	class Texture;
 
 	class Scene {

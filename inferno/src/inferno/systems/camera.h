@@ -12,11 +12,10 @@
 
 #include "entt/entity/registry.hpp" // entt::entity, entt::registry
 
-#include "inferno/scene/components.h"
+#include "inferno/components/cameracomponent.h"
+#include "inferno/components/transformcomponent.h"
 
 namespace Inferno {
-
-	class Entity;
 
 	class CameraSystem {
 	public:
