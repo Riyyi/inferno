@@ -1,11 +1,11 @@
 #include "glm/ext/matrix_transform.hpp" // glm::translate, glm::rotate, glm::scale, glm::radians
 
 #include "inferno/assert.h"
-#include "inferno/components/spritecomponent.h"
-#include "inferno/components/transformcomponent.h"
+#include "inferno/component/spritecomponent.h"
+#include "inferno/component/transformcomponent.h"
 #include "inferno/io/log.h"
 #include "inferno/render/renderer.h"
-#include "inferno/systems/rendersystem.h"
+#include "inferno/system/rendersystem.h"
 
 namespace Inferno {
 

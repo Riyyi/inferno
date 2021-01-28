@@ -1,9 +1,9 @@
 #include "glm/ext/matrix_transform.hpp" // glm::translate, glm::rotate, glm::scale, glm::radians
 
 #include "inferno/assert.h"
-#include "inferno/components/transformcomponent.h"
+#include "inferno/component/transformcomponent.h"
 #include "inferno/io/log.h"
-#include "inferno/systems/transformsystem.h"
+#include "inferno/system/transformsystem.h"
 
 namespace Inferno {
 

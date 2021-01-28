@@ -12,8 +12,8 @@
 
 #include "entt/entity/registry.hpp" // entt::entity, entt::registry
 
-#include "inferno/components/cameracomponent.h"
-#include "inferno/components/transformcomponent.h"
+#include "inferno/component/cameracomponent.h"
+#include "inferno/component/transformcomponent.h"
 
 namespace Inferno {
 

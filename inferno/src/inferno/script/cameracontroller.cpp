@@ -1,7 +1,7 @@
 #include "glm/ext/matrix_transform.hpp"  // glm::radians
 
-#include "inferno/components/cameracomponent.h"
-#include "inferno/components/transformcomponent.h"
+#include "inferno/component/cameracomponent.h"
+#include "inferno/component/transformcomponent.h"
 #include "inferno/io/input.h"
 #include "inferno/keycodes.h"
 #include "inferno/script/cameracontroller.h"

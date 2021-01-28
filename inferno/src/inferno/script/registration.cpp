@@ -3,10 +3,10 @@
 #include "glm/ext/vector_float4.hpp"    // glm::vec4
 #include "glm/ext/matrix_transform.hpp" // glm::radians
 
-#include "inferno/components/cameracomponent.h"
-#include "inferno/components/spritecomponent.h"
-#include "inferno/components/tagcomponent.h"
-#include "inferno/components/transformcomponent.h"
+#include "inferno/component/cameracomponent.h"
+#include "inferno/component/spritecomponent.h"
+#include "inferno/component/tagcomponent.h"
+#include "inferno/component/transformcomponent.h"
 #include "inferno/io/input.h"
 #include "inferno/keycodes.h"
 #include "inferno/script/registration.h"
