@@ -85,14 +85,14 @@ namespace Inferno {
 
 	class DebugLogStream final : public BufferedLogStream {
 	public:
-		DebugLogStream():
-			m_newline(true), m_type(Log::None) {}
-		DebugLogStream(bool newline):
-			m_newline(newline), m_type(Log::None) {}
-		DebugLogStream(Log type):
-			m_newline(true), m_type(type) { color(); }
-		DebugLogStream(Log type, bool newline):
-			m_newline(newline), m_type(type) { color(); }
+		DebugLogStream()
+			: m_newline(true), m_type(Log::None) {}
+		DebugLogStream(bool newline)
+			: m_newline(newline), m_type(Log::None) {}
+		DebugLogStream(Log type)
+			: m_newline(true), m_type(type) { color(); }
+		DebugLogStream(Log type, bool newline)
+			: m_newline(newline), m_type(type) { color(); }
 		virtual ~DebugLogStream() override;
 
 		void color() const;
@@ -100,6 +100,18 @@ namespace Inferno {
 	private:
 		bool m_newline;
 		Log m_type;
+	};
+
+// -----------------------------------------
+
+	class StringLogStream final : public BufferedLogStream {
+	public:
+		StringLogStream(std::string* fill)
+			: m_fill(fill) {}
+		virtual ~StringLogStream() override;
+
+	private:
+		std::string* m_fill;
 	};
 
 // -----------------------------------------
@@ -208,6 +220,10 @@ namespace Inferno {
 	{
 		dbgln(type, newline, format.data(), value, std::forward<P>(parameters)...);
 	}
+
+// -----------------------------------------
+
+	StringLogStream str(std::string* fill);
 
 }
 

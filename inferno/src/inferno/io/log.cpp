@@ -94,6 +94,15 @@ namespace Inferno {
 
 // -----------------------------------------
 
+	StringLogStream::~StringLogStream()
+	{
+		char terminator = '\0';
+		write(&terminator, 1);
+		*m_fill = std::string(reinterpret_cast<char*>(buffer()));
+	}
+
+// -----------------------------------------
+
 	const LogStream& operator<<(const LogStream& stream, const char* value)
 	{
 		if (value == nullptr) {
@@ -303,6 +312,13 @@ namespace Inferno {
 	void dbgln(Log type, bool newline, std::string_view format)
 	{
 		dbg(type, newline) << format;
+	}
+
+// -----------------------------------------
+
+	StringLogStream str(std::string* fill)
+	{
+		return StringLogStream(fill);
 	}
 
 }
