@@ -1,7 +1,7 @@
 #include <algorithm> // std::min
 #include <utility>   // std::move
 
-#include <glad/glad.h>
+#include "glad/glad.h"
 
 #include "inferno/assertions.h"
 #include "inferno/render/buffer.h"

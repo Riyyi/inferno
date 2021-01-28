@@ -6,7 +6,7 @@
 #include <string>        // std::string
 #include <unordered_map> // std::unordered_map
 
-#include <glm/glm.hpp>
+#include "glm/glm.hpp"
 
 namespace Inferno {
 

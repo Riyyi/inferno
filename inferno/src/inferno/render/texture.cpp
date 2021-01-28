@@ -1,9 +1,9 @@
 #include <climits> // UINT_MAX
 #include <memory>
 
-#include <glad/glad.h>
+#include "glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include "stb_image.h"
 
 #include "inferno/assertions.h"
 #include "inferno/render/texture.h"

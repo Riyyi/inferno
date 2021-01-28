@@ -7,7 +7,7 @@
 #include <unordered_map> // std::unordered_map
 #include <vector>        // std::vector
 
-#include <glm/ext/vector_int2.hpp> // glm::ivec2
+#include "glm/ext/vector_int2.hpp" // glm::ivec2
 
 #include "inferno/log.h"
 

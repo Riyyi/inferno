@@ -1,4 +1,4 @@
-#include <glad/glad.h>
+#include "glad/glad.h"
 
 #include "inferno/assertions.h"
 #include "inferno/core.h"

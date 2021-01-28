@@ -1,7 +1,7 @@
 #include <string>        // std::string
 #include <unordered_map> // std::unordered_map
 
-#include <GLFW/glfw3.h>
+#include "GLFW/glfw3.h"
 
 #include "inferno/assertions.h"
 #include "inferno/inputcodes.h"

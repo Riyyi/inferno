@@ -1,7 +1,7 @@
 #include <vector> // std::vector
 
-#include <glad/glad.h>
-#include <glm/gtc/type_ptr.hpp> // glm::value_ptr
+#include "glad/glad.h"
+#include "glm/gtc/type_ptr.hpp" // glm::value_ptr
 
 #include "inferno/assertions.h"
 #include "inferno/core.h"

@@ -1,4 +1,4 @@
-#include <GLFW/glfw3.h>
+#include "GLFW/glfw3.h"
 
 #include "inferno/assertions.h"
 #include "inferno/core.h"
