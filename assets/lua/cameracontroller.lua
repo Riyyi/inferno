@@ -119,25 +119,23 @@ LuaScript = {
 
 		-- WASD movement
 		if Input.isKeyPressed(keyCode("GLFW_KEY_W")) then
-			self.transform.translate = glm.vec3( self.transform.translate + cameraSpeed * self.transform.rotate )
+			self.transform.translate = self.transform.translate + self.transform.rotate * cameraSpeed
 		end
 		if Input.isKeyPressed(keyCode("GLFW_KEY_S")) then
-			self.transform.translate = glm.vec3( self.transform.translate - cameraSpeed * self.transform.rotate )
+			self.transform.translate = self.transform.translate - self.transform.rotate * cameraSpeed
 		end
 		if Input.isKeyPressed(keyCode("GLFW_KEY_A")) then
-			self.transform.translate = glm.vec3( self.transform.translate -
-				glm.normalize(glm.cross(self.transform.rotate, self.camera.up)) * cameraSpeed )
+			self.transform.translate = self.transform.translate - glm.normalize(glm.cross(self.transform.rotate, self.camera.up)) * cameraSpeed
 		end
 		if Input.isKeyPressed(keyCode("GLFW_KEY_D")) then
-			self.transform.translate = glm.vec3( self.transform.translate +
-				glm.normalize(glm.cross(self.transform.rotate, self.camera.up)) * cameraSpeed )
+			self.transform.translate = self.transform.translate + glm.normalize(glm.cross(self.transform.rotate, self.camera.up)) * cameraSpeed
 		end
 		-- Up / down movement
 		if Input.isKeyPressed(keyCode("GLFW_KEY_SPACE")) then
-			self.transform.translate = glm.vec3( self.transform.translate.x, self.transform.translate.y + cameraSpeed, self.transform.translate.z )
+			self.transform.translate.y = self.transform.translate.y + cameraSpeed
 		end
 		if Input.isKeyPressed(keyCode("GLFW_KEY_LEFT_SHIFT")) then
-			self.transform.translate = glm.vec3( self.transform.translate.x, self.transform.translate.y - cameraSpeed, self.transform.translate.z )
+			self.transform.translate.y = self.transform.translate.y - cameraSpeed
 		end
 
 	end,

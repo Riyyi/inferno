@@ -98,25 +98,23 @@ namespace Inferno {
 
 		// WASD movement
 		if (Input::isKeyPressed(KeyCode("GLFW_KEY_W"))) {
-			transform->translate = { transform->translate + cameraSpeed * transform->rotate };
+			transform->translate += transform->rotate * cameraSpeed;
 		}
 		if (Input::isKeyPressed(KeyCode("GLFW_KEY_S"))) {
-			transform->translate = { transform->translate - cameraSpeed * transform->rotate };
+			transform->translate -= transform->rotate * cameraSpeed;
 		}
 		if (Input::isKeyPressed(KeyCode("GLFW_KEY_A"))) {
-			transform->translate = { transform->translate -
-				glm::normalize(glm::cross(transform->rotate, m_camera->up)) * cameraSpeed };
+			transform->translate -= glm::normalize(glm::cross(transform->rotate, m_camera->up)) * cameraSpeed;
 		}
 		if (Input::isKeyPressed(KeyCode("GLFW_KEY_D"))) {
-			transform->translate = { transform->translate +
-				glm::normalize(glm::cross(transform->rotate, m_camera->up)) * cameraSpeed };
+			transform->translate += glm::normalize(glm::cross(transform->rotate, m_camera->up)) * cameraSpeed;
 		}
 		// Up / down movement
 		if (Input::isKeyPressed(KeyCode("GLFW_KEY_SPACE"))) {
-			transform->translate = { transform->translate.x, transform->translate.y + cameraSpeed, transform->translate.z };
+			transform->translate.y += cameraSpeed;
 		}
 		if (Input::isKeyPressed(KeyCode("GLFW_KEY_LEFT_SHIFT"))) {
-			transform->translate = { transform->translate.x, transform->translate.y - cameraSpeed, transform->translate.z };
+			transform->translate.y -= cameraSpeed;
 		}
 	}
 }
