@@ -4,7 +4,7 @@
 #include "GLFW/glfw3.h"
 
 #include "inferno/assert.h"
-#include "inferno/inputcodes.h"
+#include "inferno/keycodes.h"
 
 namespace Inferno {
 
@@ -134,7 +134,7 @@ namespace Inferno {
 
 // -----------------------------------------
 
-	int KeyCode(const char* name)
+	int keyCode(const char* name)
 	{
 		ASSERT(keys.find(name) != keys.end(), "keyCode could not find '{}'", name);
 		return keys.at(name);

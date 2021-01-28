@@ -3,7 +3,7 @@
 #include "glm/ext/vector_float4.hpp"    // glm::vec4
 #include "glm/ext/matrix_transform.hpp" // glm::radians
 
-#include "inferno/inputcodes.h"
+#include "inferno/keycodes.h"
 #include "inferno/io/input.h"
 #include "inferno/scene/components.h"
 #include "inferno/script/registration.h"
@@ -106,7 +106,7 @@ namespace Inferno {
 
 	void Registration::input(sol::state_view& state)
 	{
-		state.set_function("keyCode", &KeyCode);
+		state.set_function("keyCode", &keyCode);
 		// state["keyCode"] = &KeyCode;
 
 		auto input = state.new_usertype<Input>("Input", sol::no_constructor);

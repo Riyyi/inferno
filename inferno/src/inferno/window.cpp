@@ -5,7 +5,7 @@
 #include "inferno/event/applicationevent.h"
 #include "inferno/event/keyevent.h"
 #include "inferno/event/mouseevent.h"
-#include "inferno/inputcodes.h"
+#include "inferno/keycodes.h"
 #include "inferno/io/input.h"
 #include "inferno/io/log.h"
 #include "inferno/render/context.h"
@@ -165,7 +165,7 @@ namespace Inferno {
 		glfwPollEvents();
 
 		// Lock mouse in window
-		if (Input::isKeyPressed(KeyCode("GLFW_KEY_LEFT_SUPER"))) {
+		if (Input::isKeyPressed(keyCode("GLFW_KEY_LEFT_SUPER"))) {
 			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}
 		else {

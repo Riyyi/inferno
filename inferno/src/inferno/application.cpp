@@ -5,7 +5,7 @@
 #include "inferno/event/event.h"
 #include "inferno/event/keyevent.h"
 #include "inferno/event/mouseevent.h"
-#include "inferno/inputcodes.h"
+#include "inferno/keycodes.h"
 #include "inferno/io/input.h"
 #include "inferno/io/log.h"
 #include "inferno/render/buffer.h"
@@ -202,7 +202,7 @@ namespace Inferno {
 		      e.getKey());
 
 		// Stop the main loop on 'Escape' keypress
-		if (e.getKey() == KeyCode("GLFW_KEY_ESCAPE")) {
+		if (e.getKey() == keyCode("GLFW_KEY_ESCAPE")) {
 			m_window->setShouldClose(true);
 		}
 
