@@ -8,7 +8,7 @@
 #include "inferno/scene/scene.h"
 #include "inferno/script/luascript.h"
 #include "inferno/script/nativescript.h"
-#include "inferno/systems/script.h"
+#include "inferno/systems/scriptsystem.h"
 
 namespace Inferno {
 

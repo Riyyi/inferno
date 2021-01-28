@@ -3,7 +3,7 @@
 #include "inferno/assert.h"
 #include "inferno/components/transformcomponent.h"
 #include "inferno/io/log.h"
-#include "inferno/systems/transform.h"
+#include "inferno/systems/transformsystem.h"
 
 namespace Inferno {
 

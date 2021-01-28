@@ -5,7 +5,7 @@
 #include "inferno/assert.h"
 #include "inferno/io/input.h"
 #include "inferno/io/log.h"
-#include "inferno/systems/camera.h"
+#include "inferno/systems/camerasystem.h"
 #include "inferno/window.h"
 
 namespace Inferno {

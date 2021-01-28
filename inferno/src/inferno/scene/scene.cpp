@@ -7,10 +7,10 @@
 #include "inferno/scene/scene.h"
 #include "inferno/script/cameracontroller.h"
 #include "inferno/script/nativescript.h"
-#include "inferno/systems/camera.h"
-#include "inferno/systems/render.h"
-#include "inferno/systems/script.h"
-#include "inferno/systems/transform.h"
+#include "inferno/systems/camerasystem.h"
+#include "inferno/systems/rendersystem.h"
+#include "inferno/systems/scriptsystem.h"
+#include "inferno/systems/transformsystem.h"
 
 namespace Inferno {
 

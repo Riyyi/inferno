@@ -5,7 +5,7 @@
 #include "inferno/components/transformcomponent.h"
 #include "inferno/io/log.h"
 #include "inferno/render/renderer.h"
-#include "inferno/systems/render.h"
+#include "inferno/systems/rendersystem.h"
 
 namespace Inferno {
 
