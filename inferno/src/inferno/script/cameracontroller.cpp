@@ -1,5 +1,4 @@
-#include <glm/ext/matrix_clip_space.hpp> // glm::perspective, glm::ortho
-#include <glm/ext/matrix_transform.hpp>  // glm::radians, glm::lookAt
+#include <glm/ext/matrix_transform.hpp>  // glm::radians
 
 #include "inferno/input.h"
 #include "inferno/inputcodes.h"
@@ -14,10 +13,10 @@ namespace Inferno {
 		float cameraRotateSpeed = ROTATE_SPEED * deltaTime;
 
 		if (Input::isKeyPressed(KeyCode("GLFW_KEY_Q"))) {
-			transform->rotate.z += cameraRotateSpeed;
+			transform->rotate.z -= cameraRotateSpeed;
 		}
 		if (Input::isKeyPressed(KeyCode("GLFW_KEY_E"))) {
-			transform->rotate.z -= cameraRotateSpeed;
+			transform->rotate.z += cameraRotateSpeed;
 		}
 
 		if (transform->rotate.z > 180.0f) {
