@@ -1,3 +1,4 @@
+#include <string>        // std::string
 #include <unordered_map> // std::unordered_map
 
 #include <GLFW/glfw3.h>
@@ -7,7 +8,7 @@
 
 namespace Inferno {
 
-	static std::unordered_map<const char*, int> keys ({
+	static std::unordered_map<std::string, int> keys ({
 		{ MAP_KEY(GLFW_KEY_UNKNOWN) },
 		{ MAP_KEY(GLFW_KEY_SPACE) },
 		{ MAP_KEY(GLFW_KEY_APOSTROPHE) },
@@ -135,7 +136,7 @@ namespace Inferno {
 
 	int KeyCode(const char* name)
 	{
-		ASSERT(keys.find(name) != keys.end(), "Could not find KeyCode");
+		ASSERT(keys.find(name) != keys.end(), "keyCode could not find '{}'", name);
 		return keys.at(name);
 	}
 
