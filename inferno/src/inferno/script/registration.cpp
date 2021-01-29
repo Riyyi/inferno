@@ -89,6 +89,7 @@ namespace Inferno {
 		transformComponent["rotate"]    = &TransformComponent::rotate;
 		transformComponent["scale"]     = &TransformComponent::scale;
 		transformComponent["transform"] = &TransformComponent::transform;
+		transformComponent["__tostring"] = &string<TransformComponent>;
 
 		auto cameraType = state.new_enum("CameraType",
 		                                 "Orthographic", CameraType::Orthographic,
