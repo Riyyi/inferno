@@ -174,7 +174,7 @@ namespace Inferno {
 		m_vertexArray->setIndexBuffer(indexBuffer);
 		delete[] indices;
 
-		dbg(Log::Info) << "Renderer2D initialized";
+		info() << "Renderer2D initialized";
 	}
 
 	void Renderer2D::destroy()
@@ -331,7 +331,7 @@ namespace Inferno {
 		m_vertexArray->setIndexBuffer(indexBuffer);
 		delete[] indices;
 
-		dbg(Log::Info) << "RendererCharacter initialized";
+		info() << "RendererCharacter initialized";
 	}
 
 	void RendererCharacter::destroy()

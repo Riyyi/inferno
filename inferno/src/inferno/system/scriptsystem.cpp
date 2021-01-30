@@ -19,7 +19,7 @@ namespace Inferno {
 		ASSERT(!s_instance, "ScriptSystem already exists!");
 		s_instance = this;
 
-		dbg(Log::Info) << "ScriptSystem initialized";
+		info() << "ScriptSystem initialized";
 	}
 
 	void ScriptSystem::destroy()

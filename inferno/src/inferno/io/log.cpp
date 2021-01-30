@@ -252,66 +252,66 @@ namespace Inferno {
 		return DebugLogStream(newline);
 	}
 
-	DebugLogStream dbg(Log type)
+	DebugLogStream info()
 	{
-		return DebugLogStream(type);
+		return DebugLogStream(Log::Info);
 	}
 
-	DebugLogStream dbg(Log type, bool newline)
+	DebugLogStream warn()
 	{
-		return DebugLogStream(type, newline);
+		return DebugLogStream(Log::Warn);
+	}
+
+	DebugLogStream danger()
+	{
+		return DebugLogStream(Log::Danger);
+	}
+
+	DebugLogStream success()
+	{
+		return DebugLogStream(Log::Success);
+	}
+
+	DebugLogStream comment()
+	{
+		return DebugLogStream(Log::Comment);
+	}
+
+	DebugLogStream info(bool newline)
+	{
+		return DebugLogStream(Log::Info, newline);
+	}
+
+	DebugLogStream warn(bool newline)
+	{
+		return DebugLogStream(Log::Warn, newline);
+	}
+
+	DebugLogStream danger(bool newline)
+	{
+		return DebugLogStream(Log::Danger, newline);
+	}
+
+	DebugLogStream success(bool newline)
+	{
+		return DebugLogStream(Log::Success, newline);
+	}
+
+	DebugLogStream comment(bool newline)
+	{
+		return DebugLogStream(Log::Comment, newline);
 	}
 
 // -----------------------------------------
 
-	void dbgln(Log type, bool newline) {
-		(void)type;
-		dbg(newline);
-	}
-
-	void dbgln(const char* format)
+	void dbgln(Log type, bool newline)
 	{
-		dbg() << format;
-	}
-
-	void dbgln(Log type, const char* format)
-	{
-		dbg(type) << format;
+		(void)type, DebugLogStream(newline);
 	}
 
 	void dbgln(Log type, bool newline, const char* format)
 	{
-		dbg(type, newline) << format;
-	}
-
-	void dbgln(std::string format)
-	{
-		dbg() << format;
-	}
-
-	void dbgln(Log type, std::string format)
-	{
-		dbg(type) << format;
-	}
-
-	void dbgln(Log type, bool newline, std::string format)
-	{
-		dbg(type, newline) << format;
-	}
-
-	void dbgln(std::string_view format)
-	{
-		dbg() << format;
-	}
-
-	void dbgln(Log type, std::string_view format)
-	{
-		dbg(type) << format;
-	}
-
-	void dbgln(Log type, bool newline, std::string_view format)
-	{
-		dbg(type, newline) << format;
+		DebugLogStream(type, newline) << format;
 	}
 
 // -----------------------------------------

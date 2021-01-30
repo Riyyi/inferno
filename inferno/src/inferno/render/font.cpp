@@ -95,7 +95,7 @@ namespace Inferno {
 		ASSERT(!s_instance, "FontManager already exists!");
 		s_instance = this;
 
-		dbg(Log::Info) << "FontManager initialized";
+		info() << "FontManager initialized";
 	}
 
 	void FontManager::destroy()

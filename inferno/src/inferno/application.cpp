@@ -122,7 +122,7 @@ namespace Inferno {
 		// borderwidth
 		// borderedge
 		// bordercolor
-		// offse
+		// offset
 
 		while (!m_window->shouldClose()) {
 
@@ -172,7 +172,7 @@ namespace Inferno {
 		// Suppress unused warning
 		(void)e;
 
-		dbg(Log::Info) << "WindowCloseEvent triggered";
+		info() << "WindowCloseEvent triggered";
 
 		m_window->setShouldClose(true);
 
@@ -184,7 +184,7 @@ namespace Inferno {
 		// Suppress unused warning
 		(void)e;
 
-		dbgln(Log::Info, "WindowResizeEvent {}x{} triggered", e.getWidth(), e.getHeight());
+		infoln("WindowResizeEvent {}x{} triggered", e.getWidth(), e.getHeight());
 
 		m_window->getContext()->setViewport(0, 0, e.getWidth(), e.getHeight());
 
@@ -196,7 +196,7 @@ namespace Inferno {
 		// Suppress unused warning
 		(void)e;
 
-		dbgln(Log::Info, "KeyPressEvent {} ({}) triggered",
+		infoln("KeyPressEvent {} ({}) triggered",
 		      Input::getKeyName(e.getKey()),
 		      e.getKey());
 

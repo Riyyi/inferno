@@ -181,7 +181,7 @@ namespace Inferno {
 				? glGetShaderInfoLog(check, maxLength, nullptr, &infoLog[0])
 				: glGetProgramInfoLog(check, maxLength, nullptr, &infoLog[0]);
 
-			dbg(Log::Warn) << "Shader " << infoLog.data();
+			warn() << "Shader " << infoLog.data();
 		}
 
 		ASSERT(success == GL_TRUE, "Shader program creation failed!");
@@ -198,7 +198,7 @@ namespace Inferno {
 		ASSERT(!s_instance, "ShaderManager already exists!");
 		s_instance = this;
 
-		dbg(Log::Info) << "ShaderManager initialized";
+		info() << "ShaderManager initialized";
 	}
 
 	void ShaderManager::destroy()

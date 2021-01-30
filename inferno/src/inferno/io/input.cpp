@@ -20,7 +20,7 @@ namespace Inferno {
 		m_xPosLast = Application::the().getWindow().getWidth() / 2.0f;
 		m_yPosLast = Application::the().getWindow().getHeight() / 2.0f;
 
-		dbg(Log::Info) << "Input initialized";
+		info() << "Input initialized";
 	}
 
 	void Input::update()

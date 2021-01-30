@@ -13,7 +13,7 @@ namespace Inferno {
 	{
 		Settings::update();
 
-		dbg(Log::Info) << "Settings initialized";
+		info() << "Settings initialized";
 	}
 
 	void Settings::update()
@@ -29,7 +29,7 @@ namespace Inferno {
 			m_properties.window.vsync       = json["window"]["vsync"].get<bool>();
 		}
 		catch (...) {
-			dbg(Log::Warn) << "Settings syntax error: using default values";
+			warn() << "Settings syntax error: using default values";
 		}
 	}
 
@@ -54,7 +54,7 @@ namespace Inferno {
 		json["window"]["vsync"]       = m_properties.window.vsync;
 
 		File::ioWrite(json, m_path);
-		dbg(Log::Info) << "Settings saved";
+		info() << "Settings saved";
 
 		return true;
 	}

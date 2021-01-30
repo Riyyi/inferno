@@ -108,7 +108,7 @@ namespace Inferno {
 		ASSERT(!s_instance, "TextureManager already exists!");
 		s_instance = this;
 
-		dbg(Log::Info) << "TextureManager initialized";
+		info() << "TextureManager initialized";
 	}
 
 	void TextureManager::destroy()

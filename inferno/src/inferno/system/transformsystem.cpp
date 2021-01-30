@@ -14,7 +14,7 @@ namespace Inferno {
 		ASSERT(!s_instance, "TransformSystem already exists!");
 		s_instance = this;
 
-		dbg(Log::Info) << "TransformSystem initialized";
+		info() << "TransformSystem initialized";
 	}
 
 	void TransformSystem::update()

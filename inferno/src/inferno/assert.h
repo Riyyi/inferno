@@ -41,17 +41,17 @@ namespace Inferno {
 
 	#ifdef NF_ENABLE_ASSERTS
 	template<typename... P>
-	void __assertion_failed(const char* message, const char* file, unsigned line, const char* function, const P&... parameters)
+	void __assertion_failed(const char* message, const char* file, unsigned line, const char* function, P&&... parameters)
 	{
-		dbg(Log::Danger, false) << "ASSERTION FAILED: " << message;
+		danger(false) << "ASSERTION FAILED: " << message;
 
 		if (sizeof...(P) > 0) {
-			dbg(Log::Danger, false) << ": ";
-			dbgln(Log::Danger, false, parameters...);
-			dbg(Log::Danger, false);
+			danger(false) << ": ";
+			dbgln(Log::Danger, false, std::forward<P>(parameters)...);
+			danger(false);
 		}
 
-		dbg(Log::Danger) << "\n\t" << file << ":" << line << ": " << function;
+		danger() << "\n\t" << file << ":" << line << ": " << function;
 
 		raise(ABORT_SIGNAL);
 	}

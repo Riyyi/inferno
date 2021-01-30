@@ -16,7 +16,7 @@ namespace Inferno {
 		ASSERT(!s_instance, "RenderSystem already exists!");
 		s_instance = this;
 
-		dbg(Log::Info) << "RenderSystem initialized";
+		info() << "RenderSystem initialized";
 	}
 
 	void RenderSystem::render()

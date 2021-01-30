@@ -17,7 +17,7 @@ namespace Inferno {
 		ASSERT(!s_instance, "CameraSystem already exists!");
 		s_instance = this;
 
-		dbg(Log::Info) << "CameraSystem initialized";
+		info() << "CameraSystem initialized";
 	}
 
 	void CameraSystem::update()

@@ -67,7 +67,7 @@ namespace Inferno {
 		quad3Transform.translate.x = 2.2f;
 		addComponent<SpriteComponent>(quad3, glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture2);
 
-		dbg(Log::Info) << "Scene initialized";
+		info() << "Scene initialized";
 	}
 
 	void Scene::update(float deltaTime)
