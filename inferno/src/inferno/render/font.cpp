@@ -69,6 +69,7 @@ namespace Inferno {
 			}
 		}
 
+		ASSERT(elements.empty(), "Font file did not find any columns");
 		return elements;
 	}
 
@@ -76,13 +77,14 @@ namespace Inferno {
 	{
 		size_t find = 0;
 		// Loop over columns
-		for (auto it = columns.begin(); it != columns.end(); it++) {
-			find = it->find(key + "=");
+		for (auto& column : columns) {
+			find = column.find(key + "=");
 			if (find != std::string::npos) {
-				return it->substr(key.length() + 1);
+				return column.substr(key.length() + 1);
 			}
 		}
 
+		ASSERT(false, "Font file did not contain key '{}'", key);
 		return "";
 	}
 
