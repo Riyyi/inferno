@@ -52,10 +52,6 @@ namespace Inferno {
 
 	DebugLogStream::~DebugLogStream()
 	{
-		if (empty()) {
-			return;
-		}
-
 		if (m_type != Log::None) {
 			const char* clear = "\033[0m";
 			write(clear, strlen(clear));

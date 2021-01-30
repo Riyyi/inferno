@@ -152,47 +152,47 @@ namespace Inferno {
 
 // -----------------------------------------
 
-	template<typename... P> void dbgln(const char* format, P&&... parameters) { return dbgln(Log::None, true, format, std::forward<P>(parameters)...); }
-	template<typename... P> void infoln(const char* format, P&&... parameters) { return dbgln(Log::Info, true, format, std::forward<P>(parameters)...); }
-	template<typename... P> void warnln(const char* format, P&&... parameters) { return dbgln(Log::Warn, true, format, std::forward<P>(parameters)...); }
-	template<typename... P> void dangerln(const char* format, P&&... parameters) { return dbgln(Log::Danger, true, format, std::forward<P>(parameters)...); }
-	template<typename... P> void successln(const char* format, P&&... parameters) { return dbgln(Log::Success, true, format, std::forward<P>(parameters)...); }
-	template<typename... P> void commentln(const char* format, P&&... parameters) { return dbgln(Log::Comment, true, format, std::forward<P>(parameters)...); }
+	template<typename... P> void dbgln(const char* format, P&&... parameters) { dbgln(Log::None, true, format, std::forward<P>(parameters)...); }
+	template<typename... P> void infoln(const char* format, P&&... parameters) { dbgln(Log::Info, true, format, std::forward<P>(parameters)...); }
+	template<typename... P> void warnln(const char* format, P&&... parameters) { dbgln(Log::Warn, true, format, std::forward<P>(parameters)...); }
+	template<typename... P> void dangerln(const char* format, P&&... parameters) { dbgln(Log::Danger, true, format, std::forward<P>(parameters)...); }
+	template<typename... P> void successln(const char* format, P&&... parameters) { dbgln(Log::Success, true, format, std::forward<P>(parameters)...); }
+	template<typename... P> void commentln(const char* format, P&&... parameters) { dbgln(Log::Comment, true, format, std::forward<P>(parameters)...); }
 
-	template<typename... P> void dbgln(const std::string& format, P&&... parameters) { return dbgln(Log::None, true, format.c_str(), std::forward<P>(parameters)...); }
-	template<typename... P> void infoln(const std::string& format, P&&... parameters) { return dbgln(Log::Info, true, format.c_str(), std::forward<P>(parameters)...); }
-	template<typename... P> void warnln(const std::string& format, P&&... parameters) { return dbgln(Log::Warn, true, format.c_str(), std::forward<P>(parameters)...); }
-	template<typename... P> void dangerln(const std::string& format, P&&... parameters) { return dbgln(Log::Danger, true, format.c_str(), std::forward<P>(parameters)...); }
-	template<typename... P> void successln(const std::string& format, P&&... parameters) { return dbgln(Log::Success, true, format.c_str(), std::forward<P>(parameters)...); }
-	template<typename... P> void commentln(const std::string& format, P&&... parameters) { return dbgln(Log::Comment, true, format.c_str(), std::forward<P>(parameters)...); }
+	template<typename... P> void dbgln(const std::string& format, P&&... parameters) { dbgln(Log::None, true, format.c_str(), std::forward<P>(parameters)...); }
+	template<typename... P> void infoln(const std::string& format, P&&... parameters) { dbgln(Log::Info, true, format.c_str(), std::forward<P>(parameters)...); }
+	template<typename... P> void warnln(const std::string& format, P&&... parameters) { dbgln(Log::Warn, true, format.c_str(), std::forward<P>(parameters)...); }
+	template<typename... P> void dangerln(const std::string& format, P&&... parameters) { dbgln(Log::Danger, true, format.c_str(), std::forward<P>(parameters)...); }
+	template<typename... P> void successln(const std::string& format, P&&... parameters) { dbgln(Log::Success, true, format.c_str(), std::forward<P>(parameters)...); }
+	template<typename... P> void commentln(const std::string& format, P&&... parameters) { dbgln(Log::Comment, true, format.c_str(), std::forward<P>(parameters)...); }
 
-	template<typename... P> void dbgln(const std::string_view& format, P&&... parameters) { return dbgln(Log::None, true, format.data(), std::forward<P>(parameters)...); }
-	template<typename... P> void infoln(const std::string_view& format, P&&... parameters) { return dbgln(Log::Info, true, format.data(), std::forward<P>(parameters)...); }
-	template<typename... P> void warnln(const std::string_view& format, P&&... parameters) { return dbgln(Log::Warn, true, format.data(), std::forward<P>(parameters)...); }
-	template<typename... P> void dangerln(const std::string_view& format, P&&... parameters) { return dbgln(Log::Danger, true, format.data(), std::forward<P>(parameters)...); }
-	template<typename... P> void successln(const std::string_view& format, P&&... parameters) { return dbgln(Log::Success, true, format.data(), std::forward<P>(parameters)...); }
-	template<typename... P> void commentln(const std::string_view& format, P&&... parameters) { return dbgln(Log::Comment, true, format.data(), std::forward<P>(parameters)...); }
+	template<typename... P> void dbgln(const std::string_view& format, P&&... parameters) { dbgln(Log::None, true, format.data(), std::forward<P>(parameters)...); }
+	template<typename... P> void infoln(const std::string_view& format, P&&... parameters) { dbgln(Log::Info, true, format.data(), std::forward<P>(parameters)...); }
+	template<typename... P> void warnln(const std::string_view& format, P&&... parameters) { dbgln(Log::Warn, true, format.data(), std::forward<P>(parameters)...); }
+	template<typename... P> void dangerln(const std::string_view& format, P&&... parameters) { dbgln(Log::Danger, true, format.data(), std::forward<P>(parameters)...); }
+	template<typename... P> void successln(const std::string_view& format, P&&... parameters) { dbgln(Log::Success, true, format.data(), std::forward<P>(parameters)...); }
+	template<typename... P> void commentln(const std::string_view& format, P&&... parameters) { dbgln(Log::Comment, true, format.data(), std::forward<P>(parameters)...); }
 
-	template<typename... P> void dbgln(bool newline, const char* format, P&&... parameters) { return dbgln(Log::None, newline, format, std::forward<P>(parameters)...); }
-	template<typename... P> void infoln(bool newline, const char* format, P&&... parameters) { return dbgln(Log::Info, newline, format, std::forward<P>(parameters)...); }
-	template<typename... P> void warnln(bool newline, const char* format, P&&... parameters) { return dbgln(Log::Warn, newline, format, std::forward<P>(parameters)...); }
-	template<typename... P> void dangerln(bool newline, const char* format, P&&... parameters) { return dbgln(Log::Danger, newline, format, std::forward<P>(parameters)...); }
-	template<typename... P> void successln(bool newline, const char* format, P&&... parameters) { return dbgln(Log::Success, newline, format, std::forward<P>(parameters)...); }
-	template<typename... P> void commentln(bool newline, const char* format, P&&... parameters) { return dbgln(Log::Comment, newline, format, std::forward<P>(parameters)...); }
+	template<typename... P> void dbgln(bool newline, const char* format, P&&... parameters) { dbgln(Log::None, newline, format, std::forward<P>(parameters)...); }
+	template<typename... P> void infoln(bool newline, const char* format, P&&... parameters) { dbgln(Log::Info, newline, format, std::forward<P>(parameters)...); }
+	template<typename... P> void warnln(bool newline, const char* format, P&&... parameters) { dbgln(Log::Warn, newline, format, std::forward<P>(parameters)...); }
+	template<typename... P> void dangerln(bool newline, const char* format, P&&... parameters) { dbgln(Log::Danger, newline, format, std::forward<P>(parameters)...); }
+	template<typename... P> void successln(bool newline, const char* format, P&&... parameters) { dbgln(Log::Success, newline, format, std::forward<P>(parameters)...); }
+	template<typename... P> void commentln(bool newline, const char* format, P&&... parameters) { dbgln(Log::Comment, newline, format, std::forward<P>(parameters)...); }
 
-	template<typename... P> void dbgln(bool newline, const std::string& format, P&&... parameters) { return dbgln(Log::None, newline, format.c_str(), std::forward<P>(parameters)...); }
-	template<typename... P> void infoln(bool newline, const std::string& format, P&&... parameters) { return dbgln(Log::Info, newline, format.c_str(), std::forward<P>(parameters)...); }
-	template<typename... P> void warnln(bool newline, const std::string& format, P&&... parameters) { return dbgln(Log::Warn, newline, format.c_str(), std::forward<P>(parameters)...); }
-	template<typename... P> void dangerln(bool newline, const std::string& format, P&&... parameters) { return dbgln(Log::Danger, newline, format.c_str(), std::forward<P>(parameters)...); }
-	template<typename... P> void successln(bool newline, const std::string& format, P&&... parameters) { return dbgln(Log::Success, newline, format.c_str(), std::forward<P>(parameters)...); }
-	template<typename... P> void commentln(bool newline, const std::string& format, P&&... parameters) { return dbgln(Log::Comment, newline, format.c_str(), std::forward<P>(parameters)...); }
+	template<typename... P> void dbgln(bool newline, const std::string& format, P&&... parameters) { dbgln(Log::None, newline, format.c_str(), std::forward<P>(parameters)...); }
+	template<typename... P> void infoln(bool newline, const std::string& format, P&&... parameters) { dbgln(Log::Info, newline, format.c_str(), std::forward<P>(parameters)...); }
+	template<typename... P> void warnln(bool newline, const std::string& format, P&&... parameters) { dbgln(Log::Warn, newline, format.c_str(), std::forward<P>(parameters)...); }
+	template<typename... P> void dangerln(bool newline, const std::string& format, P&&... parameters) { dbgln(Log::Danger, newline, format.c_str(), std::forward<P>(parameters)...); }
+	template<typename... P> void successln(bool newline, const std::string& format, P&&... parameters) { dbgln(Log::Success, newline, format.c_str(), std::forward<P>(parameters)...); }
+	template<typename... P> void commentln(bool newline, const std::string& format, P&&... parameters) { dbgln(Log::Comment, newline, format.c_str(), std::forward<P>(parameters)...); }
 
-	template<typename... P> void dbgln(bool newline, const std::string_view& format, P&&... parameters) { return dbgln(Log::None, newline, format.data(), std::forward<P>(parameters)...); }
-	template<typename... P> void infoln(bool newline, const std::string_view& format, P&&... parameters) { return dbgln(Log::Info, newline, format.data(), std::forward<P>(parameters)...); }
-	template<typename... P> void warnln(bool newline, const std::string_view& format, P&&... parameters) { return dbgln(Log::Warn, newline, format.data(), std::forward<P>(parameters)...); }
-	template<typename... P> void dangerln(bool newline, const std::string_view& format, P&&... parameters) { return dbgln(Log::Danger, newline, format.data(), std::forward<P>(parameters)...); }
-	template<typename... P> void successln(bool newline, const std::string_view& format, P&&... parameters) { return dbgln(Log::Success, newline, format.data(), std::forward<P>(parameters)...); }
-	template<typename... P> void commentln(bool newline, const std::string_view& format, P&&... parameters) { return dbgln(Log::Comment, newline, format.data(), std::forward<P>(parameters)...); }
+	template<typename... P> void dbgln(bool newline, const std::string_view& format, P&&... parameters) { dbgln(Log::None, newline, format.data(), std::forward<P>(parameters)...); }
+	template<typename... P> void infoln(bool newline, const std::string_view& format, P&&... parameters) { dbgln(Log::Info, newline, format.data(), std::forward<P>(parameters)...); }
+	template<typename... P> void warnln(bool newline, const std::string_view& format, P&&... parameters) { dbgln(Log::Warn, newline, format.data(), std::forward<P>(parameters)...); }
+	template<typename... P> void dangerln(bool newline, const std::string_view& format, P&&... parameters) { dbgln(Log::Danger, newline, format.data(), std::forward<P>(parameters)...); }
+	template<typename... P> void successln(bool newline, const std::string_view& format, P&&... parameters) { dbgln(Log::Success, newline, format.data(), std::forward<P>(parameters)...); }
+	template<typename... P> void commentln(bool newline, const std::string_view& format, P&&... parameters) { dbgln(Log::Comment, newline, format.data(), std::forward<P>(parameters)...); }
 
 // -----------------------------------------
 
