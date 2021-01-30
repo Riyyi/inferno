@@ -69,7 +69,7 @@ namespace Inferno {
 			}
 		}
 
-		ASSERT(elements.empty(), "Font file did not find any columns");
+		ASSERT(!elements.empty(), "Font file did not find any columns");
 		return elements;
 	}
 
