@@ -46,6 +46,8 @@ namespace Inferno {
 		m_scene = std::make_shared<Scene>();
 		m_scene->initialize();
 
+		RenderCommand::initialize();
+
 		Renderer2D* renderer2D = new Renderer2D();
 		renderer2D->initialize();
 
@@ -65,6 +67,7 @@ namespace Inferno {
 		FontManager::the().destroy();
 		RendererCharacter::the().destroy();
 		Renderer2D::the().destroy();
+		RenderCommand::destroy();
 		m_scene->destroy();
 		TextureManager::the().destroy();
 		ShaderManager::the().destroy();
@@ -186,7 +189,7 @@ namespace Inferno {
 
 		infoln("WindowResizeEvent {}x{} triggered", e.getWidth(), e.getHeight());
 
-		m_window->getContext()->setViewport(0, 0, e.getWidth(), e.getHeight());
+		RenderCommand::setViewport(0, 0, e.getWidth(), e.getHeight());
 
 		return true;
 	}

@@ -28,20 +28,20 @@ namespace Inferno {
 // -----------------------------------------
 
 		void initialize();
+		void destroy();
 		void update();
 		void render();
-		void destroy();
 
 // -----------------------------------------
 
-		void setWindowMonitor();
-		bool shouldClose() const;
+		void setWindowMonitor() const;
+		void setVSync(bool enabled);
 		void setShouldClose(bool close) const;
 
+		bool shouldClose() const;
 		inline float getAspect() const { return static_cast<float>(m_properties.width) / static_cast<float>(m_properties.height); }
 		inline int getWidth() const { return m_properties.width; }
 		inline int getHeight() const { return m_properties.height; }
-		inline bool isVSync() const { return m_properties.vsync; }
 
 		inline GLFWwindow* getWindow() const { return m_window; }
 		inline const std::shared_ptr<Context>& getContext() const { return m_context; }

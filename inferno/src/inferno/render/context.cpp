@@ -12,14 +12,14 @@ namespace Inferno {
 	Context::Context(GLFWwindow* window) :
 		m_window(window)
 	{
+		ASSERT(window, "Context window is nullptr!");
 	}
-
-// -----------------------------------------
 
 	void Context::initialize()
 	{
+		Context::setCurrent();
+
 		// Initialize glad
-		glfwMakeContextCurrent(m_window);
 		int glad = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		ASSERT(glad, "Failed to initialize glad!");
 
@@ -29,34 +29,12 @@ namespace Inferno {
 		comment() << "  Renderer: " << glGetString(GL_RENDERER);
 		comment() << "  Version:  " << glGetString(GL_VERSION);
 
-#ifdef NF_ENABLE_ASSERTS
-		int versionMajor;
-		int versionMinor;
-		glGetIntegerv(GL_MAJOR_VERSION, &versionMajor);
-		glGetIntegerv(GL_MINOR_VERSION, &versionMinor);
-		ASSERT(versionMajor > 4 || (versionMajor == 4 && versionMinor >= 5),
-		       "Inferno requires at least OpenGL version 4.5!");
-#endif
-
-		Window& w = *(Window*)glfwGetWindowUserPointer(m_window);
-
-		// Disable vsync
-		if (!w.isVSync()) {
-			glfwSwapInterval(0);
-		}
-
-		// Set viewport
-		this->setViewport(0, 0, w.getWidth(), w.getHeight());
-
-		// Enable z-buffer / depth buffer
-		glEnable(GL_DEPTH_TEST);
-
-		// Enable transparency
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glEnable(GL_BLEND);
+		// Check OpenGL version
+		ASSERT(GLVersion.major > 4 || (GLVersion.major == 4 && GLVersion.minor >= 5),
+			"Inferno requires at least OpenGL version 4.5!");
 	}
 
-	void Context::update()
+	void Context::destroy()
 	{
 	}
 
@@ -65,14 +43,10 @@ namespace Inferno {
 		glfwSwapBuffers(m_window);
 	}
 
-	void Context::destroy()
+	void Context::setCurrent()
 	{
+		// Set current OpenGL context to this window
+		glfwMakeContextCurrent(m_window);
 	}
 
-// -----------------------------------------
-
-	void Context::setViewport(int x, int y, int width, int height) const
-	{
-		glViewport(x, y, width, height);
-	}
 }

@@ -5,10 +5,11 @@
 #include "inferno/event/applicationevent.h"
 #include "inferno/event/keyevent.h"
 #include "inferno/event/mouseevent.h"
-#include "inferno/keycodes.h"
 #include "inferno/io/input.h"
 #include "inferno/io/log.h"
+#include "inferno/keycodes.h"
 #include "inferno/render/context.h"
+#include "inferno/render/renderer.h"
 #include "inferno/settings.h"
 #include "inferno/window.h"
 
@@ -41,6 +42,7 @@ namespace Inferno {
 		std::string title      = m_properties.title;
 		unsigned int width     = m_properties.width;
 		unsigned int height    = m_properties.height;
+		bool vsync             = m_properties.vsync;
 
 		// Only init once
 		if (s_windowCount == 0) {
@@ -68,8 +70,9 @@ namespace Inferno {
 		m_context = std::make_shared<Context>(m_window);
 		m_context->initialize();
 
-		// Capture cursor and hide it
-		// glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		// Set vsync, viewport
+		setVSync(vsync);
+		RenderCommand::setViewport(0, 0, width, height);
 
 		// Error callback
 		glfwSetErrorCallback([](int error, const char* description) {
@@ -160,27 +163,10 @@ namespace Inferno {
 		});
 	}
 
-	void Window::update()
-	{
-		glfwPollEvents();
-
-		// Lock mouse in window
-		if (Input::isKeyPressed(keyCode("GLFW_KEY_LEFT_SUPER"))) {
-			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		}
-		else {
-			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		}
-
-	}
-
-	void Window::render()
-	{
-		m_context->render();
-	}
-
 	void Window::destroy()
 	{
+		m_context->destroy();
+
 		glfwDestroyWindow(m_window);
 		s_windowCount--;
 
@@ -189,9 +175,27 @@ namespace Inferno {
 		}
 	}
 
+	void Window::update()
+	{
+		glfwPollEvents();
+
+		// Capture cursor in window and hide it
+		if (!Input::isKeyPressed(keyCode("GLFW_KEY_LEFT_SUPER"))) {
+			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+		else {
+			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+	}
+
+	void Window::render()
+	{
+		m_context->render();
+	}
+
 // -----------------------------------------
 
-	void Window::setWindowMonitor()
+	void Window::setWindowMonitor() const
 	{
 		GLFWmonitor* monitor   = glfwGetPrimaryMonitor();
 		int xPos               = 0;
@@ -222,13 +226,19 @@ namespace Inferno {
 		glfwSetWindowMonitor(m_window, monitor, xPos, yPos, width, height, refresh);
 	}
 
-	bool Window::shouldClose() const {
-		return glfwWindowShouldClose(m_window);
+	void Window::setVSync(bool enabled)
+	{
+		enabled ? glfwSwapInterval(GL_TRUE) : glfwSwapInterval(GL_FALSE);
+		m_properties.vsync = enabled;
 	}
 
 	void Window::setShouldClose(bool close) const
 	{
 		glfwSetWindowShouldClose(m_window, close ? GL_TRUE : GL_FALSE);
+	}
+
+	bool Window::shouldClose() const {
+		return glfwWindowShouldClose(m_window);
 	}
 
 }

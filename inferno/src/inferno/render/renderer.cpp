@@ -11,6 +11,21 @@
 
 namespace Inferno {
 
+	void RenderCommand::initialize()
+	{
+		setDepthTest(true);
+
+		// Enable transparency
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+
+		info() << "RenderCommand initialized";
+	}
+
+	void RenderCommand::destroy()
+	{
+	}
+
 	void RenderCommand::clear()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -25,6 +40,24 @@ namespace Inferno {
 	{
 		uint32_t count = indexCount ? indexCount : vertexArray->getIndexBuffer()->getCount();
  		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
+	}
+
+	void RenderCommand::setViewport(int32_t x, int32_t y, uint32_t width, uint32_t height)
+	{
+		glViewport(x, y, width, height);
+	}
+
+	void RenderCommand::setDepthTest(bool enabled)
+	{
+		// Set z-buffer / depth buffer
+		enabled ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+	}
+
+	bool RenderCommand::depthTest()
+	{
+		unsigned char depthTest = GL_FALSE;
+		glGetBooleanv(GL_DEPTH_TEST, &depthTest);
+		return depthTest == GL_TRUE;
 	}
 
 	int32_t RenderCommand::textureUnitAmount()
@@ -397,7 +430,10 @@ namespace Inferno {
 		bind();
 
 		// Render
+		bool depthTest = RenderCommand::depthTest();
+		RenderCommand::setDepthTest(false);
 		RenderCommand::drawIndexed(m_vertexArray, m_quadIndex * indexPerQuad);
+		RenderCommand::setDepthTest(depthTest);
 
 		unbind();
 	}

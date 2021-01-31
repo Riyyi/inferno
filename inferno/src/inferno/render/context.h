@@ -8,18 +8,12 @@ namespace Inferno {
 	class Context {
 	public:
 		Context(GLFWwindow* window);
-		// virtual ~Context();
-
-// -----------------------------------------
 
 		void initialize();
-		void update();
-		void render();
 		void destroy();
+		void render();
 
-// -----------------------------------------
-
-		void setViewport(int x, int y, int width, int height) const;
+		void setCurrent();
 
 	private:
 		GLFWwindow* m_window;
