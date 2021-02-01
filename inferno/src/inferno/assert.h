@@ -43,7 +43,7 @@ namespace Inferno {
 
 	#ifdef NF_ENABLE_ASSERTS
 		template<typename... P>
-		[[noreturn]] inline void __assert_fail(const char* assertion, const char* file, unsigned int line, const char* function, P&&... parameters)
+		inline void __assert_fail(const char* assertion, const char* file, unsigned int line, const char* function, P&&... parameters)
 		{
 			dangerln(false, "ASSERTION `{}' FAILED.", assertion);
 
@@ -52,7 +52,7 @@ namespace Inferno {
 				dbgln(Log::Danger, false, std::forward<P>(parameters)...);
 			}
 
-			danger() << "\n\t" << file << ":" << line << ": " << function;
+			danger() << "\n  " << file << ":" << line << " in " << function;
 
 			raise(ABORT_SIGNAL);
 		}
