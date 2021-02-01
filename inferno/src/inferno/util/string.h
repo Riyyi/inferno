@@ -24,5 +24,4 @@ namespace std {
 
 } // namespace std
 
-
 #endif // UTIL_STRING_H
