@@ -1,4 +1,4 @@
-#include <bits/stdint-uintn.h>
+#include <limits> // std::numeric_limits
 #include <string> // std::getline
 
 #include "inferno/assert.h"
@@ -31,11 +31,14 @@ namespace Inferno {
 			const std::vector<std::string> data = findColumns(line);
 
 			unsigned char id = std::stoi(findValue("id", data));
+			unsigned long advance = std::stoul(findValue("xadvance", data));
+			ASSERT(advance <= std::numeric_limits<uint32_t>::max(), "Font file xadvance is not in uint32_t range on line \n'{}'", line);
+
 			Character character = {
 				{ std::stoi(findValue("x", data)), std::stoi(findValue("y", data)) },
 				{ std::stoi(findValue("width", data)), std::stoi(findValue("height", data)) },
 				{ std::stoi(findValue("xoffset", data)), std::stoi(findValue("yoffset", data)) },
-				std::stoi(findValue("xadvance", data))
+				static_cast<uint32_t>(advance)
 			};
 			m_characterList.emplace(id, std::make_shared<Character>(character));
 		}

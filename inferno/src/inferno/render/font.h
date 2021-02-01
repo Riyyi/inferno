@@ -1,7 +1,7 @@
 #ifndef FONT_H
 #define FONT_H
 
-#include <cstdint>       // int32_t
+#include <cstdint>       // uint32_t
 #include <memory>        // std::shared_ptr
 #include <string>        // std::string
 #include <unordered_map> // std::unordered_map
@@ -16,10 +16,10 @@ namespace Inferno {
 class Texture;
 
 	struct Character {
-		glm::ivec2 position;  // Position
-		glm::ivec2 size;      // Width/height
-		glm::ivec2 offset;    // Offset from baseline to left / top of glyph
-		int32_t advance;      // Amount to advance to next glyph
+		glm::ivec2 position; // Position
+		glm::ivec2 size;     // Width/height
+		glm::ivec2 offset;   // Offset from baseline to left / top of glyph
+		uint32_t advance;    // Amount to advance to next glyph
 	};
 
 // -----------------------------------------
