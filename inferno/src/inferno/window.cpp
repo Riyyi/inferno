@@ -1,5 +1,8 @@
+#include <csignal> // signal
+
 #include "GLFW/glfw3.h"
 
+#include "inferno/application.h"
 #include "inferno/assert.h"
 #include "inferno/core.h"
 #include "inferno/event/applicationevent.h"
@@ -73,6 +76,10 @@ namespace Inferno {
 		// Set vsync, viewport
 		setVSync(vsync);
 		RenderCommand::setViewport(0, 0, width, height);
+
+		// Signal callbacks
+		signal(SIGINT, Window::signalCallback);
+		signal(SIGTERM, Window::signalCallback);
 
 		// Error callback
 		glfwSetErrorCallback([](int error, const char* description) {
@@ -194,6 +201,16 @@ namespace Inferno {
 	}
 
 // -----------------------------------------
+
+	void Window::signalCallback(int signal)
+	{
+		Application::the().setStatus(signal);
+
+		if (signal == SIGINT || signal == SIGTERM) {
+			WindowCloseEvent e;
+			Application::the().getWindow().m_eventCallback(e);
+		}
+	}
 
 	void Window::setWindowMonitor() const
 	{

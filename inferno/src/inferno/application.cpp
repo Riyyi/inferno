@@ -75,7 +75,7 @@ namespace Inferno {
 		Settings::destroy();
 	}
 
-	void Application::run()
+	int Application::run()
 	{
 		dbg() << "Application startup";
 
@@ -159,6 +159,8 @@ namespace Inferno {
 		}
 
 		dbg() << "Application shutdown";
+
+		return m_status;
 	}
 
 	void Application::onEvent(Event& e)

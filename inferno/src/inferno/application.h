@@ -26,7 +26,7 @@ namespace Inferno {
 		Application();
 		virtual ~Application();
 
-		void run();
+		int run();
 
 		void onEvent(Event& e);
 		bool onWindowClose(WindowCloseEvent& e);
@@ -35,6 +35,8 @@ namespace Inferno {
 		bool onMousePosition(MousePositionEvent& e);
 
 // -----------------------------------------
+
+		inline void setStatus(int status) { m_status = status; }
 
 		inline Window& getWindow() const { return *m_window; }
 
@@ -49,6 +51,8 @@ namespace Inferno {
 		//
 		std::shared_ptr<Font> m_font;
 		//
+
+		int m_status = 0;
 
 		static Application* s_instance;
 	};

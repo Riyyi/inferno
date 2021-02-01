@@ -34,6 +34,8 @@ namespace Inferno {
 
 // -----------------------------------------
 
+		static void signalCallback(int signal);
+
 		void setWindowMonitor() const;
 		void setVSync(bool enabled);
 		void setShouldClose(bool close) const;
