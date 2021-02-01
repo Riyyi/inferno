@@ -1,5 +1,5 @@
-#ifndef ASSERTIONS_H
-#define ASSERTIONS_H
+#ifndef ASSERT_H
+#define ASSERT_H
 
 #include <csignal> // raise
 
@@ -24,14 +24,16 @@
 		#define FUNCTION_MACRO __PRETTY_FUNCTION__
 	#elif MSVC
 		#define FUNCTION_MACRO __FUNCSIG__
+	#else
+		#define FUNCTION_MACRO __func__
 	#endif
 
 	// ##__VA_ARGS__ is a non-standard GCC extension, C++20 introduces __VA_OPT__
 	// https://stackoverflow.com/questions/52891546/what-does-va-args-mean
-	#define ASSERT(cond, ...) static_cast<bool>(cond) ? (void)0 : __assertion_failed(#cond, __FILE__, __LINE__, FUNCTION_MACRO, ##__VA_ARGS__)
+	#define ASSERT(expr, ...) static_cast<bool>(expr) ? (void)0 : Inferno::__assert_fail(#expr, __FILE__, __LINE__, FUNCTION_MACRO, ##__VA_ARGS__)
 	#define ASSERT_NOT_REACHED() ASSERT(false)
 #else
-	#define ASSERT(cond, ...)
+	#define ASSERT(expr, ...)
 	#define ASSERT_NOT_REACHED() CRASH()
 #endif
 
@@ -40,23 +42,22 @@
 namespace Inferno {
 
 	#ifdef NF_ENABLE_ASSERTS
-	template<typename... P>
-	void __assertion_failed(const char* message, const char* file, unsigned line, const char* function, P&&... parameters)
-	{
-		danger(false) << "ASSERTION FAILED: " << message;
+		template<typename... P>
+		[[noreturn]] inline void __assert_fail(const char* assertion, const char* file, unsigned int line, const char* function, P&&... parameters)
+		{
+			dangerln(false, "ASSERTION `{}' FAILED.", assertion);
 
-		if (sizeof...(P) > 0) {
-			danger(false) << ": ";
-			dbgln(Log::Danger, false, std::forward<P>(parameters)...);
-			danger(false);
+			if (sizeof...(P) > 0) {
+				dbg(false) << " ";
+				dbgln(Log::Danger, false, std::forward<P>(parameters)...);
+			}
+
+			danger() << "\n\t" << file << ":" << line << ": " << function;
+
+			raise(ABORT_SIGNAL);
 		}
-
-		danger() << "\n\t" << file << ":" << line << ": " << function;
-
-		raise(ABORT_SIGNAL);
-	}
 	#endif
 
 }
 
-#endif // ASSERTIONS_H
+#endif // ASSERT_H
