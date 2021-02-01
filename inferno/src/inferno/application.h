@@ -1,7 +1,7 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include <memory> // std::unique_ptr
+#include <memory> // std::unique_ptr, std::shared_ptr
 
 namespace Inferno {
 
@@ -9,11 +9,7 @@ namespace Inferno {
 	class Font;
 	class KeyPressEvent;
 	class MousePositionEvent;
-	class OrthographicCamera;
-	class PerspectiveCamera;
 	class Scene;
-	class Texture;
-	class TextureManager;
 	class Window;
 	class WindowCloseEvent;
 	class WindowResizeEvent;
