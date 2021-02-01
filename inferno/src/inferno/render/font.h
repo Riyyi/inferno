@@ -7,7 +7,8 @@
 #include <unordered_map> // std::unordered_map
 #include <vector>        // std::vector
 
-#include "glm/ext/vector_int2.hpp" // glm::ivec2
+#include "glm/ext/vector_uint2.hpp" // glm::uvec2
+#include "glm/ext/vector_int2.hpp"  // glm::ivec2
 
 #include "inferno/io/log.h"
 
@@ -16,8 +17,8 @@ namespace Inferno {
 class Texture;
 
 	struct Character {
-		glm::ivec2 position; // Position
-		glm::ivec2 size;     // Width/height
+		glm::uvec2 position; // Position
+		glm::uvec2 size;     // Width/height
 		glm::ivec2 offset;   // Offset from baseline to left / top of glyph
 		uint32_t advance;    // Amount to advance to next glyph
 	};
@@ -29,6 +30,7 @@ class Texture;
 		Font(const std::string& name);
 		virtual ~Font() {}
 
+		inline uint32_t size() const { return m_size; }
 		inline const std::shared_ptr<Character>& get(unsigned char c) const { return m_characterList.at(c); }
 		inline const std::shared_ptr<Character>& operator[](unsigned char c) const { return m_characterList.at(c); }
 
@@ -41,9 +43,10 @@ class Texture;
 		const std::vector<std::string> findColumns(const std::string& line);
 		const std::string findValue(const std::string& key, const std::vector<std::string>& columns);
 
+		uint32_t m_size;
+		std::unordered_map<unsigned char, std::shared_ptr<Character>> m_characterList;
 		std::string m_name;
 		std::shared_ptr<Texture> m_texture;
-		std::unordered_map<unsigned char, std::shared_ptr<Character>> m_characterList;
 	};
 
 // -----------------------------------------

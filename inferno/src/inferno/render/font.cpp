@@ -5,6 +5,7 @@
 #include "inferno/io/file.h"
 #include "inferno/render/font.h"
 #include "inferno/render/texture.h"
+#include "inferno/util/string.h"
 
 namespace Inferno {
 
@@ -24,21 +25,28 @@ namespace Inferno {
 		std::istringstream iss(font);
 		for (std::string line; std::getline(iss, line);) {
 
-			if (findAction(line).compare("char") != 0) {
+			if (findAction(line).compare("info") != 0 &&
+			    findAction(line).compare("char") != 0) {
 				continue;
 			}
 
-			const std::vector<std::string> data = findColumns(line);
+			const std::vector<std::string> columns = findColumns(line);
 
-			unsigned char id = std::stoi(findValue("id", data));
-			unsigned long advance = std::stoul(findValue("xadvance", data));
-			ASSERT(advance <= std::numeric_limits<uint32_t>::max(), "Font file xadvance is not in uint32_t range on line \n'{}'", line);
+			// Info
 
+			if (findAction(line).compare("info") == 0) {
+				m_size = std::stou(findValue("size", columns));
+				continue;
+			}
+
+			// Character
+
+			unsigned char id = std::stoi(findValue("id", columns));
 			Character character = {
-				{ std::stoi(findValue("x", data)), std::stoi(findValue("y", data)) },
-				{ std::stoi(findValue("width", data)), std::stoi(findValue("height", data)) },
-				{ std::stoi(findValue("xoffset", data)), std::stoi(findValue("yoffset", data)) },
-				static_cast<uint32_t>(advance)
+				{ std::stou(findValue("x", columns)), std::stou(findValue("y", columns)) },
+				{ std::stou(findValue("width", columns)), std::stou(findValue("height", columns)) },
+				{ std::stoi(findValue("xoffset", columns)), std::stoi(findValue("yoffset", columns)) },
+				std::stou(findValue("xadvance", columns))
 			};
 			m_characterList.emplace(id, std::make_shared<Character>(character));
 		}
