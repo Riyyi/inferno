@@ -1,27 +1,22 @@
-#ifndef UTIL_STRING_H
-#define UTIL_STRING_H
+#ifndef STRING_UTIL_H
+#define STRING_UTIL_H
 
-#include <limits> // std::numeric_limits
-#include <string> // std::string, std::stoul
+#include <iomanip> // std::setfill, std::setw
+#include <sstream> // std::stringstream
 
-#include "inferno/assert.h"
+namespace Inferno {
 
-namespace std {
-
-	// Can't believe this is not in the standard library
-
-	inline uint32_t stou(const std::string& string)
+	template<typename T>
+	std::string intToHex(T i)
 	{
-		unsigned long size = std::stoul(string);
-		ASSERT(size <= std::numeric_limits<uint32_t>::max(), "String util not in uint32_t range '{}'", string);
-		return static_cast<uint32_t>(size);
+		std::stringstream stream;
+		stream << "0x"
+		       << std::setfill('0') << std::setw(sizeof(T) * 2)
+		       << std::hex << i;
+
+		return stream.str();
 	}
 
-	inline uint32_t stou(const char* string)
-	{
-		return stou(std::string(string));
-	}
+} // namespace Inferno
 
-} // namespace std
-
-#endif // UTIL_STRING_H
+#endif // STRING_UTIL_H

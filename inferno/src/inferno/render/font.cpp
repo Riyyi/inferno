@@ -1,11 +1,11 @@
 #include <limits> // std::numeric_limits
-#include <string> // std::getline
+#include <string> // std::getline, std::stoi
 
 #include "inferno/assert.h"
 #include "inferno/io/file.h"
 #include "inferno/render/font.h"
 #include "inferno/render/texture.h"
-#include "inferno/util/string.h"
+#include "inferno/util/integer.h"
 
 namespace Inferno {
 
