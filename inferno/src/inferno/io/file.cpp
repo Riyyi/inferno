@@ -1,5 +1,5 @@
-#include <iostream> // std::ios
-#include <memory>   // std::make_unique
+#include <ios>    // std::ios
+#include <memory> // std::make_unique
 
 #include "inferno/assert.h"
 #include "inferno/io/file.h"
