@@ -14,6 +14,7 @@ namespace Inferno {
 	class File {
 	public:
 		static std::string read(const std::string& path);
+		static int32_t length(const std::string& path, std::ifstream& ifstream);
 
 		template<typename T>
 		static void ioRead(T& t, const std::string& path)
