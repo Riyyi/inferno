@@ -29,14 +29,14 @@ namespace Inferno {
 		}
 
 		// Allocate memory filled with zeros
-		auto buffer = std::make_unique<char[]>(length + 1);
+		auto buffer = std::make_unique<char[]>(length);
 
 		// Fill buffer with file contents
 		file.read(buffer.get(), length);
 		file.close();
 
 		// Create string from the buffer and return
-		return std::string(buffer.get(), length + 1);
+		return std::string(buffer.get(), length);
 	}
 
 }
