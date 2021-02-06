@@ -16,6 +16,12 @@ namespace Inferno {
 
 		// https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#objects
 
+		// https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#scene
+		struct Scene {
+			std::vector<uint32_t> nodes;
+			std::string name;
+		};
+
 		// https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#reference-asset
 		struct Asset {
 			std::string copyright;
@@ -73,6 +79,7 @@ namespace Inferno {
 		struct Model {
 			Asset asset;
 
+			std::vector<Scene> scenes;
 			std::vector<Mesh> meshes;
 			std::vector<Accessor> accessors;
 			std::vector<BufferView> bufferViews;
@@ -91,6 +98,7 @@ namespace Inferno {
 		inline const glTF::Model& model() const { return m_model; }
 
 	private:
+		static void parseScene(glTF::Scene* scene, const std::string& key, const json& object);
 		static void parsePrimitive(glTF::Primitive* primitive, const std::string& key, const json& object);
 		static void parseMesh(glTF::Mesh* mesh, const std::string& key, const json& object);
 		static void parseAccessor(glTF::Accessor* accessor, const std::string& key, const json& object);
