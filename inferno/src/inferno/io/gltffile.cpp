@@ -63,6 +63,7 @@ namespace Inferno {
 
 		// Read JSON data
 		auto jsonChunk = readChunk(glb, header, 0x4e4f534a);
+		ASSERT(jsonChunk.second >= json, "GlTF file invalid JSON content length '{}'", jsonChunk.second);
 
 		// Read binary data
 		auto binaryChunk = readChunk(glb, header + size * 2 + jsonChunk.second, 0x004e4942);
