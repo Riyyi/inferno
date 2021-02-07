@@ -35,12 +35,12 @@ namespace Inferno {
 			uint32_t camera;
 			std::vector<uint32_t> children;
 			uint32_t skin;
-			std::array<double, 16> matrix { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }; // Identity matrix
+			std::array<float, 16> matrix { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }; // Identity matrix
 			uint32_t mesh;
-			std::array<double, 4> rotation { 0, 0, 0, 1 };
-			std::array<double, 3> scale { 1, 1, 1 };
-			std::array<double, 3> translation { 0, 0, 0 };
-			std::vector<double> weights;
+			std::array<float, 4> rotation { 0, 0, 0, 1 };
+			std::array<float, 3> scale { 1, 1, 1 };
+			std::array<float, 3> translation { 0, 0, 0 };
+			std::vector<float> weights;
 			std::string name;
 		};
 
@@ -55,7 +55,7 @@ namespace Inferno {
 		// https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#meshes
 		struct Mesh {
 			std::vector<Primitive> primitives; // Required
-			std::vector<double> weights;
+			std::vector<float> weights;
 			std::string name;
 		};
 
@@ -67,8 +67,8 @@ namespace Inferno {
 			bool normalized { false };
 			uint32_t count;            // Required
 			std::string type;          // Required
-			std::vector<double> max;
-			std::vector<double> min;
+			std::vector<float> max;
+			std::vector<float> min;
 			std::string name;
 		};
 

@@ -143,7 +143,7 @@ namespace Inferno {
 
 	void Gltf::parseScene(glTF::Scene* scene, const std::string& key, const json& object)
 	{
-		auto nodes = Json::parseDoubleArrayProperty(object, "nodes", false);
+		auto nodes = Json::parseFloatArrayProperty(object, "nodes", false);
 		ASSERT(!nodes || nodes.value().size() > 0, "Gltf scene '{}' empty 'nodes' property", key);
 
 		auto name = Json::parseStringProperty(object, "name", false);
@@ -160,21 +160,21 @@ namespace Inferno {
 
 		auto skin = Json::parseUnsignedProperty(object, "skin", false);
 
-		auto matrix = Json::parseDoubleArrayProperty(object, "matrix", false);
+		auto matrix = Json::parseFloatArrayProperty(object, "matrix", false);
 		ASSERT(!matrix || matrix.value().size() == 16, "Gltf node '{}' property 'matrix' invalid size", key);
 
 		auto mesh = Json::parseUnsignedProperty(object, "mesh", false);
 
-		auto rotation = Json::parseDoubleArrayProperty(object, "rotation", false);
+		auto rotation = Json::parseFloatArrayProperty(object, "rotation", false);
 		ASSERT(!rotation || rotation.value().size() == 4, "Gltf node '{}' property 'rotation' invalid size", key);
 
-		auto scale = Json::parseDoubleArrayProperty(object, "scale", false);
+		auto scale = Json::parseFloatArrayProperty(object, "scale", false);
 		ASSERT(!scale || scale.value().size() == 3, "Gltf node '{}' property 'scale' invalid size", key);
 
-		auto translation = Json::parseDoubleArrayProperty(object, "translation", false);
+		auto translation = Json::parseFloatArrayProperty(object, "translation", false);
 		ASSERT(!translation || translation.value().size() == 3, "Gltf node '{}' property 'translation' invalid size", key);
 
-		auto weights = Json::parseDoubleArrayProperty(object, "weights", false);
+		auto weights = Json::parseFloatArrayProperty(object, "weights", false);
 		ASSERT(!weights || weights.value().size() > 0, "Gltf node '{}' empty property 'weights'", key);
 
 		auto name = Json::parseStringProperty(object, "name", false);
@@ -239,7 +239,7 @@ namespace Inferno {
 			mesh->primitives.emplace_back(std::move(primitive));
 		}
 
-		auto weights = Json::parseDoubleArrayProperty(object, "weights", false);
+		auto weights = Json::parseFloatArrayProperty(object, "weights", false);
 		ASSERT(!weights || weights.value().size() > 0, "Gltf mesh '{}' empty property 'weights'", key);
 
 		auto name = Json::parseStringProperty(object, "name", false);
@@ -265,10 +265,10 @@ namespace Inferno {
 		auto type = Json::parseStringProperty(object, "type", true);
 		ASSERT(type, "Gltf accessor '{}' missing required property 'type'", key);
 
-		auto max = Json::parseDoubleArrayProperty(object, "max", false);
+		auto max = Json::parseFloatArrayProperty(object, "max", false);
 		ASSERT(!max || max.value().size() > 0, "Gltf accessor '{}' empty property 'max'", key);
 
-		auto min = Json::parseDoubleArrayProperty(object, "min", false);
+		auto min = Json::parseFloatArrayProperty(object, "min", false);
 		ASSERT(!min || min.value().size() > 0, "Gltf accessor '{}' empty property 'min'", key);
 
 		auto name = Json::parseStringProperty(object, "name", false);

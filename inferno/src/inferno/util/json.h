@@ -127,7 +127,8 @@ namespace Inferno {
 			}
 
 			// Return vector if it has any items, uninitialized optional otherwise
-			return values.size() > 0 ? std::optional { values } : std::nullopt;
+			if (values.size() > 0) return values;
+			return {};
 		}
 
 		template<typename T>
@@ -165,7 +166,8 @@ namespace Inferno {
 			}
 
 			// Return map if it has any items, uninitialized optional otherwise
-			return values.size() > 0 ? std::optional { values } : std::nullopt;
+			if (values.size() > 0) return values;
+			return {};
 		}
 
 		static std::optional<bool> parseBoolProperty(const json& json, const char* property, bool required)
@@ -173,19 +175,25 @@ namespace Inferno {
 			return parseProperty<bool>(json, property, required, json::value_t::boolean);
 		}
 
-		static std::optional<double> parseDoubleProperty(const json& json, const char* property, bool required)
+		static std::optional<float> parseFloatProperty(const json& json, const char* property, bool required)
 		{
-			return parseProperty<double>(json, property, required, std::vector { json::value_t::number_integer, json::value_t::number_unsigned, json::value_t::number_float });
+			auto result = parseProperty<double>(json, property, required, std::vector { json::value_t::number_integer, json::value_t::number_unsigned, json::value_t::number_float });
+			if (result) return static_cast<float>(result.value());
+			return {};
 		}
 
 		static std::optional<int32_t> parseIntegerProperty(const json& json, const char* property, bool required)
 		{
-			return parseProperty<int32_t>(json, property, required, json::value_t::number_integer);
+			auto result = parseProperty<int64_t>(json, property, required, json::value_t::number_integer);
+			if (result) return static_cast<int32_t>(result.value());
+			return {};
 		}
 
 		static std::optional<uint32_t> parseUnsignedProperty(const json& json, const char* property, bool required)
 		{
-			return parseProperty<uint32_t>(json, property, required, json::value_t::number_unsigned);
+			auto result = parseProperty<uint64_t>(json, property, required, json::value_t::number_unsigned);
+			if (result) return static_cast<uint32_t>(result.value());
+			return {};
 		}
 
 		static std::optional<std::string> parseStringProperty(const json& json, const char* property, bool required)
@@ -193,34 +201,46 @@ namespace Inferno {
 			return parseProperty<std::string>(json, property, required, json::value_t::string);
 		}
 
-		static std::optional<std::vector<double>> parseDoubleArrayProperty(const json& json, const char* property, bool required)
+		static std::optional<std::vector<float>> parseFloatArrayProperty(const json& json, const char* property, bool required)
 		{
-			return parseArrayProperty<double>(json, property, required, std::vector { json::value_t::number_integer, json::value_t::number_unsigned, json::value_t::number_float });
+			auto result = parseArrayProperty<double>(json, property, required, std::vector { json::value_t::number_integer, json::value_t::number_unsigned, json::value_t::number_float });
+			if (result) return std::vector<float>(result.value().begin(), result.value().end());
+			return {};
 		}
 
 		static std::optional<std::vector<int32_t>> parseIntegerArrayProperty(const json& json, const char* property, bool required)
 		{
-			return parseArrayProperty<int32_t>(json, property, required, json::value_t::number_integer);
+			auto result = parseArrayProperty<int64_t>(json, property, required, json::value_t::number_integer);
+			if (result) return std::vector<int32_t>(result.value().begin(), result.value().end());
+			return {};
 		}
 
 		static std::optional<std::vector<uint32_t>> parseUnsignedArrayProperty(const json& json, const char* property, bool required)
 		{
-			return parseArrayProperty<uint32_t>(json, property, required, json::value_t::number_unsigned);
+			auto result = parseArrayProperty<uint64_t>(json, property, required, json::value_t::number_unsigned);
+			if (result) return std::vector<uint32_t>(result.value().begin(), result.value().end());
+			return {};
 		}
 
-		static std::optional<std::map<std::string, double>> parseDoubleObjectProperty(const json& json, const char* property, bool required)
+		static std::optional<std::map<std::string, float>> parseFloatObjectProperty(const json& json, const char* property, bool required)
 		{
-			return parseObjectProperty<double>(json, property, required, std::vector { json::value_t::number_integer, json::value_t::number_unsigned, json::value_t::number_float });
+			auto result = parseObjectProperty<double>(json, property, required, std::vector { json::value_t::number_integer, json::value_t::number_unsigned, json::value_t::number_float });
+			if (result) return std::map<std::string, float>(result.value().begin(), result.value().end());
+			return {};
 		}
 
 		static std::optional<std::map<std::string, int32_t>> parseIntegerObjectProperty(const json& json, const char* property, bool required)
 		{
-			return parseObjectProperty<int32_t>(json, property, required, json::value_t::number_integer);
+			auto result = parseObjectProperty<int64_t>(json, property, required, json::value_t::number_integer);
+			if (result) return std::map<std::string, int32_t>(result.value().begin(), result.value().end());
+			return {};
 		}
 
 		static std::optional<std::map<std::string, uint32_t>> parseUnsignedObjectProperty(const json& json, const char* property, bool required)
 		{
-			return parseObjectProperty<uint32_t>(json, property, required, json::value_t::number_unsigned);
+			auto result = parseObjectProperty<uint64_t>(json, property, required, json::value_t::number_unsigned);
+			if (result) return std::map<std::string, uint32_t>(result.value().begin(), result.value().end());
+			return {};
 		}
 
 	};
