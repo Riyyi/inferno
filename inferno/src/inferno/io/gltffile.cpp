@@ -28,7 +28,7 @@ namespace Inferno {
 	{
 		// Create input stream object and open file
 		std::ifstream glb(path, std::ios::in | std::ios::binary);
-		ASSERT(glb.is_open(), "GlTFFile could not open '{}'", path);
+		ASSERT(glb.is_open(), "GltfFile could not open '{}'", path);
 
 		constexpr uint32_t size = 4;
 		constexpr uint32_t header = 12;
@@ -36,7 +36,7 @@ namespace Inferno {
 
 		// Get the actual length of the file
 		uint32_t length = static_cast<uint32_t>(File::length(path, glb));
-		ASSERT(length > header + json, "GlTFFile too small to be valid '{}'", path);
+		ASSERT(length > header + json, "GltfFile too small to be valid '{}'", path);
 
 		// Read header
 
@@ -53,17 +53,17 @@ namespace Inferno {
 		// Validate header
 
 		uint32_t magicInt = *reinterpret_cast<uint32_t*>(magic);
-		ASSERT(magicInt == 0x46546c67, "GlTF invalid header magic '{}'", magic);
+		ASSERT(magicInt == 0x46546c67, "Gltf invalid header magic '{}'", magic);
 
 		uint32_t versionInt = *reinterpret_cast<uint32_t*>(version);
-		ASSERT(versionInt == 2, "GlTF unsupported version '{}'", versionInt);
+		ASSERT(versionInt == 2, "Gltf unsupported version '{}'", versionInt);
 
 		uint32_t fileLengthInt = *reinterpret_cast<uint32_t*>(fileLength);
-		ASSERT(fileLengthInt == length, "GlTF file and reported byte size mismatch '{}' '{}'", length, fileLengthInt);
+		ASSERT(fileLengthInt == length, "Gltf file and reported byte size mismatch '{}' '{}'", length, fileLengthInt);
 
 		// Read JSON data
 		auto jsonChunk = readChunk(glb, header, 0x4e4f534a);
-		ASSERT(jsonChunk.second >= json, "GlTF file invalid JSON content length '{}'", jsonChunk.second);
+		ASSERT(jsonChunk.second >= json, "Gltf file invalid JSON content length '{}'", jsonChunk.second);
 
 		// Read binary data
 		auto binaryChunk = readChunk(glb, header + size * 2 + jsonChunk.second, 0x004e4942);
@@ -86,7 +86,7 @@ namespace Inferno {
 		ifstream.read(chunkType, size);
 
 		uint32_t chunkTypeInt = *reinterpret_cast<uint32_t*>(chunkType);
-		ASSERT(chunkTypeInt == type, "GlTF invalid chunk type '{}' != '{}'", chunkType, intToHex(type));
+		ASSERT(chunkTypeInt == type, "Gltf invalid chunk type '{}' != '{}'", chunkType, intToHex(type));
 
 		uint32_t chunkLengthInt = *reinterpret_cast<uint32_t*>(chunkLength);
 		// Allocate memory filled with zeros
