@@ -12,7 +12,7 @@ namespace Inferno {
 	Gltf::Gltf(const std::string& path)
 		: m_path(path)
 	{
-		auto gltf = GlTFFile::read(path);
+		auto gltf = GltfFile::read(path);
 		ASSERT(gltf.first && gltf.second, "GlTF model was incomplete '{}'", path);
 
 		json json = json::parse(gltf.first.get());

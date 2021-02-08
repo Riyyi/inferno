@@ -8,7 +8,7 @@
 
 namespace Inferno {
 
-	class GlTFFile {
+	class GltfFile {
 	public:
 		static std::pair<std::shared_ptr<char[]>, std::shared_ptr<char[]>> read(const std::string& path);
 

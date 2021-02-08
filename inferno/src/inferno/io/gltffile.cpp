@@ -10,7 +10,7 @@
 
 namespace Inferno {
 
-	std::pair<std::shared_ptr<char[]>, std::shared_ptr<char[]>> GlTFFile::read(const std::string& path)
+	std::pair<std::shared_ptr<char[]>, std::shared_ptr<char[]>> GltfFile::read(const std::string& path)
 	{
 		std::string extension = path.substr(path.find_first_of("."));
 
@@ -24,7 +24,7 @@ namespace Inferno {
 		return {};
 	}
 
-	std::pair<std::shared_ptr<char[]>, std::shared_ptr<char[]>> GlTFFile::glb(const std::string& path)
+	std::pair<std::shared_ptr<char[]>, std::shared_ptr<char[]>> GltfFile::glb(const std::string& path)
 	{
 		// Create input stream object and open file
 		std::ifstream glb(path, std::ios::in | std::ios::binary);
@@ -73,7 +73,7 @@ namespace Inferno {
 		return { jsonChunk.first, binaryChunk.first };
 	}
 
-	std::pair<std::shared_ptr<char[]>, uint32_t> GlTFFile::readChunk(std::ifstream& ifstream, uint32_t offset, uint32_t type)
+	std::pair<std::shared_ptr<char[]>, uint32_t> GltfFile::readChunk(std::ifstream& ifstream, uint32_t offset, uint32_t type)
 	{
 		constexpr uint32_t size = 4;
 
