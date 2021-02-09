@@ -1,11 +1,14 @@
 #include <algorithm> // std::copy
+#include <utility>   // std::move
 
 #include "nlohmann/json.hpp"
 
 #include "inferno/assert.h"
+#include "inferno/io/file.h"
 #include "inferno/io/gltffile.h"
 #include "inferno/io/log.h"
 #include "inferno/render/gltf.h"
+#include "inferno/util/integer.h"
 
 namespace Inferno {
 
@@ -13,9 +16,14 @@ namespace Inferno {
 		: m_path(path)
 	{
 		auto gltf = GltfFile::read(path);
-		ASSERT(gltf.first && gltf.second, "GlTF model was incomplete '{}'", path);
+		ASSERT(gltf.first, "Gltf model invalid JSON content '{}'", path);
 
 		json json = json::parse(gltf.first.get());
+
+		// Add binary data from .glb files
+		if (gltf.second) {
+			m_model.data.emplace(0, std::move(gltf.second));
+		}
 
 		// Properties
 
@@ -113,10 +121,11 @@ namespace Inferno {
 
 			for (auto& [key, object] : buffers.items()) {
 				glTF::Buffer buffer;
-				parseBuffer(&buffer, key, object);
+				parseBuffer(&buffer, key, object, &m_model.data);
 				m_model.buffers.emplace_back(std::move(buffer));
 			}
 		}
+
 	}
 
 	Gltf::~Gltf()
@@ -307,9 +316,15 @@ namespace Inferno {
 		bufferView->name = name ? name.value() : key;
 	}
 
-	void Gltf::parseBuffer(glTF::Buffer* buffer, const std::string& key, const json& object)
+	void Gltf::parseBuffer(glTF::Buffer* buffer, const std::string& key, const json& object, std::map<uint32_t, std::shared_ptr<char[]>>* data)
 	{
-		auto uri = Json::parseStringProperty(object, "buffer", false);
+		auto uri = Json::parseStringProperty(object, "uri", false);
+
+		// Load external binary data
+		if (uri) {
+			ASSERT(uri.value().find("data:", 0) == std::string::npos, "GltfFile embedded binary data is unsupported");
+			data->emplace(std::stou(key), File::raw("assets/gltf/" + uri.value()));
+		}
 
 		auto byteLength = Json::parseUnsignedProperty(object, "byteLength", true);
 		ASSERT(byteLength, "Gltf buffer '{}' missing required property 'byteLength'", key);

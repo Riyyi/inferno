@@ -97,6 +97,8 @@ namespace Inferno {
 			std::vector<Accessor> accessors;
 			std::vector<BufferView> bufferViews;
 			std::vector<Buffer> buffers;
+
+			std::map<uint32_t, std::shared_ptr<char[]>> data;
 		};
 
 	} // namespace glTF
@@ -118,7 +120,7 @@ namespace Inferno {
 		static void parseMesh(glTF::Mesh* mesh, const std::string& key, const json& object);
 		static void parseAccessor(glTF::Accessor* accessor, const std::string& key, const json& object);
 		static void parseBufferView(glTF::BufferView* bufferView, const std::string& key, const json& object);
-		static void parseBuffer(glTF::Buffer* buffer, const std::string& key, const json& object);
+		static void parseBuffer(glTF::Buffer* buffer, const std::string& key, const json& object, std::map<uint32_t, std::shared_ptr<char[]>>* data);
 
 		std::string m_path;
 		glTF::Model m_model;
