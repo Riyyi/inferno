@@ -15,6 +15,8 @@ namespace Inferno {
 	private:
 		static std::pair<std::shared_ptr<char[]>, std::shared_ptr<char[]>> glb(const std::string& path);
 		static std::pair<std::shared_ptr<char[]>, uint32_t> readChunk(std::ifstream& ifstream, uint32_t offset, uint32_t type);
+
+		static std::pair<std::shared_ptr<char[]>, std::shared_ptr<char[]>> gltf(const std::string& path);
 	};
 
 } // namespace Inferno

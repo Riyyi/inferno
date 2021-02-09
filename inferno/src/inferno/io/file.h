@@ -3,6 +3,7 @@
 
 #include <fstream> // std::ifstream, std::ofstream
 #include <iomanip> // std::setfill, std::setw
+#include <memory>  // std::shared_ptr
 #include <string>  // std::string
 
 #include "inferno/assert.h"
@@ -13,6 +14,7 @@ namespace Inferno {
 
 	class File {
 	public:
+		static std::shared_ptr<char[]> raw(const std::string& path);
 		static std::string read(const std::string& path);
 		static int32_t length(const std::string& path, std::ifstream& ifstream);
 

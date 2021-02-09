@@ -7,6 +7,7 @@
 #include "inferno/io/gltffile.h"
 #include "inferno/io/log.h"
 #include "inferno/util/string.h"
+#include "inferno/util/json.h"
 
 namespace Inferno {
 
@@ -18,9 +19,10 @@ namespace Inferno {
 			return glb(path);
 		}
 		else if (extension.compare(".gltf") == 0) {
-			ASSERT_NOT_REACHED();
+			return gltf(path);
 		}
 
+		ASSERT(false, "GltfFile unknown file extension!");
 		return {};
 	}
 
@@ -96,6 +98,25 @@ namespace Inferno {
 		chunkData.get()[chunkLengthInt] = '\0';
 
 		return { chunkData, chunkLengthInt };
+	}
+
+	std::pair<std::shared_ptr<char[]>, std::shared_ptr<char[]>> GltfFile::gltf(const std::string& path)
+	{
+		auto jsonContent = File::raw(path);
+
+		json json = json::parse(jsonContent.get());
+		ASSERT(Json::hasProperty(json, "buffers"), "GltfFile missing required property 'buffers'");
+
+		std::shared_ptr<char[]> binaryContent { nullptr };
+		for (auto& [key, buffer] : json["buffers"].items()) {
+			auto uri = Json::parseStringProperty(buffer, "uri", true);
+			ASSERT(uri, "GltfFile missing required property 'uri'");
+			ASSERT(uri.value().find("data:", 0) == std::string::npos, "GltfFile embedded binary data is unsupported");
+			binaryContent = File::raw("assets/gltf/" + uri.value());
+			break;
+		}
+
+		return { jsonContent, binaryContent };
 	}
 
 } // namespace Inferno

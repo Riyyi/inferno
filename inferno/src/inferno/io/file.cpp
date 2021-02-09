@@ -6,7 +6,7 @@
 
 namespace Inferno {
 
-	std::string File::read(const std::string &path)
+	std::shared_ptr<char[]> File::raw(const std::string& path)
 	{
 		// Create input stream object and open file
 		std::ifstream ifstream(path);
@@ -26,14 +26,22 @@ namespace Inferno {
 		}
 
 		// Allocate memory filled with zeros
-		auto buffer = std::make_unique<char[]>(length);
+		auto buffer = std::shared_ptr<char[]>(new char[length + 1]);
 
 		// Fill buffer with file contents
 		ifstream.read(buffer.get(), length);
 		ifstream.close();
 
+		// Null termination
+		buffer[length] = '\0';
+
+		return buffer;
+	}
+
+	std::string File::read(const std::string &path)
+	{
 		// Create string from the buffer and return
-		return std::string(buffer.get(), length);
+		return std::string(raw(path).get());
 	}
 
 	int32_t File::length(const std::string& path, std::ifstream& ifstream)
