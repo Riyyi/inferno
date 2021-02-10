@@ -1,6 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include <cstdint>    // uint32_t
 #include <functional> // std::function
 #include <memory>     // std::shared_ptr
 #include <string>     // std::string
@@ -14,8 +15,8 @@ namespace Inferno {
 
 	struct WindowProperties {
 		std::string title { "Inferno" };
-		int width = 1280;
-		int height = 720;
+		uint32_t width = 1280;
+		uint32_t height = 720;
 		std::string fullscreen { "windowed" }; // windowed/fullscreen/borderless
 		bool vsync = true;
 	};
@@ -42,8 +43,8 @@ namespace Inferno {
 
 		bool shouldClose() const;
 		inline float getAspect() const { return static_cast<float>(m_properties.width) / static_cast<float>(m_properties.height); }
-		inline int getWidth() const { return m_properties.width; }
-		inline int getHeight() const { return m_properties.height; }
+		inline uint32_t getWidth() const { return m_properties.width; }
+		inline uint32_t getHeight() const { return m_properties.height; }
 
 		inline GLFWwindow* getWindow() const { return m_window; }
 		inline const std::shared_ptr<Context>& getContext() const { return m_context; }

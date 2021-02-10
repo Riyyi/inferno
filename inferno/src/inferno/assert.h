@@ -2,6 +2,7 @@
 #define ASSERT_H
 
 #include <csignal> // raise
+#include <cstdint> // uint32_t
 
 #include "inferno/core.h"
 #include "inferno/io/log.h"
@@ -43,7 +44,7 @@ namespace Inferno {
 
 	#ifdef NF_ENABLE_ASSERTS
 		template<typename... P>
-		inline void __assert_fail(const char* assertion, const char* file, unsigned int line, const char* function, P&&... parameters)
+		inline void __assert_fail(const char* assertion, const char* file, uint32_t line, const char* function, P&&... parameters)
 		{
 			dangerln(false, "ASSERTION `{}' FAILED.", assertion);
 

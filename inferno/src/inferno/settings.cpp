@@ -1,8 +1,10 @@
-#include <string> // std::string
+#include <cstdint> // uint32_t
+#include <string>  // std::string
 
 #include "inferno/io/file.h"
 #include "inferno/io/log.h"
 #include "inferno/settings.h"
+#include "inferno/util/json.h"
 
 namespace Inferno {
 
@@ -21,16 +23,23 @@ namespace Inferno {
 		nlohmann::json json;
 		Settings::load(json);
 
-		try {
-			m_properties.window.title       = json["window"]["title"].get<std::string>();
-			m_properties.window.width       = json["window"]["width"].get<int>();
-			m_properties.window.height      = json["window"]["height"].get<int>();
-			m_properties.window.fullscreen  = json["window"]["fullscreen"].get<std::string>();
-			m_properties.window.vsync       = json["window"]["vsync"].get<bool>();
+		if (!Json::hasProperty(json, "window")) {
+			warn() << "Settings has no window section, using default values";
+			return;
 		}
-		catch (...) {
-			warn() << "Settings syntax error: using default values";
-		}
+
+		auto window = json["window"];
+		auto title = Json::parseStringProperty(window, "title", false);
+		auto width = Json::parseUnsignedProperty(window, "width", false);
+		auto height = Json::parseUnsignedProperty(window, "height", false);
+		auto fullscreen = Json::parseStringProperty(window, "fullscreen", false);
+		auto vsync = Json::parseBoolProperty(window, "vsync", false);
+
+		if (title)      m_properties.window.title = title.value();
+		if (width)      m_properties.window.width = width.value();
+		if (height)     m_properties.window.height = height.value();
+		if (fullscreen) m_properties.window.fullscreen = fullscreen.value();
+		if (vsync)      m_properties.window.vsync = vsync.value();
 	}
 
 	void Settings::destroy()

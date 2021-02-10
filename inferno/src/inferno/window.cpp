@@ -42,10 +42,10 @@ namespace Inferno {
 
 	void Window::initialize()
 	{
-		std::string title      = m_properties.title;
-		unsigned int width     = m_properties.width;
-		unsigned int height    = m_properties.height;
-		bool vsync             = m_properties.vsync;
+		std::string title = m_properties.title;
+		uint32_t width    = m_properties.width;
+		uint32_t height   = m_properties.height;
+		bool vsync        = m_properties.vsync;
 
 		// Only init once
 		if (s_windowCount == 0) {
