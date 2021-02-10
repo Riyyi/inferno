@@ -1,5 +1,6 @@
 #include <climits> // UINT_MAX
-#include <memory>
+#include <memory>  // std::shared_ptr
+#include <utility> // std::move
 
 #include "glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
@@ -11,6 +12,7 @@
 namespace Inferno {
 
 	Texture::Texture(const std::string& path)
+		: m_path(std::move(path))
 	{
 		int width;
 		int height;

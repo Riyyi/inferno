@@ -1,5 +1,6 @@
-#include <limits> // std::numeric_limits
-#include <string> // std::getline, std::stoi
+#include <limits>  // std::numeric_limits
+#include <string>  // std::getline, std::stoi
+#include <utility> // std::move
 
 #include "inferno/assert.h"
 #include "inferno/io/file.h"
@@ -10,6 +11,7 @@
 namespace Inferno {
 
 	Font::Font(const std::string& name)
+		: m_name(std::move(name))
 	{
 		std::string path = name + ".fnt";
 		std::string image = name + ".png";

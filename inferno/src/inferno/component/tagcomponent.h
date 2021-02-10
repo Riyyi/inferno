@@ -2,6 +2,7 @@
 #define TAG_COMPONENT_H
 
 #include <string> // std::string
+#include <utility> // std::move
 
 namespace Inferno {
 
@@ -10,7 +11,7 @@ namespace Inferno {
 
 		TagComponent() = default;
 		TagComponent(const std::string& tag)
-			: tag(tag) {}
+			: tag(std::move(tag)) {}
 
 		operator const std::string&() const { return tag; }
 	};

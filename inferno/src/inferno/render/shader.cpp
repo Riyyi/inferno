@@ -1,4 +1,5 @@
-#include <vector> // std::vector
+#include <utility> // std::move
+#include <vector>  // std::vector
 
 #include "glad/glad.h"
 #include "glm/gtc/type_ptr.hpp" // glm::value_ptr
@@ -12,7 +13,8 @@
 namespace Inferno {
 
 	Shader::Shader(const std::string& name)
-		: m_id(0)
+		: m_name(std::move(name)),
+		  m_id(0)
 	{
 		// Get file contents
 		std::string vertexSrc = File::read(name + ".vert");

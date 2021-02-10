@@ -13,7 +13,7 @@
 namespace Inferno {
 
 	Gltf::Gltf(const std::string& path)
-		: m_path(path)
+		: m_path(std::move(path))
 	{
 		auto gltf = GltfFile::read(path);
 		ASSERT(gltf.first, "Gltf model invalid JSON content '{}'", path);
