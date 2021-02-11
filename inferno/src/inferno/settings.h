@@ -15,7 +15,7 @@ namespace Inferno {
 		static void initialize();
 		static void destroy();
 
-		static void load();
+		static bool load();
 		static bool save();
 
 		static inline SettingsProperties& get() { return m_properties; }

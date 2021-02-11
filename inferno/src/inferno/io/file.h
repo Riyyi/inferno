@@ -19,28 +19,48 @@ namespace Inferno {
 		static int32_t length(const std::string& path, std::ifstream& file);
 
 		template<typename T>
-		static void ioRead(T* t, const std::string& path)
+		static bool ioRead(T* t, const std::string& path)
 		{
 			std::ifstream file(path);
 			ASSERT(file.is_open(), "File could not open '{}'", path);
 
-			if (file.is_open()) {
-				file >> *t;
-				file.close();
+			if (!file.is_open()) {
+				return false;
 			}
+
+			try {
+				file >> *t;
+			}
+			catch (...) {
+				file.close();
+				return false;
+			}
+
+			file.close();
+			return true;
 		}
 
 		template<typename T>
-		static void ioWrite(T* t, const std::string& path)
+		static bool ioWrite(T* t, const std::string& path)
 		{
 			std::ofstream file (path);
 			ASSERT(file.is_open(), "File could not open! {}", path);
 
-			if (file.is_open()) {
+			if (!file.is_open()) {
+				return false;
+			}
+
+			try {
 				// Write file with single tabs, nicely formatted
 				file << std::setfill ('\t') << std::setw(1) << *t << std::endl;
-				file.close();
 			}
+			catch (...) {
+				file.close();
+				return false;
+			}
+
+			file.close();
+			return true;
 		}
 	};
 

@@ -15,6 +15,7 @@ namespace Inferno {
 	void Settings::initialize()
 	{
 		Settings::load();
+		Settings::save();
 
 		info() << "Settings initialized";
 	}
@@ -23,29 +24,32 @@ namespace Inferno {
 	{
 	}
 
-	void Settings::load()
+	bool Settings::load()
 	{
 		json object;
 
-		try {
-			File::ioRead(&object, m_path);
-		}
-		catch (...) {
+		if (!File::ioRead(&object, m_path)) {
 			warn() << "Settings invalid formatting, using default values";
+			return false;
 		}
 
 		auto settings = Json::getPropertyValue<SettingsProperties>(object, json::value_t::object);
 		if (settings) {
 			m_properties = settings.value();
 		}
+
+		return true;
 	}
 
 	bool Settings::save()
 	{
 		json object = m_properties;
-		File::ioWrite(&object, m_path);
-		info() << "Settings saved";
+		if (!File::ioWrite(&object, m_path)) {
+			warn() << "Settings could not be saved";
+			return false;
+		}
 
+		info() << "Settings saved";
 		return true;
 	}
 
