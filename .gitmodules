@@ -16,3 +16,6 @@
 [submodule "inferno/vendor/sol2"]
 	path = inferno/vendor/sol2
 	url = https://github.com/ThePhD/sol2
+[submodule "inferno/vendor/stb/stb"]
+	path = inferno/vendor/stb/stb
+	url = https://github.com/nothings/stb
