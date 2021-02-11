@@ -1,13 +1,13 @@
 #ifndef LOG_H
 #define LOG_H
 
-#define BUFFER_SIZE 128
-
 #include <cstddef>     // size_t
 #include <cstring>     // memcpy
 #include <string>      // std::string
 #include <string_view> // std::string_view
 #include <utility>     // std::forward
+
+#define BUFFER_SIZE 128
 
 namespace Inferno {
 
