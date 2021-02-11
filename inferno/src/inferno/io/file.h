@@ -16,29 +16,29 @@ namespace Inferno {
 	public:
 		static std::shared_ptr<char[]> raw(const std::string& path);
 		static std::string read(const std::string& path);
-		static int32_t length(const std::string& path, std::ifstream& ifstream);
+		static int32_t length(const std::string& path, std::ifstream& file);
 
 		template<typename T>
-		static void ioRead(T& t, const std::string& path)
+		static void ioRead(T* t, const std::string& path)
 		{
 			std::ifstream file(path);
-			ASSERT(file.is_open(), "File could not open! {}", path.c_str());
+			ASSERT(file.is_open(), "File could not open '{}'", path);
 
 			if (file.is_open()) {
-				file >> t;
+				file >> *t;
 				file.close();
 			}
 		}
 
 		template<typename T>
-		static void ioWrite(T& t, const std::string& path)
+		static void ioWrite(T* t, const std::string& path)
 		{
 			std::ofstream file (path);
-			ASSERT(file.is_open(), "File could not open! {}", path.c_str());
+			ASSERT(file.is_open(), "File could not open! {}", path);
 
 			if (file.is_open()) {
 				// Write file with single tabs, nicely formatted
-				file << std::setfill ('\t') << std::setw(1) << t << std::endl;
+				file << std::setfill ('\t') << std::setw(1) << *t << std::endl;
 				file.close();
 			}
 		}

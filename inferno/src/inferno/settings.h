@@ -1,8 +1,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include "nlohmann/json.hpp"
-
+#include "inferno/util/json.h"
 #include "inferno/window.h"
 
 namespace Inferno {
@@ -14,10 +13,9 @@ namespace Inferno {
 	class Settings {
 	public:
 		static void initialize();
-		static void update();
 		static void destroy();
 
-		static bool load(nlohmann::json& json);
+		static void load();
 		static bool save();
 
 		static inline SettingsProperties& get() { return m_properties; }
@@ -26,6 +24,16 @@ namespace Inferno {
 		static const char* m_path;
 		static SettingsProperties m_properties;
 	};
+
+// -----------------------------------------
+
+	// nlohmann::json arbitrary type conversion functions
+
+	void to_json(json& object, const SettingsProperties& settings);
+	void from_json(const json& object, SettingsProperties& settings);
+
+	void to_json(json& object, const WindowProperties& window);
+	void from_json(const json& object, WindowProperties& window);
 
 }
 

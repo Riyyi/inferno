@@ -5,67 +5,82 @@
 #include "inferno/io/log.h"
 #include "inferno/settings.h"
 #include "inferno/util/json.h"
+#include "inferno/window.h"
 
 namespace Inferno {
 
-	const char* Settings::m_path = "assets/settings.json";
-	SettingsProperties Settings::m_properties = {};
+	const char* Settings::m_path { "assets/settings.json" };
+	SettingsProperties Settings::m_properties {};
 
 	void Settings::initialize()
 	{
-		Settings::update();
+		Settings::load();
 
 		info() << "Settings initialized";
-	}
-
-	void Settings::update()
-	{
-		nlohmann::json json;
-		Settings::load(json);
-
-		if (!Json::hasProperty(json, "window")) {
-			warn() << "Settings has no window section, using default values";
-			return;
-		}
-
-		auto window = json["window"];
-		auto title = Json::parseStringProperty(window, "title", false);
-		auto width = Json::parseUnsignedProperty(window, "width", false);
-		auto height = Json::parseUnsignedProperty(window, "height", false);
-		auto fullscreen = Json::parseStringProperty(window, "fullscreen", false);
-		auto vsync = Json::parseBoolProperty(window, "vsync", false);
-
-		if (title)      m_properties.window.title = title.value();
-		if (width)      m_properties.window.width = width.value();
-		if (height)     m_properties.window.height = height.value();
-		if (fullscreen) m_properties.window.fullscreen = fullscreen.value();
-		if (vsync)      m_properties.window.vsync = vsync.value();
 	}
 
 	void Settings::destroy()
 	{
 	}
 
-	bool Settings::load(nlohmann::json& json)
+	void Settings::load()
 	{
-		File::ioRead(json, m_path);
+		json object;
 
-		return true;
+		try {
+			File::ioRead(&object, m_path);
+		}
+		catch (...) {
+			warn() << "Settings invalid formatting, using default values";
+		}
+
+		auto settings = Json::getPropertyValue<SettingsProperties>(object, json::value_t::object);
+		if (settings) {
+			m_properties = settings.value();
+		}
 	}
 
 	bool Settings::save()
 	{
-		nlohmann::json json;
-		json["window"]["title"]       = m_properties.window.title;
-		json["window"]["width"]       = m_properties.window.width;
-		json["window"]["height"]      = m_properties.window.height;
-		json["window"]["fullscreen"]  = m_properties.window.fullscreen;
-		json["window"]["vsync"]       = m_properties.window.vsync;
-
-		File::ioWrite(json, m_path);
+		json object = m_properties;
+		File::ioWrite(&object, m_path);
 		info() << "Settings saved";
 
 		return true;
+	}
+
+// -----------------------------------------
+
+	void to_json(json& object, const SettingsProperties& settings)
+	{
+		object = json {
+			{ "window", settings.window }
+		};
+	}
+
+	void from_json(const json& object, SettingsProperties& settings)
+	{
+		if (Json::hasProperty(object, "window")) object.at("window").get_to(settings.window);
+	}
+
+	void to_json(json& object, const WindowProperties& window)
+	{
+		object = json {
+			{ "title", window.title },
+			{ "width", window.width },
+			{ "height", window.height },
+			{ "fullscreen", window.fullscreen },
+			{ "vsync", window.vsync },
+		};
+	}
+
+	void from_json(const json& object, WindowProperties& window)
+	{
+		if (Json::hasProperty(object, "title"))      object.at("title").get_to(window.title);
+		if (Json::hasProperty(object, "width"))      object.at("width").get_to(window.width);
+		if (Json::hasProperty(object, "height"))     object.at("height").get_to(window.height);
+		if (Json::hasProperty(object, "fullscreen")) object.at("fullscreen").get_to(window.fullscreen);
+		if (Json::hasProperty(object, "vsync"))      object.at("vsync").get_to(window.vsync);
 	}
 
 }
