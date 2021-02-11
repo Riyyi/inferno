@@ -15,9 +15,10 @@ namespace Inferno {
 	void Settings::initialize()
 	{
 		Settings::load();
-		Settings::save();
 
 		info() << "Settings initialized";
+
+		Settings::save();
 	}
 
 	void Settings::destroy()
