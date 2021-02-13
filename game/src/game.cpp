@@ -4,11 +4,11 @@
 class Game : public Inferno::Application
 {
 public:
-	Game() {};
-	~Game() {};
+	Game() : Application({}) {}
+	~Game() {}
 };
 
-Inferno::Application* Inferno::createApplication()
+Inferno::Application& Inferno::getApplication()
 {
-	return new Game();
+	return Game::the();
 }

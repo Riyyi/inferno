@@ -15,13 +15,7 @@ int main(int argc, char* argv[])
 	(void)argc;
 	(void)argv;
 
-	auto app = Inferno::createApplication();
-
-	int status = app->run();
-
-	delete app;
-
-	return status;
+	return Inferno::getApplication().run();
 }
 
 #endif // ENTRYPOINT_H
