@@ -21,8 +21,13 @@
 
 namespace Inferno {
 
-	Application::Application(s)
+	Application* Application::s_instance = nullptr;
+
+	Application::Application()
 	{
+		ASSERT(!s_instance, "Application already exists!");
+		s_instance = this;
+
 		// Initialize
 
 		Settings::initialize();

@@ -3,8 +3,6 @@
 
 #include <memory> // std::unique_ptr, std::shared_ptr
 
-#include "inferno/singleton.h"
-
 namespace Inferno {
 
 	class Event;
@@ -16,9 +14,9 @@ namespace Inferno {
 	class WindowCloseEvent;
 	class WindowResizeEvent;
 
-	class Application : public Singleton<Application> {
+	class Application {
 	public:
-		Application(s);
+		Application();
 		virtual ~Application();
 
 		int run();
@@ -33,20 +31,23 @@ namespace Inferno {
 
 		inline Window& getWindow() const { return *m_window; }
 
+		static inline Application& the() { return *s_instance; }
+
 	private:
-		int m_status = 0;
+		int m_status { 0 };
 		float m_lastFrameTime { 0.0f };
 
-		std::unique_ptr<Window> m_window { nullptr };
-		std::shared_ptr<Scene> m_scene { nullptr };
+		std::unique_ptr<Window> m_window;
+		std::shared_ptr<Scene> m_scene;
 
 		//
-		std::shared_ptr<Font> m_font { nullptr };
-		//
+		std::shared_ptr<Font> m_font;
+
+		static Application* s_instance;
 	};
 
 	// To be defined in the game
-	extern Application& getApplication();
+	extern Application* createApplication();
 
 }
 

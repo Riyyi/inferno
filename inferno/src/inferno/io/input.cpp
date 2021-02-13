@@ -16,6 +16,10 @@ namespace Inferno {
 
 	void Input::initialize()
 	{
+		// Set cursor in the middle of the screen
+		m_xPosLast = Application::the().getWindow().getWidth() / 2.0f;
+		m_yPosLast = Application::the().getWindow().getHeight() / 2.0f;
+
 		info() << "Input initialized";
 	}
 
