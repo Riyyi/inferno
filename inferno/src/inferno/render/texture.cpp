@@ -122,7 +122,7 @@ namespace Inferno {
 	void TextureManager::add(const std::string& path, const std::shared_ptr<Texture>& texture)
 	{
 		// Construct (key, value) pair and insert it into the unordered_map
-		m_textureList.emplace(path, texture);
+		m_textureList.emplace(std::move(path), std::move(texture));
 	}
 
 	std::shared_ptr<Texture> TextureManager::load(const std::string& path)

@@ -122,7 +122,7 @@ namespace Inferno {
 	void FontManager::add(const std::string& name, const std::shared_ptr<Font>& font)
 	{
 		// Construct (key, value) pair and insert it into the unordered_map
-		m_fontList.emplace(name, font);
+		m_fontList.emplace(std::move(name), std::move(font));
 	}
 
 	std::shared_ptr<Font> FontManager::load(const std::string& name)

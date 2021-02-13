@@ -30,12 +30,12 @@ class Texture;
 		Font(const std::string& name);
 		virtual ~Font() {}
 
+		inline std::string name() const { return m_name; }
 		inline uint32_t size() const { return m_size; }
+		inline const std::shared_ptr<Texture>& texture() const { return m_texture; }
+
 		inline const std::shared_ptr<Character>& get(unsigned char c) const { return m_characterList.at(c); }
 		inline const std::shared_ptr<Character>& operator[](unsigned char c) const { return m_characterList.at(c); }
-
-		inline std::string name() const { return m_name; }
-		inline const std::shared_ptr<Texture>& texture() const { return m_texture; }
 
 	private:
 		void parseFont(const std::string& font);
@@ -43,10 +43,10 @@ class Texture;
 		const std::vector<std::string> findColumns(const std::string& line);
 		const std::string findValue(const std::string& key, const std::vector<std::string>& columns);
 
-		uint32_t m_size;
-		std::unordered_map<unsigned char, std::shared_ptr<Character>> m_characterList;
 		std::string m_name;
+		uint32_t m_size;
 		std::shared_ptr<Texture> m_texture;
+		std::unordered_map<unsigned char, std::shared_ptr<Character>> m_characterList;
 	};
 
 // -----------------------------------------
@@ -62,7 +62,7 @@ class Texture;
 		bool exists(const std::string& name);
 
 		void remove(const std::string& name);
-		void remove(const std::shared_ptr<Font>& shader);
+		void remove(const std::shared_ptr<Font>& font);
 
 		static inline FontManager& the() { return *s_instance; }
 

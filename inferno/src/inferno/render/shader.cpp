@@ -212,7 +212,7 @@ namespace Inferno {
 	void ShaderManager::add(const std::string& name, const std::shared_ptr<Shader>& shader)
 	{
 		// Construct (key, value) pair and insert it into the unordered_map
-		m_shaderList.emplace(name, shader);
+		m_shaderList.emplace(std::move(name), std::move(shader));
 	}
 
 	std::shared_ptr<Shader> ShaderManager::load(const std::string& name)
