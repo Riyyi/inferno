@@ -5,14 +5,15 @@
 
 #include "entt/entity/registry.hpp" // entt::entity, entt::registry
 
-#include "inferno/component/cameracomponent.h"
-#include "inferno/component/transformcomponent.h"
 #include "inferno/singleton.h"
 
 #define NEAR_PLANE 0.1f
 #define FAR_PLANE 100.0f
 
 namespace Inferno {
+
+	struct TransformComponent;
+	struct CameraComponent;
 
 	class CameraSystem final : public Singleton<CameraSystem> {
 	public:

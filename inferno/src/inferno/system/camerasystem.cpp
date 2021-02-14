@@ -3,6 +3,8 @@
 
 #include "inferno/application.h"
 #include "inferno/assert.h"
+#include "inferno/component/cameracomponent.h"
+#include "inferno/component/transformcomponent.h"
 #include "inferno/io/input.h"
 #include "inferno/io/log.h"
 #include "inferno/system/camerasystem.h"
