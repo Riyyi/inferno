@@ -21,20 +21,16 @@ namespace Inferno {
 
 		m_registry = std::make_shared<entt::registry>();
 
-		TransformSystem* transformSystem = new TransformSystem();
-		transformSystem->initialize();
+		TransformSystem::initialize();
 		TransformSystem::the().setRegistry(m_registry);
 
-		CameraSystem* cameraSystem = new CameraSystem();
-		cameraSystem->initialize();
+		CameraSystem::initialize();
 		CameraSystem::the().setRegistry(m_registry);
 
-		RenderSystem* renderSystem = new RenderSystem();
-		renderSystem->initialize();
+		RenderSystem::initialize();
 		RenderSystem::the().setRegistry(m_registry);
 
-		ScriptSystem* scriptSystem = new ScriptSystem();
-		scriptSystem->initialize();
+		ScriptSystem::initialize();
 		ScriptSystem::the().setScene(this);
 
 		// Load assets
@@ -85,10 +81,10 @@ namespace Inferno {
 
 	void Scene::destroy()
 	{
-		ScriptSystem::the().destroy();
-		RenderSystem::the().destroy();
-		CameraSystem::the().destroy();
-		TransformSystem::the().destroy();
+		ScriptSystem::destroy();
+		RenderSystem::destroy();
+		CameraSystem::destroy();
+		TransformSystem::destroy();
 	}
 
 	uint32_t Scene::createEntity(const std::string& name)

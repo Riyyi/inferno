@@ -103,20 +103,13 @@ namespace Inferno {
 
 // -----------------------------------------
 
-	TextureManager* TextureManager::s_instance = nullptr;
-
-	void TextureManager::initialize()
+	TextureManager::TextureManager(s)
 	{
-		ASSERT(!s_instance, "TextureManager already exists!");
-		s_instance = this;
-
 		info() << "TextureManager initialized";
 	}
 
-	void TextureManager::destroy()
+	TextureManager::~TextureManager()
 	{
-		delete s_instance;
-		s_instance = nullptr;
 	}
 
 	void TextureManager::add(const std::string& path, const std::shared_ptr<Texture>& texture)

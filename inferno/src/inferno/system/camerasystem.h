@@ -7,31 +7,29 @@
 
 #include "inferno/component/cameracomponent.h"
 #include "inferno/component/transformcomponent.h"
+#include "inferno/singleton.h"
 
 #define NEAR_PLANE 0.1f
 #define FAR_PLANE 100.0f
 
 namespace Inferno {
 
-	class CameraSystem {
+	class CameraSystem final : public Singleton<CameraSystem> {
 	public:
-		void initialize();
+		CameraSystem(s);
+		virtual ~CameraSystem();
+
 		void update();
-		void destroy();
 
 		glm::mat4 projectionView();
 
 		void setRegistry(const std::shared_ptr<entt::registry>& registry) { m_registry = registry; };
-
-		static inline CameraSystem& the() { return *s_instance; }
 
 	private:
 		void updateOrthographic(TransformComponent& transform, CameraComponent& camera);
 		void updatePerspective(TransformComponent& transform, CameraComponent& camera);
 
 		std::shared_ptr<entt::registry> m_registry;
-
-		static CameraSystem* s_instance;
 	};
 
 }

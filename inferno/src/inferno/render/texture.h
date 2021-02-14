@@ -1,10 +1,12 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <cstdint>  	 // std::uint32_t
+#include <cstdint>  	 // uint32_t
 #include <memory>        // std::shared_ptr
-#include <string>		 // std::string
+#include <string>        // std::string
 #include <unordered_map> // std::unordered_map
+
+#include "inferno/singleton.h"
 
 namespace Inferno {
 
@@ -37,10 +39,10 @@ namespace Inferno {
 
 // -----------------------------------------
 
-	class TextureManager {
+	class TextureManager final : public Singleton<TextureManager> {
 	public:
-		void initialize();
-		void destroy();
+		TextureManager(s);
+		virtual ~TextureManager();
 
 		void add(const std::string& path, const std::shared_ptr<Texture>& texture);
 		std::shared_ptr<Texture> load(const std::string& path);
@@ -50,12 +52,8 @@ namespace Inferno {
 		void remove(const std::string& path);
 		void remove(const std::shared_ptr<Texture>& texture);
 
-		static inline TextureManager& the() { return *s_instance; }
-
 	private:
 		std::unordered_map<std::string, std::shared_ptr<Texture>> m_textureList;
-
-		static TextureManager* s_instance;
 	};
 
 }

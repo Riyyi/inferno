@@ -7,14 +7,13 @@
 
 namespace Inferno {
 
-	TransformSystem* TransformSystem::s_instance = nullptr;
-
-	void TransformSystem::initialize()
+	TransformSystem::TransformSystem(s)
 	{
-		ASSERT(!s_instance, "TransformSystem already exists!");
-		s_instance = this;
-
 		info() << "TransformSystem initialized";
+	}
+
+	TransformSystem::~TransformSystem()
+	{
 	}
 
 	void TransformSystem::update()
@@ -39,12 +38,6 @@ namespace Inferno {
 			// Scale
 			component.transform = glm::scale(component.transform, component.scale);
 		}
-	}
-
-	void TransformSystem::destroy()
-	{
-		delete s_instance;
-		s_instance = nullptr;
 	}
 
 }

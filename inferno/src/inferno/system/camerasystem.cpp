@@ -10,14 +10,13 @@
 
 namespace Inferno {
 
-	CameraSystem* CameraSystem::s_instance = nullptr;
-
-	void CameraSystem::initialize()
+	CameraSystem::CameraSystem(s)
 	{
-		ASSERT(!s_instance, "CameraSystem already exists!");
-		s_instance = this;
-
 		info() << "CameraSystem initialized";
+	}
+
+	CameraSystem::~CameraSystem()
+	{
 	}
 
 	void CameraSystem::update()
@@ -33,12 +32,6 @@ namespace Inferno {
 				updatePerspective(transform, camera);
 			}
 		}
-	}
-
-	void CameraSystem::destroy()
-	{
-		delete s_instance;
-		s_instance = nullptr;
 	}
 
 	glm::mat4 CameraSystem::projectionView()

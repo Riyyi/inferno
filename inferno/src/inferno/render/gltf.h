@@ -7,6 +7,7 @@
 #include <unordered_map> // std::unordered_map
 #include <vector>        // std::vector
 
+#include "inferno/singleton.h"
 #include "inferno/util/json.h"
 
 namespace Inferno {
@@ -128,10 +129,10 @@ namespace Inferno {
 
 // -----------------------------------------
 
-	class GltfManager {
+	class GltfManager final : Singleton<GltfManager> {
 	public:
-		void initialize();
-		void destroy();
+		GltfManager(s) {}
+		virtual ~GltfManager() {}
 
 		void add(const std::string& path, const std::shared_ptr<Gltf>& gltf);
 		std::shared_ptr<Gltf> load(const std::string& path);
@@ -141,12 +142,8 @@ namespace Inferno {
 		void remove(const std::string& path);
 		void remove(const std::shared_ptr<Gltf>& gltf);
 
-		static inline GltfManager& the() { return *s_instance; }
-
 	private:
 		std::unordered_map<std::string, std::shared_ptr<Gltf>> m_gltfList;
-
-		static GltfManager* s_instance;
 	};
 
 } // namespace Inferno

@@ -1,7 +1,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include <cstdint> // std::int32_t, std::uint32_t
+#include <cstdint> // int32_t, uint32_t
 #include <memory>  // std::shared_ptr, std::unique_ptr, std::make_shared, std::make_unique
 
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
@@ -10,6 +10,7 @@
 #include "glm/ext/vector_float4.hpp"   // glm::vec4
 
 #include "inferno/component/transformcomponent.h"
+#include "inferno/singleton.h"
 
 namespace Inferno {
 
@@ -29,12 +30,14 @@ namespace Inferno {
 	struct CharacterVertex {
 		QuadVertex quad;
 
+		// Font
 		float width = 0.44f;
 		float edge = 0.15f;
-
+		// Outline
 		float borderWidth = 0.7f;
 		float borderEdge = 0.1f;
 		glm::vec4 borderColor { 1.0f, 1.0f, 1.0f, 1.0f };
+		// Dropshadow
 		float offset = 0.0f;
 	};
 
@@ -65,8 +68,10 @@ namespace Inferno {
 		static const uint32_t textureUnitPerBatch = 32;
 
 	protected:
-		virtual void initialize() = 0;
-		virtual void destroy() = 0;
+		Renderer() {}
+
+		void initialize();
+		void destroy();
 
 		uint32_t addTextureUnit(std::shared_ptr<Texture> texture);
 
@@ -91,14 +96,19 @@ namespace Inferno {
 
 // -----------------------------------------
 
-	class Renderer2D final : public Renderer {
+	class Renderer2D final
+		: public Renderer
+		, public Singleton<Renderer2D> {
 	public:
+		Renderer2D(s);
+		virtual ~Renderer2D();
+
+		using Singleton<Renderer2D>::initialize;
+		using Singleton<Renderer2D>::destroy;
+
 		static const uint32_t quadCount = 1000;
 		static const uint32_t vertexCount = quadCount * vertexPerQuad;
 		static const uint32_t indexCount = quadCount * indexPerQuad;
-
-		void initialize() override;
-		void destroy() override;
 
 		void beginScene(glm::mat4 cameraProjectionView);
 		void endScene();
@@ -107,9 +117,6 @@ namespace Inferno {
 		void drawQuad(const TransformComponent& transform, glm::mat4 color);
 		void drawQuad(const TransformComponent& transform, glm::vec4 color, std::shared_ptr<Texture> texture);
 		void drawQuad(const TransformComponent& transform, glm::mat4 color, std::shared_ptr<Texture> texture);
-
-		static inline Renderer2D& the() { return *s_instance; }
-
 	private:
 		void loadShader() override;
 		void flush() override;
@@ -122,28 +129,28 @@ namespace Inferno {
 
 		// Default quad vertex positions
 		glm::vec4 m_vertexPositions[vertexPerQuad];
-
-		static Renderer2D* s_instance;
 	};
 
 // -----------------------------------------
 
-	class RendererCharacter final : public Renderer {
+	class RendererCharacter final
+		: public Renderer
+		, public Singleton<RendererCharacter> {
 	public:
+		RendererCharacter(s);
+		virtual ~RendererCharacter();
+
+		using Singleton<RendererCharacter>::initialize;
+		using Singleton<RendererCharacter>::destroy;
+
 		static const uint32_t quadCount = 1000;
 		static const uint32_t vertexCount = quadCount * vertexPerQuad;
 		static const uint32_t indexCount = quadCount * indexPerQuad;
-
-		void initialize() override;
-		void destroy() override;
 
 		void beginScene();
 		void endScene();
 
 		void drawCharacter(std::array<CharacterVertex, vertexPerQuad>& characterQuad, std::shared_ptr<Texture> texture);
-
-		static inline RendererCharacter& the() { return *s_instance; }
-
 	private:
 		void loadShader() override;
 		void flush() override;
@@ -153,8 +160,6 @@ namespace Inferno {
 		// CPU quad vertices
 		std::unique_ptr<CharacterVertex[]> m_vertexBufferBase = nullptr;
 		CharacterVertex* m_vertexBufferPtr = nullptr;
-
-		static RendererCharacter* s_instance;
 	};
 
 }

@@ -12,17 +12,12 @@
 
 namespace Inferno {
 
-	ScriptSystem* ScriptSystem::s_instance = nullptr;
-
-	void ScriptSystem::initialize()
+	ScriptSystem::ScriptSystem(s)
 	{
-		ASSERT(!s_instance, "ScriptSystem already exists!");
-		s_instance = this;
-
 		info() << "ScriptSystem initialized";
 	}
 
-	void ScriptSystem::destroy()
+	ScriptSystem::~ScriptSystem()
 	{
 		auto nativeScriptView = m_scene->registry()->view<NativeScriptComponent>();
 
@@ -35,9 +30,6 @@ namespace Inferno {
 		for (auto entity : luaScriptView) {
 			cleanup(luaScriptView.get<LuaScriptComponent>(entity));
 		}
-
-		delete s_instance;
-		s_instance = nullptr;
 	}
 
 	void ScriptSystem::update(float deltaTime)

@@ -11,6 +11,7 @@
 #include "glm/ext/vector_int2.hpp"  // glm::ivec2
 
 #include "inferno/io/log.h"
+#include "inferno/singleton.h"
 
 namespace Inferno {
 
@@ -51,10 +52,10 @@ class Texture;
 
 // -----------------------------------------
 
-	class FontManager {
+	class FontManager final : public Singleton<FontManager> {
 	public:
-		void initialize();
-		void destroy();
+		FontManager(s);
+		virtual ~FontManager();
 
 		void add(const std::string& name, const std::shared_ptr<Font>& font);
 		std::shared_ptr<Font> load(const std::string& name);
@@ -64,12 +65,8 @@ class Texture;
 		void remove(const std::string& name);
 		void remove(const std::shared_ptr<Font>& font);
 
-		static inline FontManager& the() { return *s_instance; }
-
 	private:
 		std::unordered_map<std::string, std::shared_ptr<Font>> m_fontList;
-
-		static FontManager* s_instance;
 	};
 
 

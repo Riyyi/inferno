@@ -3,6 +3,8 @@
 
 #include <cstdint> // uint32_t
 
+#include "inferno/singleton.h"
+
 namespace Inferno {
 
 	struct NativeScriptComponent;
@@ -10,10 +12,11 @@ namespace Inferno {
 
 	class Scene;
 
-	class ScriptSystem {
+	class ScriptSystem final : public Singleton<ScriptSystem> {
 	public:
-		void initialize();
-		void destroy();
+		ScriptSystem(s);
+		virtual ~ScriptSystem();
+
 		void update(float deltaTime);
 
 		void cleanup(uint32_t entity);
@@ -22,12 +25,8 @@ namespace Inferno {
 
 		void setScene(Scene* scene) { m_scene = scene; }
 
-		static inline ScriptSystem& the() { return *s_instance; }
-
 	private:
 		Scene* m_scene;
-
-		static ScriptSystem* s_instance;
 	};
 
 }

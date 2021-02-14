@@ -34,26 +34,15 @@ namespace Inferno {
 		m_window->setEventCallback(NF_BIND_EVENT(Application::onEvent));
 
 		Input::initialize();
-
-		ShaderManager* shaderManager = new ShaderManager();
-		shaderManager->initialize();
-
-		TextureManager* textureManager = new TextureManager();
-		textureManager->initialize();
+		ShaderManager::initialize();
+		TextureManager::initialize();
+		RenderCommand::initialize();
+		Renderer2D::initialize();
+		RendererCharacter::initialize();
+		FontManager::initialize();
 
 		m_scene = std::make_shared<Scene>();
 		m_scene->initialize();
-
-		RenderCommand::initialize();
-
-		Renderer2D* renderer2D = new Renderer2D();
-		renderer2D->initialize();
-
-		RendererCharacter* rendererCharacter = new RendererCharacter();
-		rendererCharacter->initialize();
-
-		FontManager* fontManager = new FontManager();
-		fontManager->initialize();
 
 		// Load assets
 
@@ -62,14 +51,18 @@ namespace Inferno {
 
 	Application::~Application()
 	{
-		FontManager::the().destroy();
-		RendererCharacter::the().destroy();
-		Renderer2D::the().destroy();
-		RenderCommand::destroy();
 		m_scene->destroy();
-		TextureManager::the().destroy();
-		ShaderManager::the().destroy();
+
+		FontManager::destroy();
+		RendererCharacter::destroy();
+		Renderer2D::destroy();
+		RenderCommand::destroy();
+		TextureManager::destroy();
+		ShaderManager::destroy();
 		// Input::destroy();
+
+		m_window->destroy();
+
 		Settings::destroy();
 	}
 

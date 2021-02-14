@@ -151,13 +151,8 @@ namespace Inferno {
 
 // -----------------------------------------
 
-	Renderer2D* Renderer2D::s_instance = nullptr;
-
-	void Renderer2D::initialize()
+	Renderer2D::Renderer2D(s)
 	{
-		ASSERT(!s_instance, "RendererCharacter already exists!");
-		s_instance = this;
-
 		Renderer::initialize();
 
 		// CPU
@@ -210,10 +205,9 @@ namespace Inferno {
 		info() << "Renderer2D initialized";
 	}
 
-	void Renderer2D::destroy()
+	Renderer2D::~Renderer2D()
 	{
-		delete s_instance;
-		s_instance = nullptr;
+		Renderer::destroy();
 	}
 
 	void Renderer2D::beginScene(glm::mat4 cameraProjectionView)
@@ -308,13 +302,8 @@ namespace Inferno {
 
 // -----------------------------------------
 
-	RendererCharacter* RendererCharacter::s_instance = nullptr;
-
-	void RendererCharacter::initialize()
+	RendererCharacter::RendererCharacter(s)
 	{
-		ASSERT(!s_instance, "RendererCharacter already exists!");
-		s_instance = this;
-
 		Renderer::initialize();
 
 		// CPU
@@ -367,10 +356,9 @@ namespace Inferno {
 		info() << "RendererCharacter initialized";
 	}
 
-	void RendererCharacter::destroy()
+	RendererCharacter::~RendererCharacter()
 	{
-		delete s_instance;
-		s_instance = nullptr;
+		Renderer::destroy();
 	}
 
 	void RendererCharacter::beginScene()

@@ -103,20 +103,13 @@ namespace Inferno {
 
 // -----------------------------------------
 
-	FontManager* FontManager::s_instance = nullptr;
-
-	void FontManager::initialize()
+	FontManager::FontManager(s)
 	{
-		ASSERT(!s_instance, "FontManager already exists!");
-		s_instance = this;
-
 		info() << "FontManager initialized";
 	}
 
-	void FontManager::destroy()
+	FontManager::~FontManager()
 	{
-		delete s_instance;
-		s_instance = nullptr;
 	}
 
 	void FontManager::add(const std::string& name, const std::shared_ptr<Font>& font)

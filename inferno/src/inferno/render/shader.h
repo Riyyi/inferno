@@ -8,12 +8,14 @@
 
 #include "glm/glm.hpp"
 
+#include "inferno/singleton.h"
+
 namespace Inferno {
 
 	class Shader {
 	public:
 		Shader(const std::string& name);
-		~Shader();
+		virtual ~Shader();
 
 		int32_t findUniform(const std::string& name) const;
 
@@ -45,10 +47,10 @@ namespace Inferno {
 
 // -----------------------------------------
 
-	class ShaderManager {
+	class ShaderManager final : public Singleton<ShaderManager> {
 	public:
-		void initialize();
-		void destroy();
+		ShaderManager(s);
+		virtual ~ShaderManager();
 
 		void add(const std::string& name, const std::shared_ptr<Shader>& shader);
 		std::shared_ptr<Shader> load(const std::string& name);
@@ -60,16 +62,12 @@ namespace Inferno {
 		void remove(const std::string& name);
 		void remove(const std::shared_ptr<Shader>& shader);
 
-		static inline ShaderManager& the() { return *s_instance; }
-
 	protected:
 		std::string computeName(const std::string& vertexSource,
 		                        const std::string& fragmentSource);
 
 	private:
 		std::unordered_map<std::string, std::shared_ptr<Shader>> m_shaderList;
-
-		static ShaderManager* s_instance;
 	};
 
 }

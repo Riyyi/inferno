@@ -4,23 +4,21 @@
 #include <memory> //std::shared_ptr
 
 #include "entt/entity/registry.hpp" // entt::entity, entt::registry
+#include "inferno/singleton.h"
 
 namespace Inferno {
 
-	class TransformSystem {
+	class TransformSystem final : public Singleton<TransformSystem> {
 	public:
-		void initialize();
+		TransformSystem(s);
+		virtual ~TransformSystem();
+
 		void update();
-		void destroy();
 
 		void setRegistry(const std::shared_ptr<entt::registry>& registry) { m_registry = registry; };
 
-		static inline TransformSystem& the() { return *s_instance; }
-
 	private:
 		std::shared_ptr<entt::registry> m_registry;
-
-		static TransformSystem* s_instance;
 	};
 
 }

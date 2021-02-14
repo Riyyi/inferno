@@ -193,20 +193,13 @@ namespace Inferno {
 
 // -----------------------------------------
 
-	ShaderManager* ShaderManager::s_instance = nullptr;
-
-	void ShaderManager::initialize()
+	ShaderManager::ShaderManager(s)
 	{
-		ASSERT(!s_instance, "ShaderManager already exists!");
-		s_instance = this;
-
 		info() << "ShaderManager initialized";
 	}
 
-	void ShaderManager::destroy()
+	ShaderManager::~ShaderManager()
 	{
-		delete s_instance;
-		s_instance = nullptr;
 	}
 
 	void ShaderManager::add(const std::string& name, const std::shared_ptr<Shader>& shader)

@@ -9,14 +9,13 @@
 
 namespace Inferno {
 
-	RenderSystem* RenderSystem::s_instance = nullptr;
-
-	void RenderSystem::initialize()
+	RenderSystem::RenderSystem(s)
 	{
-		ASSERT(!s_instance, "RenderSystem already exists!");
-		s_instance = this;
-
 		info() << "RenderSystem initialized";
+	}
+
+	RenderSystem::~RenderSystem()
+	{
 	}
 
 	void RenderSystem::render()
@@ -26,12 +25,6 @@ namespace Inferno {
 		for (auto [entity, transform, sprite] : group.each()) {
 			Renderer2D::the().drawQuad(transform, sprite.color, sprite.texture);
 		}
-	}
-
-	void RenderSystem::destroy()
-	{
-		delete s_instance;
-		s_instance = nullptr;
 	}
 
 }
