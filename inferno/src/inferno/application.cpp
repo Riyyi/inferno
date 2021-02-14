@@ -61,8 +61,6 @@ namespace Inferno {
 		ShaderManager::destroy();
 		// Input::destroy();
 
-		m_window->destroy();
-
 		Settings::destroy();
 	}
 
