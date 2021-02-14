@@ -15,11 +15,11 @@ int main(int argc, char* argv[])
 	(void)argc;
 	(void)argv;
 
-	auto app = Inferno::createApplication();
+	auto& app = Inferno::createApplication();
 
-	int status = app->run();
+	int status = app.run();
 
-	delete app;
+	app.destroy();
 
 	return status;
 }
