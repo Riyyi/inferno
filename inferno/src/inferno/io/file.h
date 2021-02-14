@@ -32,11 +32,9 @@ namespace Inferno {
 				file >> *t;
 			}
 			catch (...) {
-				file.close();
 				return false;
 			}
 
-			file.close();
 			return true;
 		}
 
@@ -55,11 +53,9 @@ namespace Inferno {
 				file << std::setfill ('\t') << std::setw(1) << *t << std::endl;
 			}
 			catch (...) {
-				file.close();
 				return false;
 			}
 
-			file.close();
 			return true;
 		}
 	};
