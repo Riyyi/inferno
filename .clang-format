@@ -1,0 +1,35 @@
+# -*- yaml -*-
+
+---
+BasedOnStyle:                                    WebKit
+IndentWidth:                                     4
+---
+Language:                                        Cpp
+
+AlignAfterOpenBracket:                           Align
+AlignEscapedNewlines:                            Left
+AlignOperands:                                   Align
+AlignTrailingComments:                           true
+
+AllowAllArgumentsOnNextLine:                     false
+AllowAllConstructorInitializersOnNextLine:       true
+AllowAllParametersOfDeclarationOnNextLine:       false
+
+AlwaysBreakTemplateDeclarations:                 Yes
+
+BraceWrapping:
+  AfterEnum:                                     false
+  AfterFunction:                                 true
+  BeforeCatch:                                   true
+  BeforeElse:                                    true
+  SplitEmptyRecord:                              false
+BreakBeforeBraces:                               Custom
+BreakInheritanceList:                            BeforeComma
+
+SpaceAfterTemplateKeyword:                       false
+SpaceInEmptyBlock:                               false
+NamespaceIndentation:                            None
+Standard:                                        c++11
+TabWidth:                                        4
+UseTab:                                          AlignWithSpaces
+...
