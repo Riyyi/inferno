@@ -29,7 +29,7 @@ namespace Inferno {
 		// -----------
 		// 0b100000000 256
 
-		// Buffer is is chunks of 128 bytes
+		// Buffer is increased in chunks of 128 bytes
 		size_t newCapacity = (m_count + bytes + BUFFER_SIZE - 1) & ~(BUFFER_SIZE - 1);
 
 		unsigned char* newBuffer = static_cast<unsigned char*>(malloc(newCapacity));

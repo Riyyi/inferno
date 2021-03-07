@@ -205,16 +205,13 @@ namespace Inferno {
 	{
 		std::string_view view { format };
 
-		uint32_t i = 0;
-		while(format[i] != '\0') {
+		for(uint32_t i = 0; format[i] != '\0'; i++) {
 
 			if (format[i] == '{' && format[i + 1] == '}') {
 				DebugLogStream(type, false) << view.substr(0, i) << value;
 				dbgln(type, newline, format + i + 2, parameters...);
 				return;
 			}
-
-			i++;
 		}
 	}
 
