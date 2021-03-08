@@ -44,7 +44,7 @@ namespace Inferno {
 	int32_t Shader::findUniform(const std::string& name) const
 	{
 		int32_t location = glGetUniformLocation(m_id, name.c_str());
-		ASSERT(location != -1, "Shader could not find uniform '{}'", name.c_str());
+		ASSERT(location != -1, "Shader could not find uniform '{}'", name);
 		return location;
 	}
 
