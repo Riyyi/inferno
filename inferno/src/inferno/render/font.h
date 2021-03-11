@@ -33,10 +33,10 @@ class Texture;
 
 		inline std::string name() const { return m_name; }
 		inline uint32_t size() const { return m_size; }
-		inline const std::shared_ptr<Texture>& texture() const { return m_texture; }
+		inline std::shared_ptr<Texture> texture() const { return m_texture; }
 
-		inline const std::shared_ptr<Character>& get(unsigned char c) const { return m_characterList.at(c); }
-		inline const std::shared_ptr<Character>& operator[](unsigned char c) const { return m_characterList.at(c); }
+		inline std::shared_ptr<Character> get(unsigned char c) const { return m_characterList.at(c); }
+		inline std::shared_ptr<Character> operator[](unsigned char c) const { return m_characterList.at(c); }
 
 	private:
 		void parseFont(const std::string& font);
@@ -57,13 +57,13 @@ class Texture;
 		FontManager(s);
 		virtual ~FontManager();
 
-		void add(const std::string& name, const std::shared_ptr<Font>& font);
+		void add(const std::string& name, std::shared_ptr<Font> font);
 		std::shared_ptr<Font> load(const std::string& name);
 		std::shared_ptr<Font> get(const std::string& name);
 		bool exists(const std::string& name);
 
 		void remove(const std::string& name);
-		void remove(const std::shared_ptr<Font>& font);
+		void remove(std::shared_ptr<Font> font);
 
 	private:
 		std::unordered_map<std::string, std::shared_ptr<Font>> m_fontList;

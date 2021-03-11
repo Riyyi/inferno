@@ -36,9 +36,9 @@ namespace Inferno {
 		glClearColor(color.r, color.g, color.b, color.a);
 	}
 
-	void RenderCommand::drawIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t indexCount)
+	void RenderCommand::drawIndexed(const VertexArray& vertexArray, uint32_t indexCount)
 	{
-		uint32_t count = indexCount ? indexCount : vertexArray->getIndexBuffer()->getCount();
+		uint32_t count = indexCount ? indexCount : vertexArray.getIndexBuffer()->getCount();
  		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 
@@ -281,7 +281,7 @@ namespace Inferno {
 		bind();
 
 		// Render
-		RenderCommand::drawIndexed(m_vertexArray, m_quadIndex * indexPerQuad);
+		RenderCommand::drawIndexed(*m_vertexArray, m_quadIndex * indexPerQuad);
 
 		unbind();
 	}
@@ -420,7 +420,7 @@ namespace Inferno {
 		// Render
 		bool depthTest = RenderCommand::depthTest();
 		RenderCommand::setDepthTest(false);
-		RenderCommand::drawIndexed(m_vertexArray, m_quadIndex * indexPerQuad);
+		RenderCommand::drawIndexed(*m_vertexArray, m_quadIndex * indexPerQuad);
 		RenderCommand::setDepthTest(depthTest);
 
 		unbind();

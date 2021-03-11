@@ -3,7 +3,8 @@
 
 #include <memory> //std::shared_ptr
 
-#include "entt/entity/registry.hpp" // entt::entity, entt::registry
+#include "entt/entity/registry.hpp"    // entt::entity, entt::registry
+#include "glm/ext/matrix_float4x4.hpp" // glm::mat4
 
 #include "inferno/singleton.h"
 
@@ -24,7 +25,7 @@ namespace Inferno {
 
 		glm::mat4 projectionView();
 
-		void setRegistry(const std::shared_ptr<entt::registry>& registry) { m_registry = registry; };
+		void setRegistry(std::shared_ptr<entt::registry> registry) { m_registry = registry; };
 
 	private:
 		void updateOrthographic(TransformComponent& transform, CameraComponent& camera);

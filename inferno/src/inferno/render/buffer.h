@@ -132,11 +132,11 @@ namespace Inferno {
 		void bind() const;
 		void unbind() const;
 
-		void addVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer);
-		void setIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer);
+		void addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer);
+		void setIndexBuffer(std::shared_ptr<IndexBuffer> indexBuffer);
 
 		inline const std::vector<std::shared_ptr<VertexBuffer>>& getVertexBuffers() const { return m_vertexBuffers; }
-		inline const std::shared_ptr<IndexBuffer>& getIndexBuffer() const { return m_indexBuffer; }
+		inline std::shared_ptr<IndexBuffer> getIndexBuffer() const { return m_indexBuffer; }
 
 	private:
 		uint32_t m_id;

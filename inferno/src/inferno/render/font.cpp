@@ -112,7 +112,7 @@ namespace Inferno {
 	{
 	}
 
-	void FontManager::add(const std::string& name, const std::shared_ptr<Font>& font)
+	void FontManager::add(const std::string& name, std::shared_ptr<Font> font)
 	{
 		// Construct (key, value) pair and insert it into the unordered_map
 		m_fontList.emplace(std::move(name), std::move(font));
@@ -146,7 +146,7 @@ namespace Inferno {
 		}
 	}
 
-	void FontManager::remove(const std::shared_ptr<Font>& font)
+	void FontManager::remove(std::shared_ptr<Font> font)
 	{
 		if (exists(font->name())) {
 			m_fontList.erase(font->name());

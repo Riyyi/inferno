@@ -202,7 +202,7 @@ namespace Inferno {
 	{
 	}
 
-	void ShaderManager::add(const std::string& name, const std::shared_ptr<Shader>& shader)
+	void ShaderManager::add(const std::string& name, std::shared_ptr<Shader> shader)
 	{
 		// Construct (key, value) pair and insert it into the unordered_map
 		m_shaderList.emplace(std::move(name), std::move(shader));
@@ -243,7 +243,7 @@ namespace Inferno {
 		}
 	}
 
-	void ShaderManager::remove(const std::shared_ptr<Shader>& shader)
+	void ShaderManager::remove(std::shared_ptr<Shader> shader)
 	{
 		if (exists(shader->name())) {
 			m_shaderList.erase(shader->name());

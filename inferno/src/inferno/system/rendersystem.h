@@ -17,7 +17,7 @@ namespace Inferno {
 
 		void render();
 
-		void setRegistry(const std::shared_ptr<entt::registry>& registry) { m_registry = registry; };
+		void setRegistry(std::shared_ptr<entt::registry> registry) { m_registry = registry; };
 
 	private:
 		std::shared_ptr<entt::registry> m_registry;

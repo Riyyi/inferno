@@ -112,7 +112,7 @@ namespace Inferno {
 	{
 	}
 
-	void TextureManager::add(const std::string& path, const std::shared_ptr<Texture>& texture)
+	void TextureManager::add(const std::string& path, std::shared_ptr<Texture> texture)
 	{
 		// Construct (key, value) pair and insert it into the unordered_map
 		m_textureList.emplace(std::move(path), std::move(texture));
@@ -146,7 +146,7 @@ namespace Inferno {
 		}
 	}
 
-	void TextureManager::remove(const std::shared_ptr<Texture>& texture)
+	void TextureManager::remove(std::shared_ptr<Texture> texture)
 	{
 		if (exists(texture->path())) {
 			m_textureList.erase(texture->path());

@@ -52,7 +52,7 @@ namespace Inferno {
 		ShaderManager(s);
 		virtual ~ShaderManager();
 
-		void add(const std::string& name, const std::shared_ptr<Shader>& shader);
+		void add(const std::string& name, std::shared_ptr<Shader> shader);
 		std::shared_ptr<Shader> load(const std::string& name);
 		std::shared_ptr<Shader> load(const std::string& vertexSource,
 		                             const std::string& fragmentSource);
@@ -60,7 +60,7 @@ namespace Inferno {
 		bool exists(const std::string& name);
 
 		void remove(const std::string& name);
-		void remove(const std::shared_ptr<Shader>& shader);
+		void remove(std::shared_ptr<Shader> shader);
 
 	protected:
 		std::string computeName(const std::string& vertexSource,

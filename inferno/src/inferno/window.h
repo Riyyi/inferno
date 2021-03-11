@@ -47,7 +47,7 @@ namespace Inferno {
 		inline uint32_t getHeight() const { return m_properties.height; }
 
 		inline GLFWwindow* getWindow() const { return m_window; }
-		inline const std::shared_ptr<Context>& getContext() const { return m_context; }
+		inline std::shared_ptr<Context> getContext() const { return m_context; }
 
 		inline void setEventCallback(const std::function<void(Event&)>& callback) { m_eventCallback = callback; }
 

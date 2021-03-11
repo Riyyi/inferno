@@ -143,10 +143,10 @@ namespace Inferno {
 
 // -----------------------------------------
 
-	BufferLayout::BufferLayout(const std::initializer_list<BufferElement>& elements) :
-		m_elements(elements), m_stride(0)
+	BufferLayout::BufferLayout(const std::initializer_list<BufferElement>& elements)
+		: m_elements(elements), m_stride(0)
 	{
-		this->calculateOffsetsAndStride();
+		calculateOffsetsAndStride();
 	}
 
 	void BufferLayout::calculateOffsetsAndStride()
@@ -258,7 +258,7 @@ namespace Inferno {
 		glBindVertexArray(0);
 	}
 
-	void VertexArray::addVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+	void VertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer)
 	{
 		const auto& layout = vertexBuffer->getLayout();
 		ASSERT(layout.getElements().size(), "VertexBuffer has no layout");
@@ -279,18 +279,18 @@ namespace Inferno {
 
 			index++;
 		}
-		m_vertexBuffers.push_back(vertexBuffer);
+		m_vertexBuffers.push_back(std::move(vertexBuffer));
 
 		unbind();
 		vertexBuffer->unbind();
 	}
 
-	void VertexArray::setIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+	void VertexArray::setIndexBuffer(std::shared_ptr<IndexBuffer> indexBuffer)
 	{
 		bind();
 		indexBuffer->bind();
 
-		m_indexBuffer = indexBuffer;
+		m_indexBuffer = std::move(indexBuffer);
 
 		unbind();
 		indexBuffer->unbind();

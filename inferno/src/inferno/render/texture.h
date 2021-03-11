@@ -44,13 +44,13 @@ namespace Inferno {
 		TextureManager(s);
 		virtual ~TextureManager();
 
-		void add(const std::string& path, const std::shared_ptr<Texture>& texture);
+		void add(const std::string& path, std::shared_ptr<Texture> texture);
 		std::shared_ptr<Texture> load(const std::string& path);
 		std::shared_ptr<Texture> get(const std::string& path);
 		bool exists(const std::string& path);
 
 		void remove(const std::string& path);
-		void remove(const std::shared_ptr<Texture>& texture);
+		void remove(std::shared_ptr<Texture> texture);
 
 	private:
 		std::unordered_map<std::string, std::shared_ptr<Texture>> m_textureList;

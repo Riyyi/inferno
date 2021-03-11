@@ -134,13 +134,13 @@ namespace Inferno {
 		GltfManager(s) {}
 		virtual ~GltfManager() {}
 
-		void add(const std::string& path, const std::shared_ptr<Gltf>& gltf);
+		void add(const std::string& path, std::shared_ptr<Gltf> gltf);
 		std::shared_ptr<Gltf> load(const std::string& path);
 		std::shared_ptr<Gltf> get(const std::string& path);
 		bool exists(const std::string& path);
 
 		void remove(const std::string& path);
-		void remove(const std::shared_ptr<Gltf>& gltf);
+		void remove(std::shared_ptr<Gltf> gltf);
 
 	private:
 		std::unordered_map<std::string, std::shared_ptr<Gltf>> m_gltfList;
