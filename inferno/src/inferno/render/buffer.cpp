@@ -163,23 +163,23 @@ namespace Inferno {
 	VertexBuffer::VertexBuffer(size_t size)
 	{
 		glGenBuffers(1, &m_id);
-		this->bind();
+		bind();
 
 		// Reserve data on the GPU
 		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
 
-		this->unbind();
+		unbind();
 	}
 
 	VertexBuffer::VertexBuffer(float* vertices, size_t size)
 	{
 		glGenBuffers(1, &m_id);
-		this->bind();
+		bind();
 
 		// Upload data to the GPU
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 
-		this->unbind();
+		unbind();
 	}
 
 	VertexBuffer::~VertexBuffer()
@@ -199,12 +199,12 @@ namespace Inferno {
 
 	void VertexBuffer::uploadData(const void* data, uint32_t size)
 	{
-		this->bind();
+		bind();
 
 		// Upload data to the GPU
 		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
 
-		this->unbind();
+		unbind();
 	}
 
 // -----------------------------------------
@@ -213,12 +213,12 @@ namespace Inferno {
 		m_count(size / sizeof(uint32_t))
 	{
 		glCreateBuffers(1, &m_id);
-		this->bind();
+		bind();
 
 		// Upload data to the GPU
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
 
-		this->unbind();
+		unbind();
 	}
 
 	IndexBuffer::~IndexBuffer()
@@ -263,7 +263,7 @@ namespace Inferno {
 		const auto& layout = vertexBuffer->getLayout();
 		ASSERT(layout.getElements().size(), "VertexBuffer has no layout");
 
-		this->bind();
+		bind();
 		vertexBuffer->bind();
 
 		uint32_t index = 0;
@@ -281,18 +281,18 @@ namespace Inferno {
 		}
 		m_vertexBuffers.push_back(vertexBuffer);
 
-		this->unbind();
+		unbind();
 		vertexBuffer->unbind();
 	}
 
 	void VertexArray::setIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
 	{
-		this->bind();
+		bind();
 		indexBuffer->bind();
 
 		m_indexBuffer = indexBuffer;
 
-		this->unbind();
+		unbind();
 		indexBuffer->unbind();
 	}
 

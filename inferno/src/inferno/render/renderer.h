@@ -14,10 +14,8 @@
 
 namespace Inferno {
 
-	class Camera;
 	class Shader;
 	class Texture;
-	class Transform;
 	class VertexArray;
 
 	struct QuadVertex {

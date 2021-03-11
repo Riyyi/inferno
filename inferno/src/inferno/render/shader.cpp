@@ -50,13 +50,13 @@ namespace Inferno {
 
 	void Shader::setInt(const std::string& name, int value)
 	{
-		// Set unifrom int
+		// Set uniform int
 		glUniform1i(findUniform(name), value);
 	}
 
 	void Shader::setInt(const std::string& name, int* values, uint32_t count)
 	{
-		// Set unifrom int array
+		// Set uniform int array
 		glUniform1iv(findUniform(name), count, values);
 	}
 
