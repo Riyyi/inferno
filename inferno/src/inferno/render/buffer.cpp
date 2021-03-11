@@ -150,6 +150,7 @@ namespace Inferno {
 
 	void BufferLayout::calculateOffsetsAndStride()
 	{
+		m_stride = 0;
 		for (auto& element : m_elements) {
 			element.setOffset(m_stride);
 			m_stride += element.getSize();
