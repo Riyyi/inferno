@@ -13,7 +13,6 @@ namespace Inferno {
 			m_type(type),
 			m_name(name),
 			m_size(BufferElement::getTypeSize(type)),
-			m_offset(0),
 			m_normalized(normalized)
 	{
 	}
@@ -144,14 +143,13 @@ namespace Inferno {
 // -----------------------------------------
 
 	BufferLayout::BufferLayout(const std::initializer_list<BufferElement>& elements)
-		: m_elements(elements), m_stride(0)
+		: m_elements(elements)
 	{
 		calculateOffsetsAndStride();
 	}
 
 	void BufferLayout::calculateOffsetsAndStride()
 	{
-		m_stride = 0;
 		for (auto& element : m_elements) {
 			element.setOffset(m_stride);
 			m_stride += element.getSize();

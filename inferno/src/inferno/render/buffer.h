@@ -50,9 +50,9 @@ namespace Inferno {
 	private:
 		BufferElementType m_type;
 		std::string m_name;
-		uint32_t m_size;
-		uint32_t m_offset;
-		bool m_normalized;
+		uint32_t m_size { 0 };
+		uint32_t m_offset { 0 };
+		bool m_normalized { false };
 	};
 
 // -----------------------------------------
@@ -77,7 +77,7 @@ namespace Inferno {
 
 	private:
 		std::vector<BufferElement> m_elements;
-		uint32_t m_stride;
+		uint32_t m_stride { 0 };
 	};
 
 // -----------------------------------------
@@ -99,7 +99,7 @@ namespace Inferno {
 		inline void setLayout(const BufferLayout& layout) { m_layout = layout; }
 
 	private:
-		uint32_t m_id;
+		uint32_t m_id { 0 };
 		BufferLayout m_layout;
 	};
 
@@ -117,8 +117,8 @@ namespace Inferno {
 		inline uint32_t getCount() const { return m_count; }
 
 	private:
-		uint32_t m_id;
-		uint32_t m_count;
+		uint32_t m_id { 0 };
+		uint32_t m_count { 0 };
 	};
 
 // -----------------------------------------
@@ -139,7 +139,7 @@ namespace Inferno {
 		inline std::shared_ptr<IndexBuffer> getIndexBuffer() const { return m_indexBuffer; }
 
 	private:
-		uint32_t m_id;
+		uint32_t m_id { 0 };
 		std::vector<std::shared_ptr<VertexBuffer>> m_vertexBuffers;
 		std::shared_ptr<IndexBuffer> m_indexBuffer;
 	};
