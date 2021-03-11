@@ -195,7 +195,7 @@ namespace Inferno {
 			{ BufferElementType::Vec2,  "a_textureCoordinates" },
 			{ BufferElementType::Float, "a_textureIndex" },
 		});
-		m_vertexArray->addVertexBuffer(std::move(vertexBuffer));
+		m_vertexArray->addVertexBuffer(vertexBuffer);
 
 		// Create index buffer
 		auto indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(uint32_t) * indexCount);
@@ -346,7 +346,7 @@ namespace Inferno {
 			{ BufferElementType::Vec4,  "a_borderColor" },
 			{ BufferElementType::Float, "a_offset" },
 		});
-		m_vertexArray->addVertexBuffer(std::move(vertexBuffer));
+		m_vertexArray->addVertexBuffer(vertexBuffer);
 
 		// Create index buffer
 		auto indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(uint32_t) * indexCount);
