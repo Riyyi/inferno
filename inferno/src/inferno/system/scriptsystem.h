@@ -26,7 +26,7 @@ namespace Inferno {
 		void setScene(Scene* scene) { m_scene = scene; }
 
 	private:
-		Scene* m_scene;
+		Scene* m_scene { nullptr };
 	};
 
 }

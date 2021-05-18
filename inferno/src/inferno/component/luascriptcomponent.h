@@ -9,7 +9,7 @@ namespace Inferno {
 	class LuaScript;
 
 	struct LuaScriptComponent {
-		LuaScript* instance = nullptr;
+		LuaScript* instance { nullptr };
 		std::string path;
 
 		// Dont allow manually setting instance during construction

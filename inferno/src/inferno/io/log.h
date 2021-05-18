@@ -111,7 +111,7 @@ namespace Inferno {
 		virtual ~StringLogStream() override;
 
 	private:
-		std::string* m_fill;
+		std::string* m_fill { nullptr };
 	};
 
 // -----------------------------------------

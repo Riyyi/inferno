@@ -45,9 +45,9 @@ namespace Inferno {
 		sol::state m_state;
 		std::string m_path = "";
 
-		Scene* m_scene = nullptr;
-		uint32_t m_entity = 0;
-		TransformComponent* transform = nullptr;
+		Scene* m_scene { nullptr };
+		uint32_t m_entity { 0 };
+		TransformComponent* transform { nullptr };
 
 		friend class ScriptSystem;
 	};

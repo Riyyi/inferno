@@ -31,7 +31,7 @@ namespace Inferno {
 		void updatePerspective(float deltaTime);
 
 	private:
-		CameraComponent* m_camera;
+		CameraComponent* m_camera { nullptr };
 	};
 
 }

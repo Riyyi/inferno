@@ -88,8 +88,8 @@ namespace Inferno {
 		std::array<std::shared_ptr<Texture>, textureUnitPerBatch> m_textureUnits;
 
 		// GPU objects
-		std::shared_ptr<Shader> m_shader = nullptr;
-		std::shared_ptr<VertexArray> m_vertexArray = nullptr;
+		std::shared_ptr<Shader> m_shader;
+		std::shared_ptr<VertexArray> m_vertexArray;
 	};
 
 // -----------------------------------------
@@ -122,8 +122,8 @@ namespace Inferno {
 		void nextBatch() override;
 
 		// CPU quad vertices
-		std::unique_ptr<QuadVertex[]> m_vertexBufferBase = nullptr;
-		QuadVertex* m_vertexBufferPtr = nullptr;
+		std::unique_ptr<QuadVertex[]> m_vertexBufferBase;
+		QuadVertex* m_vertexBufferPtr { nullptr };
 
 		// Default quad vertex positions
 		glm::vec4 m_vertexPositions[vertexPerQuad];
@@ -156,8 +156,8 @@ namespace Inferno {
 		void nextBatch() override;
 
 		// CPU quad vertices
-		std::unique_ptr<CharacterVertex[]> m_vertexBufferBase = nullptr;
-		CharacterVertex* m_vertexBufferPtr = nullptr;
+		std::unique_ptr<CharacterVertex[]> m_vertexBufferBase;
+		CharacterVertex* m_vertexBufferPtr { nullptr };
 	};
 
 }

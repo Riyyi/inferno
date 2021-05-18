@@ -22,11 +22,11 @@ namespace Inferno {
 			return m_scene->getComponent<T>(m_entity);
 		}
 
-		TransformComponent* transform = nullptr;
+		TransformComponent* transform { nullptr };
 
 	private:
-		Scene* m_scene = nullptr;
-		uint32_t m_entity = 0;
+		Scene* m_scene { nullptr };
+		uint32_t m_entity { 0 };
 
 		friend class ScriptSystem;
 	};

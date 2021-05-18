@@ -7,7 +7,7 @@
 namespace Inferno {
 
 	struct NativeScriptComponent {
-		NativeScript* instance = nullptr;
+		NativeScript* instance { nullptr };
 
 		NativeScript* (*initialize)();
 

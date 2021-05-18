@@ -16,7 +16,7 @@ namespace Inferno {
 		void setCurrent();
 
 	private:
-		GLFWwindow* m_window;
+		GLFWwindow* m_window { nullptr };
 	};
 
 }
