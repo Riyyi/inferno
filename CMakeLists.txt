@@ -58,18 +58,18 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Engine dependencies target
 
 # Add engine target to project
-add_subdirectory("${CMAKE_SOURCE_DIR}/vendor")
+add_subdirectory("vendor")
 
 # ------------------------------------------
 # Engine target
 
 # Add engine target to project
-add_subdirectory("${CMAKE_SOURCE_DIR}/${ENGINE}")
+add_subdirectory("src")
 
 # ------------------------------------------
 # Examples target
 
 if (INFERNO_BUILD_EXAMPLES)
 	# Add examples target to project
-	add_subdirectory("${CMAKE_SOURCE_DIR}/example")
+	add_subdirectory("example")
 endif()

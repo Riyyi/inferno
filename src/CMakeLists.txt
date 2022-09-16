@@ -1,8 +1,8 @@
-file(GLOB_RECURSE ENGINE_SOURCES "src/*.cpp")
+file(GLOB_RECURSE ENGINE_SOURCES "${ENGINE}/*.cpp")
 
 add_library(${ENGINE} ${ENGINE_SOURCES})
 target_include_directories(${ENGINE} PRIVATE
-	"src"
+	"${CMAKE_SOURCE_DIR}/src"
 	"${CMAKE_SOURCE_DIR}/vendor/entt/src"
 	"${CMAKE_SOURCE_DIR}/vendor/glad/include"
 	"${CMAKE_SOURCE_DIR}/vendor/glfw/include"
