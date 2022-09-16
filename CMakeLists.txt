@@ -4,9 +4,13 @@
 # Set engine name
 set(ENGINE "inferno")
 
+if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+	set(INFERNO_STANDALONE TRUE)
+endif()
+
 # Options
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
-option(INFERNO_BUILD_EXAMPLES "Build the Inferno example programs" OFF)
+option(INFERNO_BUILD_EXAMPLES "Build the Inferno example programs" ${INFERNO_STANDALONE})
 
 # ------------------------------------------
 
