@@ -55,6 +55,12 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # ------------------------------------------
+# Engine dependencies target
+
+# Add engine target to project
+add_subdirectory("${CMAKE_SOURCE_DIR}/vendor")
+
+# ------------------------------------------
 # Engine target
 
 # Add engine target to project

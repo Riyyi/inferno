@@ -1,21 +1,21 @@
 [submodule "inferno/vendor/glfw"]
-	path = inferno/vendor/glfw
+	path = vendor/glfw
 	url = https://github.com/glfw/glfw
 [submodule "inferno/vendor/glm"]
-	path = inferno/vendor/glm
+	path = vendor/glm
 	url = https://github.com/g-truc/glm
 [submodule "inferno/vendor/json"]
-	path = inferno/vendor/json
+	path = vendor/json
 	url = https://github.com/nlohmann/json
 [submodule "inferno/vendor/entt"]
-	path = inferno/vendor/entt
+	path = vendor/entt
 	url = https://github.com/skypjack/entt
 [submodule "inferno/vendor/lua/lua"]
-	path = inferno/vendor/lua/lua
+	path = vendor/lua/lua
 	url = https://github.com/lua/lua
 [submodule "inferno/vendor/sol2"]
-	path = inferno/vendor/sol2
+	path = vendor/sol2
 	url = https://github.com/ThePhD/sol2
 [submodule "inferno/vendor/stb/stb"]
-	path = inferno/vendor/stb/stb
+	path = vendor/stb/stb
 	url = https://github.com/nothings/stb

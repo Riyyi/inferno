@@ -1,32 +1,17 @@
-# GLFW options
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-
-# Add GLFW target to project
-add_subdirectory(vendor/glfw)
-
-# Define engine source files
-file(GLOB_RECURSE GLAD "vendor/glad/*.c")
-file(GLOB LUA "vendor/lua/lua/*.c")
-list(REMOVE_ITEM LUA "${CMAKE_CURRENT_SOURCE_DIR}/vendor/lua/lua/onelua.c") # Do not compile single file variant
-list(REMOVE_ITEM LUA "${CMAKE_CURRENT_SOURCE_DIR}/vendor/lua/lua/ltests.c") # Do not compile internal debugging
-list(REMOVE_ITEM LUA "${CMAKE_CURRENT_SOURCE_DIR}/vendor/lua/lua/lua.c")    # Do not compile interpreter
 file(GLOB_RECURSE ENGINE_SOURCES "src/*.cpp")
-set(ENGINE_SOURCES ${GLAD} ${LUA} ${ENGINE_SOURCES})
 
 add_library(${ENGINE} ${ENGINE_SOURCES})
 target_include_directories(${ENGINE} PRIVATE
 	"src"
-	"vendor/entt/src"
-	"vendor/glad/include"
-	"vendor/glfw/include"
-	"vendor/glm"
-	"vendor/json/include"
-	"vendor/lua"
-	"vendor/sol2/include"
-	"vendor/stb")
-target_link_libraries(${ENGINE} glfw)
+	"${CMAKE_SOURCE_DIR}/vendor/entt/src"
+	"${CMAKE_SOURCE_DIR}/vendor/glad/include"
+	"${CMAKE_SOURCE_DIR}/vendor/glfw/include"
+	"${CMAKE_SOURCE_DIR}/vendor/glm"
+	"${CMAKE_SOURCE_DIR}/vendor/json/include"
+	"${CMAKE_SOURCE_DIR}/vendor/lua"
+	"${CMAKE_SOURCE_DIR}/vendor/sol2/include"
+	"${CMAKE_SOURCE_DIR}/vendor/stb")
+target_link_libraries(${ENGINE} ${ENGINE}-dependencies)
 
 # ------------------------------------------
 
