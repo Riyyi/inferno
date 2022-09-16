@@ -60,7 +60,9 @@ include_directories(
 # Define engine source files
 file(GLOB_RECURSE GLAD "${ENGINE}/vendor/glad/*.c")
 file(GLOB LUA "${ENGINE}/vendor/lua/lua/*.c")
-list(REMOVE_ITEM LUA "${CMAKE_SOURCE_DIR}/${ENGINE}/vendor/lua/lua/lua.c") # Do not compile stand-alone main()
+list(REMOVE_ITEM LUA "${CMAKE_SOURCE_DIR}/${ENGINE}/vendor/lua/lua/onelua.c") # Do not compile single file variant
+list(REMOVE_ITEM LUA "${CMAKE_SOURCE_DIR}/${ENGINE}/vendor/lua/lua/ltests.c") # Do not compile internal debugging
+list(REMOVE_ITEM LUA "${CMAKE_SOURCE_DIR}/${ENGINE}/vendor/lua/lua/lua.c")    # Do not compile interpreter
 file(GLOB_RECURSE ENGINE_SOURCES "${ENGINE}/src/${ENGINE}/*.cpp")
 set(ENGINE_SOURCES ${GLAD} ${LUA} ${ENGINE_SOURCES})
 
