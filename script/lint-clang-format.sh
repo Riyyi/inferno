@@ -24,7 +24,8 @@ else
 	exit 1
 fi
 
-files=$(git ls-files -- '*.cpp' '*.h' ':!:inferno/vendor')
+files="${1:-$(git --no-pager diff --cached --name-only)}"
+files="$(echo "$files" | grep -E '\.(cpp|h)$')"
 
 if [ -z "$files" ]; then
 	echo "No .cpp or .h files to check."

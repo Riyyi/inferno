@@ -14,14 +14,17 @@ AlignTrailingComments:                           true
 AllowAllArgumentsOnNextLine:                     false
 AllowAllConstructorInitializersOnNextLine:       true
 AllowAllParametersOfDeclarationOnNextLine:       false
+AllowShortLambdasOnASingleLine:                  All
 
 AlwaysBreakTemplateDeclarations:                 Yes
+IndentPPDirectives:                              BeforeHash
 
 BraceWrapping:
   AfterEnum:                                     false
   AfterFunction:                                 true
   BeforeCatch:                                   true
   BeforeElse:                                    true
+  BeforeLambdaBody:                              false
   SplitEmptyRecord:                              false
 BreakBeforeBraces:                               Custom
 BreakInheritanceList:                            BeforeComma
@@ -29,7 +32,8 @@ BreakInheritanceList:                            BeforeComma
 SpaceAfterTemplateKeyword:                       false
 SpaceInEmptyBlock:                               false
 NamespaceIndentation:                            None
-Standard:                                        c++11
+FixNamespaceComments:                            true
+Standard:                                        c++17
 TabWidth:                                        4
 UseTab:                                          AlignWithSpaces
 ...

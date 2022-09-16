@@ -4,12 +4,14 @@
 #include "inferno/component/nativescriptcomponent.h"
 #include "inferno/component/spritecomponent.h"
 #include "inferno/component/tagcomponent.h"
+#include "inferno/component/textareacomponent.h"
 #include "inferno/scene/scene.h"
 #include "inferno/script/cameracontroller.h"
 #include "inferno/script/nativescript.h"
 #include "inferno/system/camerasystem.h"
 #include "inferno/system/rendersystem.h"
 #include "inferno/system/scriptsystem.h"
+#include "inferno/system/textareasystem.h"
 #include "inferno/system/transformsystem.h"
 
 namespace Inferno {
@@ -33,6 +35,9 @@ namespace Inferno {
 		ScriptSystem::initialize();
 		ScriptSystem::the().setScene(this);
 
+		TextAreaSystem::initialize();
+		TextAreaSystem::the().setScene(this);
+
 		// Load assets
 		// ---------------------------------
 
@@ -44,6 +49,9 @@ namespace Inferno {
 
 		uint32_t camera = createEntity("Camera Entity");
 		auto& cameraTransform = getComponent<TransformComponent>(camera);
+		// cameraTransform.rotate.z = 0.0f;
+		// cameraTransform.translate.z = -1.0f;
+		// addComponent<CameraComponent>(camera, CameraType::Orthographic);
 		cameraTransform.rotate.z = -1.0f;
 		cameraTransform.translate.z = 1.0f;
 		addComponent<CameraComponent>(camera, CameraType::Perspective);
@@ -63,6 +71,10 @@ namespace Inferno {
 		quad3Transform.translate.x = 2.2f;
 		addComponent<SpriteComponent>(quad3, glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture2);
 
+		uint32_t text = createEntity("Text");
+		addComponent<TextAreaComponent>(text, "HelloWorld!", "assets/fnt/dejavu-sans", 0, 150, 3);
+		// addComponent<TextAreaComponent>(text, "@#$%^&*()qygij!", "assets/fnt/dejavu-sans-test", 0, 150, 3);
+
 		info() << "Scene initialized";
 	}
 
@@ -77,6 +89,7 @@ namespace Inferno {
 	void Scene::render()
 	{
 		RenderSystem::the().render();
+		TextAreaSystem::the().render();
 	}
 
 	void Scene::destroy()

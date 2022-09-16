@@ -1,3 +1,5 @@
+#include "glm/gtc/type_ptr.hpp" // glm::make_mat4
+
 #include "inferno/application.h"
 #include "inferno/assert.h"
 #include "inferno/core.h"
@@ -5,12 +7,14 @@
 #include "inferno/event/event.h"
 #include "inferno/event/keyevent.h"
 #include "inferno/event/mouseevent.h"
-#include "inferno/keycodes.h"
+#include "inferno/io/gltffile.h"
 #include "inferno/io/input.h"
 #include "inferno/io/log.h"
+#include "inferno/keycodes.h"
 #include "inferno/render/buffer.h"
 #include "inferno/render/context.h"
 #include "inferno/render/font.h"
+#include "inferno/render/gltf.h"
 #include "inferno/render/renderer.h"
 #include "inferno/render/shader.h"
 #include "inferno/render/texture.h"
@@ -18,6 +22,7 @@
 #include "inferno/settings.h"
 #include "inferno/time.h"
 #include "inferno/window.h"
+#include <string>
 
 namespace Inferno {
 
@@ -47,6 +52,20 @@ namespace Inferno {
 		// Load assets
 
 		m_font = FontManager::the().load("assets/fnt/dejavu-sans");
+
+		// auto bla = GlTFFile::read("assets/gltf/box.glb");
+		// success() << "@" << bla.first.get() << "@";
+		// auto bla2 = GlTFFile::read("assets/gltf/boxtextured.glb");
+		// info() << "@" << bla2.first.get() << "@";
+		// auto bla3 = GlTFFile::read("assets/gltf/guinea-pig-cage-fleece.glb");
+		// warn() << "@" << bla3.first.get() << "@";
+
+		// Gltf model = Gltf("assets/gltf/box.glb");
+
+		// Gltf model = Gltf("assets/gltf/animatedmorphcube.glb");
+		// Gltf model = Gltf("assets/gltf/reciprocatingsaw.glb");
+
+		Gltf model = Gltf("assets/gltf/triangle-without-indices.gltf");
 	}
 
 	Application::~Application()
@@ -138,7 +157,7 @@ namespace Inferno {
 			RendererCharacter::the().beginScene();
 
 			m_scene->render();
-			RendererCharacter::the().drawCharacter(character, f->texture());
+			// RendererCharacter::the().drawCharacter(character, f->texture());
 
 			Renderer2D::the().endScene();
 			RendererCharacter::the().endScene();
@@ -167,6 +186,7 @@ namespace Inferno {
 		(void)e;
 
 		info() << "WindowCloseEvent triggered";
+		infoln("{}Event triggered", e.toString());
 
 		m_window->setShouldClose(true);
 

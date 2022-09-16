@@ -152,6 +152,7 @@ namespace Inferno {
 
 // -----------------------------------------
 
+	// clang-format off
 	template<typename... P> void dbgln(const char* format, P&&... parameters) { dbgln(Log::None, true, format, std::forward<P>(parameters)...); }
 	template<typename... P> void infoln(const char* format, P&&... parameters) { dbgln(Log::Info, true, format, std::forward<P>(parameters)...); }
 	template<typename... P> void warnln(const char* format, P&&... parameters) { dbgln(Log::Warn, true, format, std::forward<P>(parameters)...); }
@@ -193,6 +194,7 @@ namespace Inferno {
 	template<typename... P> void dangerln(bool newline, const std::string_view& format, P&&... parameters) { dbgln(Log::Danger, newline, format.data(), std::forward<P>(parameters)...); }
 	template<typename... P> void successln(bool newline, const std::string_view& format, P&&... parameters) { dbgln(Log::Success, newline, format.data(), std::forward<P>(parameters)...); }
 	template<typename... P> void commentln(bool newline, const std::string_view& format, P&&... parameters) { dbgln(Log::Comment, newline, format.data(), std::forward<P>(parameters)...); }
+	// clang-format on
 
 // -----------------------------------------
 
@@ -214,6 +216,7 @@ namespace Inferno {
 			}
 		}
 	}
+	// possible c++17 improvent https://riptutorial.com/cplusplus/example/3208/iterating-over-a-parameter-pack
 
 // -----------------------------------------
 

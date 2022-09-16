@@ -33,4 +33,7 @@ void main()
 	v_borderColor = a_borderColor;
 	v_offset = a_offset;
 	gl_Position = vec4(a_position, 1.0f);
+
+	// Vclip = Camera projection * Camera view * Model transform * Vlocal
+	// gl_Position = u_projectionView * vec4(a_position, 1.0f);
 }

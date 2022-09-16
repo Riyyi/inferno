@@ -7,23 +7,24 @@
 
 scriptName="$(basename "$0")"
 
-help() {
-	b=$(tput bold)
-	u=$(tput smul)
-	nc=$(tput sgr0)
+b="$(tput bold)"
+u="$(tput smul)"
+red="$(tput setf 4)"
+n="$(tput sgr0)"
 
+help() {
 	cat << EOF
-${b}NAME${nc}
+${b}NAME${n}
 	${scriptName} - manage pre-commit hooks
 
-${b}SYNOPSIS${nc}
-	${b}${scriptName}${nc} ${u}COMMAND${nc}
+${b}SYNOPSIS${n}
+	${b}${scriptName}${n} ${u}COMMAND${n}
 
-${b}COMMANDS${nc}
-	${b}install${nc}
+${b}COMMANDS${n}
+	${b}install${n}
 		Install all pre-commit hooks.
 
-	${b}remove${nc}
+	${b}remove${n}
 		Remove all pre-commit hooks.
 EOF
 }
@@ -31,8 +32,18 @@ EOF
 # Exit if no option is provided
 [ "$#" -eq 0 ] && help && exit 1
 
+if [ ! -d ".git" ]; then
+   echo "${b}${red}Error:${n} please run this script from the project root." >&2
+   exit 1
+fi
+
+currentDir="$(pwd -P)"
+
+# Get the path from the project root to the script
+subDir="$(dirname -- "$0")"
+
 # Get the full path to this script while handling spaces and symlinks correctly
-scriptPath="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
+scriptPath="$(cd -P -- "$subDir" && pwd -P)"
 cd "$scriptPath/.." || exit 1
 
 hooks="
@@ -42,7 +53,7 @@ lint-ci.sh
 install() {
 	echo "Installing pre-commit hooks"
 
-	preCommit=".git/hooks/pre-commit"
+	preCommit="$currentDir/.git/hooks/pre-commit"
 	if ! test -f "$preCommit"; then
 		touch "$preCommit"
 		chmod +x "$preCommit"
@@ -51,7 +62,7 @@ install() {
 
 	for hook in $hooks; do
 		sed -Ei "/$hook/d" "$preCommit"
-		sed -Ei "\$ a script/$hook" "$preCommit"
+		sed -Ei "\$ a $subDir/$hook" "$preCommit"
 	done
 }
 

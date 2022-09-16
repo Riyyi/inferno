@@ -53,37 +53,48 @@ namespace Inferno {
 #endif // APPLICATION_H
 
 // C++17 features used:
-//   - std::string:view, log.h
-//   - std::shared_ptr array management, renderer.h
+//   - std::string_view                 -> log.h
+//   - std::shared_ptr array management -> renderer.h
+//   - EnTT library
+//   - structured binding               -> render.cpp, camera.cpp
+//   - std::optional                    -> textareasystem.cpp
 
 // OpenGL 4.5 features used:
 //   -
 
+// Cmake 3.16 features used:
+//   - Precompiled headers
+
 // Gameplan
-// v Entrypoint
-// v Logging
-// v Events
-// v Window
-// v Settings loader (json)
-// v Input polling
-// v OpenGL context
 // - GPUDriver (?)
 // v Renderer
 //   v Buffers
 //   ~ Shader
 //   - Schene (camera, lights, environment)
-// - Texture loading
 // - Model loading
-// - Entity Component System
 // - Serialization
 // - Level format
 // - Tools (Tiled?)
-// - Scripting (Lua)
 
-// - Global object access can be done in 3 ways:
-// - Singleton, static, extern
+// - Global object access can be done in 4 ways:
+// - Singleton, static class, extern, regular global
 
 // @Todo
-// - Settings should contain all file paths (ex: shaders)
 // - RefPtr<>
-// - Rename Application::get() to Application::the() for singleton
+// - keycodes.h stringify helper in code.h (util/types.h, util/defines.h)
+//     https://github.com/SerenityOS/serenity/blob/master/Kernel/Assertions.h#L29
+// - Call delete on pointers that make the singletons, so valgrind will say "All heap blocks were freed -- no leaks are possible", in "HEAP SUMMARY"
+// - TagComponent, string -> char[]
+// - Move Gltf parsing and json helper to /parser directory
+
+// - Initialize primitive types, raw pointers are uninitialized, so need to be explicitly initialized to nullptr
+// - Run clang-format on every file
+
+// profiling: 1:33:08 - JS bytecode VM part 7
+// $ valgrind --tool=callgrind <executable>
+// $ kcachegrind callgrind.out.<number>
+
+// GUI
+// Framebuffer on entire screen, manage every individual pixel
+// - classes:    Window, Button, Label
+// - event loop: select based

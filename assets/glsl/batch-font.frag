@@ -27,6 +27,7 @@ void main()
 	vec4 textureColor = v_color;
 	switch(int(v_textureIndex)) {
 		case 0:  break; // Texture unit 0 is reserved for no texture
+		// case 1: textureColor.a = 1; break;
 		case 1:  textureColor.a = alpha(texture(u_textures[1], v_textureCoordinates).a); break;
 		// case 1:  textureColor *= texture(u_textures[1],  v_textureCoordinates); break;
 		case 2:  textureColor.a = alpha(texture(u_textures[2],  v_textureCoordinates).a); break;

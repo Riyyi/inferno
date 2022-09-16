@@ -1,6 +1,7 @@
 #ifndef CAMERA_CONTROLLER_H
 #define CAMERA_CONTROLLER_H
 
+#include "inferno/component/cameracomponent.h"
 #include "inferno/script/nativescript.h"
 
 #define TRANSLATE_SPEED 2.5f

@@ -13,20 +13,20 @@ namespace Inferno {
 	public:
 		static inline void initialize()
 		{
-			ASSERT(!s_instance, "Singleton already exists!");
+			ASSERT(!s_instance, "singleton already exists");
 			s_instance = new T { s {} };
 		}
 
 		static inline void destroy()
 		{
-			ASSERT(s_instance, "Singleton does not exist!");
+			ASSERT(s_instance, "singleton does not exist");
 			delete s_instance;
 			s_instance = nullptr;
 		}
 
 		static inline T& the()
 		{
-			ASSERT(s_instance, "Singleton does not exist!");
+			ASSERT(s_instance, "singleton does not exist");
 			return *s_instance;
 		}
 

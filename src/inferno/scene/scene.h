@@ -82,3 +82,7 @@ namespace Inferno {
 }
 
 #endif // SCENE_H
+
+// @Todo
+// - Convert registry to stack variable
+// - Convert registry to scene pointer in systems

@@ -15,7 +15,8 @@ if ! command -v shellcheck > /dev/null 2>&1; then
 	exit 1
 fi
 
-files=$(git ls-files -- '*.sh' ':!:inferno/vendor')
+files="${1:-$(git --no-pager diff --cached --name-only)}"
+files="$(echo "$files" | grep -E '\.sh$')"
 
 if [ -z "$files" ]; then
 	echo "No .sh files to check."
