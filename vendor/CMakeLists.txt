@@ -6,6 +6,9 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 # Add GLFW target to project
 add_subdirectory(glfw)
 
+# Add RUC target to project
+add_subdirectory(ruc)
+
 # Define engine source files
 file(GLOB_RECURSE GLAD "glad/*.c")
 file(GLOB LUA "lua/lua/*.c")
@@ -18,4 +21,4 @@ add_library(${ENGINE}-dependencies ${ENGINE_SOURCES})
 target_include_directories(${ENGINE}-dependencies PRIVATE
 	"glad/include"
 	"lua")
-target_link_libraries(${ENGINE}-dependencies glfw)
+target_link_libraries(${ENGINE}-dependencies glfw ruc)

@@ -9,6 +9,7 @@ target_include_directories(${ENGINE} PRIVATE
 	"${CMAKE_SOURCE_DIR}/vendor/glm"
 	"${CMAKE_SOURCE_DIR}/vendor/json/include"
 	"${CMAKE_SOURCE_DIR}/vendor/lua"
+	"${CMAKE_SOURCE_DIR}/vendor/ruc/src"
 	"${CMAKE_SOURCE_DIR}/vendor/sol2/include"
 	"${CMAKE_SOURCE_DIR}/vendor/stb")
 target_link_libraries(${ENGINE} ${ENGINE}-dependencies)
