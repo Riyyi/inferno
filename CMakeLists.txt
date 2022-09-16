@@ -57,55 +57,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # ------------------------------------------
 # Engine target
 
-# GLFW options
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-
-# Add GLFW target to project
-add_subdirectory(${ENGINE}/vendor/glfw)
-
-# Define engine source files
-file(GLOB_RECURSE GLAD "${ENGINE}/vendor/glad/*.c")
-file(GLOB LUA "${ENGINE}/vendor/lua/lua/*.c")
-list(REMOVE_ITEM LUA "${CMAKE_SOURCE_DIR}/${ENGINE}/vendor/lua/lua/onelua.c") # Do not compile single file variant
-list(REMOVE_ITEM LUA "${CMAKE_SOURCE_DIR}/${ENGINE}/vendor/lua/lua/ltests.c") # Do not compile internal debugging
-list(REMOVE_ITEM LUA "${CMAKE_SOURCE_DIR}/${ENGINE}/vendor/lua/lua/lua.c")    # Do not compile interpreter
-file(GLOB_RECURSE ENGINE_SOURCES "${ENGINE}/src/${ENGINE}/*.cpp")
-set(ENGINE_SOURCES ${GLAD} ${LUA} ${ENGINE_SOURCES})
-
-add_library(${ENGINE} ${ENGINE_SOURCES})
-target_include_directories(${ENGINE} PRIVATE
-	"${ENGINE}/src"
-	"${ENGINE}/vendor/entt/src"
-	"${ENGINE}/vendor/glad/include"
-	"${ENGINE}/vendor/glfw/include"
-	"${ENGINE}/vendor/glm"
-	"${ENGINE}/vendor/json/include"
-	"${ENGINE}/vendor/lua"
-	"${ENGINE}/vendor/sol2/include"
-	"${ENGINE}/vendor/stb")
-target_link_libraries(${ENGINE} glfw)
-
-# ------------------------------------------
-
-target_precompile_headers(${ENGINE} PRIVATE
-	"$<$<COMPILE_LANGUAGE:CXX>:<algorithm$<ANGLE-R>>"
-	"$<$<COMPILE_LANGUAGE:CXX>:<array$<ANGLE-R>>"
-	"$<$<COMPILE_LANGUAGE:CXX>:<csignal$<ANGLE-R>>"
-	"$<$<COMPILE_LANGUAGE:CXX>:<cstddef$<ANGLE-R>>"
-	"$<$<COMPILE_LANGUAGE:CXX>:<cstdint$<ANGLE-R>>"
-	"$<$<COMPILE_LANGUAGE:CXX>:<functional$<ANGLE-R>>"
-	"$<$<COMPILE_LANGUAGE:CXX>:<iostream$<ANGLE-R>>"
-	"$<$<COMPILE_LANGUAGE:CXX>:<memory$<ANGLE-R>>"
-	"$<$<COMPILE_LANGUAGE:CXX>:<ostream$<ANGLE-R>>"
-	"$<$<COMPILE_LANGUAGE:CXX>:<sstream$<ANGLE-R>>"
-	"$<$<COMPILE_LANGUAGE:CXX>:<string$<ANGLE-R>>"
-	"$<$<COMPILE_LANGUAGE:CXX>:<string_view$<ANGLE-R>>"
-	"$<$<COMPILE_LANGUAGE:CXX>:<unordered_map$<ANGLE-R>>"
-	"$<$<COMPILE_LANGUAGE:CXX>:<utility$<ANGLE-R>>"
-	"$<$<COMPILE_LANGUAGE:CXX>:<vector$<ANGLE-R>>"
-)
+# Add engine target to project
+add_subdirectory("${CMAKE_SOURCE_DIR}/${ENGINE}")
 
 # ------------------------------------------
 # Examples target
