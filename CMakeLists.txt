@@ -1,61 +1,65 @@
-# User config between these lines
 # ------------------------------------------
+# User config between these lines
 
 # Set engine name
 set(ENGINE "inferno")
-# Set project name
-set(GAME "game")
-# Set debugging, ON/OFF
-set(DEBUG "ON")
+
+# Options
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+option(INFERNO_BUILD_EXAMPLES "Build the Inferno example programs" OFF)
 
 # ------------------------------------------
 
-# Add 'make run' target
-add_custom_target(run
-    COMMAND ${GAME}
-)
+cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+project(${ENGINE} CXX C)
 
 # ------------------------------------------
+# Setup C++ compiler
 
-cmake_minimum_required(VERSION 3.16)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Compiler flags used for all build types
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
+# -Wall      = All warnings about contructions that are easily avoidable
+# -Wextra    = Extra warning flags not covered by -Wall
+# -Wpedantic = Warnings for compiler extensions not part of the standard
+
+# Set default build type if not specified
+set(DEFAULT_BUILD_TYPE Release)
+if(EXISTS ${CMAKE_SOURCE_DIR}/.git)
+	set(DEFAULT_BUILD_TYPE Debug)
+endif()
+if(NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE ${DEFAULT_BUILD_TYPE})
+endif()
+
+# Set build type specific compiler flags
+message("--- ${CMAKE_BUILD_TYPE} ---")
+if(${CMAKE_BUILD_TYPE} STREQUAL Debug)
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -g -pg")
+	# -Og = Optimizations that do not interfere with debugging
+	# -g  = Produce debugging information in OS's native format
+	# -pg = Generate profile information for analysis with gprof
+	# $ gprof <PROJECT> gmon.out > profile-data.txt
+elseif(${CMAKE_BUILD_TYPE} STREQUAL Release)
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
+	# -O3 = Optimizations that increase compilation time and performance
+endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Check if the build should include debugging symbols
-option(DEBUG "" ${DEBUG})
-if(DEBUG)
-	# cmake -DDEBUG=on .. && make
-	message("--- Debug ---")
-	set(CMAKE_BUILD_TYPE "Debug")
+# ------------------------------------------
+# Engine target
 
-	# -Og     = Optimizations that do not interfere with debugging
-	# -Wall   = All warnings about contructions that are easily avoidable
-	# -Wextra = Extra warning flags not covered by -Wall
-	# -g      = Produce debugging information in OS's native format
-	# -pg     = Generate profile information for analysis with gprof
-	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -Wall -Wextra -g -pg")
-	# gprof <GAME> gmon.out > profile-data.txt
-else()
-	# cmake -DDEBUG=off .. && make
-	message("--- Release ---")
-	set(CMAKE_BUILD_TYPE "Release")
+# GLFW options
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
-	# -O3     = Optimizations that increases compilation time and performance
-	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
-endif()
-
-# Include all headers
-include_directories(
-	"${ENGINE}/src"
-	"${ENGINE}/vendor/entt/src"
-	"${ENGINE}/vendor/glad/include"
-	"${ENGINE}/vendor/glfw/include"
-	"${ENGINE}/vendor/glm"
-	"${ENGINE}/vendor/json/include"
-	"${ENGINE}/vendor/lua"
-	"${ENGINE}/vendor/sol2/include"
-	"${ENGINE}/vendor/stb"
-)
+# Add GLFW target to project
+add_subdirectory(${ENGINE}/vendor/glfw)
 
 # Define engine source files
 file(GLOB_RECURSE GLAD "${ENGINE}/vendor/glad/*.c")
@@ -66,33 +70,18 @@ list(REMOVE_ITEM LUA "${CMAKE_SOURCE_DIR}/${ENGINE}/vendor/lua/lua/lua.c")    # 
 file(GLOB_RECURSE ENGINE_SOURCES "${ENGINE}/src/${ENGINE}/*.cpp")
 set(ENGINE_SOURCES ${GLAD} ${LUA} ${ENGINE_SOURCES})
 
-# Define game source files
-file(GLOB_RECURSE GAME_SOURCES "${GAME}/src/*.cpp")
-set(GAME_SOURCES ${GAME_SOURCES})
-
-# ------------------------------------------
-
-project(${ENGINE})
-set(CMAKE_CXX_STANDARD 17)
-
-# GLFW options
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-
-# Add GLFW target to project
-add_subdirectory(${ENGINE}/vendor/glfw)
-
-add_library(${ENGINE} STATIC ${ENGINE_SOURCES})
+add_library(${ENGINE} ${ENGINE_SOURCES})
+target_include_directories(${ENGINE} PRIVATE
+	"${ENGINE}/src"
+	"${ENGINE}/vendor/entt/src"
+	"${ENGINE}/vendor/glad/include"
+	"${ENGINE}/vendor/glfw/include"
+	"${ENGINE}/vendor/glm"
+	"${ENGINE}/vendor/json/include"
+	"${ENGINE}/vendor/lua"
+	"${ENGINE}/vendor/sol2/include"
+	"${ENGINE}/vendor/stb")
 target_link_libraries(${ENGINE} glfw)
-
-# ------------------------------------------
-
-project(${GAME})
-set(CMAKE_CXX_STANDARD 17)
-
-add_executable(${GAME} ${GAME_SOURCES})
-target_link_libraries(${GAME} ${ENGINE})
 
 # ------------------------------------------
 
@@ -114,4 +103,10 @@ target_precompile_headers(${ENGINE} PRIVATE
 	"$<$<COMPILE_LANGUAGE:CXX>:<vector$<ANGLE-R>>"
 )
 
-target_precompile_headers(${GAME} REUSE_FROM ${ENGINE})
+# ------------------------------------------
+# Examples target
+
+if (INFERNO_BUILD_EXAMPLES)
+	# Add examples target to project
+	add_subdirectory("${CMAKE_SOURCE_DIR}/example")
+endif()
