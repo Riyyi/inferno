@@ -1,5 +1,4 @@
-#ifndef LOG_H
-#define LOG_H
+#pragma once
 
 #include <cstddef>     // size_t
 #include <cstring>     // memcpy
@@ -222,6 +221,4 @@ namespace Inferno {
 
 	StringLogStream str(std::string* fill);
 
-}
-
-#endif // LOG_H
+} // namespace Inferno

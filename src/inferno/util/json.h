@@ -1,5 +1,4 @@
-#ifndef JSON_UTIL_H
-#define JSON_UTIL_H
+#pragma once
 
 #if 0
 #include <cstdint>  // int32_t, uint32_t
@@ -248,8 +247,6 @@ namespace Inferno {
 
 } // namespace Inferno
 #endif
-
-#endif // JSON_UTIL_H
 
 // JSON syntax:
 //   [ ]        = std::map,    array (ordered)

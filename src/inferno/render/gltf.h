@@ -1,5 +1,4 @@
-#ifndef GLTF_H
-#define GLTF_H
+#pragma once
 
 #if 0
 #include <cstdint>       // uint32_t
@@ -169,5 +168,3 @@ namespace Inferno {
 
 } // namespace Inferno
 #endif
-
-#endif // GLTF_H

@@ -1,5 +1,4 @@
-#ifndef SINGLETON_H
-#define SINGLETON_H
+#pragma once
 
 #include "inferno/assert.h"
 
@@ -50,6 +49,3 @@ namespace Inferno {
 	T* Singleton<T>::s_instance = nullptr;
 
 } // namespace Inferno
-
-
-#endif // SINGLETON_H

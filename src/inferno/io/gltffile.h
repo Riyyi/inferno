@@ -1,5 +1,4 @@
-#ifndef GLTF_FILE_H
-#define GLTF_FILE_H
+#pragma once
 
 #include <cstdint> // uint32_t
 #include <memory>  // std::shared_ptr
@@ -18,5 +17,3 @@ namespace Inferno {
 	};
 
 } // namespace Inferno
-
-#endif // GLTF_FILE_H

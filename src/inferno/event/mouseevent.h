@@ -1,5 +1,4 @@
-#ifndef MOUSEEVENT_H
-#define MOUSEEVENT_H
+#pragma once
 
 #include <sstream> // std::stringstream
 
@@ -101,6 +100,4 @@ namespace Inferno {
 		float m_yOffset;
 	};
 
-}
-
-#endif // MOUSEEVENT_H
+} // namespace Inferno

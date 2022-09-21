@@ -1,5 +1,4 @@
-#ifndef TEXTAREA_H
-#define TEXTAREA_H
+#pragma once
 
 #include <cstdint>  // std::uint32_t
 #include <memory>   // std::shared_ptr
@@ -34,5 +33,3 @@ namespace Inferno {
 	};
 
 } // namespace Inferno
-
-#endif // TEXTAREA_H

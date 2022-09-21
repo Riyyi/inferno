@@ -1,5 +1,4 @@
-#ifndef CAMERA_SYSTEM_H
-#define CAMERA_SYSTEM_H
+#pragma once
 
 #include <memory> //std::shared_ptr
 
@@ -34,5 +33,3 @@ namespace Inferno {
 	};
 
 } // namespace Inferno
-
-#endif // CAMERA_SYSTEM_H

@@ -1,5 +1,4 @@
-#ifndef SHADER_H
-#define SHADER_H
+#pragma once
 
 #include <cstdint>       // int32_t, uint32_t
 #include <memory>        // std::shared_ptr
@@ -70,5 +69,3 @@ namespace Inferno {
 	};
 
 } // namespace Inferno
-
-#endif // SHADER_H

@@ -1,5 +1,4 @@
-#ifndef CAMERA_COMPONENT_H
-#define CAMERA_COMPONENT_H
+#pragma once
 
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
 #include "glm/ext/vector_float3.hpp"   // glm::vec3
@@ -27,6 +26,4 @@ namespace Inferno {
 		glm::mat4 projection { 1.0f }; // Identity matrix
 	};
 
-}
-
-#endif // CAMERA_COMPONENT_H
+} // namespace Inferno

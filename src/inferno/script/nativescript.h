@@ -1,5 +1,4 @@
-#ifndef NATIVE_SCRIPT_H
-#define NATIVE_SCRIPT_H
+#pragma once
 
 #include "inferno/scene/scene.h"
 
@@ -31,6 +30,4 @@ namespace Inferno {
 		friend class ScriptSystem;
 	};
 
-}
-
-#endif // NATIVE_SCRIPT_H
+} // namespace Inferno

@@ -1,5 +1,4 @@
-#ifndef CONTEXT_H
-#define CONTEXT_H
+#pragma once
 
 struct GLFWwindow;
 
@@ -19,7 +18,4 @@ namespace Inferno {
 		GLFWwindow* m_window { nullptr };
 	};
 
-}
-
-
-#endif // CONTEXT_H
+} // namespace Inferno

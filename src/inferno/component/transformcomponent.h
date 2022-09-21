@@ -1,5 +1,4 @@
-#ifndef TRANSFORM_COMPONENT_H
-#define TRANSFORM_COMPONENT_H
+#pragma once
 
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
 #include "glm/ext/vector_float3.hpp"   // glm::vec3
@@ -22,6 +21,4 @@ namespace Inferno {
 	const LogStream& operator<<(const LogStream& stream, const glm::vec4& value);
 	const LogStream& operator<<(const LogStream& stream, const glm::mat4& value);
 	const LogStream& operator<<(const LogStream& stream, const TransformComponent& value);
-}
-
-#endif // TRANSFORM_COMPONENT_H
+} // namespace Inferno

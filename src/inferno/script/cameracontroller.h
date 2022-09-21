@@ -1,5 +1,4 @@
-#ifndef CAMERA_CONTROLLER_H
-#define CAMERA_CONTROLLER_H
+#pragma once
 
 #include "inferno/component/cameracomponent.h"
 #include "inferno/script/nativescript.h"
@@ -15,7 +14,6 @@ namespace Inferno {
 
 	class CameraController final : public NativeScript {
 	public:
-
 		virtual void update(float deltaTime) override
 		{
 			m_camera = &getComponent<CameraComponent>();
@@ -35,6 +33,4 @@ namespace Inferno {
 		CameraComponent* m_camera { nullptr };
 	};
 
-}
-
-#endif // CAMERA_CONTROLLER_H
+} // namespace Inferno

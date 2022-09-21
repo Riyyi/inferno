@@ -1,7 +1,6 @@
-#ifndef TRANSFORM_SYSTEM_H
-#define TRANSFORM_SYSTEM_H
+#pragma once
 
-#include <memory> //std::shared_ptr
+#include <memory> // std::shared_ptr
 
 #include "entt/entity/registry.hpp" // entt::entity, entt::registry
 #include "ruc/singleton.h"
@@ -22,5 +21,3 @@ namespace Inferno {
 	};
 
 } // namespace Inferno
-
-#endif // TRANSFORM_SYSTEM_H

@@ -1,5 +1,4 @@
-#ifndef BUFFER_H
-#define BUFFER_H
+#pragma once
 
 #include <cstddef> // size_t
 #include <cstdint> // int32_t, uint32_t
@@ -143,6 +142,4 @@ namespace Inferno {
 		std::vector<std::shared_ptr<VertexBuffer>> m_vertexBuffers;
 		std::shared_ptr<IndexBuffer> m_indexBuffer;
 	};
-}
-
-#endif // BUFFER_H
+} // namespace Inferno

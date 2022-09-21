@@ -1,5 +1,4 @@
-#ifndef ASSERT_H
-#define ASSERT_H
+#pragma once
 
 #include <csignal> // raise
 #include <cstdint> // uint32_t
@@ -110,7 +109,5 @@ inline void __crash()
 	#endif
 
 }
-
-#endif // ASSERT_H
 
 // https://github.com/scottt/debugbreak

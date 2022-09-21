@@ -1,5 +1,4 @@
-#ifndef APPLICATION_H
-#define APPLICATION_H
+#pragma once
 
 #include <memory> // std::unique_ptr, std::shared_ptr
 
@@ -49,8 +48,6 @@ namespace Inferno {
 	extern Application& createApplication();
 
 } // namespace Inferno
-
-#endif // APPLICATION_H
 
 // C++17 features used:
 //   - std::string_view                 -> log.h

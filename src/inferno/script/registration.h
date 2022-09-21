@@ -1,5 +1,4 @@
-#ifndef REGISTRATION_H
-#define REGISTRATION_H
+#pragma once
 
 #include "sol/overload.hpp"   // sol::overload
 #include "sol/state_view.hpp" // sol::state_view
@@ -66,6 +65,4 @@ namespace Inferno {
 		}
 	};
 
-}
-
-#endif // REGISTRATION_H
+} // namespace Inferno

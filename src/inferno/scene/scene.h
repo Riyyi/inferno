@@ -1,5 +1,4 @@
-#ifndef SCENE_H
-#define SCENE_H
+#pragma once
 
 #include <cstdint> // uint32_t
 #include <memory>  // std::shared_ptr
@@ -79,9 +78,7 @@ namespace Inferno {
 
 	const LogStream& operator<<(const LogStream& stream, entt::entity handle);
 
-}
-
-#endif // SCENE_H
+} // namespace Inferno
 
 // @Todo
 // - Convert registry to stack variable

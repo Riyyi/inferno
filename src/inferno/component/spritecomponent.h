@@ -1,5 +1,4 @@
-#ifndef SPRITE_COMPONENT_H
-#define SPRITE_COMPONENT_H
+#pragma once
 
 #include <memory> // std::shared_ptr
 
@@ -14,6 +13,4 @@ namespace Inferno {
 		std::shared_ptr<Texture> texture;
 	};
 
-}
-
-#endif // SPRITE_COMPONENT_H
+} // namespace Inferno

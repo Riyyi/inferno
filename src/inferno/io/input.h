@@ -1,5 +1,4 @@
-#ifndef INPUT_H
-#define INPUT_H
+#pragma once
 
 #include <utility> // std::pair
 
@@ -34,6 +33,4 @@ namespace Inferno {
 		static float m_yOffset;
 	};
 
-}
-
-#endif // INPUT_H
+} // namespace Inferno

@@ -1,5 +1,4 @@
-#ifndef INFERNO_H
-#define INFERNO_H
+#pragma once
 
 // For use by the game
 
@@ -12,5 +11,3 @@
 #include "inferno/io/log.h"
 
 // -----------------------------------------
-
-#endif // INFERNO_H

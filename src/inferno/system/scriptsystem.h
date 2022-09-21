@@ -1,5 +1,4 @@
-#ifndef SCRIPT_SYSTEM_H
-#define SCRIPT_SYSTEM_H
+#pragma once
 
 #include <cstdint> // uint32_t
 
@@ -30,5 +29,3 @@ namespace Inferno {
 	};
 
 } // namespace Inferno
-
-#endif // SCRIPT_SYSTEM_H

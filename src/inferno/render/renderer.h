@@ -1,5 +1,4 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#pragma once
 
 #include <cstdint> // int32_t, uint32_t
 #include <memory>  // std::shared_ptr, std::unique_ptr, std::make_shared, std::make_unique
@@ -161,5 +160,3 @@ namespace Inferno {
 	};
 
 } // namespace Inferno
-
-#endif // RENDERER_H

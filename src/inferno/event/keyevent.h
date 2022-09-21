@@ -1,5 +1,4 @@
-#ifndef KEYEVENT_H
-#define KEYEVENT_H
+#pragma once
 
 #include <sstream> // std::stringstream
 
@@ -66,6 +65,4 @@ namespace Inferno {
 		EVENT_CLASS_TYPE(KeyPress)
 	};
 
-}
-
-#endif // KEYEVENT_H
+} // namespace Inferno

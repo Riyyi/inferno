@@ -1,5 +1,4 @@
-#ifndef FILE_H
-#define FILE_H
+#pragma once
 
 #include <fstream> // std::ifstream, std::ofstream
 #include <iomanip> // std::setfill, std::setw
@@ -60,6 +59,4 @@ namespace Inferno {
 		}
 	};
 
-}
-
-#endif // FILE_H
+} // namespace Inferno

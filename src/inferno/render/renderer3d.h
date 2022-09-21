@@ -19,8 +19,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef RENDERER_3D_H
-#define RENDERER_3D_H
+#pragma once
 
 namespace Inferno {
 
@@ -31,8 +30,6 @@ public:
 };
 
 } // namespace Inferno
-
-#endif // RENDERER_3D_H
 
 // - what data do you need?
 // - gltf

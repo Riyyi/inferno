@@ -1,5 +1,4 @@
-#ifndef TIME_H
-#define TIME_H
+#pragma once
 
 namespace Inferno {
 
@@ -8,6 +7,4 @@ namespace Inferno {
 		static float time();
 	};
 
-}
-
-#endif // TIME_H
+} // namespace Inferno

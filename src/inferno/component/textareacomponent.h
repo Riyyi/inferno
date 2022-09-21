@@ -1,5 +1,4 @@
-#ifndef TEXTAREA_COMPONENT_H
-#define TEXTAREA_COMPONENT_H
+#pragma once
 
 #include <cstdint> // uint32_t
 #include <string>  // std::string
@@ -27,6 +26,4 @@ namespace Inferno {
 		// float dropShadow { 0.0f };
 	};
 
-}
-
-#endif // TEXTAREA_COMPONENT_H
+} // namespace Inferno

@@ -1,5 +1,4 @@
-#ifndef LUA_SCRIPT_H
-#define LUA_SCRIPT_H
+#pragma once
 
 #include <cstdint> // uint32_t
 #include <string>  // std::string
@@ -52,6 +51,4 @@ namespace Inferno {
 		friend class ScriptSystem;
 	};
 
-}
-
-#endif // LUA_SCRIPT_H
+} // namespace Inferno

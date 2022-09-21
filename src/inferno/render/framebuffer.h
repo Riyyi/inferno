@@ -1,14 +1,11 @@
-#ifndef FRAMEBUFFER_H
-#define FRAMEBUFFER_H
+#pragma once
 
 namespace Inferno {
 
-class Framebuffer {
-public:
-	Framebuffer();
-	virtual ~Framebuffer();
-};
+	class Framebuffer {
+	public:
+		Framebuffer();
+		virtual ~Framebuffer();
+	};
 
 } // namespace Inferno
-
-#endif // FRAMEBUFFER_H

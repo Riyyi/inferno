@@ -1,5 +1,4 @@
-#ifndef TEXTURE_H
-#define TEXTURE_H
+#pragma once
 
 #include <cstdint>       // uint32_t
 #include <memory>        // std::shared_ptr
@@ -57,5 +56,3 @@ namespace Inferno {
 	};
 
 } // namespace Inferno
-
-#endif // TEXTURE_H

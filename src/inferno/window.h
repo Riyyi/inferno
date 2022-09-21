@@ -1,5 +1,4 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#pragma once
 
 #include <cstdint>    // uint32_t
 #include <functional> // std::function
@@ -61,6 +60,4 @@ namespace Inferno {
 		static unsigned char s_windowCount;
 	};
 
-}
-
-#endif // WINDOW_H
+} // namespace Inferno

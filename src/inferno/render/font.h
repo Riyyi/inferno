@@ -1,5 +1,4 @@
-#ifndef FONT_H
-#define FONT_H
+#pragma once
 
 #include <cstdint>       // uint32_t
 #include <memory>        // std::shared_ptr
@@ -74,8 +73,6 @@ namespace Inferno {
 	const LogStream& operator<<(const LogStream& stream, const glm::ivec2& value);
 
 } // namespace Inferno
-
-#endif // FONT_H
 
 // FontManager fm;
 // Font f = fm.load("path/to/font");

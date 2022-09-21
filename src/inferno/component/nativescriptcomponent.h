@@ -1,5 +1,4 @@
-#ifndef NATIVE_SCRIPT_COMPONENT_H
-#define NATIVE_SCRIPT_COMPONENT_H
+#pragma once
 
 #include "inferno/assert.h"
 #include "inferno/script/nativescript.h"
@@ -28,6 +27,4 @@ namespace Inferno {
 		}
 	};
 
-}
-
-#endif // NATIVE_SCRIPT_COMPONENT_H
+} // namespace Inferno

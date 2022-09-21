@@ -1,5 +1,4 @@
-#ifndef STRING_UTIL_H
-#define STRING_UTIL_H
+#pragma once
 
 #include <iomanip> // std::setfill, std::setw
 #include <sstream> // std::stringstream
@@ -18,5 +17,3 @@ namespace Inferno {
 	}
 
 } // namespace Inferno
-
-#endif // STRING_UTIL_H

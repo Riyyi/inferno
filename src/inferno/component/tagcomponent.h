@@ -1,7 +1,6 @@
-#ifndef TAG_COMPONENT_H
-#define TAG_COMPONENT_H
+#pragma once
 
-#include <string> // std::string
+#include <string>  // std::string
 #include <utility> // std::move
 
 namespace Inferno {
@@ -16,6 +15,4 @@ namespace Inferno {
 		operator const std::string&() const { return tag; }
 	};
 
-}
-
-#endif // TAG_COMPONENT_H
+} // namespace Inferno

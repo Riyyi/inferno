@@ -1,5 +1,4 @@
-#ifndef RENDER_SYSTEM_H
-#define RENDER_SYSTEM_H
+#pragma once
 
 #include <memory> //std::shared_ptr
 
@@ -24,5 +23,3 @@ namespace Inferno {
 	};
 
 } // namespace Inferno
-
-#endif // RENDER_SYSTEM_H

@@ -1,5 +1,4 @@
-#ifndef JOYSTICKEVENT_H
-#define JOYSTICKEVENT_H
+#pragma once
 
 #include <sstream> // std::stringstream
 
@@ -51,6 +50,4 @@ namespace Inferno {
 		EVENT_CLASS_TYPE(JoystickDisconnected)
 	};
 
-}
-
-#endif // JOYSTICKEVENT_H
+} // namespace Inferno

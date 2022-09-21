@@ -1,5 +1,4 @@
-#ifndef CORE_H
-#define CORE_H
+#pragma once
 
 #include <functional> // std::bind, std::placeholders
 
@@ -20,5 +19,3 @@
 #elif defined(_MSC_VER)
 	#define MSVC
 #endif
-
-#endif // CORE_H

@@ -1,5 +1,4 @@
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#pragma once
 
 #include "ruc/json/json.h"
 
@@ -37,5 +36,3 @@ namespace Inferno {
 	void fromJson(const ruc::Json& object, WindowProperties& window);
 
 } // namespace Inferno
-
-#endif // SETTINGS_H

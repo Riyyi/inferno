@@ -1,5 +1,4 @@
-#ifndef EVENT_H
-#define EVENT_H
+#pragma once
 
 #include <ostream> // std::ostream
 
@@ -110,5 +109,3 @@ inline std::ostream& operator<<(std::ostream& os, const Event& e)
 }
 
 } // namespace Inferno
-
-#endif // EVENT_H

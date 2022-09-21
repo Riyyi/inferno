@@ -1,5 +1,4 @@
-#ifndef APPLICATIONEVENT_H
-#define APPLICATIONEVENT_H
+#pragma once
 
 #include <sstream> // std::stringstream
 
@@ -37,6 +36,4 @@ namespace Inferno {
 		int m_width;
 		int m_height;
 	};
-}
-
-#endif // APPLICATIONEVENT_H
+} // namespace Inferno

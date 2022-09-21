@@ -4,8 +4,7 @@
  * `g_` for global variables.
  */
 
-#ifndef ENTRYPOINT_H
-#define ENTRYPOINT_H
+#pragma once
 
 #include "inferno/application.h"
 
@@ -23,5 +22,3 @@ int main(int argc, char* argv[])
 
 	return status;
 }
-
-#endif // ENTRYPOINT_H

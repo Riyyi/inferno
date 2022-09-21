@@ -1,5 +1,4 @@
-#ifndef LUA_SCRIPT_COMPONENT_H
-#define LUA_SCRIPT_COMPONENT_H
+#pragma once
 
 #include <string>  // std::string
 #include <utility> // std::move
@@ -17,6 +16,4 @@ namespace Inferno {
 		LuaScriptComponent(const std::string& path)
 			: path(std::move(path)) {}
 	};
-}
-
-#endif // LUA_SCRIPT_COMPONENT_H
+} // namespace Inferno

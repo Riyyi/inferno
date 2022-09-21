@@ -1,8 +1,7 @@
-#ifndef INTEGER_UTIL_H
-#define INTEGER_UTIL_H
+#pragma once
 
-#include <limits>  // std::numeric_limits
-#include <string>  // std::string, std::stoul
+#include <limits> // std::numeric_limits
+#include <string> // std::string, std::stoul
 
 #include "inferno/assert.h"
 
@@ -23,5 +22,3 @@ namespace std {
 	}
 
 } // namespace std
-
-#endif // INTEGER_UTIL_H
