@@ -7,14 +7,14 @@
 #include "inferno/event/event.h"
 #include "inferno/event/keyevent.h"
 #include "inferno/event/mouseevent.h"
-#include "inferno/io/gltffile.h"
+// #include "inferno/io/gltffile.h"
 #include "inferno/io/input.h"
 #include "inferno/io/log.h"
 #include "inferno/keycodes.h"
 #include "inferno/render/buffer.h"
 #include "inferno/render/context.h"
 #include "inferno/render/font.h"
-#include "inferno/render/gltf.h"
+// #include "inferno/render/gltf.h"
 #include "inferno/render/renderer.h"
 #include "inferno/render/shader.h"
 #include "inferno/render/texture.h"
@@ -22,7 +22,6 @@
 #include "inferno/settings.h"
 #include "inferno/time.h"
 #include "inferno/window.h"
-#include <string>
 
 namespace Inferno {
 
@@ -65,7 +64,7 @@ namespace Inferno {
 		// Gltf model = Gltf("assets/gltf/animatedmorphcube.glb");
 		// Gltf model = Gltf("assets/gltf/reciprocatingsaw.glb");
 
-		Gltf model = Gltf("assets/gltf/triangle-without-indices.gltf");
+		// Gltf model = Gltf("assets/gltf/triangle-without-indices.gltf");
 	}
 
 	Application::~Application()

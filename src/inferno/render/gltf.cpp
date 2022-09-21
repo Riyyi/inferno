@@ -1,3 +1,4 @@
+#if 0
 #include <algorithm> // std::copy
 #include <utility>   // std::move
 
@@ -337,3 +338,4 @@ namespace Inferno {
 	}
 
 } // namespace Inferno
+#endif

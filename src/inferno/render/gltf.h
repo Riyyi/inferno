@@ -1,6 +1,7 @@
 #ifndef GLTF_H
 #define GLTF_H
 
+#if 0
 #include <cstdint>       // uint32_t
 #include <memory>        // std::shared_ptr
 #include <string>        // std::string
@@ -166,6 +167,6 @@ namespace Inferno {
 	};
 
 } // namespace Inferno
-
+#endif
 
 #endif // GLTF_H

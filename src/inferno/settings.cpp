@@ -1,10 +1,11 @@
 #include <cstdint> // uint32_t
 #include <string>  // std::string
 
+#include "ruc/json/json.h"
+
 #include "inferno/io/file.h"
 #include "inferno/io/log.h"
 #include "inferno/settings.h"
-#include "inferno/util/json.h"
 #include "inferno/window.h"
 
 namespace Inferno {
@@ -27,24 +28,22 @@ namespace Inferno {
 
 	bool Settings::load()
 	{
-		json object;
+		ruc::Json object;
 
 		if (!File::ioRead(&object, m_path)) {
 			warn() << "Settings invalid formatting, using default values";
 			return false;
 		}
 
-		auto settings = Json::getPropertyValue<SettingsProperties>(object, json::value_t::object);
-		if (settings) {
-			m_properties = settings.value();
-		}
+		m_properties = object.get<SettingsProperties>();
 
 		return true;
 	}
 
 	bool Settings::save()
 	{
-		json object = m_properties;
+		ruc::Json object = m_properties;
+
 		if (!File::ioWrite(&object, m_path)) {
 			warn() << "Settings could not be saved";
 			return false;
@@ -54,23 +53,26 @@ namespace Inferno {
 		return true;
 	}
 
-// -----------------------------------------
+	// -------------------------------------
 
-	void to_json(json& object, const SettingsProperties& settings)
+	void toJson(ruc::Json& object, const SettingsProperties& settings)
 	{
-		object = json {
+		object = ruc::Json {
 			{ "window", settings.window }
 		};
 	}
 
-	void from_json(const json& object, SettingsProperties& settings)
+	void fromJson(const ruc::Json& object, SettingsProperties& settings)
 	{
-		if (Json::hasProperty(object, "window")) object.at("window").get_to(settings.window);
+		VERIFY(object.type() == ruc::Json::Type::Object);
+
+		if (object.exists("window"))
+			object.at("window").getTo(settings.window);
 	}
 
-	void to_json(json& object, const WindowProperties& window)
+	void toJson(ruc::Json& object, const WindowProperties& window)
 	{
-		object = json {
+		object = ruc::Json {
 			{ "title", window.title },
 			{ "width", window.width },
 			{ "height", window.height },
@@ -79,13 +81,20 @@ namespace Inferno {
 		};
 	}
 
-	void from_json(const json& object, WindowProperties& window)
+	void fromJson(const ruc::Json& object, WindowProperties& window)
 	{
-		if (Json::hasProperty(object, "title"))      object.at("title").get_to(window.title);
-		if (Json::hasProperty(object, "width"))      object.at("width").get_to(window.width);
-		if (Json::hasProperty(object, "height"))     object.at("height").get_to(window.height);
-		if (Json::hasProperty(object, "fullscreen")) object.at("fullscreen").get_to(window.fullscreen);
-		if (Json::hasProperty(object, "vsync"))      object.at("vsync").get_to(window.vsync);
+		VERIFY(object.type() == ruc::Json::Type::Object);
+
+		if (object.exists("title"))
+			object.at("title").getTo(window.title);
+		if (object.exists("width"))
+			object.at("width").getTo(window.width);
+		if (object.exists("height"))
+			object.at("height").getTo(window.height);
+		if (object.exists("fullscreen"))
+			object.at("fullscreen").getTo(window.fullscreen);
+		if (object.exists("vsync"))
+			object.at("vsync").getTo(window.vsync);
 	}
 
-}
+} // namespace Inferno

@@ -1,6 +1,7 @@
 #ifndef JSON_UTIL_H
 #define JSON_UTIL_H
 
+#if 0
 #include <cstdint>  // int32_t, uint32_t
 #include <optional> // std::optional
 #include <vector>   // std::vector
@@ -246,6 +247,7 @@ namespace Inferno {
 	};
 
 } // namespace Inferno
+#endif
 
 #endif // JSON_UTIL_H
 

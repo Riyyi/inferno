@@ -1,7 +1,8 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include "inferno/util/json.h"
+#include "ruc/json/json.h"
+
 #include "inferno/window.h"
 
 namespace Inferno {
@@ -27,14 +28,14 @@ namespace Inferno {
 
 // -----------------------------------------
 
-	// nlohmann::json arbitrary type conversion functions
+	// Json arbitrary type conversion functions
 
-	void to_json(json& object, const SettingsProperties& settings);
-	void from_json(const json& object, SettingsProperties& settings);
+	void toJson(ruc::Json& object, const SettingsProperties& settings);
+	void fromJson(const ruc::Json& object, SettingsProperties& settings);
 
-	void to_json(json& object, const WindowProperties& window);
-	void from_json(const json& object, WindowProperties& window);
+	void toJson(ruc::Json& object, const WindowProperties& window);
+	void fromJson(const ruc::Json& object, WindowProperties& window);
 
-}
+} // namespace Inferno
 
 #endif // SETTINGS_H
