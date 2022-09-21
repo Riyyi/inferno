@@ -1,5 +1,6 @@
+#include "ruc/meta/assert.h"
+
 #include "inferno/application.h"
-#include "inferno/assert.h"
 #include "inferno/component/textareacomponent.h"
 #include "inferno/render/font.h"
 #include "inferno/render/renderer.h"
@@ -60,7 +61,7 @@ namespace Inferno {
 
 		float textureWidth = static_cast<float>(font->texture()->width());
 		float textureHeight = static_cast<float>(font->texture()->height());
-		ASSERT(textureWidth == textureHeight, "TextAreaSystem read invalid font texture");
+		VERIFY(textureWidth == textureHeight, "TextAreaSystem read invalid font texture");
 
 		// Skip empty characters
 		if (c->size.x == 0 || c->size.y == 0) {

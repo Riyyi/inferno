@@ -1,12 +1,13 @@
-#include "inferno/assert.h"
-#include "inferno/io/log.h"
-
 #include <cstddef>     // size_t
 #include <cstdio>      // fwrite, snprintf
 #include <cstdlib>     // malloc, free
 #include <cstring>     // memcpy, strlen
 #include <string>      // std::string
 #include <string_view> // std::string_view
+
+#include "ruc/meta/assert.h"
+
+#include "inferno/io/log.h"
 
 namespace Inferno {
 
@@ -231,7 +232,7 @@ namespace Inferno {
 		case Log::Comment:
 			return stream << "Comment";
 		default:
-			ASSERT_NOT_REACHED();
+			VERIFY_NOT_REACHED();
 			return stream;
 		}
 	}
@@ -317,4 +318,4 @@ namespace Inferno {
 		return StringLogStream(fill);
 	}
 
-}
+} // namespace Inferno

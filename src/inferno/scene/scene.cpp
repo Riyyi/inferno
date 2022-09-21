@@ -1,11 +1,12 @@
-#include "inferno/scene/scene.h"
-#include "inferno/assert.h"
+#include "ruc/meta/assert.h"
+
 #include "inferno/component/cameracomponent.h"
 #include "inferno/component/luascriptcomponent.h"
 #include "inferno/component/nativescriptcomponent.h"
 #include "inferno/component/spritecomponent.h"
 #include "inferno/component/tagcomponent.h"
 #include "inferno/component/textareacomponent.h"
+#include "inferno/scene/scene.h"
 #include "inferno/script/cameracontroller.h"
 #include "inferno/script/nativescript.h"
 #include "inferno/system/camerasystem.h"
@@ -113,7 +114,7 @@ namespace Inferno {
 
 	void Scene::validEntity(uint32_t entity) const
 	{
-		ASSERT(m_registry->valid(entt::entity { entity }), "Entity is not valid");
+		VERIFY(m_registry->valid(entt::entity { entity }), "Entity is not valid");
 	}
 
 	// -------------------------------------

@@ -2,8 +2,8 @@
 #include <unordered_map> // std::unordered_map
 
 #include "GLFW/glfw3.h"
+#include "ruc/meta/assert.h"
 
-#include "inferno/assert.h"
 #include "inferno/keycodes.h"
 
 namespace Inferno {
@@ -136,8 +136,8 @@ namespace Inferno {
 
 	int keyCode(const char* name)
 	{
-		ASSERT(keys.find(name) != keys.end(), "keyCode could not find '{}'", name);
+		VERIFY(keys.find(name) != keys.end(), "keyCode could not find '{}'", name);
 		return keys.at(name);
 	}
 
-}
+} // namespace Inferno

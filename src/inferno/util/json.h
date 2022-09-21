@@ -6,8 +6,7 @@
 #include <vector>   // std::vector
 
 #include "nlohmann/json.hpp"
-
-#include "inferno/assert.h"
+#include "ruc/meta/assert.h"
 
 namespace Inferno {
 
@@ -81,7 +80,7 @@ namespace Inferno {
 
 			// Has property
 			exists = hasProperty(json, it, property);
-			ASSERT(!required || (required && exists), "Json could not find required property '{}'", property);
+			VERIFY(!required || (required && exists), "Json could not find required property '{}'", property);
 
 			if (!exists) {
 				return {};
@@ -105,14 +104,14 @@ namespace Inferno {
 
 			// Has property
 			exists = hasProperty(json, it, property);
-			ASSERT(!required || (required && exists), "Json could not find required property '{}'", property);
+			VERIFY(!required || (required && exists), "Json could not find required property '{}'", property);
 
 			if (!exists) {
 				return {};
 			}
 
 			// Check if property is array []
-			ASSERT(getValue(it).is_array(), "Json property is not an array '{}'", property);
+			VERIFY(getValue(it).is_array(), "Json property is not an array '{}'", property);
 
 			// Fill array with values
 			std::vector<T> values;
@@ -145,14 +144,14 @@ namespace Inferno {
 
 			// Has property
 			exists = hasProperty(json, it, property);
-			ASSERT(!required || (required && exists), "Json could not find required property '{}'", property);
+			VERIFY(!required || (required && exists), "Json could not find required property '{}'", property);
 
 			if (!exists) {
 				return {};
 			}
 
 			// Check if property is an object {}
-			ASSERT(getValue(it).is_object(), "Json property is not an array '{}'", property);
+			VERIFY(getValue(it).is_object(), "Json property is not an array '{}'", property);
 
 			std::map<std::string, T> values;
 			for (auto& [key, value] : getValue(it).items()) {

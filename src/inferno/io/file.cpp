@@ -1,7 +1,8 @@
 #include <ios>    // std::ios
 #include <memory> // std::make_unique
 
-#include "inferno/assert.h"
+#include "ruc/meta/assert.h"
+
 #include "inferno/io/file.h"
 
 namespace Inferno {
@@ -10,7 +11,7 @@ namespace Inferno {
 	{
 		// Create input stream object and open file
 		std::ifstream file(path);
-		ASSERT(file.is_open(), "File could not open '{}'", path);
+		VERIFY(file.is_open(), "File could not open '{}'", path);
 
 		// Get length of the file
 		int32_t length = File::length(path, file);
@@ -39,9 +40,9 @@ namespace Inferno {
 		file.seekg(0, std::ios::end);
 		int32_t length = file.tellg();
 		file.seekg(0, std::ios::beg);
-		ASSERT(length != -1, "File could not determine length '{}'", path);
+		VERIFY(length != -1, "File could not determine length '{}'", path);
 
 		return length;
 	}
 
-}
+} // namespace Inferno

@@ -3,7 +3,7 @@
 #include <limits> // std::numeric_limits
 #include <string> // std::string, std::stoul
 
-#include "inferno/assert.h"
+#include "ruc/meta/assert.h"
 
 namespace std {
 
@@ -12,7 +12,7 @@ namespace std {
 	inline uint32_t stou(const std::string& string)
 	{
 		unsigned long size = std::stoul(string);
-		ASSERT(size <= std::numeric_limits<uint32_t>::max(), "String util not in uint32_t range '{}'", string);
+		VERIFY(size <= std::numeric_limits<uint32_t>::max(), "String util not in uint32_t range '{}'", string);
 		return static_cast<uint32_t>(size);
 	}
 

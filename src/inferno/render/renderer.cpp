@@ -3,7 +3,6 @@
 
 #include "glad/glad.h"
 
-#include "inferno/assert.h"
 #include "inferno/render/buffer.h"
 #include "inferno/render/renderer.h"
 #include "inferno/render/shader.h"

@@ -1,6 +1,6 @@
 #include "glad/glad.h"
 
-#include "inferno/assert.h"
+#include "ruc/meta/assert.h"
 #include "inferno/core.h"
 #include "inferno/io/log.h"
 #include "inferno/render/buffer.h"
@@ -64,7 +64,7 @@ namespace Inferno {
 			case BufferElementType::DoubleMat4: return sizeof(double) * 4 * 4;
 		};
 
-		ASSERT(false, "BufferElement unknown BufferElementType size!");
+		VERIFY(false, "BufferElement unknown BufferElementType size!");
 		return 0;
 	}
 
@@ -100,7 +100,7 @@ namespace Inferno {
 			case BufferElementType::DoubleMat4: return 4 * 4;
 		};
 
-		ASSERT(false, "BufferElement unknown BufferElementType count!");
+		VERIFY(false, "BufferElement unknown BufferElementType count!");
 		return 0;
 	}
 
@@ -136,7 +136,7 @@ namespace Inferno {
 			case BufferElementType::DoubleMat4: return GL_DOUBLE;
 		};
 
-		ASSERT(false, "BufferElement unknown BufferElementType GL!");
+		VERIFY(false, "BufferElement unknown BufferElementType GL!");
 		return 0;
 	}
 
@@ -260,7 +260,7 @@ namespace Inferno {
 	void VertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer)
 	{
 		const auto& layout = vertexBuffer->getLayout();
-		ASSERT(layout.getElements().size(), "VertexBuffer has no layout");
+		VERIFY(layout.getElements().size(), "VertexBuffer has no layout");
 
 		bind();
 		vertexBuffer->bind();
@@ -295,4 +295,4 @@ namespace Inferno {
 		indexBuffer->unbind();
 	}
 
-}
+} // namespace Inferno

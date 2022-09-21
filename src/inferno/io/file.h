@@ -5,9 +5,9 @@
 #include <memory>  // std::shared_ptr
 #include <string>  // std::string
 
-#include "inferno/assert.h"
 #include "inferno/core.h"
 #include "inferno/io/log.h"
+#include "ruc/meta/assert.h"
 
 namespace Inferno {
 
@@ -21,7 +21,7 @@ namespace Inferno {
 		static bool ioRead(T* t, const std::string& path)
 		{
 			std::ifstream file(path);
-			ASSERT(file.is_open(), "File could not open '{}'", path);
+			VERIFY(file.is_open(), "File could not open '{}'", path);
 
 			if (!file.is_open()) {
 				return false;
@@ -41,7 +41,7 @@ namespace Inferno {
 		static bool ioWrite(T* t, const std::string& path)
 		{
 			std::ofstream file (path);
-			ASSERT(file.is_open(), "File could not open! {}", path);
+			VERIFY(file.is_open(), "File could not open! {}", path);
 
 			if (!file.is_open()) {
 				return false;

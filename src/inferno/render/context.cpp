@@ -1,7 +1,7 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "ruc/meta/assert.h"
 
-#include "inferno/assert.h"
 #include "inferno/core.h"
 #include "inferno/io/log.h"
 #include "inferno/render/context.h"
@@ -12,7 +12,7 @@ namespace Inferno {
 	Context::Context(GLFWwindow* window) :
 		m_window(window)
 	{
-		ASSERT(window, "Context window is nullptr!");
+		VERIFY(window, "Context window is nullptr!");
 	}
 
 	void Context::initialize()
@@ -21,7 +21,7 @@ namespace Inferno {
 
 		// Initialize glad
 		int glad = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		ASSERT(glad, "Failed to initialize glad!");
+		VERIFY(glad, "Failed to initialize glad!");
 
 		// Log OpenGL properties
 		comment() << "OpenGL Info:";
@@ -30,8 +30,8 @@ namespace Inferno {
 		comment() << "  Version:  " << glGetString(GL_VERSION);
 
 		// Check OpenGL version
-		ASSERT(GLVersion.major > 4 || (GLVersion.major == 4 && GLVersion.minor >= 5),
-			"Inferno requires at least OpenGL version 4.5!");
+		VERIFY(GLVersion.major > 4 || (GLVersion.major == 4 && GLVersion.minor >= 5),
+		       "Inferno requires at least OpenGL version 4.5!");
 	}
 
 	void Context::destroy()
@@ -49,4 +49,4 @@ namespace Inferno {
 		glfwMakeContextCurrent(m_window);
 	}
 
-}
+} // namespace Inferno

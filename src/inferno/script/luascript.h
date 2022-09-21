@@ -3,13 +3,12 @@
 #include <cstdint> // uint32_t
 #include <string>  // std::string
 
+#include "ruc/meta/assert.h"
 #define SOL_ALL_SAFETIES_ON 1
 #include "sol/protected_function.hpp"
 #include "sol/protected_function_result.hpp"
 #include "sol/state.hpp"
 #include "sol/table.hpp"
-
-#include "inferno/assert.h"
 
 namespace Inferno {
 
@@ -37,7 +36,7 @@ namespace Inferno {
 			// Only call function if it exists
 			if (solFunction.valid()) {
 				sol::protected_function_result result = solFunction(solTable, parameters...);
-				ASSERT(result.valid(), "Lua function {}", ((sol::error)result).what());
+				VERIFY(result.valid(), "Lua function {}", ((sol::error)result).what());
 			}
 		}
 

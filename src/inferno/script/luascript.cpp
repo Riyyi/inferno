@@ -66,14 +66,14 @@ namespace Inferno {
 		std::string script = File::read(m_path);
 		auto result = m_state.script(script.c_str(),
 			[](lua_State*, sol::protected_function_result pfr) { return pfr; });
-		ASSERT(result.valid(), "LuaScript {}", ((sol::error)result).what());
+		VERIFY(result.valid(), "LuaScript {}", ((sol::error)result).what());
 	}
 
 	sol::table LuaScript::getTable(const char* name)
 	{
 		sol::table table = m_state[name];
-		ASSERT(table.valid(), "LuaScript table does not exist");
+		VERIFY(table.valid(), "LuaScript table does not exist");
 		return table;
 	}
 
-}
+} // namespace Inferno

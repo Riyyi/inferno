@@ -1,6 +1,5 @@
 #include "entt/entity/registry.hpp" // entt::entity, entt::registry
 
-#include "inferno/assert.h"
 #include "inferno/component/luascriptcomponent.h"
 #include "inferno/component/nativescriptcomponent.h"
 #include "inferno/component/transformcomponent.h"
@@ -68,7 +67,6 @@ namespace Inferno {
 
 			luaScript.instance->update(deltaTime);
 		}
-
 	}
 
 	void ScriptSystem::cleanup(uint32_t entity)
@@ -100,4 +98,4 @@ namespace Inferno {
 		}
 	}
 
-}
+} // namespace Inferno

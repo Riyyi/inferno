@@ -1,7 +1,7 @@
 #include "glm/gtc/type_ptr.hpp" // glm::make_mat4
+#include "ruc/meta/assert.h"
 
 #include "inferno/application.h"
-#include "inferno/assert.h"
 #include "inferno/core.h"
 #include "inferno/event/applicationevent.h"
 #include "inferno/event/event.h"
@@ -91,7 +91,7 @@ namespace Inferno {
 
 		uint32_t textureWidth = f->texture()->width();
 		uint32_t textureHeight = f->texture()->height();
-		ASSERT(textureWidth == textureHeight, "Invalid font texture!");
+		VERIFY(textureWidth == textureHeight, "Invalid font texture!");
 
 		float quadWidth  = (c->size.x / (float)textureWidth) - 0.04; // @Todo something wrong with the width
 		float quadHeight = c->size.y / (float)textureHeight;

@@ -1,8 +1,8 @@
 #include "glm/ext/matrix_clip_space.hpp" // glm::perspective, glm::ortho
 #include "glm/ext/matrix_transform.hpp"  // glm::radians, glm::lookAt
+#include "ruc/meta/assert.h"
 
 #include "inferno/application.h"
-#include "inferno/assert.h"
 #include "inferno/component/cameracomponent.h"
 #include "inferno/component/transformcomponent.h"
 #include "inferno/io/input.h"
@@ -44,7 +44,7 @@ namespace Inferno {
 			return camera.projection * transform.transform;
 		}
 
-		ASSERT_NOT_REACHED();
+		VERIFY_NOT_REACHED();
 
 		return glm::mat4 { 1.0f };
 	}
@@ -94,4 +94,4 @@ namespace Inferno {
 		// Souce: https://learnopengl.com/img/getting-started/coordinate_systems.png
 	}
 
-}
+} // namespace Inferno

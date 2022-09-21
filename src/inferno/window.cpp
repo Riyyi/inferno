@@ -1,9 +1,9 @@
 #include <csignal> // signal
 
 #include "GLFW/glfw3.h"
+#include "ruc/meta/assert.h"
 
 #include "inferno/application.h"
-#include "inferno/assert.h"
 #include "inferno/core.h"
 #include "inferno/event/applicationevent.h"
 #include "inferno/event/keyevent.h"
@@ -61,7 +61,7 @@ namespace Inferno {
 		// Create GLFW window
 		m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 		s_windowCount++;
-		ASSERT(m_window, "Failed to create GLFW window!");
+		VERIFY(m_window, "Failed to create GLFW window!");
 
 		// Set windowed/fullscreen/borderless
 		this->setWindowMonitor();

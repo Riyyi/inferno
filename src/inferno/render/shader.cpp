@@ -3,8 +3,8 @@
 
 #include "glad/glad.h"
 #include "glm/gtc/type_ptr.hpp" // glm::value_ptr
+#include "ruc/meta/assert.h"
 
-#include "inferno/assert.h"
 #include "inferno/core.h"
 #include "inferno/io/file.h"
 #include "inferno/io/log.h"
@@ -44,7 +44,7 @@ namespace Inferno {
 	int32_t Shader::findUniform(const std::string& name) const
 	{
 		int32_t location = glGetUniformLocation(m_id, name.c_str());
-		ASSERT(location != -1, "Shader could not find uniform '{}'", name);
+		VERIFY(location != -1, "Shader could not find uniform '{}'", name);
 		return location;
 	}
 
@@ -186,7 +186,7 @@ namespace Inferno {
 			warn() << "Shader " << infoLog.data();
 		}
 
-		ASSERT(success == GL_TRUE, "Shader program creation failed!");
+		VERIFY(success == GL_TRUE, "Shader program creation failed!");
 
 		return success;
 	}
@@ -256,15 +256,15 @@ namespace Inferno {
 		auto vertexPos = vertexSource.find_last_of('.');
 		auto fragmentPos = fragmentSource.find_last_of('.');
 
-		ASSERT(vertexPos != std::string::npos, "Shader did not have file extension: '{}'", vertexSource);
-		ASSERT(fragmentPos != std::string::npos, "Shader did not have file extension: '{}'", fragmentSource);
+		VERIFY(vertexPos != std::string::npos, "Shader did not have file extension: '{}'", vertexSource);
+		VERIFY(fragmentPos != std::string::npos, "Shader did not have file extension: '{}'", fragmentSource);
 
 		auto vertexName = vertexSource.substr(0, vertexPos);
 		auto fragmentName = vertexSource.substr(0, fragmentPos);
 
-		ASSERT(vertexName == fragmentName, "Shader names did not match: {} {}", vertexSource, fragmentSource);
+		VERIFY(vertexName == fragmentName, "Shader names did not match: {} {}", vertexSource, fragmentSource);
 
 		return vertexName;
 	}
 
-}
+} // namespace Inferno

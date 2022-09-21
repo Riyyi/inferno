@@ -2,7 +2,8 @@
 #include <string>  // std::getline, std::stoi
 #include <utility> // std::move
 
-#include "inferno/assert.h"
+#include "ruc/meta/assert.h"
+
 #include "inferno/io/file.h"
 #include "inferno/render/font.h"
 #include "inferno/render/texture.h"
@@ -82,7 +83,7 @@ namespace Inferno {
 			}
 		}
 
-		ASSERT(!elements.empty(), "Font file did not find any columns");
+		VERIFY(!elements.empty(), "Font file did not find any columns");
 		return elements;
 	}
 
@@ -97,7 +98,7 @@ namespace Inferno {
 			}
 		}
 
-		ASSERT(false, "Font file did not contain key '{}'", key);
+		VERIFY(false, "Font file did not contain key '{}'", key);
 		return "";
 	}
 
@@ -160,4 +161,4 @@ namespace Inferno {
 		return stream << "{ " << value.x << ", " << value.y << " }";
 	}
 
-}
+} // namespace Inferno

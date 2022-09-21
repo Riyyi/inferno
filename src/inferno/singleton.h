@@ -1,6 +1,6 @@
 #pragma once
 
-#include "inferno/assert.h"
+#include "ruc/meta/assert.h"
 
 namespace Inferno {
 
@@ -12,20 +12,20 @@ namespace Inferno {
 	public:
 		static inline void initialize()
 		{
-			ASSERT(!s_instance, "singleton already exists");
+			VERIFY(!s_instance, "singleton already exists");
 			s_instance = new T { s {} };
 		}
 
 		static inline void destroy()
 		{
-			ASSERT(s_instance, "singleton does not exist");
+			VERIFY(s_instance, "singleton does not exist");
 			delete s_instance;
 			s_instance = nullptr;
 		}
 
 		static inline T& the()
 		{
-			ASSERT(s_instance, "singleton does not exist");
+			VERIFY(s_instance, "singleton does not exist");
 			return *s_instance;
 		}
 

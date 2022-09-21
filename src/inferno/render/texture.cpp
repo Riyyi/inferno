@@ -3,10 +3,11 @@
 #include <utility> // std::move
 
 #include "glad/glad.h"
+#include "ruc/meta/assert.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
-#include "inferno/assert.h"
+#include "inferno/io/log.h"
 #include "inferno/render/texture.h"
 
 namespace Inferno {
@@ -22,7 +23,7 @@ namespace Inferno {
 		stbi_set_flip_vertically_on_load(1);
 		unsigned char* data = stbi_load(path.c_str(), &width, &height, &channels, STBI_default);
 
-		ASSERT(data, "Failed to load image: '{}'", path);
+		VERIFY(data, "Failed to load image: '{}'", path);
 
 		m_width = width;
 		m_height = height;
@@ -153,4 +154,4 @@ namespace Inferno {
 		}
 	}
 
-}
+} // namespace Inferno

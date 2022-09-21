@@ -7,7 +7,6 @@
 #include "inferno/core.h"
 
 #include "inferno/application.h"
-#include "inferno/assert.h"
 #include "inferno/io/log.h"
 
 // -----------------------------------------
