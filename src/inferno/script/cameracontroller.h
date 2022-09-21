@@ -10,27 +10,27 @@
 
 namespace Inferno {
 
-	struct CameraComponent;
+struct CameraComponent;
 
-	class CameraController final : public NativeScript {
-	public:
-		virtual void update(float deltaTime) override
-		{
-			m_camera = &getComponent<CameraComponent>();
+class CameraController final : public NativeScript {
+public:
+	virtual void update(float deltaTime) override
+	{
+		m_camera = &getComponent<CameraComponent>();
 
-			if (m_camera->type == CameraType::Orthographic) {
-				updateOrthographic(deltaTime);
-			}
-			else if (m_camera->type == CameraType::Perspective) {
-				updatePerspective(deltaTime);
-			}
+		if (m_camera->type == CameraType::Orthographic) {
+			updateOrthographic(deltaTime);
 		}
+		else if (m_camera->type == CameraType::Perspective) {
+			updatePerspective(deltaTime);
+		}
+	}
 
-		void updateOrthographic(float deltaTime);
-		void updatePerspective(float deltaTime);
+	void updateOrthographic(float deltaTime);
+	void updatePerspective(float deltaTime);
 
-	private:
-		CameraComponent* m_camera { nullptr };
-	};
+private:
+	CameraComponent* m_camera { nullptr };
+};
 
 } // namespace Inferno

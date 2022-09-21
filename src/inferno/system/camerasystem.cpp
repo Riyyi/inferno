@@ -12,86 +12,85 @@
 
 namespace Inferno {
 
-	CameraSystem::CameraSystem(s)
-	{
-		info() << "CameraSystem initialized";
-	}
+CameraSystem::CameraSystem(s)
+{
+	info() << "CameraSystem initialized";
+}
 
-	CameraSystem::~CameraSystem()
-	{
-	}
+CameraSystem::~CameraSystem()
+{
+}
 
-	void CameraSystem::update()
-	{
-		auto view = m_registry->view<TransformComponent, CameraComponent>();
+void CameraSystem::update()
+{
+	auto view = m_registry->view<TransformComponent, CameraComponent>();
 
-		for (auto [entity, transform, camera] : view.each()) {
+	for (auto [entity, transform, camera] : view.each()) {
 
-			if (camera.type == CameraType::Orthographic) {
-				updateOrthographic(transform, camera);
-			}
-			else if (camera.type == CameraType::Perspective) {
-				updatePerspective(transform, camera);
-			}
+		if (camera.type == CameraType::Orthographic) {
+			updateOrthographic(transform, camera);
+		}
+		else if (camera.type == CameraType::Perspective) {
+			updatePerspective(transform, camera);
 		}
 	}
+}
 
-	glm::mat4 CameraSystem::projectionView()
-	{
-		auto view = m_registry->view<TransformComponent, CameraComponent>();
+glm::mat4 CameraSystem::projectionView()
+{
+	auto view = m_registry->view<TransformComponent, CameraComponent>();
 
-		for (auto [entity, transform, camera] : view.each()) {
-			return camera.projection * transform.transform;
-		}
-
-		VERIFY_NOT_REACHED();
-
-		return glm::mat4 { 1.0f };
+	for (auto [entity, transform, camera] : view.each()) {
+		return camera.projection * transform.transform;
 	}
 
-	void CameraSystem::updateOrthographic(TransformComponent& transform, CameraComponent& camera)
-	{
-		// Update camera matrix
+	VERIFY_NOT_REACHED();
 
-		// Local space -> World space: model matrix
-		// Is done in Object::update()
+	return glm::mat4 { 1.0f };
+}
 
-		// World space -> View space: view matrix
-		transform.transform = {
-			glm::translate(glm::mat4(1.0f), transform.translate) *
-			glm::rotate(glm::mat4(1.0f), glm::radians(transform.rotate.z), camera.rotateAxis)
-		};
-		transform.transform = { glm::inverse(transform.transform) };
+void CameraSystem::updateOrthographic(TransformComponent& transform, CameraComponent& camera)
+{
+	// Update camera matrix
 
-		// View space -> Clip space: projection matrix
-		float aspectRatio = Application::the().getWindow().getAspect();
-		camera.projection = {
-			glm::ortho(-aspectRatio * camera.zoomLevel, aspectRatio * camera.zoomLevel,
-			           -camera.zoomLevel, camera.zoomLevel, -1.0f, 1.0f)
-		};
+	// Local space -> World space: model matrix
+	// Is done in Object::update()
 
-		// Clip space -> Screen space: viewport transform
-		// Is done in the fragment shader using the settings of glViewport
-	}
+	// World space -> View space: view matrix
+	transform.transform = {
+		glm::translate(glm::mat4(1.0f), transform.translate) * glm::rotate(glm::mat4(1.0f), glm::radians(transform.rotate.z), camera.rotateAxis)
+	};
+	transform.transform = { glm::inverse(transform.transform) };
 
-	void CameraSystem::updatePerspective(TransformComponent& transform, CameraComponent& camera)
-	{
-		// Update camera matrix
+	// View space -> Clip space: projection matrix
+	float aspectRatio = Application::the().getWindow().getAspect();
+	camera.projection = {
+		glm::ortho(-aspectRatio * camera.zoomLevel, aspectRatio * camera.zoomLevel,
+		           -camera.zoomLevel, camera.zoomLevel, -1.0f, 1.0f)
+	};
 
-		// Local space -> World space: model matrix
-		// Is done in Object::update()
+	// Clip space -> Screen space: viewport transform
+	// Is done in the fragment shader using the settings of glViewport
+}
 
-		// World space -> View space: view matrix
-		transform.transform = { glm::lookAt(transform.translate, transform.translate + transform.rotate, camera.up) };
+void CameraSystem::updatePerspective(TransformComponent& transform, CameraComponent& camera)
+{
+	// Update camera matrix
 
-		// View space -> Clip space: projection matrix
-		float aspect = Application::the().getWindow().getAspect();
-		camera.projection = { glm::perspective(glm::radians(camera.fov), aspect, NEAR_PLANE, FAR_PLANE) };
+	// Local space -> World space: model matrix
+	// Is done in Object::update()
 
-		// Clip space -> Screen space: viewport transform
-		// Is done in the fragment shader using the settings of glViewport
+	// World space -> View space: view matrix
+	transform.transform = { glm::lookAt(transform.translate, transform.translate + transform.rotate, camera.up) };
 
-		// Souce: https://learnopengl.com/img/getting-started/coordinate_systems.png
-	}
+	// View space -> Clip space: projection matrix
+	float aspect = Application::the().getWindow().getAspect();
+	camera.projection = { glm::perspective(glm::radians(camera.fov), aspect, NEAR_PLANE, FAR_PLANE) };
+
+	// Clip space -> Screen space: viewport transform
+	// Is done in the fragment shader using the settings of glViewport
+
+	// Souce: https://learnopengl.com/img/getting-started/coordinate_systems.png
+}
 
 } // namespace Inferno

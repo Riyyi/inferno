@@ -6,46 +6,46 @@
 
 namespace Inferno {
 
-	class Event;
-	class Font;
-	class KeyPressEvent;
-	class MousePositionEvent;
-	class Scene;
-	class Window;
-	class WindowCloseEvent;
-	class WindowResizeEvent;
+class Event;
+class Font;
+class KeyPressEvent;
+class MousePositionEvent;
+class Scene;
+class Window;
+class WindowCloseEvent;
+class WindowResizeEvent;
 
-	class Application : public ruc::Singleton<Application> {
-	public:
-		Application(s);
-		virtual ~Application();
+class Application : public ruc::Singleton<Application> {
+public:
+	Application(s);
+	virtual ~Application();
 
-		int run();
+	int run();
 
-		void onEvent(Event& e);
-		bool onWindowClose(WindowCloseEvent& e);
-		bool onWindowResize(WindowResizeEvent& e);
-		bool onKeyPress(KeyPressEvent& e);
-		bool onMousePosition(MousePositionEvent& e);
+	void onEvent(Event& e);
+	bool onWindowClose(WindowCloseEvent& e);
+	bool onWindowResize(WindowResizeEvent& e);
+	bool onKeyPress(KeyPressEvent& e);
+	bool onMousePosition(MousePositionEvent& e);
 
-		inline void setStatus(int status) { m_status = status; }
+	inline void setStatus(int status) { m_status = status; }
 
-		inline Window& getWindow() const { return *m_window; }
+	inline Window& getWindow() const { return *m_window; }
 
-	private:
-		int m_status { 0 };
-		float m_lastFrameTime { 0.0f };
+private:
+	int m_status { 0 };
+	float m_lastFrameTime { 0.0f };
 
-		std::unique_ptr<Window> m_window;
-		std::shared_ptr<Scene> m_scene;
+	std::unique_ptr<Window> m_window;
+	std::shared_ptr<Scene> m_scene;
 
-		//
-		std::shared_ptr<Font> m_font;
-		//
-	};
+	//
+	std::shared_ptr<Font> m_font;
+	//
+};
 
-	// To be defined in the game
-	extern Application& createApplication();
+// To be defined in the game
+extern Application& createApplication();
 
 } // namespace Inferno
 

@@ -12,24 +12,24 @@
 
 namespace Inferno {
 
-	using CharacterQuad = std::array<CharacterVertex, Renderer::vertexPerQuad>;
+using CharacterQuad = std::array<CharacterVertex, Renderer::vertexPerQuad>;
 
-	class Font;
-	class Scene;
+class Font;
+class Scene;
 
-	class TextAreaSystem final : public ruc::Singleton<TextAreaSystem> {
-	public:
-		TextAreaSystem(s);
-		virtual ~TextAreaSystem();
+class TextAreaSystem final : public ruc::Singleton<TextAreaSystem> {
+public:
+	TextAreaSystem(s);
+	virtual ~TextAreaSystem();
 
-		void render();
+	void render();
 
-		void setScene(Scene* scene) { m_scene = scene; }
+	void setScene(Scene* scene) { m_scene = scene; }
 
-	private:
-		std::optional<CharacterQuad> calculateCharacterQuad(unsigned char character, std::shared_ptr<Font> font, float& advance);
+private:
+	std::optional<CharacterQuad> calculateCharacterQuad(unsigned char character, std::shared_ptr<Font> font, float& advance);
 
-		Scene* m_scene { nullptr };
-	};
+	Scene* m_scene { nullptr };
+};
 
 } // namespace Inferno

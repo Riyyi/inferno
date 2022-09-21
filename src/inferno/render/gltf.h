@@ -1,34 +1,34 @@
 #pragma once
 
 #if 0
-#include <cstdint>       // uint32_t
-#include <memory>        // std::shared_ptr
-#include <string>        // std::string
-#include <unordered_map> // std::unordered_map
-#include <vector>        // std::vector
+	#include <cstdint>       // uint32_t
+	#include <memory>        // std::shared_ptr
+	#include <string>        // std::string
+	#include <unordered_map> // std::unordered_map
+	#include <vector>        // std::vector
 
-#include "ruc/singleton.h"
+	#include "ruc/singleton.h"
 
-#include "inferno/util/json.h"
+	#include "inferno/util/json.h"
 
-#define GLTF_TYPE_SCALAR 1
-#define GLTF_TYPE_VEC2 2
-#define GLTF_TYPE_VEC3 3
-#define GLTF_TYPE_VEC4 4
-#define GLTF_TYPE_MAT2 8
-#define GLTF_TYPE_MAT3 12
-#define GLTF_TYPE_MAT4 16
+	#define GLTF_TYPE_SCALAR 1
+	#define GLTF_TYPE_VEC2 2
+	#define GLTF_TYPE_VEC3 3
+	#define GLTF_TYPE_VEC4 4
+	#define GLTF_TYPE_MAT2 8
+	#define GLTF_TYPE_MAT3 12
+	#define GLTF_TYPE_MAT4 16
 
-#define GLTF_COMPONENT_TYPE_BYTE 5120
-#define GLTF_COMPONENT_TYPE_UNSIGNED_BYTE 5121
-#define GLTF_COMPONENT_TYPE_SHORT 5122
-#define GLTF_COMPONENT_TYPE_UNSIGNED_SHORT 5123
-#define GLTF_COMPONENT_TYPE_INT 5124
-#define GLTF_COMPONENT_TYPE_UNSIGNED_INT 5125
-#define GLTF_COMPONENT_TYPE_FLOAT 5126
+	#define GLTF_COMPONENT_TYPE_BYTE 5120
+	#define GLTF_COMPONENT_TYPE_UNSIGNED_BYTE 5121
+	#define GLTF_COMPONENT_TYPE_SHORT 5122
+	#define GLTF_COMPONENT_TYPE_UNSIGNED_SHORT 5123
+	#define GLTF_COMPONENT_TYPE_INT 5124
+	#define GLTF_COMPONENT_TYPE_UNSIGNED_INT 5125
+	#define GLTF_COMPONENT_TYPE_FLOAT 5126
 
-#define GLTF_TARGET_ARRAY_BUFFER 34962
-#define GLTF_TARGET_ELEMENT_ARRAY_BUFFER 34963
+	#define GLTF_TARGET_ARRAY_BUFFER 34962
+	#define GLTF_TARGET_ELEMENT_ARRAY_BUFFER 34963
 
 namespace Inferno {
 

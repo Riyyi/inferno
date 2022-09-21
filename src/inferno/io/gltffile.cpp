@@ -12,93 +12,93 @@
 
 namespace Inferno {
 
-	std::pair<std::shared_ptr<char[]>, std::shared_ptr<char[]>> GltfFile::read(const std::string& path)
-	{
-		std::string extension = path.substr(path.find_first_of("."));
+std::pair<std::shared_ptr<char[]>, std::shared_ptr<char[]>> GltfFile::read(const std::string& path)
+{
+	std::string extension = path.substr(path.find_first_of("."));
 
-		if (extension.compare(".glb") == 0) {
-			return glb(path);
-		}
-		else if (extension.compare(".gltf") == 0) {
-			return { File::raw(path), nullptr };
-		}
-
-		VERIFY(false, "GltfFile unknown file extension!");
-		return {};
+	if (extension.compare(".glb") == 0) {
+		return glb(path);
+	}
+	else if (extension.compare(".gltf") == 0) {
+		return { File::raw(path), nullptr };
 	}
 
-	std::pair<std::shared_ptr<char[]>, std::shared_ptr<char[]>> GltfFile::glb(const std::string& path)
-	{
-		// Create input stream object and open file
-		std::ifstream glb(path, std::ios::in | std::ios::binary);
-		VERIFY(glb.is_open(), "GltfFile could not open '{}'", path);
+	VERIFY(false, "GltfFile unknown file extension!");
+	return {};
+}
 
-		constexpr uint32_t size = 4;
-		constexpr uint32_t header = 12;
-		constexpr uint32_t json = 27; // Minimum valid glTF has an asset property with version specifier
+std::pair<std::shared_ptr<char[]>, std::shared_ptr<char[]>> GltfFile::glb(const std::string& path)
+{
+	// Create input stream object and open file
+	std::ifstream glb(path, std::ios::in | std::ios::binary);
+	VERIFY(glb.is_open(), "GltfFile could not open '{}'", path);
 
-		// Get the actual length of the file
-		uint32_t length = static_cast<uint32_t>(File::length(path, glb));
-		VERIFY(length > header + json, "GltfFile too small to be valid '{}'", path);
+	constexpr uint32_t size = 4;
+	constexpr uint32_t header = 12;
+	constexpr uint32_t json = 27; // Minimum valid glTF has an asset property with version specifier
 
-		// Read header
+	// Get the actual length of the file
+	uint32_t length = static_cast<uint32_t>(File::length(path, glb));
+	VERIFY(length > header + json, "GltfFile too small to be valid '{}'", path);
 
-		char magic[size];
-		char version[size];
-		char fileLength[size];
+	// Read header
 
-		glb.read(magic, size);
-		glb.seekg(size * 1);
-		glb.read(version, size);
-		glb.seekg(size * 2);
-		glb.read(fileLength, size);
+	char magic[size];
+	char version[size];
+	char fileLength[size];
 
-		// Validate header
+	glb.read(magic, size);
+	glb.seekg(size * 1);
+	glb.read(version, size);
+	glb.seekg(size * 2);
+	glb.read(fileLength, size);
 
-		uint32_t magicInt = *reinterpret_cast<uint32_t*>(magic);
-		VERIFY(magicInt == 0x46546c67, "Gltf invalid header magic '{}'", magic);
+	// Validate header
 
-		uint32_t versionInt = *reinterpret_cast<uint32_t*>(version);
-		VERIFY(versionInt == 2, "Gltf unsupported version '{}'", versionInt);
+	uint32_t magicInt = *reinterpret_cast<uint32_t*>(magic);
+	VERIFY(magicInt == 0x46546c67, "Gltf invalid header magic '{}'", magic);
 
-		uint32_t fileLengthInt = *reinterpret_cast<uint32_t*>(fileLength);
-		VERIFY(fileLengthInt == length, "Gltf file and reported byte size mismatch '{}' '{}'", length, fileLengthInt);
+	uint32_t versionInt = *reinterpret_cast<uint32_t*>(version);
+	VERIFY(versionInt == 2, "Gltf unsupported version '{}'", versionInt);
 
-		// Read JSON data
-		auto jsonChunk = readChunk(glb, header, 0x4e4f534a);
-		VERIFY(jsonChunk.second >= json, "Gltf file invalid JSON content length '{}'", jsonChunk.second);
+	uint32_t fileLengthInt = *reinterpret_cast<uint32_t*>(fileLength);
+	VERIFY(fileLengthInt == length, "Gltf file and reported byte size mismatch '{}' '{}'", length, fileLengthInt);
 
-		// Read binary data
-		auto binaryChunk = readChunk(glb, header + size * 2 + jsonChunk.second, 0x004e4942);
+	// Read JSON data
+	auto jsonChunk = readChunk(glb, header, 0x4e4f534a);
+	VERIFY(jsonChunk.second >= json, "Gltf file invalid JSON content length '{}'", jsonChunk.second);
 
-		glb.close();
+	// Read binary data
+	auto binaryChunk = readChunk(glb, header + size * 2 + jsonChunk.second, 0x004e4942);
 
-		return { jsonChunk.first, binaryChunk.first };
-	}
+	glb.close();
 
-	std::pair<std::shared_ptr<char[]>, uint32_t> GltfFile::readChunk(std::ifstream& ifstream, uint32_t offset, uint32_t type)
-	{
-		constexpr uint32_t size = 4;
+	return { jsonChunk.first, binaryChunk.first };
+}
 
-		char chunkLength[size];
-		char chunkType[size];
+std::pair<std::shared_ptr<char[]>, uint32_t> GltfFile::readChunk(std::ifstream& ifstream, uint32_t offset, uint32_t type)
+{
+	constexpr uint32_t size = 4;
 
-		ifstream.seekg(offset);
-		ifstream.read(chunkLength, size);
-		ifstream.seekg(offset + size * 1);
-		ifstream.read(chunkType, size);
+	char chunkLength[size];
+	char chunkType[size];
 
-		uint32_t chunkTypeInt = *reinterpret_cast<uint32_t*>(chunkType);
-		VERIFY(chunkTypeInt == type, "Gltf invalid chunk type '{}' != '{}'", chunkType, intToHex(type));
+	ifstream.seekg(offset);
+	ifstream.read(chunkLength, size);
+	ifstream.seekg(offset + size * 1);
+	ifstream.read(chunkType, size);
 
-		uint32_t chunkLengthInt = *reinterpret_cast<uint32_t*>(chunkLength);
-		// Allocate memory filled with zeros
-		std::shared_ptr<char[]> chunkData(new char[chunkLengthInt + 1]);
-		ifstream.seekg(offset + size * 2);
-		ifstream.read(chunkData.get(), chunkLengthInt);
-		chunkData.get()[chunkLengthInt] = '\0';
+	uint32_t chunkTypeInt = *reinterpret_cast<uint32_t*>(chunkType);
+	VERIFY(chunkTypeInt == type, "Gltf invalid chunk type '{}' != '{}'", chunkType, intToHex(type));
 
-		return { chunkData, chunkLengthInt };
-	}
+	uint32_t chunkLengthInt = *reinterpret_cast<uint32_t*>(chunkLength);
+	// Allocate memory filled with zeros
+	std::shared_ptr<char[]> chunkData(new char[chunkLengthInt + 1]);
+	ifstream.seekg(offset + size * 2);
+	ifstream.read(chunkData.get(), chunkLengthInt);
+	chunkData.get()[chunkLengthInt] = '\0';
+
+	return { chunkData, chunkLengthInt };
+}
 
 } // namespace Inferno

@@ -4,6 +4,6 @@
 
 namespace Inferno {
 
-	int keyCode(const char* name);
+int keyCode(const char* name);
 
 }

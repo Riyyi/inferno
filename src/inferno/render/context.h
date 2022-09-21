@@ -4,18 +4,18 @@ struct GLFWwindow;
 
 namespace Inferno {
 
-	class Context {
-	public:
-		Context(GLFWwindow* window);
+class Context {
+public:
+	Context(GLFWwindow* window);
 
-		void initialize();
-		void destroy();
-		void render();
+	void initialize();
+	void destroy();
+	void render();
 
-		void setCurrent();
+	void setCurrent();
 
-	private:
-		GLFWwindow* m_window { nullptr };
-	};
+private:
+	GLFWwindow* m_window { nullptr };
+};
 
 } // namespace Inferno

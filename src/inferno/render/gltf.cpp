@@ -1,15 +1,15 @@
 #if 0
-#include <algorithm> // std::copy
-#include <utility>   // std::move
+	#include <algorithm> // std::copy
+	#include <utility>   // std::move
 
-#include "nlohmann/json.hpp"
-#include "ruc/meta/assert.h"
+	#include "nlohmann/json.hpp"
+	#include "ruc/meta/assert.h"
 
-#include "inferno/io/file.h"
-#include "inferno/io/gltffile.h"
-#include "inferno/io/log.h"
-#include "inferno/render/gltf.h"
-#include "inferno/util/integer.h"
+	#include "inferno/io/file.h"
+	#include "inferno/io/gltffile.h"
+	#include "inferno/io/log.h"
+	#include "inferno/render/gltf.h"
+	#include "inferno/util/integer.h"
 
 namespace Inferno {
 

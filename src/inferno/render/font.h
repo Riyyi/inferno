@@ -14,63 +14,63 @@
 
 namespace Inferno {
 
-	class Texture;
+class Texture;
 
-	struct Character {
-		glm::uvec2 position; // Position
-		glm::uvec2 size;     // Width/height
-		glm::ivec2 offset;   // Offset from baseline to left / top of glyph
-		uint32_t advance;    // Amount to advance to next glyph
-	};
+struct Character {
+	glm::uvec2 position; // Position
+	glm::uvec2 size;     // Width/height
+	glm::ivec2 offset;   // Offset from baseline to left / top of glyph
+	uint32_t advance;    // Amount to advance to next glyph
+};
 
-	// -------------------------------------
+// -------------------------------------
 
-	class Font {
-	public:
-		Font(const std::string& name);
-		virtual ~Font() {}
+class Font {
+public:
+	Font(const std::string& name);
+	virtual ~Font() {}
 
-		inline std::string name() const { return m_name; }
-		inline uint32_t size() const { return m_size; }
-		inline std::shared_ptr<Texture> texture() const { return m_texture; }
+	inline std::string name() const { return m_name; }
+	inline uint32_t size() const { return m_size; }
+	inline std::shared_ptr<Texture> texture() const { return m_texture; }
 
-		inline std::shared_ptr<Character> get(unsigned char c) const { return m_characterList.at(c); }
-		inline std::shared_ptr<Character> operator[](unsigned char c) const { return m_characterList.at(c); }
+	inline std::shared_ptr<Character> get(unsigned char c) const { return m_characterList.at(c); }
+	inline std::shared_ptr<Character> operator[](unsigned char c) const { return m_characterList.at(c); }
 
-	private:
-		void parseFont(const std::string& font);
-		const std::string findAction(const std::string& line);
-		const std::vector<std::string> findColumns(const std::string& line);
-		const std::string findValue(const std::string& key, const std::vector<std::string>& columns);
+private:
+	void parseFont(const std::string& font);
+	const std::string findAction(const std::string& line);
+	const std::vector<std::string> findColumns(const std::string& line);
+	const std::string findValue(const std::string& key, const std::vector<std::string>& columns);
 
-		std::string m_name;
-		uint32_t m_size;
-		std::shared_ptr<Texture> m_texture;
-		std::unordered_map<unsigned char, std::shared_ptr<Character>> m_characterList;
-	};
+	std::string m_name;
+	uint32_t m_size;
+	std::shared_ptr<Texture> m_texture;
+	std::unordered_map<unsigned char, std::shared_ptr<Character>> m_characterList;
+};
 
-	// -------------------------------------
+// -------------------------------------
 
-	class FontManager final : public ruc::Singleton<FontManager> {
-	public:
-		FontManager(s);
-		virtual ~FontManager();
+class FontManager final : public ruc::Singleton<FontManager> {
+public:
+	FontManager(s);
+	virtual ~FontManager();
 
-		void add(const std::string& name, std::shared_ptr<Font> font);
-		std::shared_ptr<Font> load(const std::string& name);
-		std::shared_ptr<Font> get(const std::string& name);
-		bool exists(const std::string& name);
+	void add(const std::string& name, std::shared_ptr<Font> font);
+	std::shared_ptr<Font> load(const std::string& name);
+	std::shared_ptr<Font> get(const std::string& name);
+	bool exists(const std::string& name);
 
-		void remove(const std::string& name);
-		void remove(std::shared_ptr<Font> font);
+	void remove(const std::string& name);
+	void remove(std::shared_ptr<Font> font);
 
-	private:
-		std::unordered_map<std::string, std::shared_ptr<Font>> m_fontList;
-	};
+private:
+	std::unordered_map<std::string, std::shared_ptr<Font>> m_fontList;
+};
 
-	// -------------------------------------
+// -------------------------------------
 
-	const LogStream& operator<<(const LogStream& stream, const glm::ivec2& value);
+const LogStream& operator<<(const LogStream& stream, const glm::ivec2& value);
 
 } // namespace Inferno
 

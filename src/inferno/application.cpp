@@ -25,196 +25,196 @@
 
 namespace Inferno {
 
-	Application::Application(s)
-	{
-		// Initialize
+Application::Application(s)
+{
+	// Initialize
 
-		Settings::initialize();
+	Settings::initialize();
 
-		m_window = std::make_unique<Window>();
-		m_window->setEventCallback(NF_BIND_EVENT(Application::onEvent));
+	m_window = std::make_unique<Window>();
+	m_window->setEventCallback(NF_BIND_EVENT(Application::onEvent));
 
-		Input::initialize();
-		RenderCommand::initialize();
+	Input::initialize();
+	RenderCommand::initialize();
 
-		m_scene = std::make_shared<Scene>();
-		m_scene->initialize();
+	m_scene = std::make_shared<Scene>();
+	m_scene->initialize();
 
-		// Load assets
+	// Load assets
 
-		m_font = FontManager::the().load("assets/fnt/dejavu-sans");
+	m_font = FontManager::the().load("assets/fnt/dejavu-sans");
 
-		// auto bla = GlTFFile::read("assets/gltf/box.glb");
-		// success() << "@" << bla.first.get() << "@";
-		// auto bla2 = GlTFFile::read("assets/gltf/boxtextured.glb");
-		// info() << "@" << bla2.first.get() << "@";
-		// auto bla3 = GlTFFile::read("assets/gltf/guinea-pig-cage-fleece.glb");
-		// warn() << "@" << bla3.first.get() << "@";
+	// auto bla = GlTFFile::read("assets/gltf/box.glb");
+	// success() << "@" << bla.first.get() << "@";
+	// auto bla2 = GlTFFile::read("assets/gltf/boxtextured.glb");
+	// info() << "@" << bla2.first.get() << "@";
+	// auto bla3 = GlTFFile::read("assets/gltf/guinea-pig-cage-fleece.glb");
+	// warn() << "@" << bla3.first.get() << "@";
 
-		// Gltf model = Gltf("assets/gltf/box.glb");
+	// Gltf model = Gltf("assets/gltf/box.glb");
 
-		// Gltf model = Gltf("assets/gltf/animatedmorphcube.glb");
-		// Gltf model = Gltf("assets/gltf/reciprocatingsaw.glb");
+	// Gltf model = Gltf("assets/gltf/animatedmorphcube.glb");
+	// Gltf model = Gltf("assets/gltf/reciprocatingsaw.glb");
 
-		// Gltf model = Gltf("assets/gltf/triangle-without-indices.gltf");
+	// Gltf model = Gltf("assets/gltf/triangle-without-indices.gltf");
+}
+
+Application::~Application()
+{
+	m_scene->destroy();
+
+	FontManager::destroy();
+	RendererCharacter::destroy();
+	Renderer2D::destroy();
+	RenderCommand::destroy();
+	TextureManager::destroy();
+	ShaderManager::destroy();
+	// Input::destroy();
+
+	Settings::destroy();
+}
+
+int Application::run()
+{
+	dbg() << "Application startup";
+
+	std::array<CharacterVertex, Renderer::vertexPerQuad> character;
+
+	// character.at(0).quad.textureCoordinates = { 0.0f, 0.0f }; // bottom left
+	// character.at(1).quad.textureCoordinates = { 1.0f, 0.0f };
+	// character.at(2).quad.textureCoordinates = { 1.0f, 1.0f }; // top right
+	// character.at(3).quad.textureCoordinates = { 0.0f, 1.0f };
+
+	auto f = FontManager::the().get("assets/fnt/dejavu-sans");
+	auto c = f->get('5');
+	// dbg() << c->position << " " << c->size;
+
+	uint32_t textureWidth = f->texture()->width();
+	uint32_t textureHeight = f->texture()->height();
+	VERIFY(textureWidth == textureHeight, "Invalid font texture!");
+
+	float quadWidth = (c->size.x / (float)textureWidth) - 0.04; // @Todo something wrong with the width
+	float quadHeight = c->size.y / (float)textureHeight;
+
+	character.at(0).quad.position = { -quadWidth, -quadHeight, 0.0f }; // bottom left
+	character.at(1).quad.position = { quadWidth, -quadHeight, 0.0f };  // bottom right
+	character.at(2).quad.position = { quadWidth, quadHeight, 0.0f };   // top right
+	character.at(3).quad.position = { -quadWidth, quadHeight, 0.0f };  // top left
+
+	glm::vec2 x {
+		1 - (textureWidth - c->position.x) / (float)textureWidth,
+		1 - (textureWidth - c->position.x - c->size.x) / (float)textureWidth
+	};
+	glm::vec2 y {
+		(textureHeight - c->position.y - c->size.y) / (float)textureHeight,
+		(textureHeight - c->position.y) / (float)textureHeight
+	};
+	// dbg() < y;
+
+	character.at(0).quad.textureCoordinates = { x.x, y.x };
+	character.at(1).quad.textureCoordinates = { x.y, y.x };
+	character.at(2).quad.textureCoordinates = { x.y, y.y };
+	character.at(3).quad.textureCoordinates = { x.x, y.y };
+
+	// pos
+	// texcoords
+	//
+	// width
+	// edge
+	// borderwidth
+	// borderedge
+	// bordercolor
+	// offset
+
+	while (!m_window->shouldClose()) {
+
+		float time = Time::time();
+		float deltaTime = time - m_lastFrameTime;
+		m_lastFrameTime = time;
+		// dbg() << "Frametime " << deltaTime * 1000 << "ms";
+
+		// Update
+
+		Input::update();
+		m_window->update();
+		m_scene->update(deltaTime);
+
+		// Render
+
+		RenderCommand::clearColor({ 0.2f, 0.3f, 0.3f, 1.0f });
+		RenderCommand::clear();
+
+		Renderer2D::the().beginScene(m_scene->cameraProjectionView()); // camera, lights, environment
+		RendererCharacter::the().beginScene();
+
+		m_scene->render();
+		// RendererCharacter::the().drawCharacter(character, f->texture());
+
+		Renderer2D::the().endScene();
+		RendererCharacter::the().endScene();
+
+		m_window->render();
 	}
 
-	Application::~Application()
-	{
-		m_scene->destroy();
+	dbg() << "Application shutdown";
 
-		FontManager::destroy();
-		RendererCharacter::destroy();
-		Renderer2D::destroy();
-		RenderCommand::destroy();
-		TextureManager::destroy();
-		ShaderManager::destroy();
-		// Input::destroy();
+	return m_status;
+}
 
-		Settings::destroy();
-	}
+void Application::onEvent(Event& e)
+{
+	EventDispatcher dispatcher(e);
+	dispatcher.dispatch<WindowCloseEvent>(NF_BIND_EVENT(Application::onWindowClose));
+	dispatcher.dispatch<WindowResizeEvent>(NF_BIND_EVENT(Application::onWindowResize));
+	dispatcher.dispatch<KeyPressEvent>(NF_BIND_EVENT(Application::onKeyPress));
+	dispatcher.dispatch<MousePositionEvent>(NF_BIND_EVENT(Application::onMousePosition));
+}
 
-	int Application::run()
-	{
-		dbg() << "Application startup";
+bool Application::onWindowClose(WindowCloseEvent& e)
+{
+	// Suppress unused warning
+	(void)e;
 
-		std::array<CharacterVertex, Renderer::vertexPerQuad> character;
+	info() << "WindowCloseEvent triggered";
+	infoln("{}Event triggered", e.toString());
 
-		// character.at(0).quad.textureCoordinates = { 0.0f, 0.0f }; // bottom left
-		// character.at(1).quad.textureCoordinates = { 1.0f, 0.0f };
-		// character.at(2).quad.textureCoordinates = { 1.0f, 1.0f }; // top right
-		// character.at(3).quad.textureCoordinates = { 0.0f, 1.0f };
+	m_window->setShouldClose(true);
 
-		auto f = FontManager::the().get("assets/fnt/dejavu-sans");
-		auto c = f->get('5');
-		// dbg() << c->position << " " << c->size;
+	return true;
+}
 
-		uint32_t textureWidth = f->texture()->width();
-		uint32_t textureHeight = f->texture()->height();
-		VERIFY(textureWidth == textureHeight, "Invalid font texture!");
+bool Application::onWindowResize(WindowResizeEvent& e)
+{
+	// Suppress unused warning
+	(void)e;
 
-		float quadWidth  = (c->size.x / (float)textureWidth) - 0.04; // @Todo something wrong with the width
-		float quadHeight = c->size.y / (float)textureHeight;
+	infoln("WindowResizeEvent {}x{} triggered", e.getWidth(), e.getHeight());
 
-		character.at(0).quad.position = { -quadWidth, -quadHeight, 0.0f }; // bottom left
-		character.at(1).quad.position = {  quadWidth, -quadHeight, 0.0f }; // bottom right
-		character.at(2).quad.position = {  quadWidth,  quadHeight, 0.0f }; // top right
-		character.at(3).quad.position = { -quadWidth,  quadHeight, 0.0f }; // top left
+	RenderCommand::setViewport(0, 0, e.getWidth(), e.getHeight());
 
-		glm::vec2 x {
-			1 - (textureWidth - c->position.x) / (float)textureWidth,
-			1 - (textureWidth - c->position.x - c->size.x) / (float)textureWidth
-		};
-		glm::vec2 y {
-			(textureHeight - c->position.y - c->size.y) / (float)textureHeight,
-			(textureHeight - c->position.y) / (float)textureHeight
-		};
-		// dbg() < y;
+	return true;
+}
 
-		character.at(0).quad.textureCoordinates = { x.x, y.x };
-		character.at(1).quad.textureCoordinates = { x.y, y.x };
-		character.at(2).quad.textureCoordinates = { x.y, y.y };
-		character.at(3).quad.textureCoordinates = { x.x, y.y };
+bool Application::onKeyPress(KeyPressEvent& e)
+{
+	// Suppress unused warning
+	(void)e;
 
-		// pos
-		// texcoords
-		//
-		// width
-		// edge
-		// borderwidth
-		// borderedge
-		// bordercolor
-		// offset
+	infoln("KeyPressEvent {} ({}) triggered",
+	       Input::getKeyName(e.getKey()),
+	       e.getKey());
 
-		while (!m_window->shouldClose()) {
-
-			float time = Time::time();
-			float deltaTime = time - m_lastFrameTime;
-			m_lastFrameTime = time;
-			// dbg() << "Frametime " << deltaTime * 1000 << "ms";
-
-			// Update
-
-			Input::update();
-			m_window->update();
-			m_scene->update(deltaTime);
-
-			// Render
-
-			RenderCommand::clearColor({ 0.2f, 0.3f, 0.3f, 1.0f });
-			RenderCommand::clear();
-
-			Renderer2D::the().beginScene(m_scene->cameraProjectionView()); // camera, lights, environment
-			RendererCharacter::the().beginScene();
-
-			m_scene->render();
-			// RendererCharacter::the().drawCharacter(character, f->texture());
-
-			Renderer2D::the().endScene();
-			RendererCharacter::the().endScene();
-
-			m_window->render();
-		}
-
-		dbg() << "Application shutdown";
-
-		return m_status;
-	}
-
-	void Application::onEvent(Event& e)
-	{
-		EventDispatcher dispatcher(e);
-		dispatcher.dispatch<WindowCloseEvent>(NF_BIND_EVENT(Application::onWindowClose));
-		dispatcher.dispatch<WindowResizeEvent>(NF_BIND_EVENT(Application::onWindowResize));
-		dispatcher.dispatch<KeyPressEvent>(NF_BIND_EVENT(Application::onKeyPress));
-		dispatcher.dispatch<MousePositionEvent>(NF_BIND_EVENT(Application::onMousePosition));
-	}
-
-	bool Application::onWindowClose(WindowCloseEvent& e)
-	{
-		// Suppress unused warning
-		(void)e;
-
-		info() << "WindowCloseEvent triggered";
-		infoln("{}Event triggered", e.toString());
-
+	// Stop the main loop on 'Escape' keypress
+	if (e.getKey() == keyCode("GLFW_KEY_ESCAPE")) {
 		m_window->setShouldClose(true);
-
-		return true;
 	}
 
-	bool Application::onWindowResize(WindowResizeEvent& e)
-	{
-		// Suppress unused warning
-		(void)e;
+	return true;
+}
 
-		infoln("WindowResizeEvent {}x{} triggered", e.getWidth(), e.getHeight());
-
-		RenderCommand::setViewport(0, 0, e.getWidth(), e.getHeight());
-
-		return true;
-	}
-
-	bool Application::onKeyPress(KeyPressEvent& e)
-	{
-		// Suppress unused warning
-		(void)e;
-
-		infoln("KeyPressEvent {} ({}) triggered",
-		      Input::getKeyName(e.getKey()),
-		      e.getKey());
-
-		// Stop the main loop on 'Escape' keypress
-		if (e.getKey() == keyCode("GLFW_KEY_ESCAPE")) {
-			m_window->setShouldClose(true);
-		}
-
-		return true;
-	}
-
-	bool Application::onMousePosition(MousePositionEvent& e)
-	{
-		return Input::onMousePosition(e);
-	}
+bool Application::onMousePosition(MousePositionEvent& e)
+{
+	return Input::onMousePosition(e);
+}
 
 } // namespace Inferno

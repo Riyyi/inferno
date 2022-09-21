@@ -6,26 +6,27 @@
 
 namespace Inferno {
 
-	struct NativeScriptComponent {
-		NativeScript* instance { nullptr };
+struct NativeScriptComponent {
+	NativeScript* instance { nullptr };
 
-		NativeScript* (*initialize)();
+	NativeScript* (*initialize)();
 
-		// Dont allow manually setting instance during construction
-		NativeScriptComponent() {}
+	// Dont allow manually setting instance during construction
+	NativeScriptComponent() {}
 
-		template<typename T>
-		void bind()
-		{
-			VERIFY(instance == nullptr, "NativeScript already bound");
-			initialize = []() { return static_cast<NativeScript*>(new T()); };
-		}
+	template<typename T>
+	void bind()
+	{
+		VERIFY(instance == nullptr, "NativeScript already bound");
+		initialize = []() { return static_cast<NativeScript*>(new T()); };
+	}
 
-		void destroy() {
-			VERIFY(instance, "Attempting to destroy an uninitialized NativeScript");
-			delete instance;
-			instance = nullptr;
-		}
-	};
+	void destroy()
+	{
+		VERIFY(instance, "Attempting to destroy an uninitialized NativeScript");
+		delete instance;
+		instance = nullptr;
+	}
+};
 
 } // namespace Inferno

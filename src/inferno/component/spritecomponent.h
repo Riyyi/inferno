@@ -8,9 +8,9 @@
 
 namespace Inferno {
 
-	struct SpriteComponent {
-		glm::vec4 color { 1.0f };
-		std::shared_ptr<Texture> texture;
-	};
+struct SpriteComponent {
+	glm::vec4 color { 1.0f };
+	std::shared_ptr<Texture> texture;
+};
 
 } // namespace Inferno

@@ -4,9 +4,9 @@
 
 namespace Inferno {
 
-	float Time::time()
-	{
-		return static_cast<float>(glfwGetTime());
-	}
-
+float Time::time()
+{
+	return static_cast<float>(glfwGetTime());
 }
+
+} // namespace Inferno

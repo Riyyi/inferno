@@ -8,22 +8,22 @@
 
 namespace Inferno {
 
-	RenderSystem::RenderSystem(s)
-	{
-		info() << "RenderSystem initialized";
-	}
+RenderSystem::RenderSystem(s)
+{
+	info() << "RenderSystem initialized";
+}
 
-	RenderSystem::~RenderSystem()
-	{
-	}
+RenderSystem::~RenderSystem()
+{
+}
 
-	void RenderSystem::render()
-	{
-		auto group = m_registry->group<TransformComponent, SpriteComponent>();
+void RenderSystem::render()
+{
+	auto group = m_registry->group<TransformComponent, SpriteComponent>();
 
-		for (auto [entity, transform, sprite] : group.each()) {
-			Renderer2D::the().drawQuad(transform, sprite.color, sprite.texture);
-		}
+	for (auto [entity, transform, sprite] : group.each()) {
+		Renderer2D::the().drawQuad(transform, sprite.color, sprite.texture);
 	}
+}
 
 } // namespace Inferno

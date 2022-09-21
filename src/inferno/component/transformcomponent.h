@@ -7,18 +7,18 @@
 
 namespace Inferno {
 
-	struct TransformComponent {
-		glm::vec3 translate { 0.0f, 0.0f, 0.0f };
-		glm::vec3 rotate { 0.0f, 0.0f, 0.0f } ;
-		glm::vec3 scale { 1.0f, 1.0f, 1.0f };
-		glm::mat4 transform { 1.0f }; // Identity matrix
-	};
+struct TransformComponent {
+	glm::vec3 translate { 0.0f, 0.0f, 0.0f };
+	glm::vec3 rotate { 0.0f, 0.0f, 0.0f };
+	glm::vec3 scale { 1.0f, 1.0f, 1.0f };
+	glm::mat4 transform { 1.0f }; // Identity matrix
+};
 
 // -----------------------------------------
 
-	const LogStream& operator<<(const LogStream& stream, const glm::vec2& value);
-	const LogStream& operator<<(const LogStream& stream, const glm::vec3& value);
-	const LogStream& operator<<(const LogStream& stream, const glm::vec4& value);
-	const LogStream& operator<<(const LogStream& stream, const glm::mat4& value);
-	const LogStream& operator<<(const LogStream& stream, const TransformComponent& value);
+const LogStream& operator<<(const LogStream& stream, const glm::vec2& value);
+const LogStream& operator<<(const LogStream& stream, const glm::vec3& value);
+const LogStream& operator<<(const LogStream& stream, const glm::vec4& value);
+const LogStream& operator<<(const LogStream& stream, const glm::mat4& value);
+const LogStream& operator<<(const LogStream& stream, const TransformComponent& value);
 } // namespace Inferno

@@ -2,9 +2,9 @@
 
 namespace Inferno {
 
-	class Time {
-	public:
-		static float time();
-	};
+class Time {
+public:
+	static float time();
+};
 
 } // namespace Inferno

@@ -11,25 +11,25 @@
 
 namespace Inferno {
 
-	struct TransformComponent;
-	struct CameraComponent;
+struct TransformComponent;
+struct CameraComponent;
 
-	class CameraSystem final : public ruc::Singleton<CameraSystem> {
-	public:
-		CameraSystem(s);
-		virtual ~CameraSystem();
+class CameraSystem final : public ruc::Singleton<CameraSystem> {
+public:
+	CameraSystem(s);
+	virtual ~CameraSystem();
 
-		void update();
+	void update();
 
-		glm::mat4 projectionView();
+	glm::mat4 projectionView();
 
-		void setRegistry(std::shared_ptr<entt::registry> registry) { m_registry = registry; };
+	void setRegistry(std::shared_ptr<entt::registry> registry) { m_registry = registry; };
 
-	private:
-		void updateOrthographic(TransformComponent& transform, CameraComponent& camera);
-		void updatePerspective(TransformComponent& transform, CameraComponent& camera);
+private:
+	void updateOrthographic(TransformComponent& transform, CameraComponent& camera);
+	void updatePerspective(TransformComponent& transform, CameraComponent& camera);
 
-		std::shared_ptr<entt::registry> m_registry;
-	};
+	std::shared_ptr<entt::registry> m_registry;
+};
 
 } // namespace Inferno

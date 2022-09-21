@@ -7,18 +7,18 @@
 
 namespace std {
 
-	// Can't believe this is not in the standard library
+// Can't believe this is not in the standard library
 
-	inline uint32_t stou(const std::string& string)
-	{
-		unsigned long size = std::stoul(string);
-		VERIFY(size <= std::numeric_limits<uint32_t>::max(), "String util not in uint32_t range '{}'", string);
-		return static_cast<uint32_t>(size);
-	}
+inline uint32_t stou(const std::string& string)
+{
+	unsigned long size = std::stoul(string);
+	VERIFY(size <= std::numeric_limits<uint32_t>::max(), "String util not in uint32_t range '{}'", string);
+	return static_cast<uint32_t>(size);
+}
 
-	inline uint32_t stou(const char* string)
-	{
-		return stou(std::string(string));
-	}
+inline uint32_t stou(const char* string)
+{
+	return stou(std::string(string));
+}
 
 } // namespace std

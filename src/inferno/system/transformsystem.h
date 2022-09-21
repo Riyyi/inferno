@@ -7,17 +7,17 @@
 
 namespace Inferno {
 
-	class TransformSystem final : public ruc::Singleton<TransformSystem> {
-	public:
-		TransformSystem(s);
-		virtual ~TransformSystem();
+class TransformSystem final : public ruc::Singleton<TransformSystem> {
+public:
+	TransformSystem(s);
+	virtual ~TransformSystem();
 
-		void update();
+	void update();
 
-		void setRegistry(std::shared_ptr<entt::registry> registry) { m_registry = registry; };
+	void setRegistry(std::shared_ptr<entt::registry> registry) { m_registry = registry; };
 
-	private:
-		std::shared_ptr<entt::registry> m_registry;
-	};
+private:
+	std::shared_ptr<entt::registry> m_registry;
+};
 
 } // namespace Inferno

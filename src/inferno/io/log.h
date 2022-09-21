@@ -10,148 +10,164 @@
 
 namespace Inferno {
 
-	enum class Log {
-		None,
-		Info,
-		Warn,
-		Danger,
-		Success,
-		Comment,
-	};
+enum class Log {
+	None,
+	Info,
+	Warn,
+	Danger,
+	Success,
+	Comment,
+};
 
 // -----------------------------------------
 
-	class LogStream {
-	public:
-		LogStream() {}
-		virtual ~LogStream() {}
+class LogStream {
+public:
+	LogStream() {}
+	virtual ~LogStream() {}
 
-		virtual void write(const char* characters, int length) const = 0;
-		virtual void write(const unsigned char* characters, int length) const = 0;
-	};
+	virtual void write(const char* characters, int length) const = 0;
+	virtual void write(const unsigned char* characters, int length) const = 0;
+};
 
 // -----------------------------------------
 
-	class BufferedLogStream : public LogStream {
-	public:
-		BufferedLogStream() {}
-		virtual ~BufferedLogStream();
+class BufferedLogStream : public LogStream {
+public:
+	BufferedLogStream() {}
+	virtual ~BufferedLogStream();
 
-		inline virtual void write(const char* characters, int length) const override
-		{
-			write(reinterpret_cast<const unsigned char*>(characters), length);
+	inline virtual void write(const char* characters, int length) const override
+	{
+		write(reinterpret_cast<const unsigned char*>(characters), length);
+	}
+
+	inline virtual void write(const unsigned char* characters, int length) const override
+	{
+		size_t newSize = m_count + length;
+
+		if (newSize > m_capacity) {
+			grow(length);
 		}
 
-		inline virtual void write(const unsigned char* characters, int length) const override
-		{
-			size_t newSize = m_count + length;
+		// Append to buffer
+		memcpy(buffer() + m_count, characters, length);
 
-			if (newSize > m_capacity) {
-				grow(length);
-			}
+		m_count = newSize;
+	}
 
-			// Append to buffer
-			memcpy(buffer() + m_count, characters, length);
-
-			m_count = newSize;
+protected:
+	inline unsigned char* buffer() const
+	{
+		if (m_capacity <= sizeof(m_buffer.stack)) {
+			return m_buffer.stack;
 		}
 
-	protected:
-		inline unsigned char* buffer() const
-		{
-			if (m_capacity <= sizeof(m_buffer.stack)) {
-				return m_buffer.stack;
-			}
+		return m_buffer.heap;
+	}
 
-			return m_buffer.heap;
-		}
+	inline bool empty() const { return m_count == 0; }
+	inline size_t count() const { return m_count; }
 
-		inline bool empty() const { return m_count == 0; }
-		inline size_t count() const { return m_count; }
+private:
+	void grow(size_t bytes) const;
 
-	private:
-		void grow(size_t bytes) const;
-
-		mutable size_t m_count { 0 };
-		mutable size_t m_capacity { BUFFER_SIZE };
-		union {
-			mutable unsigned char* heap { nullptr };
-			mutable unsigned char stack[BUFFER_SIZE];
-		} m_buffer;
-	};
+	mutable size_t m_count { 0 };
+	mutable size_t m_capacity { BUFFER_SIZE };
+	union {
+		mutable unsigned char* heap { nullptr };
+		mutable unsigned char stack[BUFFER_SIZE];
+	} m_buffer;
+};
 
 // -----------------------------------------
 
-	class DebugLogStream final : public BufferedLogStream {
-	public:
-		DebugLogStream()
-			: m_newline(true), m_type(Log::None) {}
-		DebugLogStream(bool newline)
-			: m_newline(newline), m_type(Log::None) {}
-		DebugLogStream(Log type)
-			: m_newline(true), m_type(type) { color(); }
-		DebugLogStream(Log type, bool newline)
-			: m_newline(newline), m_type(type) { color(); }
-		virtual ~DebugLogStream() override;
+class DebugLogStream final : public BufferedLogStream {
+public:
+	DebugLogStream()
+		: m_newline(true)
+		, m_type(Log::None)
+	{
+	}
+	DebugLogStream(bool newline)
+		: m_newline(newline)
+		, m_type(Log::None)
+	{
+	}
+	DebugLogStream(Log type)
+		: m_newline(true)
+		, m_type(type)
+	{
+		color();
+	}
+	DebugLogStream(Log type, bool newline)
+		: m_newline(newline)
+		, m_type(type)
+	{
+		color();
+	}
+	virtual ~DebugLogStream() override;
 
-		void color() const;
+	void color() const;
 
-	private:
-		bool m_newline;
-		Log m_type;
-	};
-
-// -----------------------------------------
-
-	class StringLogStream final : public BufferedLogStream {
-	public:
-		StringLogStream(std::string* fill)
-			: m_fill(fill) {}
-		virtual ~StringLogStream() override;
-
-	private:
-		std::string* m_fill { nullptr };
-	};
-
-// -----------------------------------------
-
-	const LogStream& operator<<(const LogStream& stream, const char* value);
-	const LogStream& operator<<(const LogStream& stream, const unsigned char* value);
-	const LogStream& operator<<(const LogStream& stream, const std::string& value);
-	const LogStream& operator<<(const LogStream& stream, const std::string_view& value);
-	const LogStream& operator<<(const LogStream& stream, char value);
-	const LogStream& operator<<(const LogStream& stream, unsigned char value);
-	const LogStream& operator<<(const LogStream& stream, int value);
-	const LogStream& operator<<(const LogStream& stream, long int value);
-	const LogStream& operator<<(const LogStream& stream, long long int value);
-	const LogStream& operator<<(const LogStream& stream, unsigned int value);
-	const LogStream& operator<<(const LogStream& stream, long unsigned int value);
-	const LogStream& operator<<(const LogStream& stream, long long unsigned int value);
-	const LogStream& operator<<(const LogStream& stream, double value);
-	const LogStream& operator<<(const LogStream& stream, float value);
-	const LogStream& operator<<(const LogStream& stream, const void* value);
-	const LogStream& operator<<(const LogStream& stream, bool value);
-	const LogStream& operator<<(const LogStream& stream, Log value);
+private:
+	bool m_newline;
+	Log m_type;
+};
 
 // -----------------------------------------
 
-	DebugLogStream dbg();
-	DebugLogStream info();
-	DebugLogStream warn();
-	DebugLogStream danger();
-	DebugLogStream success();
-	DebugLogStream comment();
+class StringLogStream final : public BufferedLogStream {
+public:
+	StringLogStream(std::string* fill)
+		: m_fill(fill)
+	{
+	}
+	virtual ~StringLogStream() override;
 
-	DebugLogStream dbg(bool newline);
-	DebugLogStream info(bool newline);
-	DebugLogStream warn(bool newline);
-	DebugLogStream danger(bool newline);
-	DebugLogStream success(bool newline);
-	DebugLogStream comment(bool newline);
+private:
+	std::string* m_fill { nullptr };
+};
 
 // -----------------------------------------
 
-	// clang-format off
+const LogStream& operator<<(const LogStream& stream, const char* value);
+const LogStream& operator<<(const LogStream& stream, const unsigned char* value);
+const LogStream& operator<<(const LogStream& stream, const std::string& value);
+const LogStream& operator<<(const LogStream& stream, const std::string_view& value);
+const LogStream& operator<<(const LogStream& stream, char value);
+const LogStream& operator<<(const LogStream& stream, unsigned char value);
+const LogStream& operator<<(const LogStream& stream, int value);
+const LogStream& operator<<(const LogStream& stream, long int value);
+const LogStream& operator<<(const LogStream& stream, long long int value);
+const LogStream& operator<<(const LogStream& stream, unsigned int value);
+const LogStream& operator<<(const LogStream& stream, long unsigned int value);
+const LogStream& operator<<(const LogStream& stream, long long unsigned int value);
+const LogStream& operator<<(const LogStream& stream, double value);
+const LogStream& operator<<(const LogStream& stream, float value);
+const LogStream& operator<<(const LogStream& stream, const void* value);
+const LogStream& operator<<(const LogStream& stream, bool value);
+const LogStream& operator<<(const LogStream& stream, Log value);
+
+// -----------------------------------------
+
+DebugLogStream dbg();
+DebugLogStream info();
+DebugLogStream warn();
+DebugLogStream danger();
+DebugLogStream success();
+DebugLogStream comment();
+
+DebugLogStream dbg(bool newline);
+DebugLogStream info(bool newline);
+DebugLogStream warn(bool newline);
+DebugLogStream danger(bool newline);
+DebugLogStream success(bool newline);
+DebugLogStream comment(bool newline);
+
+// -----------------------------------------
+
+// clang-format off
 	template<typename... P> void dbgln(const char* format, P&&... parameters) { dbgln(Log::None, true, format, std::forward<P>(parameters)...); }
 	template<typename... P> void infoln(const char* format, P&&... parameters) { dbgln(Log::Info, true, format, std::forward<P>(parameters)...); }
 	template<typename... P> void warnln(const char* format, P&&... parameters) { dbgln(Log::Warn, true, format, std::forward<P>(parameters)...); }
@@ -193,32 +209,32 @@ namespace Inferno {
 	template<typename... P> void dangerln(bool newline, const std::string_view& format, P&&... parameters) { dbgln(Log::Danger, newline, format.data(), std::forward<P>(parameters)...); }
 	template<typename... P> void successln(bool newline, const std::string_view& format, P&&... parameters) { dbgln(Log::Success, newline, format.data(), std::forward<P>(parameters)...); }
 	template<typename... P> void commentln(bool newline, const std::string_view& format, P&&... parameters) { dbgln(Log::Comment, newline, format.data(), std::forward<P>(parameters)...); }
-	// clang-format on
+// clang-format on
 
 // -----------------------------------------
 
-	void dbgln(Log type, bool newline);
-	void dbgln(Log type, bool newline, const char* format);
+void dbgln(Log type, bool newline);
+void dbgln(Log type, bool newline, const char* format);
 
-	// https://en.cppreference.com/w/cpp/language/parameter_pack#Example
-	template<typename T, typename... P>
-	void dbgln(Log type, bool newline, const char* format, T value, P&&... parameters)
-	{
-		std::string_view view { format };
+// https://en.cppreference.com/w/cpp/language/parameter_pack#Example
+template<typename T, typename... P>
+void dbgln(Log type, bool newline, const char* format, T value, P&&... parameters)
+{
+	std::string_view view { format };
 
-		for(uint32_t i = 0; format[i] != '\0'; i++) {
+	for (uint32_t i = 0; format[i] != '\0'; i++) {
 
-			if (format[i] == '{' && format[i + 1] == '}') {
-				DebugLogStream(type, false) << view.substr(0, i) << value;
-				dbgln(type, newline, format + i + 2, parameters...);
-				return;
-			}
+		if (format[i] == '{' && format[i + 1] == '}') {
+			DebugLogStream(type, false) << view.substr(0, i) << value;
+			dbgln(type, newline, format + i + 2, parameters...);
+			return;
 		}
 	}
-	// possible c++17 improvent https://riptutorial.com/cplusplus/example/3208/iterating-over-a-parameter-pack
+}
+// possible c++17 improvent https://riptutorial.com/cplusplus/example/3208/iterating-over-a-parameter-pack
 
 // -----------------------------------------
 
-	StringLogStream str(std::string* fill);
+StringLogStream str(std::string* fill);
 
 } // namespace Inferno

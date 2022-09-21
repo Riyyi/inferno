@@ -6,48 +6,54 @@
 
 namespace Inferno {
 
-	class JoystickEvent : public Event {
-	public:
-		inline int getID() const { return m_id; }
+class JoystickEvent : public Event {
+public:
+	inline int getID() const { return m_id; }
 
-		EVENT_CLASS_CATEGORY(InputEventCategory | JoystickEventCatergory)
+	EVENT_CLASS_CATEGORY(InputEventCategory | JoystickEventCatergory)
 
-	protected:
-		JoystickEvent(int id) :
-			m_id(id) {}
+protected:
+	JoystickEvent(int id)
+		: m_id(id)
+	{
+	}
 
-	private:
-		int m_id;
-	};
+private:
+	int m_id;
+};
 
-	class JoystickConnectedEvent : public JoystickEvent {
-	public:
-		JoystickConnectedEvent(int id) :
-			JoystickEvent(id) {}
+class JoystickConnectedEvent : public JoystickEvent {
+public:
+	JoystickConnectedEvent(int id)
+		: JoystickEvent(id)
+	{
+	}
 
-		virtual std::string toString() const override
-		{
-			std::stringstream ss;
-			ss << "JoystickConnected: " << getID();
-			return ss.str();
-		}
+	virtual std::string toString() const override
+	{
+		std::stringstream ss;
+		ss << "JoystickConnected: " << getID();
+		return ss.str();
+	}
 
-		EVENT_CLASS_TYPE(JoystickConnected)
-	};
+	EVENT_CLASS_TYPE(JoystickConnected)
+};
 
-	class JoystickDisconnectedEvent : public JoystickEvent {
-	public:
-		JoystickDisconnectedEvent(int id) :
-			JoystickEvent(id) {}
+class JoystickDisconnectedEvent : public JoystickEvent {
+public:
+	JoystickDisconnectedEvent(int id)
+		: JoystickEvent(id)
+	{
+	}
 
-		virtual std::string toString() const override
-		{
-			std::stringstream ss;
-			ss << "JoystickDisconnected: " << getID();
-			return ss.str();
-		}
+	virtual std::string toString() const override
+	{
+		std::stringstream ss;
+		ss << "JoystickDisconnected: " << getID();
+		return ss.str();
+	}
 
-		EVENT_CLASS_TYPE(JoystickDisconnected)
-	};
+	EVENT_CLASS_TYPE(JoystickDisconnected)
+};
 
 } // namespace Inferno

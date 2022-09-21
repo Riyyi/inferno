@@ -6,26 +6,26 @@
 
 namespace Inferno {
 
-	struct NativeScriptComponent;
-	struct LuaScriptComponent;
+struct NativeScriptComponent;
+struct LuaScriptComponent;
 
-	class Scene;
+class Scene;
 
-	class ScriptSystem final : public ruc::Singleton<ScriptSystem> {
-	public:
-		ScriptSystem(s);
-		virtual ~ScriptSystem();
+class ScriptSystem final : public ruc::Singleton<ScriptSystem> {
+public:
+	ScriptSystem(s);
+	virtual ~ScriptSystem();
 
-		void update(float deltaTime);
+	void update(float deltaTime);
 
-		void cleanup(uint32_t entity);
-		void cleanup(NativeScriptComponent& nativeScript);
-		void cleanup(LuaScriptComponent& luaScript);
+	void cleanup(uint32_t entity);
+	void cleanup(NativeScriptComponent& nativeScript);
+	void cleanup(LuaScriptComponent& luaScript);
 
-		void setScene(Scene* scene) { m_scene = scene; }
+	void setScene(Scene* scene) { m_scene = scene; }
 
-	private:
-		Scene* m_scene { nullptr };
-	};
+private:
+	Scene* m_scene { nullptr };
+};
 
 } // namespace Inferno

@@ -2,10 +2,10 @@
 
 namespace Inferno {
 
-	class Framebuffer {
-	public:
-		Framebuffer();
-		virtual ~Framebuffer();
-	};
+class Framebuffer {
+public:
+	Framebuffer();
+	virtual ~Framebuffer();
+};
 
 } // namespace Inferno

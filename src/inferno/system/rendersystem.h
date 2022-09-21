@@ -9,17 +9,17 @@
 
 namespace Inferno {
 
-	class RenderSystem final : public ruc::Singleton<RenderSystem> {
-	public:
-		RenderSystem(s);
-		virtual ~RenderSystem();
+class RenderSystem final : public ruc::Singleton<RenderSystem> {
+public:
+	RenderSystem(s);
+	virtual ~RenderSystem();
 
-		void render();
+	void render();
 
-		void setRegistry(std::shared_ptr<entt::registry> registry) { m_registry = registry; };
+	void setRegistry(std::shared_ptr<entt::registry> registry) { m_registry = registry; };
 
-	private:
-		std::shared_ptr<entt::registry> m_registry;
-	};
+private:
+	std::shared_ptr<entt::registry> m_registry;
+};
 
 } // namespace Inferno
