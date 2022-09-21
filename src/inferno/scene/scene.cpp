@@ -1,3 +1,4 @@
+#include "inferno/scene/scene.h"
 #include "inferno/assert.h"
 #include "inferno/component/cameracomponent.h"
 #include "inferno/component/luascriptcomponent.h"
@@ -5,7 +6,6 @@
 #include "inferno/component/spritecomponent.h"
 #include "inferno/component/tagcomponent.h"
 #include "inferno/component/textareacomponent.h"
-#include "inferno/scene/scene.h"
 #include "inferno/script/cameracontroller.h"
 #include "inferno/script/nativescript.h"
 #include "inferno/system/camerasystem.h"
@@ -23,19 +23,10 @@ namespace Inferno {
 
 		m_registry = std::make_shared<entt::registry>();
 
-		TransformSystem::initialize();
 		TransformSystem::the().setRegistry(m_registry);
-
-		CameraSystem::initialize();
 		CameraSystem::the().setRegistry(m_registry);
-
-		RenderSystem::initialize();
 		RenderSystem::the().setRegistry(m_registry);
-
-		ScriptSystem::initialize();
 		ScriptSystem::the().setScene(this);
-
-		TextAreaSystem::initialize();
 		TextAreaSystem::the().setScene(this);
 
 		// Load assets
@@ -122,14 +113,14 @@ namespace Inferno {
 
 	void Scene::validEntity(uint32_t entity) const
 	{
-		ASSERT(m_registry->valid(entt::entity {entity}), "Entity is not valid");
+		ASSERT(m_registry->valid(entt::entity { entity }), "Entity is not valid");
 	}
 
-// ----------------------------------------
+	// -------------------------------------
 
 	const LogStream& operator<<(const LogStream& stream, entt::entity entity)
 	{
 		return stream << static_cast<uint32_t>(entity);
 	}
 
-}
+} // namespace Inferno

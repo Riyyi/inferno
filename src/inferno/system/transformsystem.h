@@ -4,11 +4,11 @@
 #include <memory> //std::shared_ptr
 
 #include "entt/entity/registry.hpp" // entt::entity, entt::registry
-#include "inferno/singleton.h"
+#include "ruc/singleton.h"
 
 namespace Inferno {
 
-	class TransformSystem final : public Singleton<TransformSystem> {
+	class TransformSystem final : public ruc::Singleton<TransformSystem> {
 	public:
 		TransformSystem(s);
 		virtual ~TransformSystem();
@@ -21,6 +21,6 @@ namespace Inferno {
 		std::shared_ptr<entt::registry> m_registry;
 	};
 
-}
+} // namespace Inferno
 
 #endif // TRANSFORM_SYSTEM_H

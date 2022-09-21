@@ -27,9 +27,6 @@ namespace Inferno {
 
 	Application::Application(s)
 	{
-		// Set singleton instance early
-		s_instance = this;
-
 		// Initialize
 
 		Settings::initialize();
@@ -38,12 +35,7 @@ namespace Inferno {
 		m_window->setEventCallback(NF_BIND_EVENT(Application::onEvent));
 
 		Input::initialize();
-		ShaderManager::initialize();
-		TextureManager::initialize();
 		RenderCommand::initialize();
-		Renderer2D::initialize();
-		RendererCharacter::initialize();
-		FontManager::initialize();
 
 		m_scene = std::make_shared<Scene>();
 		m_scene->initialize();
@@ -162,7 +154,6 @@ namespace Inferno {
 			RendererCharacter::the().endScene();
 
 			m_window->render();
-
 		}
 
 		dbg() << "Application shutdown";
@@ -226,4 +217,4 @@ namespace Inferno {
 		return Input::onMousePosition(e);
 	}
 
-}
+} // namespace Inferno

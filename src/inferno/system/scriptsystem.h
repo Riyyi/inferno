@@ -3,7 +3,7 @@
 
 #include <cstdint> // uint32_t
 
-#include "inferno/singleton.h"
+#include "ruc/singleton.h"
 
 namespace Inferno {
 
@@ -12,7 +12,7 @@ namespace Inferno {
 
 	class Scene;
 
-	class ScriptSystem final : public Singleton<ScriptSystem> {
+	class ScriptSystem final : public ruc::Singleton<ScriptSystem> {
 	public:
 		ScriptSystem(s);
 		virtual ~ScriptSystem();
@@ -29,6 +29,6 @@ namespace Inferno {
 		Scene* m_scene { nullptr };
 	};
 
-}
+} // namespace Inferno
 
 #endif // SCRIPT_SYSTEM_H

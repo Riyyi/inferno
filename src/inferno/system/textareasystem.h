@@ -7,9 +7,9 @@
 #include <vector>   // std::vector
 
 #include "glm/ext/vector_float3.hpp" // glm::vec3
+#include "ruc/singleton.h"
 
 #include "inferno/render/renderer.h"
-#include "inferno/singleton.h"
 
 namespace Inferno {
 
@@ -18,7 +18,7 @@ namespace Inferno {
 	class Font;
 	class Scene;
 
-	class TextAreaSystem final : public Singleton<TextAreaSystem> {
+	class TextAreaSystem final : public ruc::Singleton<TextAreaSystem> {
 	public:
 		TextAreaSystem(s);
 		virtual ~TextAreaSystem();
@@ -34,6 +34,5 @@ namespace Inferno {
 	};
 
 } // namespace Inferno
-
 
 #endif // TEXTAREA_H

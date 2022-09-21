@@ -1,12 +1,12 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <cstdint>  	 // uint32_t
+#include <cstdint>       // uint32_t
 #include <memory>        // std::shared_ptr
 #include <string>        // std::string
 #include <unordered_map> // std::unordered_map
 
-#include "inferno/singleton.h"
+#include "ruc/singleton.h"
 
 namespace Inferno {
 
@@ -37,9 +37,9 @@ namespace Inferno {
 		uint32_t m_dataFormat;
 	};
 
-// -----------------------------------------
+	// -------------------------------------
 
-	class TextureManager final : public Singleton<TextureManager> {
+	class TextureManager final : public ruc::Singleton<TextureManager> {
 	public:
 		TextureManager(s);
 		virtual ~TextureManager();
@@ -56,6 +56,6 @@ namespace Inferno {
 		std::unordered_map<std::string, std::shared_ptr<Texture>> m_textureList;
 	};
 
-}
+} // namespace Inferno
 
 #endif // TEXTURE_H

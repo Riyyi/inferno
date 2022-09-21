@@ -10,6 +10,5 @@ public:
 
 Inferno::Application& Inferno::createApplication()
 {
-	Game::initialize();
 	return Game::the();
 }

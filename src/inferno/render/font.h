@@ -7,15 +7,15 @@
 #include <unordered_map> // std::unordered_map
 #include <vector>        // std::vector
 
-#include "glm/ext/vector_uint2.hpp" // glm::uvec2
 #include "glm/ext/vector_int2.hpp"  // glm::ivec2
+#include "glm/ext/vector_uint2.hpp" // glm::uvec2
+#include "ruc/singleton.h"
 
 #include "inferno/io/log.h"
-#include "inferno/singleton.h"
 
 namespace Inferno {
 
-class Texture;
+	class Texture;
 
 	struct Character {
 		glm::uvec2 position; // Position
@@ -24,7 +24,7 @@ class Texture;
 		uint32_t advance;    // Amount to advance to next glyph
 	};
 
-// -----------------------------------------
+	// -------------------------------------
 
 	class Font {
 	public:
@@ -50,9 +50,9 @@ class Texture;
 		std::unordered_map<unsigned char, std::shared_ptr<Character>> m_characterList;
 	};
 
-// -----------------------------------------
+	// -------------------------------------
 
-	class FontManager final : public Singleton<FontManager> {
+	class FontManager final : public ruc::Singleton<FontManager> {
 	public:
 		FontManager(s);
 		virtual ~FontManager();
@@ -69,12 +69,11 @@ class Texture;
 		std::unordered_map<std::string, std::shared_ptr<Font>> m_fontList;
 	};
 
-
-// -----------------------------------------
+	// -------------------------------------
 
 	const LogStream& operator<<(const LogStream& stream, const glm::ivec2& value);
 
-}
+} // namespace Inferno
 
 #endif // FONT_H
 

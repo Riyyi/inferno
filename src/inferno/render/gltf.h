@@ -8,7 +8,8 @@
 #include <unordered_map> // std::unordered_map
 #include <vector>        // std::vector
 
-#include "inferno/singleton.h"
+#include "ruc/singleton.h"
+
 #include "inferno/util/json.h"
 
 #define GLTF_TYPE_SCALAR 1
@@ -149,7 +150,7 @@ namespace Inferno {
 
 // -----------------------------------------
 
-	class GltfManager final : Singleton<GltfManager> {
+	class GltfManager final : ruc::Singleton<GltfManager> {
 	public:
 		GltfManager(s) {}
 		virtual ~GltfManager() {}

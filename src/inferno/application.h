@@ -3,7 +3,7 @@
 
 #include <memory> // std::unique_ptr, std::shared_ptr
 
-#include "inferno/singleton.h"
+#include "ruc/singleton.h"
 
 namespace Inferno {
 
@@ -16,7 +16,7 @@ namespace Inferno {
 	class WindowCloseEvent;
 	class WindowResizeEvent;
 
-	class Application : public Singleton<Application> {
+	class Application : public ruc::Singleton<Application> {
 	public:
 		Application(s);
 		virtual ~Application();
@@ -48,7 +48,7 @@ namespace Inferno {
 	// To be defined in the game
 	extern Application& createApplication();
 
-}
+} // namespace Inferno
 
 #endif // APPLICATION_H
 

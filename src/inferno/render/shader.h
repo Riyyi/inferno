@@ -7,8 +7,7 @@
 #include <unordered_map> // std::unordered_map
 
 #include "glm/glm.hpp"
-
-#include "inferno/singleton.h"
+#include "ruc/singleton.h"
 
 namespace Inferno {
 
@@ -45,9 +44,9 @@ namespace Inferno {
 		uint32_t m_id;
 	};
 
-// -----------------------------------------
+	// -------------------------------------
 
-	class ShaderManager final : public Singleton<ShaderManager> {
+	class ShaderManager final : public ruc::Singleton<ShaderManager> {
 	public:
 		ShaderManager(s);
 		virtual ~ShaderManager();
@@ -70,7 +69,6 @@ namespace Inferno {
 		std::unordered_map<std::string, std::shared_ptr<Shader>> m_shaderList;
 	};
 
-}
-
+} // namespace Inferno
 
 #endif // SHADER_H
