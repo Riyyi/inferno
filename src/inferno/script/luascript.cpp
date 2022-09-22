@@ -1,10 +1,10 @@
+#include "ruc/file.h"
 #include "sol/unsafe_function_result.hpp"
 
 #include "inferno/component/cameracomponent.h"
 #include "inferno/component/spritecomponent.h"
 #include "inferno/component/tagcomponent.h"
 #include "inferno/component/transformcomponent.h"
-#include "inferno/io/file.h"
 #include "inferno/scene/scene.h"
 #include "inferno/script/luascript.h"
 #include "inferno/script/registration.h"
@@ -63,7 +63,7 @@ void LuaScript::update(float deltaTime)
 
 void LuaScript::loadScript()
 {
-	std::string script = File::read(m_path);
+	std::string script = ruc::File(m_path).data();
 	auto result = m_state.script(script.c_str(),
 	                             [](lua_State*, sol::protected_function_result pfr) { return pfr; });
 	VERIFY(result.valid(), "LuaScript {}", ((sol::error)result).what());

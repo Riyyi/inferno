@@ -2,9 +2,9 @@
 #include <fstream> // std::ifstream
 #include <ios>     // std::ios
 
+#include "ruc/file.h"
 #include "ruc/meta/assert.h"
 
-#include "inferno/io/file.h"
 #include "inferno/io/gltffile.h"
 #include "inferno/io/log.h"
 #include "inferno/util/json.h"
@@ -20,7 +20,7 @@ std::pair<std::shared_ptr<char[]>, std::shared_ptr<char[]>> GltfFile::read(const
 		return glb(path);
 	}
 	else if (extension.compare(".gltf") == 0) {
-		return { File::raw(path), nullptr };
+		return { ruc::File::raw(path), nullptr };
 	}
 
 	VERIFY(false, "GltfFile unknown file extension!");
@@ -38,7 +38,7 @@ std::pair<std::shared_ptr<char[]>, std::shared_ptr<char[]>> GltfFile::glb(const 
 	constexpr uint32_t json = 27; // Minimum valid glTF has an asset property with version specifier
 
 	// Get the actual length of the file
-	uint32_t length = static_cast<uint32_t>(File::length(path, glb));
+	uint32_t length = static_cast<uint32_t>(ruc::File::length(path, glb));
 	VERIFY(length > header + json, "GltfFile too small to be valid '{}'", path);
 
 	// Read header
@@ -62,7 +62,7 @@ std::pair<std::shared_ptr<char[]>, std::shared_ptr<char[]>> GltfFile::glb(const 
 	VERIFY(versionInt == 2, "Gltf unsupported version '{}'", versionInt);
 
 	uint32_t fileLengthInt = *reinterpret_cast<uint32_t*>(fileLength);
-	VERIFY(fileLengthInt == length, "Gltf file and reported byte size mismatch '{}' '{}'", length, fileLengthInt);
+	VERIFY(fileLengthInt == static_cast<uint32_t>(length), "Gltf file and reported byte size mismatch '{}' '{}'", length, fileLengthInt);
 
 	// Read JSON data
 	auto jsonChunk = readChunk(glb, header, 0x4e4f534a);

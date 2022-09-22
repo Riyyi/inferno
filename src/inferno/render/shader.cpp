@@ -3,10 +3,10 @@
 
 #include "glad/glad.h"
 #include "glm/gtc/type_ptr.hpp" // glm::value_ptr
+#include "ruc/file.h"
 #include "ruc/meta/assert.h"
 
 #include "inferno/core.h"
-#include "inferno/io/file.h"
 #include "inferno/io/log.h"
 #include "inferno/render/shader.h"
 
@@ -17,8 +17,8 @@ Shader::Shader(const std::string& name)
 	, m_id(0)
 {
 	// Get file contents
-	std::string vertexSrc = File::read(name + ".vert");
-	std::string fragmentSrc = File::read(name + ".frag");
+	std::string vertexSrc = ruc::File(name + ".vert").data();
+	std::string fragmentSrc = ruc::File(name + ".frag").data();
 
 	// Compile shaders
 	uint32_t vertexID = compileShader(GL_VERTEX_SHADER, vertexSrc.c_str());

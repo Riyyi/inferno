@@ -2,9 +2,9 @@
 #include <string>  // std::getline, std::stoi
 #include <utility> // std::move
 
+#include "ruc/file.h"
 #include "ruc/meta/assert.h"
 
-#include "inferno/io/file.h"
 #include "inferno/render/font.h"
 #include "inferno/render/texture.h"
 #include "inferno/util/integer.h"
@@ -17,7 +17,7 @@ Font::Font(const std::string& name)
 	std::string path = name + ".fnt";
 	std::string image = name + ".png";
 
-	std::string font = File::read(path);
+	std::string font = ruc::File(path).data();
 	parseFont(font);
 
 	m_texture = std::make_shared<Texture>(image);

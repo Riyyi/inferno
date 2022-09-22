@@ -1,9 +1,9 @@
 #include <cstdint> // uint32_t
 #include <string>  // std::string
 
+#include "ruc/file.h"
 #include "ruc/json/json.h"
 
-#include "inferno/io/file.h"
 #include "inferno/io/log.h"
 #include "inferno/settings.h"
 #include "inferno/window.h"
@@ -28,9 +28,9 @@ void Settings::destroy()
 
 bool Settings::load()
 {
-	ruc::Json object;
+	auto object = ruc::Json::parse(ruc::File(m_path).data());
 
-	if (!File::ioRead(&object, m_path)) {
+	if (object.type() != ruc::Json::Type::Object) {
 		warn() << "Settings invalid formatting, using default values";
 		return false;
 	}
@@ -44,10 +44,11 @@ bool Settings::save()
 {
 	ruc::Json object = m_properties;
 
-	if (!File::ioWrite(&object, m_path)) {
-		warn() << "Settings could not be saved";
-		return false;
-	}
+	auto file = ruc::File(m_path);
+	file.clear();
+	file.append(object.dump(1, '\t'));
+	file.append("\n");
+	file.flush();
 
 	info() << "Settings saved";
 	return true;
