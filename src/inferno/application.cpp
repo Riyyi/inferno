@@ -199,7 +199,7 @@ bool Application::onKeyPress(KeyPressEvent& e)
 	// Suppress unused warning
 	(void)e;
 
-	ruc::info("KeyPressEvent {} ({})", Input::getKeyName(e.getKey()), e.getKey());
+	ruc::info("KeyPressEvent {:3}  {}", e.getKey(), keyName(e.getKey()));
 
 	// Stop the main loop on 'Escape' keypress
 	if (e.getKey() == keyCode("GLFW_KEY_ESCAPE")) {

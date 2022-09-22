@@ -1,4 +1,5 @@
-#include <string>        // std::string
+#include <algorithm> // std::find_if
+#include <string_view>
 #include <unordered_map> // std::unordered_map
 
 #include "GLFW/glfw3.h"
@@ -8,7 +9,7 @@
 
 namespace Inferno {
 
-static std::unordered_map<std::string, int> keys({
+static std::unordered_map<std::string_view, int> keys({
 	{ MAP_KEY(GLFW_KEY_UNKNOWN) },
 	{ MAP_KEY(GLFW_KEY_SPACE) },
 	{ MAP_KEY(GLFW_KEY_APOSTROPHE) },
@@ -134,10 +135,20 @@ static std::unordered_map<std::string, int> keys({
 
 // -----------------------------------------
 
-int keyCode(const char* name)
+int keyCode(std::string_view name)
 {
-	VERIFY(keys.find(name) != keys.end(), "keyCode could not find '{}'", name);
+	VERIFY(keys.find(name) != keys.end(), "could not find key code: {}", name);
 	return keys.at(name);
+}
+
+std::string_view keyName(int key)
+{
+	auto it = std::find_if(keys.begin(), keys.end(), [key](const auto& keybind) {
+		return keybind.second == key;
+	});
+
+	VERIFY(it != keys.end(), "could not find key name: {}", key);
+	return it->first.substr(9);
 }
 
 } // namespace Inferno
