@@ -2,7 +2,7 @@
 
 #include <ostream> // std::ostream
 
-#include "inferno/core.h"
+#include "ruc/meta/core.h"
 
 namespace Inferno {
 
