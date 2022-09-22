@@ -184,9 +184,6 @@ bool Application::onWindowClose(WindowCloseEvent& e)
 
 bool Application::onWindowResize(WindowResizeEvent& e)
 {
-	// Suppress unused warning
-	(void)e;
-
 	ruc::info("WindowResizeEvent {}x{}", e.getWidth(), e.getHeight());
 
 	RenderCommand::setViewport(0, 0, e.getWidth(), e.getHeight());
@@ -196,9 +193,6 @@ bool Application::onWindowResize(WindowResizeEvent& e)
 
 bool Application::onKeyPress(KeyPressEvent& e)
 {
-	// Suppress unused warning
-	(void)e;
-
 	ruc::info("KeyPressEvent {:3}  {}", e.getKey(), keyName(e.getKey()));
 
 	// Stop the main loop on 'Escape' keypress
