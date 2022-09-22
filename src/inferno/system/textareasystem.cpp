@@ -1,3 +1,4 @@
+#include "ruc/format/log.h"
 #include "ruc/meta/assert.h"
 
 #include "inferno/application.h"
@@ -13,7 +14,7 @@ namespace Inferno {
 
 TextAreaSystem::TextAreaSystem(s)
 {
-	info() << "TextAreaSystem initialized";
+	ruc::info("TextAreaSystem initialized");
 }
 
 TextAreaSystem::~TextAreaSystem()
@@ -89,7 +90,7 @@ std::optional<CharacterQuad> TextAreaSystem::calculateCharacterQuad(unsigned cha
 		quad.quad.position.x += advance;
 	}
 
-	// dbgln("character: {} ({}) width: {} height: {} advance: {} x: {}",
+	// ruc::debug("character: {} ({}) width: {} height: {} advance: {} x: {}",
 	//       character, (int)character, quadWidth, quadHeight, advance, characterQuad.at(0).quad.position.x);
 
 	// Jump to the next glyph

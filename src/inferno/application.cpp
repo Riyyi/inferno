@@ -1,4 +1,5 @@
 #include "glm/gtc/type_ptr.hpp" // glm::make_mat4
+#include "ruc/format/log.h"
 #include "ruc/meta/assert.h"
 
 #include "inferno/application.h"
@@ -9,7 +10,6 @@
 #include "inferno/event/mouseevent.h"
 // #include "inferno/io/gltffile.h"
 #include "inferno/io/input.h"
-#include "inferno/io/log.h"
 #include "inferno/keycodes.h"
 #include "inferno/render/buffer.h"
 #include "inferno/render/context.h"
@@ -45,11 +45,11 @@ Application::Application(s)
 	m_font = FontManager::the().load("assets/fnt/dejavu-sans");
 
 	// auto bla = GlTFFile::read("assets/gltf/box.glb");
-	// success() << "@" << bla.first.get() << "@";
+	// ruc::success("@{}@", bla.first.get());
 	// auto bla2 = GlTFFile::read("assets/gltf/boxtextured.glb");
-	// info() << "@" << bla2.first.get() << "@";
+	// ruc::info("@{}@", bla2.first.get());
 	// auto bla3 = GlTFFile::read("assets/gltf/guinea-pig-cage-fleece.glb");
-	// warn() << "@" << bla3.first.get() << "@";
+	// ruc::warn("@{}@", bla3.first.get());
 
 	// Gltf model = Gltf("assets/gltf/box.glb");
 
@@ -76,7 +76,7 @@ Application::~Application()
 
 int Application::run()
 {
-	dbg() << "Application startup";
+	ruc::debug("Application startup");
 
 	std::array<CharacterVertex, Renderer::vertexPerQuad> character;
 
@@ -87,7 +87,7 @@ int Application::run()
 
 	auto f = FontManager::the().get("assets/fnt/dejavu-sans");
 	auto c = f->get('5');
-	// dbg() << c->position << " " << c->size;
+	// ruc::debug(c->position << " " << c->size);
 
 	uint32_t textureWidth = f->texture()->width();
 	uint32_t textureHeight = f->texture()->height();
@@ -109,7 +109,7 @@ int Application::run()
 		(textureHeight - c->position.y - c->size.y) / (float)textureHeight,
 		(textureHeight - c->position.y) / (float)textureHeight
 	};
-	// dbg() < y;
+	// ruc::debug(y);
 
 	character.at(0).quad.textureCoordinates = { x.x, y.x };
 	character.at(1).quad.textureCoordinates = { x.y, y.x };
@@ -131,7 +131,7 @@ int Application::run()
 		float time = Time::time();
 		float deltaTime = time - m_lastFrameTime;
 		m_lastFrameTime = time;
-		// dbg() << "Frametime " << deltaTime * 1000 << "ms";
+		// ruc::debug("Frametime " << deltaTime * 1000 << "ms");
 
 		// Update
 
@@ -156,7 +156,7 @@ int Application::run()
 		m_window->render();
 	}
 
-	dbg() << "Application shutdown";
+	ruc::debug("Application shutdown");
 
 	return m_status;
 }
@@ -175,8 +175,7 @@ bool Application::onWindowClose(WindowCloseEvent& e)
 	// Suppress unused warning
 	(void)e;
 
-	info() << "WindowCloseEvent triggered";
-	infoln("{}Event triggered", e.toString());
+	ruc::info("WindowCloseEvent");
 
 	m_window->setShouldClose(true);
 
@@ -188,7 +187,7 @@ bool Application::onWindowResize(WindowResizeEvent& e)
 	// Suppress unused warning
 	(void)e;
 
-	infoln("WindowResizeEvent {}x{} triggered", e.getWidth(), e.getHeight());
+	ruc::info("WindowResizeEvent {}x{}", e.getWidth(), e.getHeight());
 
 	RenderCommand::setViewport(0, 0, e.getWidth(), e.getHeight());
 
@@ -200,9 +199,7 @@ bool Application::onKeyPress(KeyPressEvent& e)
 	// Suppress unused warning
 	(void)e;
 
-	infoln("KeyPressEvent {} ({}) triggered",
-	       Input::getKeyName(e.getKey()),
-	       e.getKey());
+	ruc::info("KeyPressEvent {} ({})", Input::getKeyName(e.getKey()), e.getKey());
 
 	// Stop the main loop on 'Escape' keypress
 	if (e.getKey() == keyCode("GLFW_KEY_ESCAPE")) {
@@ -214,6 +211,8 @@ bool Application::onKeyPress(KeyPressEvent& e)
 
 bool Application::onMousePosition(MousePositionEvent& e)
 {
+	// ruc::info("MousePositionEvent {:.0}x{:.0}", e.getXPos(), e.getYPos());
+
 	return Input::onMousePosition(e);
 }
 

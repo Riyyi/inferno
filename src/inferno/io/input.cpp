@@ -1,9 +1,9 @@
 #include "GLFW/glfw3.h"
+#include "ruc/format/log.h"
 
 #include "inferno/application.h"
 #include "inferno/event/mouseevent.h"
 #include "inferno/io/input.h"
-#include "inferno/io/log.h"
 #include "inferno/window.h"
 
 namespace Inferno {
@@ -20,7 +20,7 @@ void Input::initialize()
 	m_xPosLast = Application::the().getWindow().getWidth() / 2.0f;
 	m_yPosLast = Application::the().getWindow().getHeight() / 2.0f;
 
-	info() << "Input initialized";
+	ruc::info("Input initialized");
 }
 
 void Input::update()

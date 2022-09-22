@@ -1,6 +1,7 @@
 #include <csignal> // signal
 
 #include "GLFW/glfw3.h"
+#include "ruc/format/log.h"
 #include "ruc/meta/assert.h"
 
 #include "inferno/application.h"
@@ -9,7 +10,6 @@
 #include "inferno/event/keyevent.h"
 #include "inferno/event/mouseevent.h"
 #include "inferno/io/input.h"
-#include "inferno/io/log.h"
 #include "inferno/keycodes.h"
 #include "inferno/render/context.h"
 #include "inferno/render/renderer.h"
@@ -83,7 +83,7 @@ void Window::initialize()
 
 	// Error callback
 	glfwSetErrorCallback([](int error, const char* description) {
-		dbgln("GLFW Error {}: {}", error, description);
+		ruc::error("GLFW Error: {}: {}", error, description);
 	});
 
 	// Window close callback

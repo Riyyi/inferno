@@ -1,3 +1,4 @@
+#include "ruc/format/log.h"
 #include "ruc/meta/assert.h"
 
 #include "inferno/component/cameracomponent.h"
@@ -67,7 +68,7 @@ void Scene::initialize()
 	addComponent<TextAreaComponent>(text, "HelloWorld!", "assets/fnt/dejavu-sans", 0, 150, 3);
 	// addComponent<TextAreaComponent>(text, "@#$%^&*()qygij!", "assets/fnt/dejavu-sans-test", 0, 150, 3);
 
-	info() << "Scene initialized";
+	ruc::info("Scene initialized");
 }
 
 void Scene::update(float deltaTime)
@@ -117,11 +118,9 @@ void Scene::validEntity(uint32_t entity) const
 	VERIFY(m_registry->valid(entt::entity { entity }), "Entity is not valid");
 }
 
-// -------------------------------------
-
-const LogStream& operator<<(const LogStream& stream, entt::entity entity)
-{
-	return stream << static_cast<uint32_t>(entity);
-}
-
 } // namespace Inferno
+
+void ruc::format::Formatter<entt::entity>::format(Builder& builder, entt::entity value) const
+{
+	return Formatter<uint32_t>::format(builder, static_cast<uint32_t>(value));
+}

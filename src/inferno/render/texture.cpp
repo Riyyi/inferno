@@ -3,11 +3,11 @@
 #include <utility> // std::move
 
 #include "glad/glad.h"
+#include "ruc/format/log.h"
 #include "ruc/meta/assert.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
-#include "inferno/io/log.h"
 #include "inferno/render/texture.h"
 
 namespace Inferno {
@@ -106,7 +106,7 @@ void Texture::create(unsigned char* data)
 
 TextureManager::TextureManager(s)
 {
-	info() << "TextureManager initialized";
+	ruc::info("TextureManager initialized");
 }
 
 TextureManager::~TextureManager()

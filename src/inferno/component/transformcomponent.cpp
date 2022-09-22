@@ -1,47 +1,39 @@
 #include "inferno/component/transformcomponent.h"
 
-namespace Inferno {
-
-const LogStream& operator<<(const LogStream& stream, const glm::vec2& value)
+void ruc::format::Formatter<glm::vec2>::format(Builder& builder, glm::vec2 value) const
 {
-	return stream << "{ "
-	              << (value.x >= 0.0f ? " " : "") << value.x << ", "
-	              << (value.y >= 0.0f ? " " : "") << value.y
-	              << " }";
+	return Formatter<std::vector<float>>::format(builder, { value.x, value.y });
 }
 
-const LogStream& operator<<(const LogStream& stream, const glm::vec3& value)
+void ruc::format::Formatter<glm::vec3>::format(Builder& builder, glm::vec3 value) const
 {
-	return stream << "{ "
-	              << (value.x >= 0.0f ? " " : "") << value.x << ", "
-	              << (value.y >= 0.0f ? " " : "") << value.y << ", "
-	              << (value.z >= 0.0f ? " " : "") << value.z
-	              << " }";
+	return Formatter<std::vector<float>>::format(builder, { value.x, value.y, value.z });
 }
 
-const LogStream& operator<<(const LogStream& stream, const glm::vec4& value)
+void ruc::format::Formatter<glm::vec4>::format(Builder& builder, glm::vec4 value) const
 {
-	return stream << "{ "
-	              << (value.x >= 0.0f ? " " : "") << value.x << ", "
-	              << (value.y >= 0.0f ? " " : "") << value.y << ", "
-	              << (value.z >= 0.0f ? " " : "") << value.z << ", "
-	              << (value.w >= 0.0f ? " " : "") << value.w
-	              << " }";
+	return Formatter<std::vector<float>>::format(builder, { value.x, value.y, value.z, value.w });
 }
 
-const LogStream& operator<<(const LogStream& stream, const glm::mat4& value)
+void ruc::format::Formatter<glm::mat4>::format(Builder& builder, glm::mat4 value) const
 {
-	return stream << "mat4 "
-	              << value[0] << "\n     " << value[1] << "\n     "
-	              << value[2] << "\n     " << value[3];
+	builder.putString("mat4 ");
+	Formatter<glm::vec4>::format(builder, value[0]);
+	builder.putString("\n     ");
+	Formatter<glm::vec4>::format(builder, value[1]);
+	builder.putString("\n     ");
+	Formatter<glm::vec4>::format(builder, value[2]);
+	builder.putString("\n     ");
+	return Formatter<glm::vec4>::format(builder, value[3]);
 }
 
-const LogStream& operator<<(const LogStream& stream, const TransformComponent& value)
+void ruc::format::Formatter<Inferno::TransformComponent>::format(Builder& builder, Inferno::TransformComponent value) const
 {
-	return stream << "transform "
-	              << value.translate << " t\n          "
-	              << value.rotate << " r\n          "
-	              << value.scale << " s";
+	builder.putString("transform ");
+	Formatter<glm::vec3>::format(builder, value.translate);
+	builder.putString(" t\n          ");
+	Formatter<glm::vec3>::format(builder, value.rotate);
+	builder.putString(" r\n          ");
+	Formatter<glm::vec3>::format(builder, value.scale);
+	builder.putString(" s");
 }
-
-} // namespace Inferno

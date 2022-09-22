@@ -5,8 +5,7 @@
 
 #include "entt/entity/registry.hpp"    // entt::entity, entt::registry
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
-
-#include "inferno/io/log.h"
+#include "ruc/format/format.h"
 
 namespace Inferno {
 
@@ -74,11 +73,12 @@ private:
 	std::shared_ptr<entt::registry> m_registry;
 };
 
-// -----------------------------------------
-
-const LogStream& operator<<(const LogStream& stream, entt::entity handle);
-
 } // namespace Inferno
+
+template<>
+struct ruc::format::Formatter<entt::entity> : Formatter<uint32_t> {
+	void format(Builder& builder, entt::entity value) const;
+};
 
 // @Todo
 // - Convert registry to stack variable

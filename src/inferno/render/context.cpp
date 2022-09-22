@@ -2,10 +2,10 @@
 #include "glad/glad.h" // glad needs to come before GLFW
 #include "GLFW/glfw3.h"
 // clang-format on
+#include "ruc/format/log.h"
 #include "ruc/meta/assert.h"
 
 #include "inferno/core.h"
-#include "inferno/io/log.h"
 #include "inferno/render/context.h"
 #include "inferno/window.h"
 
@@ -26,10 +26,10 @@ void Context::initialize()
 	VERIFY(glad, "Failed to initialize glad!");
 
 	// Log OpenGL properties
-	comment() << "OpenGL Info:";
-	comment() << "  Vendor:   " << glGetString(GL_VENDOR);
-	comment() << "  Renderer: " << glGetString(GL_RENDERER);
-	comment() << "  Version:  " << glGetString(GL_VERSION);
+	ruc::trace("OpenGL Info:");
+	ruc::trace("  Vendor:   {}", glGetString(GL_VENDOR));
+	ruc::trace("  Renderer: {}", glGetString(GL_RENDERER));
+	ruc::trace("  Version:  {}", glGetString(GL_VERSION));
 
 	// Check OpenGL version
 	VERIFY(GLVersion.major > 4 || (GLVersion.major == 4 && GLVersion.minor >= 5),

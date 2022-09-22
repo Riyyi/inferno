@@ -1,9 +1,8 @@
 #pragma once
 
+#include "ruc/format/format.h"
 #include "sol/overload.hpp"   // sol::overload
 #include "sol/state_view.hpp" // sol::state_view
-
-#include "inferno/io/log.h"
 
 namespace Inferno {
 
@@ -55,9 +54,7 @@ private:
 	template<typename T>
 	static std::string string(const T& t)
 	{
-		std::string result;
-		str(&result) << t;
-		return result;
+		return format("{}", t);
 	}
 };
 

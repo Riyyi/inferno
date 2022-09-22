@@ -2,6 +2,7 @@
 #include <utility>   // std::move
 
 #include "glad/glad.h"
+#include "ruc/format/log.h"
 
 #include "inferno/render/buffer.h"
 #include "inferno/render/renderer.h"
@@ -18,7 +19,7 @@ void RenderCommand::initialize()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
-	info() << "RenderCommand initialized";
+	ruc::info("RenderCommand initialized");
 }
 
 void RenderCommand::destroy()
@@ -201,7 +202,7 @@ Renderer2D::Renderer2D(s)
 	m_vertexArray->setIndexBuffer(indexBuffer);
 	delete[] indices;
 
-	info() << "Renderer2D initialized";
+	ruc::info("Renderer2D initialized");
 }
 
 Renderer2D::~Renderer2D()
@@ -355,7 +356,7 @@ RendererCharacter::RendererCharacter(s)
 	m_vertexArray->setIndexBuffer(indexBuffer);
 	delete[] indices;
 
-	info() << "RendererCharacter initialized";
+	ruc::info("RendererCharacter initialized");
 }
 
 RendererCharacter::~RendererCharacter()

@@ -1,9 +1,9 @@
 #include "entt/entity/registry.hpp" // entt::entity, entt::registry
+#include "ruc/format/log.h"
 
 #include "inferno/component/luascriptcomponent.h"
 #include "inferno/component/nativescriptcomponent.h"
 #include "inferno/component/transformcomponent.h"
-#include "inferno/io/log.h"
 #include "inferno/scene/scene.h"
 #include "inferno/script/luascript.h"
 #include "inferno/script/nativescript.h"
@@ -13,7 +13,7 @@ namespace Inferno {
 
 ScriptSystem::ScriptSystem(s)
 {
-	info() << "ScriptSystem initialized";
+	ruc::info("ScriptSystem initialized");
 }
 
 ScriptSystem::~ScriptSystem()

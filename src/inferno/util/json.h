@@ -7,6 +7,7 @@
 
 	#include "nlohmann/json.hpp"
 	#include "ruc/meta/assert.h"
+	#include "ruc/format/log.h"
 
 namespace Inferno {
 
@@ -121,7 +122,7 @@ namespace Inferno {
 					values.emplace_back(typedValue.value());
 				}
 				else {
-					warnln("Json array property '{}' has type inconsistency", property);
+					ruc::warn("Json array property '{}' has type inconsistency", property);
 				}
 			}
 
@@ -160,7 +161,7 @@ namespace Inferno {
 					values.emplace(std::move(key), typedValue.value());
 				}
 				else {
-					warnln("Json array property '{}' has type inconsistency", property);
+					ruc::warn("Json array property '{}' has type inconsistency", property);
 				}
 			}
 

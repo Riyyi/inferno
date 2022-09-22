@@ -1,14 +1,14 @@
 #include "glm/ext/matrix_transform.hpp" // glm::translate, glm::rotate, glm::scale, glm::radians
+#include "ruc/format/log.h"
 
 #include "inferno/component/transformcomponent.h"
-#include "inferno/io/log.h"
 #include "inferno/system/transformsystem.h"
 
 namespace Inferno {
 
 TransformSystem::TransformSystem(s)
 {
-	info() << "TransformSystem initialized";
+	ruc::info("TransformSystem initialized");
 }
 
 TransformSystem::~TransformSystem()

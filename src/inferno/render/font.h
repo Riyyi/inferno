@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdint>       // uint32_t
+#include <cstdint>       // int32_t, uint32_t
 #include <memory>        // std::shared_ptr
 #include <string>        // std::string
 #include <unordered_map> // std::unordered_map
@@ -8,9 +8,8 @@
 
 #include "glm/ext/vector_int2.hpp"  // glm::ivec2
 #include "glm/ext/vector_uint2.hpp" // glm::uvec2
+#include "ruc/format/format.h"
 #include "ruc/singleton.h"
-
-#include "inferno/io/log.h"
 
 namespace Inferno {
 
@@ -68,11 +67,12 @@ private:
 	std::unordered_map<std::string, std::shared_ptr<Font>> m_fontList;
 };
 
-// -------------------------------------
-
-const LogStream& operator<<(const LogStream& stream, const glm::ivec2& value);
-
 } // namespace Inferno
+
+template<>
+struct ruc::format::Formatter<glm::ivec2> : Formatter<std::vector<int32_t>> {
+	void format(Builder& builder, glm::ivec2 value) const;
+};
 
 // FontManager fm;
 // Font f = fm.load("path/to/font");

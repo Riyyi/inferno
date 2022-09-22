@@ -4,10 +4,10 @@
 #include "glad/glad.h"
 #include "glm/gtc/type_ptr.hpp" // glm::value_ptr
 #include "ruc/file.h"
+#include "ruc/format/log.h"
 #include "ruc/meta/assert.h"
 
 #include "inferno/core.h"
-#include "inferno/io/log.h"
 #include "inferno/render/shader.h"
 
 namespace Inferno {
@@ -185,7 +185,7 @@ int32_t Shader::checkStatus(uint32_t check, bool isProgram) const
 			? glGetShaderInfoLog(check, maxLength, nullptr, &infoLog[0])
 			: glGetProgramInfoLog(check, maxLength, nullptr, &infoLog[0]);
 
-		warn() << "Shader " << infoLog.data();
+		ruc::warn("Shader {}", infoLog.data());
 	}
 
 	VERIFY(success == GL_TRUE, "Shader program creation failed!");
@@ -197,7 +197,7 @@ int32_t Shader::checkStatus(uint32_t check, bool isProgram) const
 
 ShaderManager::ShaderManager(s)
 {
-	info() << "ShaderManager initialized";
+	ruc::info("ShaderManager initialized");
 }
 
 ShaderManager::~ShaderManager()

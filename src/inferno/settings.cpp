@@ -2,9 +2,9 @@
 #include <string>  // std::string
 
 #include "ruc/file.h"
+#include "ruc/format/log.h"
 #include "ruc/json/json.h"
 
-#include "inferno/io/log.h"
 #include "inferno/settings.h"
 #include "inferno/window.h"
 
@@ -17,7 +17,7 @@ void Settings::initialize()
 {
 	Settings::load();
 
-	info() << "Settings initialized";
+	ruc::info("Settings initialized");
 
 	Settings::save();
 }
@@ -31,7 +31,7 @@ bool Settings::load()
 	auto object = ruc::Json::parse(ruc::File(m_path).data());
 
 	if (object.type() != ruc::Json::Type::Object) {
-		warn() << "Settings invalid formatting, using default values";
+		ruc::warn("Settings invalid formatting, using default values");
 		return false;
 	}
 
@@ -50,7 +50,7 @@ bool Settings::save()
 	file.append("\n");
 	file.flush();
 
-	info() << "Settings saved";
+	ruc::info("Settings saved");
 	return true;
 }
 

@@ -1,12 +1,12 @@
 #include "glm/ext/matrix_clip_space.hpp" // glm::perspective, glm::ortho
 #include "glm/ext/matrix_transform.hpp"  // glm::radians, glm::lookAt
+#include "ruc/format/log.h"
 #include "ruc/meta/assert.h"
 
 #include "inferno/application.h"
 #include "inferno/component/cameracomponent.h"
 #include "inferno/component/transformcomponent.h"
 #include "inferno/io/input.h"
-#include "inferno/io/log.h"
 #include "inferno/system/camerasystem.h"
 #include "inferno/window.h"
 
@@ -14,7 +14,7 @@ namespace Inferno {
 
 CameraSystem::CameraSystem(s)
 {
-	info() << "CameraSystem initialized";
+	ruc::info("CameraSystem initialized");
 }
 
 CameraSystem::~CameraSystem()

@@ -2,8 +2,7 @@
 
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
 #include "glm/ext/vector_float3.hpp"   // glm::vec3
-
-#include "inferno/io/log.h"
+#include "ruc/format/format.h"
 
 namespace Inferno {
 
@@ -14,11 +13,29 @@ struct TransformComponent {
 	glm::mat4 transform { 1.0f }; // Identity matrix
 };
 
-// -----------------------------------------
-
-const LogStream& operator<<(const LogStream& stream, const glm::vec2& value);
-const LogStream& operator<<(const LogStream& stream, const glm::vec3& value);
-const LogStream& operator<<(const LogStream& stream, const glm::vec4& value);
-const LogStream& operator<<(const LogStream& stream, const glm::mat4& value);
-const LogStream& operator<<(const LogStream& stream, const TransformComponent& value);
 } // namespace Inferno
+
+template<>
+struct ruc::format::Formatter<glm::vec2> : Formatter<std::vector<float>> {
+	void format(Builder& builder, glm::vec2 value) const;
+};
+
+template<>
+struct ruc::format::Formatter<glm::vec3> : Formatter<std::vector<float>> {
+	void format(Builder& builder, glm::vec3 value) const;
+};
+
+template<>
+struct ruc::format::Formatter<glm::vec4> : Formatter<std::vector<float>> {
+	void format(Builder& builder, glm::vec4 value) const;
+};
+
+template<>
+struct ruc::format::Formatter<glm::mat4> : Formatter<glm::vec4> {
+	void format(Builder& builder, glm::mat4 value) const;
+};
+
+template<>
+struct ruc::format::Formatter<Inferno::TransformComponent> : Formatter<glm::vec3> {
+	void format(Builder& builder, Inferno::TransformComponent value) const;
+};

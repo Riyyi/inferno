@@ -1,7 +1,6 @@
 #include "glad/glad.h"
 
 #include "inferno/core.h"
-#include "inferno/io/log.h"
 #include "inferno/render/buffer.h"
 #include "ruc/meta/assert.h"
 

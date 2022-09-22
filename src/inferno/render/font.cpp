@@ -3,6 +3,7 @@
 #include <utility> // std::move
 
 #include "ruc/file.h"
+#include "ruc/format/log.h"
 #include "ruc/meta/assert.h"
 
 #include "inferno/render/font.h"
@@ -105,7 +106,7 @@ const std::string Font::findValue(const std::string& key, const std::vector<std:
 
 FontManager::FontManager(s)
 {
-	info() << "FontManager initialized";
+	ruc::info("FontManager initialized");
 }
 
 FontManager::~FontManager()
@@ -153,11 +154,9 @@ void FontManager::remove(std::shared_ptr<Font> font)
 	}
 }
 
-// -----------------------------------------
-
-const LogStream& operator<<(const LogStream& stream, const glm::ivec2& value)
-{
-	return stream << "{ " << value.x << ", " << value.y << " }";
-}
-
 } // namespace Inferno
+
+void ruc::format::Formatter<glm::ivec2>::format(Builder& builder, glm::ivec2 value) const
+{
+	return Formatter<std::vector<int32_t>>::format(builder, { value.x, value.y });
+}

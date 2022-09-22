@@ -6,7 +6,6 @@
 #include "ruc/meta/assert.h"
 
 #include "inferno/io/gltffile.h"
-#include "inferno/io/log.h"
 #include "inferno/util/json.h"
 #include "inferno/util/string.h"
 
