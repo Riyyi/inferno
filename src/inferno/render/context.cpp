@@ -1,5 +1,7 @@
+// clang-format off
+#include "glad/glad.h" // glad needs to come before GLFW
 #include "GLFW/glfw3.h"
-#include "glad/glad.h"
+// clang-format on
 #include "ruc/meta/assert.h"
 
 #include "inferno/core.h"
