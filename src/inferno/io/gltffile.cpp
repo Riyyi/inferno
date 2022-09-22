@@ -7,7 +7,6 @@
 
 #include "inferno/io/gltffile.h"
 #include "inferno/util/json.h"
-#include "inferno/util/string.h"
 
 namespace Inferno {
 
@@ -88,7 +87,7 @@ std::pair<std::shared_ptr<char[]>, uint32_t> GltfFile::readChunk(std::ifstream& 
 	ifstream.read(chunkType, size);
 
 	uint32_t chunkTypeInt = *reinterpret_cast<uint32_t*>(chunkType);
-	VERIFY(chunkTypeInt == type, "Gltf invalid chunk type '{}' != '{}'", chunkType, intToHex(type));
+	VERIFY(chunkTypeInt == type, "Gltf invalid chunk type '{}' != '{:#08x}'", chunkType, type);
 
 	uint32_t chunkLengthInt = *reinterpret_cast<uint32_t*>(chunkLength);
 	// Allocate memory filled with zeros
