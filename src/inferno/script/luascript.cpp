@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include "ruc/file.h"
 #include "sol/unsafe_function_result.hpp"
 

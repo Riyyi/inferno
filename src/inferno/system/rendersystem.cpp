@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include "glm/ext/matrix_transform.hpp" // glm::translate, glm::rotate, glm::scale, glm::radians
 #include "ruc/format/log.h"
 

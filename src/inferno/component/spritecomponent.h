@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #pragma once
 
 #include <memory> // std::shared_ptr

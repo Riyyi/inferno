@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include "glad/glad.h"
 
 #include "inferno/core.h"

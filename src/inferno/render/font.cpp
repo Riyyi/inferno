@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include <limits>  // std::numeric_limits
 #include <string>  // std::getline, std::stoi
 #include <utility> // std::move

@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include "glm/ext/matrix_transform.hpp" // glm::radians
 
 #include "inferno/component/cameracomponent.h"

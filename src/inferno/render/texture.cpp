@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include <climits> // UINT_MAX
 #include <memory>  // std::shared_ptr
 #include <utility> // std::move

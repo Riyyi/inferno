@@ -1,4 +1,10 @@
 /*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+/*
  * `m_` for member variables,
  * `s_` for static variables,
  * `g_` for global variables.

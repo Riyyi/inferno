@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include "inferno/component/transformcomponent.h"
 
 void ruc::format::Formatter<glm::vec2>::format(Builder& builder, glm::vec2 value) const

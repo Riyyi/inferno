@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include "glm/ext/matrix_clip_space.hpp" // glm::perspective, glm::ortho
 #include "glm/ext/matrix_transform.hpp"  // glm::radians, glm::lookAt
 #include "ruc/format/log.h"

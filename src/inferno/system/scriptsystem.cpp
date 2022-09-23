@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include "entt/entity/registry.hpp" // entt::entity, entt::registry
 #include "ruc/format/log.h"
 

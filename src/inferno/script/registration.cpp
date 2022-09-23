@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include "glm/ext/matrix_transform.hpp" // glm::radians
 #include "glm/ext/vector_float2.hpp"    // glm::vec2
 #include "glm/ext/vector_float3.hpp"    // glm::vec3

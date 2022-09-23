@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include <cstring> // strcmp ??
 #include <fstream> // std::ifstream
 #include <ios>     // std::ios

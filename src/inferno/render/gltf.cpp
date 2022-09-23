@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #if 0
 	#include <algorithm> // std::copy
 	#include <utility>   // std::move

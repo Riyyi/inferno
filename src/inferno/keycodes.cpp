@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include <algorithm> // std::find_if
 #include <string_view>
 #include <unordered_map> // std::unordered_map

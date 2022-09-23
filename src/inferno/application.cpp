@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include "glm/gtc/type_ptr.hpp" // glm::make_mat4
 #include "ruc/format/log.h"
 #include "ruc/meta/assert.h"

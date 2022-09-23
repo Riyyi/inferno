@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2022 Riyyi
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 // clang-format off
 #include "glad/glad.h" // glad needs to come before GLFW
 #include "GLFW/glfw3.h"
