@@ -2,16 +2,16 @@ file(GLOB_RECURSE ENGINE_SOURCES "${ENGINE}/*.cpp")
 
 add_library(${ENGINE} ${ENGINE_SOURCES})
 target_include_directories(${ENGINE} PRIVATE
-	"${CMAKE_SOURCE_DIR}/src"
-	"${CMAKE_SOURCE_DIR}/vendor/entt/src"
-	"${CMAKE_SOURCE_DIR}/vendor/glad/include"
-	"${CMAKE_SOURCE_DIR}/vendor/glfw/include"
-	"${CMAKE_SOURCE_DIR}/vendor/glm"
-	"${CMAKE_SOURCE_DIR}/vendor/json/include"
-	"${CMAKE_SOURCE_DIR}/vendor/lua"
-	"${CMAKE_SOURCE_DIR}/vendor/ruc/src"
-	"${CMAKE_SOURCE_DIR}/vendor/sol2/include"
-	"${CMAKE_SOURCE_DIR}/vendor/stb")
+	"."
+	"../vendor/entt/src"
+	"../vendor/glad/include"
+	"../vendor/glfw/include"
+	"../vendor/glm"
+	"../vendor/json/include"
+	"../vendor/lua"
+	"../vendor/ruc/src"
+	"../vendor/sol2/include"
+	"../vendor/stb")
 target_link_libraries(${ENGINE} ${ENGINE}-dependencies)
 
 # ------------------------------------------
