@@ -23,7 +23,7 @@ class WindowResizeEvent;
 
 class Application : public ruc::Singleton<Application> {
 public:
-	Application(s);
+	explicit Application(s);
 	virtual ~Application();
 
 	int run();

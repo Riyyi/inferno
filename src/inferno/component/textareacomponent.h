@@ -16,12 +16,13 @@
 namespace Inferno {
 
 struct TextAreaComponent {
-	std::string content { "" };
-	std::string font { "" };
+	std::string content;
+	std::string font;
 	uint32_t fontSize { 0 };
 	uint32_t width { 0 };
 	uint32_t lines { 0 };
 
+#if 0
 	TextAreaComponent() {}
 	TextAreaComponent(const std::string& content, const std::string& font,
 	                  uint32_t fontSize, uint32_t width, uint32_t lines)
@@ -32,6 +33,7 @@ struct TextAreaComponent {
 		, lines(lines)
 	{
 	}
+#endif
 
 	// booleans?
 	// glm::vec4 outlineColor { 1.0f, 1.0f, 1.0f, 1.0f };

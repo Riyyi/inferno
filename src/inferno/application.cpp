@@ -48,7 +48,7 @@ Application::Application(s)
 
 	// Load assets
 
-	m_font = FontManager::the().load("assets/fnt/dejavu-sans");
+	// m_font = FontManager::the().load("assets/fnt/dejavu-sans");
 
 	// auto bla = GlTFFile::read("assets/gltf/box.glb");
 	// ruc::success("@{}@", bla.first.get());
@@ -84,6 +84,7 @@ int Application::run()
 {
 	ruc::debug("Application startup");
 
+#if 0
 	std::array<CharacterVertex, Renderer::vertexPerQuad> character;
 
 	// character.at(0).quad.textureCoordinates = { 0.0f, 0.0f }; // bottom left
@@ -131,6 +132,7 @@ int Application::run()
 	// borderedge
 	// bordercolor
 	// offset
+#endif
 
 	while (!m_window->shouldClose()) {
 

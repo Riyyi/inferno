@@ -55,7 +55,7 @@ public:
 	{
 		validEntity(entity);
 		return m_registry->emplace_or_replace<T>(entt::entity { entity }, std::forward<P>(parameters)...);
-	};
+	}
 
 	template<typename T>
 	size_t removeComponent(uint32_t entity) const
