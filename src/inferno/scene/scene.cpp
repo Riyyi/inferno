@@ -83,9 +83,15 @@ void Scene::initialize()
 
 	// Text
 
-	uint32_t text = createEntity("Text");
-	addComponent<TextAreaComponent>(text, "HelloWorld!", "assets/fnt/dejavu-sans", 0, 150, 3);
-	// addComponent<TextAreaComponent>(text, "@#$%^&*()qygij!", "assets/fnt/dejavu-sans-test", 0, 150, 3);
+	if (sceneJson.exists("text") && sceneJson.at("text").type() == ruc::Json::Type::Array) {
+		auto& texts = sceneJson.at("text").asArray().elements();
+		for (const auto& text : texts) {
+			uint32_t textEntity = loadEntity(text);
+			addComponent<TextAreaComponent>(textEntity);
+			auto& textAreaComponent = getComponent<TextAreaComponent>(textEntity);
+			text.getTo(textAreaComponent);
+		}
+	}
 
 	ruc::info("Scene initialized");
 }
