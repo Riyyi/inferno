@@ -40,18 +40,14 @@ void Scene::initialize()
 	ScriptSystem::the().setScene(this);
 	TextAreaSystem::the().setScene(this);
 
-	// Load assets
-	// ---------------------------------
-
-	m_texture = TextureManager::the().load("assets/gfx/test.png");
-	m_texture2 = TextureManager::the().load("assets/gfx/test-inverted.png");
-
 	// Load scene .json
 	// -------------------------------------
 
 	auto sceneJson = ruc::Json::parse(ruc::File("assets/scene/scene1.json").data());
-	VERIFY(sceneJson.exists("camera"), "scene doesnt contain a camera");
 
+	// Camera
+
+	VERIFY(sceneJson.exists("camera"), "scene doesnt contain a camera");
 	auto& cameraJson = sceneJson.at("camera");
 	uint32_t camera = loadEntity(cameraJson);
 
@@ -73,21 +69,19 @@ void Scene::initialize()
 		}
 	}
 
-	// Construct entities
-	// ---------------------------------
+	// Quads
 
-	uint32_t quad = createEntity("Quad");
-	addComponent<SpriteComponent>(quad, glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture);
+	if (sceneJson.exists("quad") && sceneJson.at("quad").type() == ruc::Json::Type::Array) {
+		auto& quads = sceneJson.at("quad").asArray().elements();
+		for (const auto& quad : quads) {
+			uint32_t quadEntity = loadEntity(quad);
+			addComponent<SpriteComponent>(quadEntity);
+			auto& spriteComponent = getComponent<SpriteComponent>(quadEntity);
+			quad.getTo(spriteComponent);
+		}
+	}
 
-	uint32_t quad2 = createEntity("Quad 2");
-	auto& quad2Transform = getComponent<TransformComponent>(quad2);
-	quad2Transform.translate.x = 1.1f;
-	addComponent<SpriteComponent>(quad2, glm::vec4 { 0.5f, 0.6f, 0.8f, 1.0f }, m_texture);
-
-	uint32_t quad3 = createEntity("Quad 3");
-	auto& quad3Transform = getComponent<TransformComponent>(quad3);
-	quad3Transform.translate.x = 2.2f;
-	addComponent<SpriteComponent>(quad3, glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture2);
+	// Text
 
 	uint32_t text = createEntity("Text");
 	addComponent<TextAreaComponent>(text, "HelloWorld!", "assets/fnt/dejavu-sans", 0, 150, 3);
