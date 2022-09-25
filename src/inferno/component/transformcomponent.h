@@ -9,6 +9,7 @@
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
 #include "glm/ext/vector_float3.hpp"   // glm::vec3
 #include "ruc/format/format.h"
+#include "ruc/json/json.h"
 
 namespace Inferno {
 
@@ -19,7 +20,16 @@ struct TransformComponent {
 	glm::mat4 transform { 1.0f }; // Identity matrix
 };
 
+void fromJson(const ruc::Json& json, TransformComponent& value);
+
 } // namespace Inferno
+
+namespace glm {
+
+void toJson(ruc::Json& json, const vec3& value);
+void fromJson(const ruc::Json& json, vec3& value);
+
+} // namespace glm
 
 template<>
 struct ruc::format::Formatter<glm::vec2> : Formatter<std::vector<float>> {

@@ -15,7 +15,7 @@ namespace Inferno {
 struct NativeScriptComponent {
 	NativeScript* instance { nullptr };
 
-	NativeScript* (*initialize)();
+	NativeScript* (*initialize)() { nullptr };
 
 	// Dont allow manually setting instance during construction
 	NativeScriptComponent() {}

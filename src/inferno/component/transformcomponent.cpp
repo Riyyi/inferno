@@ -4,7 +4,52 @@
  * SPDX-License-Identifier: MIT
  */
 
+#include "ruc/format/format.h"
+#include "ruc/json/json.h"
+
 #include "inferno/component/transformcomponent.h"
+
+namespace Inferno {
+
+void fromJson(const ruc::Json& json, TransformComponent& value)
+{
+	VERIFY(json.type() == ruc::Json::Type::Object);
+
+	if (json.exists("translate")) {
+		json.at("translate").getTo(value.translate);
+	}
+	if (json.exists("rotate")) {
+		json.at("rotate").getTo(value.rotate);
+	}
+	if (json.exists("scale")) {
+		json.at("scale").getTo(value.scale);
+	}
+}
+
+} // namespace Inferno
+
+namespace glm {
+
+void toJson(ruc::Json& json, const vec3& value)
+{
+	json = ruc::Json {
+		{ value.x, value.y, value.z },
+	};
+}
+
+void fromJson(const ruc::Json& json, vec3& value)
+{
+	VERIFY(json.type() == ruc::Json::Type::Array);
+
+	auto& values = json.asArray();
+	VERIFY(values.size() == 3, "glm::vec3 expects 3 values, not {}", values.size());
+
+	value.x = values.at(0).get<float>();
+	value.y = values.at(1).get<float>();
+	value.z = values.at(2).get<float>();
+}
+
+} // namespace glm
 
 void ruc::format::Formatter<glm::vec2>::format(Builder& builder, glm::vec2 value) const
 {
