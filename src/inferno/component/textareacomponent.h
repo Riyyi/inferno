@@ -11,6 +11,7 @@
 #include <utility> // std::move
 
 #include "glm/ext/vector_float4.hpp" // glm::vec4
+#include "ruc/json/json.h"
 
 namespace Inferno {
 
@@ -37,5 +38,7 @@ struct TextAreaComponent {
 	// glow?
 	// float dropShadow { 0.0f };
 };
+
+void fromJson(const ruc::Json& json, TextAreaComponent& value);
 
 } // namespace Inferno

@@ -39,6 +39,7 @@
 	],
 	"text": [
 		{
+			"name": "Text",
 			"content": "HelloWorld!",
 			"font": "assets/fnt/dejavu-sans",
 			"font-size": 0,
