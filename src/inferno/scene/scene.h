@@ -12,6 +12,7 @@
 #include "entt/entity/registry.hpp"    // entt::entity, entt::registry
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
 #include "ruc/format/format.h"
+#include "ruc/json/json.h"
 
 namespace Inferno {
 
@@ -27,6 +28,8 @@ public:
 
 	uint32_t createEntity(const std::string& name = "");
 	void destroyEntity(uint32_t entity);
+
+	uint32_t loadEntity(ruc::Json json);
 
 	glm::mat4 cameraProjectionView();
 

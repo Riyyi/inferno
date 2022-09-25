@@ -1,0 +1,49 @@
+{
+	"init": "assets/lua/scene1-init.lua",
+	"camera": {
+		"name": "Camera",
+		"translate": [ 0.0, 0.0, 1.0 ],
+		"rotate": [ 0.0, 0.0, -1.0 ],
+		"scale": [ 1.0, 1.0, 1.0 ],
+		"type": "perspective",
+		"script": {
+			"type": "lua",
+			"name": "assets/lua/cameracontroller.lua"
+		}
+	},
+	"quad": [
+		{
+			"name": "Quad",
+			"translate": [ 0.0, 0.0, 0.0 ],
+			"rotate": [ 0.0, 0.0, 0.0 ],
+			"scale": [ 1.0, 1.0, 1.0 ],
+			"color": [ 1.0, 1.0, 1.0, 1.0 ],
+			"texture": "assets/gfx/test.png"
+		},
+		{
+			"name": "Quad 2",
+			"translate": [ 1.1, 0.0, 0.0 ],
+			"rotate": [ 0.0, 0.0, 0.0 ],
+			"scale": [ 1.0, 1.0, 1.0 ],
+			"color": [ 0.5, 0.6, 0.8, 1.0 ],
+			"texture": "assets/gfx/test.png"
+		},
+		{
+			"name": "Quad 3",
+			"translate": [ 2.2, 0.0, 0.0 ],
+			"rotate": [ 0.0, 0.0, 0.0 ],
+			"scale": [ 1.0, 1.0, 1.0 ],
+			"color": [ 1.0, 1.0, 1.0, 1.0 ],
+			"texture": "assets/gfx/test-inverted.png"
+		}
+	],
+	"text": [
+		{
+			"content": "HelloWorld!",
+			"font": "assets/fnt/dejavu-sans",
+			"font-size": 0,
+			"width": 150,
+			"lines": 3
+		}
+	]
+}

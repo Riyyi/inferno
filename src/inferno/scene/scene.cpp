@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 
+#include "ruc/file.h"
 #include "ruc/format/log.h"
+#include "ruc/json/json.h"
 #include "ruc/meta/assert.h"
 
 #include "inferno/component/cameracomponent.h"
@@ -13,6 +15,7 @@
 #include "inferno/component/spritecomponent.h"
 #include "inferno/component/tagcomponent.h"
 #include "inferno/component/textareacomponent.h"
+#include "inferno/component/transformcomponent.h"
 #include "inferno/scene/scene.h"
 #include "inferno/script/cameracontroller.h"
 #include "inferno/script/nativescript.h"
@@ -43,19 +46,35 @@ void Scene::initialize()
 	m_texture = TextureManager::the().load("assets/gfx/test.png");
 	m_texture2 = TextureManager::the().load("assets/gfx/test-inverted.png");
 
+	// Load scene .json
+	// -------------------------------------
+
+	auto sceneJson = ruc::Json::parse(ruc::File("assets/scene/scene1.json").data());
+	VERIFY(sceneJson.exists("camera"), "scene doesnt contain a camera");
+
+	auto& cameraJson = sceneJson.at("camera");
+	uint32_t camera = loadEntity(cameraJson);
+
+	auto cameraType = CameraType::Perspective;
+	if (cameraJson.exists("type") && cameraJson.at("type").get<std::string>() == "orthographic") {
+		cameraType = CameraType::Orthographic;
+	}
+	addComponent<CameraComponent>(camera, cameraType);
+
+	if (cameraJson.exists("script")) {
+		auto& cameraScript = cameraJson.at("script");
+		if (cameraScript.exists("type") && cameraScript.exists("name")) {
+			if (cameraScript.at("type").get<std::string>() == "lua") {
+				addComponent<LuaScriptComponent>(camera, cameraScript.at("name").get<std::string>());
+			}
+			else {
+				addComponent<NativeScriptComponent>(camera).bind<CameraController>();
+			}
+		}
+	}
+
 	// Construct entities
 	// ---------------------------------
-
-	uint32_t camera = createEntity("Camera Entity");
-	auto& cameraTransform = getComponent<TransformComponent>(camera);
-	// cameraTransform.rotate.z = 0.0f;
-	// cameraTransform.translate.z = -1.0f;
-	// addComponent<CameraComponent>(camera, CameraType::Orthographic);
-	cameraTransform.rotate.z = -1.0f;
-	cameraTransform.translate.z = 1.0f;
-	addComponent<CameraComponent>(camera, CameraType::Perspective);
-	// addComponent<NativeScriptComponent>(camera).bind<CameraController>();
-	addComponent<LuaScriptComponent>(camera, "assets/lua/cameracontroller.lua");
 
 	uint32_t quad = createEntity("Quad");
 	addComponent<SpriteComponent>(quad, glm::vec4 { 1.0f, 1.0f, 1.0f, 1.0f }, m_texture);
@@ -112,6 +131,17 @@ void Scene::destroyEntity(uint32_t entity)
 {
 	ScriptSystem::the().cleanup(entity);
 	m_registry->destroy(entt::entity { entity });
+}
+
+uint32_t Scene::loadEntity(ruc::Json json)
+{
+	uint32_t entity = createEntity((json.exists("name"))
+	                                   ? json.at("name").get<std::string>()
+	                                   : "");
+	auto& transform = getComponent<TransformComponent>(entity);
+	json.getTo(transform);
+
+	return entity;
 }
 
 glm::mat4 Scene::cameraProjectionView()
