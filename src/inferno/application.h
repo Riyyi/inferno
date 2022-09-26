@@ -31,10 +31,10 @@ public:
 	int run();
 
 	void onEvent(Event& e);
-	bool onWindowClose(WindowCloseEvent& e);
-	bool onWindowResize(WindowResizeEvent& e);
-	bool onKeyPress(KeyPressEvent& e);
-	bool onMousePosition(MousePositionEvent& e);
+	virtual bool onWindowClose(WindowCloseEvent& e);
+	virtual bool onWindowResize(WindowResizeEvent& e);
+	virtual bool onKeyPress(KeyPressEvent& e);
+	virtual bool onMousePosition(MousePositionEvent& e);
 
 	inline void setStatus(int status) { m_status = status; }
 
