@@ -23,8 +23,8 @@ float Input::m_yOffset = 0.0f;
 void Input::initialize()
 {
 	// Set cursor in the middle of the screen
-	m_xPosLast = Application::the().getWindow().getWidth() / 2.0f;
-	m_yPosLast = Application::the().getWindow().getHeight() / 2.0f;
+	m_xPosLast = Application::the().window().getWidth() / 2.0f;
+	m_yPosLast = Application::the().window().getHeight() / 2.0f;
 
 	ruc::info("Input initialized");
 }
@@ -56,19 +56,19 @@ bool Input::onMousePosition(MousePositionEvent& e)
 
 bool Input::isKeyPressed(int key)
 {
-	GLFWwindow* w = Application::the().getWindow().getWindow();
+	GLFWwindow* w = Application::the().window().getWindow();
 	return glfwGetKey(w, key) == GLFW_PRESS;
 }
 
 bool Input::isMouseButtonPressed(int button)
 {
-	GLFWwindow* w = Application::the().getWindow().getWindow();
+	GLFWwindow* w = Application::the().window().getWindow();
 	return glfwGetMouseButton(w, button) == GLFW_PRESS;
 }
 
 std::pair<float, float> Input::getMousePosition()
 {
-	GLFWwindow* w = Application::the().getWindow().getWindow();
+	GLFWwindow* w = Application::the().window().getWindow();
 	double xPos;
 	double yPos;
 	glfwGetCursorPos(w, &xPos, &yPos);

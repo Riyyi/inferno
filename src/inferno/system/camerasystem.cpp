@@ -69,7 +69,7 @@ void CameraSystem::updateOrthographic(TransformComponent& transform, CameraCompo
 	transform.transform = { glm::inverse(transform.transform) };
 
 	// View space -> Clip space: projection matrix
-	float aspectRatio = Application::the().getWindow().getAspect();
+	float aspectRatio = Application::the().window().getAspect();
 	camera.projection = {
 		glm::ortho(-aspectRatio * camera.zoomLevel, aspectRatio * camera.zoomLevel,
 		           -camera.zoomLevel, camera.zoomLevel, -1.0f, 1.0f)
@@ -90,7 +90,7 @@ void CameraSystem::updatePerspective(TransformComponent& transform, CameraCompon
 	transform.transform = { glm::lookAt(transform.translate, transform.translate + transform.rotate, camera.up) };
 
 	// View space -> Clip space: projection matrix
-	float aspect = Application::the().getWindow().getAspect();
+	float aspect = Application::the().window().getAspect();
 	camera.projection = { glm::perspective(glm::radians(camera.fov), aspect, NEAR_PLANE, FAR_PLANE) };
 
 	// Clip space -> Screen space: viewport transform

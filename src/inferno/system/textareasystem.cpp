@@ -32,8 +32,8 @@ void TextAreaSystem::render()
 	auto view = m_scene->registry()->view<TransformComponent, TextAreaComponent>();
 
 	glm::ivec2 viewport = {
-		Application::the().getWindow().getWidth(),
-		Application::the().getWindow().getHeight(),
+		Application::the().window().getWidth(),
+		Application::the().window().getHeight(),
 	};
 
 	for (auto [entity, transform, textarea] : view.each()) {

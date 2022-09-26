@@ -214,7 +214,7 @@ void Window::signalCallback(int signal)
 
 	if (signal == SIGINT || signal == SIGTERM) {
 		WindowCloseEvent e;
-		Application::the().getWindow().m_eventCallback(e);
+		Application::the().window().m_eventCallback(e);
 	}
 }
 

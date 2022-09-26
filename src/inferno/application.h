@@ -38,7 +38,7 @@ public:
 
 	inline void setStatus(int status) { m_status = status; }
 
-	inline Window& getWindow() const { return *m_window; }
+	inline Window& window() const { return *m_window; }
 
 	static Application& the() { return *s_instance; }
 
