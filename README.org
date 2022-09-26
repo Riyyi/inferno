@@ -39,7 +39,6 @@ Or
 - [[https://github.com/Dav1dde/glad][glad]]
 - [[https://github.com/glfw/glfw][GLFW]]
 - [[https://github.com/g-truc/glm][GLM]]
-- [[https://github.com/nlohmann/json][JSON]]
 - [[https://github.com/lua/lua][Lua]]
 - [[https://github.com/riyyi/ruc][ruc]]
 - [[https://github.com/ThePhD/sol2][sol3]]
