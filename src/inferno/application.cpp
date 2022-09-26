@@ -31,8 +31,14 @@
 
 namespace Inferno {
 
-Application::Application(s)
+Application* Application::s_instance = nullptr;
+
+Application::Application()
 {
+	// Set singleton instance
+	VERIFY(!s_instance, "reinstantiation of Application");
+	s_instance = this;
+
 	// Initialize
 
 	Settings::initialize();
@@ -78,6 +84,8 @@ Application::~Application()
 	// Input::destroy();
 
 	Settings::destroy();
+
+	s_instance = nullptr;
 }
 
 int Application::run()
@@ -143,11 +151,15 @@ int Application::run()
 
 		// Update
 
+		update();
+
 		Input::update();
 		m_window->update();
 		m_scene->update(deltaTime);
 
 		// Render
+
+		render();
 
 		RenderCommand::clearColor({ 0.2f, 0.3f, 0.3f, 1.0f });
 		RenderCommand::clear();

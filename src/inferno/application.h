@@ -21,10 +21,12 @@ class Window;
 class WindowCloseEvent;
 class WindowResizeEvent;
 
-class Application : public ruc::Singleton<Application> {
+class Application {
 public:
-	explicit Application(s);
 	virtual ~Application();
+
+	virtual void update() = 0;
+	virtual void render() = 0;
 
 	int run();
 
@@ -38,6 +40,11 @@ public:
 
 	inline Window& getWindow() const { return *m_window; }
 
+	static Application& the() { return *s_instance; }
+
+protected:
+	Application();
+
 private:
 	int m_status { 0 };
 	float m_lastFrameTime { 0.0f };
@@ -48,10 +55,12 @@ private:
 	//
 	std::shared_ptr<Font> m_font;
 	//
+
+	static Application* s_instance;
 };
 
 // To be defined in the game
-extern Application& createApplication();
+extern Application* createApplication(int argc, char* argv[]);
 
 } // namespace Inferno
 

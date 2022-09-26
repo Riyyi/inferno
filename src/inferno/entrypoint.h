@@ -16,15 +16,11 @@
 
 int main(int argc, char* argv[]) // NOLINT(misc-definitions-in-headers)
 {
-	// Suppress unused warning
-	(void)argc;
-	(void)argv;
+	auto* app = Inferno::createApplication(argc, argv);
 
-	auto& app = Inferno::createApplication();
+	int status = app->run();
 
-	int status = app.run();
-
-	app.destroy();
+	delete app;
 
 	return status;
 }

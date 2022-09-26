@@ -4,17 +4,26 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include "inferno.h"
-#include "inferno/entrypoint.h"
+#include "game.h"
 
-class Game : public Inferno::Application
+Game::Game()
+	: Application()
 {
-public:
-	Game() : Application({}) {}
-	~Game() {}
-};
+}
 
-Inferno::Application& Inferno::createApplication()
+Game::~Game()
 {
-	return Game::the();
+}
+
+void Game::update()
+{
+}
+
+void Game::render()
+{
+}
+
+Inferno::Application* Inferno::createApplication(int argc, char* argv[])
+{
+	return new Game;
 }
