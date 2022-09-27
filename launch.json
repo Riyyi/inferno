@@ -4,7 +4,7 @@
 			"name": "Debug Inferno",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/build/game",
+			"program": "${workspaceFolder}/build/example/game",
 			"cwd": "${workspaceFolder}/build",
 			"MIMode": "gdb"
 		}
