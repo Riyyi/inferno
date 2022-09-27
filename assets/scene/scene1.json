@@ -36,15 +36,5 @@
 			"color": [ 1.0, 1.0, 1.0, 1.0 ],
 			"texture": "assets/gfx/test-inverted.png"
 		}
-	],
-	"text": [
-		{
-			"name": "Text",
-			"content": "HelloWorld!",
-			"font": "assets/fnt/dejavu-sans",
-			"font-size": 0,
-			"width": 150,
-			"lines": 3
-		}
 	]
 }
