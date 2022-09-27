@@ -25,4 +25,5 @@ target_precompile_headers(${GAME} REUSE_FROM ${ENGINE})
 # Add 'make run' target
 add_custom_target(run
     COMMAND ${GAME}
+	WORKING_DIRECTORY ".."
 )

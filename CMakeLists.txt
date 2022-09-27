@@ -67,6 +67,13 @@ add_subdirectory("vendor")
 add_subdirectory("src")
 
 # ------------------------------------------
+# Assets target
+
+add_custom_target(${ENGINE}-assets ALL
+	COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/copy-assets.cmake
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+
+# ------------------------------------------
 # Examples target
 
 if (INFERNO_BUILD_EXAMPLES)
