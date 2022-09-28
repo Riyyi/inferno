@@ -21,4 +21,4 @@ add_library(${ENGINE}-dependencies ${ENGINE_SOURCES})
 target_include_directories(${ENGINE}-dependencies PUBLIC
 	"glad/include"
 	"lua")
-target_link_libraries(${ENGINE}-dependencies glfw ruc)
+target_link_libraries(${ENGINE}-dependencies glfw ruc ruc-test)

@@ -7,7 +7,6 @@ target_include_directories(${ENGINE} PUBLIC
 	"../vendor/glfw/include"
 	"../vendor/glm"
 	"../vendor/json/include"
-	"../vendor/ruc/src"
 	"../vendor/sol2/include"
 	"../vendor/stb")
 target_link_libraries(${ENGINE} ${ENGINE}-dependencies)
