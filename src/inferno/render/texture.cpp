@@ -5,6 +5,7 @@
  */
 
 #include <climits> // UINT_MAX
+#include <cstdint> // uint8_t, uint32_t
 #include <memory>  // std::shared_ptr
 #include <utility> // std::move
 
@@ -21,32 +22,25 @@ namespace Inferno {
 Texture::Texture(const std::string& path)
 	: m_path(std::move(path))
 {
-	int width;
-	int height;
-	int channels;
+	unsigned char* data = nullptr;
+	int width = 0;
+	int height = 0;
+	int channels = 0;
 
 	// Load image data
 	stbi_set_flip_vertically_on_load(1);
-	unsigned char* data = stbi_load(path.c_str(), &width, &height, &channels, STBI_default);
+	data = stbi_load(path.c_str(), &width, &height, &channels, STBI_default);
+	VERIFY(data, "failed to load image: '{}'", path);
 
-	VERIFY(data, "Failed to load image: '{}'", path);
-
-	m_width = width;
-	m_height = height;
-
-	if (channels == 4) {
-		m_internalFormat = GL_RGBA8;
-		m_dataFormat = GL_RGBA;
-	}
-	else if (channels == 3) {
-		m_internalFormat = GL_RGB8;
-		m_dataFormat = GL_RGB;
-	}
-
-	create(data);
+	init(data, width, height, channels);
 
 	// Clean resources
 	stbi_image_free(data);
+}
+
+Texture::Texture(unsigned char* data, uint32_t width, uint32_t height, uint8_t channels)
+{
+	init(data, width, height, channels);
 }
 
 Texture::~Texture()
@@ -68,6 +62,25 @@ void Texture::bind(uint32_t unit) const
 void Texture::unbind() const
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+// -----------------------------------------
+
+void Texture::init(unsigned char* data, uint32_t width, uint32_t height, uint8_t channels)
+{
+	m_width = width;
+	m_height = height;
+
+	if (channels == 4) {
+		m_internalFormat = GL_RGBA8;
+		m_dataFormat = GL_RGBA;
+	}
+	else if (channels == 3) {
+		m_internalFormat = GL_RGB8;
+		m_dataFormat = GL_RGB;
+	}
+
+	create(data);
 }
 
 void Texture::create(unsigned char* data)

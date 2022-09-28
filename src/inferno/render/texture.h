@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <cstdint>       // uint32_t
+#include <cstdint>       // uint8_t, uint32_t
 #include <memory>        // std::shared_ptr
 #include <string>        // std::string
 #include <unordered_map> // std::unordered_map
@@ -18,6 +18,7 @@ namespace Inferno {
 class Texture {
 public:
 	Texture(const std::string& path);
+	Texture(unsigned char* data, uint32_t width, uint32_t height, uint8_t channels = 3);
 	virtual ~Texture();
 
 	void bind(uint32_t unit = 0) const;
@@ -31,6 +32,7 @@ public:
 	inline uint32_t dataFormat() const { return m_dataFormat; }
 
 protected:
+	void init(unsigned char* data, uint32_t width, uint32_t height, uint8_t channels);
 	void create(unsigned char* data);
 
 private:
@@ -47,7 +49,7 @@ private:
 class TextureManager final : public ruc::Singleton<TextureManager> {
 public:
 	TextureManager(s);
-	virtual ~TextureManager();
+	~TextureManager();
 
 	void add(const std::string& path, std::shared_ptr<Texture> texture);
 	std::shared_ptr<Texture> load(const std::string& path);
