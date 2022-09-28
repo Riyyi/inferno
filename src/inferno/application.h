@@ -36,9 +36,10 @@ public:
 	virtual bool onKeyPress(KeyPressEvent& e);
 	virtual bool onMousePosition(MousePositionEvent& e);
 
-	inline void setStatus(int status) { m_status = status; }
+	void setStatus(int status) { m_status = status; }
 
-	inline Window& window() const { return *m_window; }
+	Scene& scene() const { return *m_scene; }
+	Window& window() const { return *m_window; }
 
 	static Application& the() { return *s_instance; }
 
