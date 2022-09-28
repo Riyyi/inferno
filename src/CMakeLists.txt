@@ -1,14 +1,12 @@
 file(GLOB_RECURSE ENGINE_SOURCES "${ENGINE}/*.cpp")
 
 add_library(${ENGINE} ${ENGINE_SOURCES})
-target_include_directories(${ENGINE} PRIVATE
+target_include_directories(${ENGINE} PUBLIC
 	"."
 	"../vendor/entt/src"
-	"../vendor/glad/include"
 	"../vendor/glfw/include"
 	"../vendor/glm"
 	"../vendor/json/include"
-	"../vendor/lua"
 	"../vendor/ruc/src"
 	"../vendor/sol2/include"
 	"../vendor/stb")

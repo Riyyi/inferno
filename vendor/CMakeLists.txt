@@ -18,7 +18,7 @@ list(REMOVE_ITEM LUA "${CMAKE_CURRENT_SOURCE_DIR}/lua/lua/lua.c")    # Do not co
 set(ENGINE_SOURCES ${GLAD} ${LUA})
 
 add_library(${ENGINE}-dependencies ${ENGINE_SOURCES})
-target_include_directories(${ENGINE}-dependencies PRIVATE
+target_include_directories(${ENGINE}-dependencies PUBLIC
 	"glad/include"
 	"lua")
 target_link_libraries(${ENGINE}-dependencies glfw ruc)
