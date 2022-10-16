@@ -27,9 +27,9 @@ public:
 	void destroy();
 
 	uint32_t createEntity(const std::string& name = "");
-	void destroyEntity(uint32_t entity);
-
 	uint32_t loadEntity(ruc::Json json);
+	uint32_t findEntity(std::string_view name);
+	void destroyEntity(uint32_t entity);
 
 	glm::mat4 cameraProjectionView();
 

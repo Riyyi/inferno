@@ -4,6 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 
+#include <cstdint> // uint32_t
+#include <limits>  // std::numeric_limits
+
 #include "ruc/file.h"
 #include "ruc/format/log.h"
 #include "ruc/json/json.h"
@@ -127,12 +130,6 @@ uint32_t Scene::createEntity(const std::string& name)
 	return entity;
 }
 
-void Scene::destroyEntity(uint32_t entity)
-{
-	ScriptSystem::the().cleanup(entity);
-	m_registry->destroy(entt::entity { entity });
-}
-
 uint32_t Scene::loadEntity(ruc::Json json)
 {
 	uint32_t entity = createEntity((json.exists("name"))
@@ -144,6 +141,25 @@ uint32_t Scene::loadEntity(ruc::Json json)
 	return entity;
 }
 
+uint32_t Scene::findEntity(std::string_view name)
+{
+	auto view = m_registry->view<TagComponent>();
+
+	for (auto [entity, tag] : view.each()) {
+		if (tag.tag == name) {
+			return static_cast<uint32_t>(entity);
+		}
+	}
+
+	return std::numeric_limits<uint32_t>::max();
+}
+
+void Scene::destroyEntity(uint32_t entity)
+{
+	ScriptSystem::the().cleanup(entity);
+	m_registry->destroy(entt::entity { entity });
+}
+
 glm::mat4 Scene::cameraProjectionView()
 {
 	return CameraSystem::the().projectionView();
@@ -151,7 +167,7 @@ glm::mat4 Scene::cameraProjectionView()
 
 void Scene::validEntity(uint32_t entity) const
 {
-	VERIFY(m_registry->valid(entt::entity { entity }), "Entity is not valid");
+	VERIFY(m_registry->valid(entt::entity { entity }), "invalid entity '{}'", entity);
 }
 
 } // namespace Inferno
