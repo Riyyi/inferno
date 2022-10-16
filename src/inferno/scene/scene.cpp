@@ -54,11 +54,13 @@ void Scene::initialize()
 	auto& cameraJson = sceneJson.at("camera");
 	uint32_t camera = loadEntity(cameraJson);
 
-	auto cameraType = CameraType::Perspective;
+	auto& cameraComponent = addComponent<CameraComponent>(camera);
 	if (cameraJson.exists("type") && cameraJson.at("type").get<std::string>() == "orthographic") {
-		cameraType = CameraType::Orthographic;
+		cameraComponent.type = CameraType::Orthographic;
 	}
-	addComponent<CameraComponent>(camera, cameraType);
+	if (cameraJson.exists("zoom-level") && cameraJson.at("zoom-level").type() == ruc::Json::Type::Number) {
+		cameraComponent.zoomLevel = cameraJson.at("zoom-level").asDouble();
+	}
 
 	if (cameraJson.exists("script")) {
 		auto& cameraScript = cameraJson.at("script");
@@ -67,6 +69,7 @@ void Scene::initialize()
 				addComponent<LuaScriptComponent>(camera, cameraScript.at("name").get<std::string>());
 			}
 			else {
+				// TODO: Allow usage of custom camera classes
 				addComponent<NativeScriptComponent>(camera).bind<CameraController>();
 			}
 		}
