@@ -10,9 +10,10 @@
 #include "inferno/component/transformcomponent.h"
 #include "inferno/io/input.h"
 #include "inferno/keycodes.h"
-#include "inferno/script/cameracontroller.h"
 
-namespace Inferno {
+#include "cameracontroller.h"
+
+namespace example {
 
 void CameraController::updateOrthographic(float deltaTime)
 {
@@ -20,10 +21,10 @@ void CameraController::updateOrthographic(float deltaTime)
 
 	float cameraRotateSpeed = ROTATE_SPEED * deltaTime;
 
-	if (Input::isKeyPressed(keyCode("GLFW_KEY_Q"))) {
+	if (Inferno::Input::isKeyPressed(Inferno::keyCode("GLFW_KEY_Q"))) {
 		transform->rotate.z -= cameraRotateSpeed;
 	}
-	if (Input::isKeyPressed(keyCode("GLFW_KEY_E"))) {
+	if (Inferno::Input::isKeyPressed(Inferno::keyCode("GLFW_KEY_E"))) {
 		transform->rotate.z += cameraRotateSpeed;
 	}
 
@@ -39,19 +40,19 @@ void CameraController::updateOrthographic(float deltaTime)
 	float cameraTranslateSpeed = TRANSLATE_SPEED * deltaTime;
 
 	// WASD movement
-	if (Input::isKeyPressed(keyCode("GLFW_KEY_W"))) {
+	if (Inferno::Input::isKeyPressed(Inferno::keyCode("GLFW_KEY_W"))) {
 		transform->translate.x += -sin(glm::radians(transform->rotate.z)) * cameraTranslateSpeed;
 		transform->translate.y += cos(glm::radians(transform->rotate.z)) * cameraTranslateSpeed;
 	}
-	if (Input::isKeyPressed(keyCode("GLFW_KEY_S"))) {
+	if (Inferno::Input::isKeyPressed(Inferno::keyCode("GLFW_KEY_S"))) {
 		transform->translate.x -= -sin(glm::radians(transform->rotate.z)) * cameraTranslateSpeed;
 		transform->translate.y -= cos(glm::radians(transform->rotate.z)) * cameraTranslateSpeed;
 	}
-	if (Input::isKeyPressed(keyCode("GLFW_KEY_A"))) {
+	if (Inferno::Input::isKeyPressed(Inferno::keyCode("GLFW_KEY_A"))) {
 		transform->translate.x -= cos(glm::radians(transform->rotate.z)) * cameraTranslateSpeed;
 		transform->translate.y -= sin(glm::radians(transform->rotate.z)) * cameraTranslateSpeed;
 	}
-	if (Input::isKeyPressed(keyCode("GLFW_KEY_D"))) {
+	if (Inferno::Input::isKeyPressed(Inferno::keyCode("GLFW_KEY_D"))) {
 		transform->translate.x += cos(glm::radians(transform->rotate.z)) * cameraTranslateSpeed;
 		transform->translate.y += sin(glm::radians(transform->rotate.z)) * cameraTranslateSpeed;
 	}
@@ -60,10 +61,10 @@ void CameraController::updateOrthographic(float deltaTime)
 
 	float zoomSpeed = ZOOM_SENSITIVITY * deltaTime;
 
-	if (Input::isKeyPressed(keyCode("GLFW_KEY_EQUAL"))) {
+	if (Inferno::Input::isKeyPressed(Inferno::keyCode("GLFW_KEY_EQUAL"))) {
 		m_camera->zoomLevel -= zoomSpeed;
 	}
-	if (Input::isKeyPressed(keyCode("GLFW_KEY_MINUS"))) {
+	if (Inferno::Input::isKeyPressed(Inferno::keyCode("GLFW_KEY_MINUS"))) {
 		m_camera->zoomLevel += zoomSpeed;
 	}
 	m_camera->zoomLevel = std::max(m_camera->zoomLevel, 0.25f);
@@ -73,8 +74,8 @@ void CameraController::updateOrthographic(float deltaTime)
 void CameraController::updatePerspective(float deltaTime)
 {
 	// Get mouse movement offset compared to last frame
-	float xOffset = Input::getXOffset() * MOUSE_SENSITIVITY;
-	float yOffset = Input::getYOffset() * MOUSE_SENSITIVITY;
+	float xOffset = Inferno::Input::getXOffset() * MOUSE_SENSITIVITY;
+	float yOffset = Inferno::Input::getYOffset() * MOUSE_SENSITIVITY;
 	m_camera->yaw += xOffset;
 	m_camera->pitch += yOffset;
 
@@ -107,24 +108,25 @@ void CameraController::updatePerspective(float deltaTime)
 	float cameraSpeed = TRANSLATE_SPEED * deltaTime;
 
 	// WASD movement
-	if (Input::isKeyPressed(keyCode("GLFW_KEY_W"))) {
+	if (Inferno::Input::isKeyPressed(Inferno::keyCode("GLFW_KEY_W"))) {
 		transform->translate += transform->rotate * cameraSpeed;
 	}
-	if (Input::isKeyPressed(keyCode("GLFW_KEY_S"))) {
+	if (Inferno::Input::isKeyPressed(Inferno::keyCode("GLFW_KEY_S"))) {
 		transform->translate -= transform->rotate * cameraSpeed;
 	}
-	if (Input::isKeyPressed(keyCode("GLFW_KEY_A"))) {
+	if (Inferno::Input::isKeyPressed(Inferno::keyCode("GLFW_KEY_A"))) {
 		transform->translate -= glm::normalize(glm::cross(transform->rotate, m_camera->up)) * cameraSpeed;
 	}
-	if (Input::isKeyPressed(keyCode("GLFW_KEY_D"))) {
+	if (Inferno::Input::isKeyPressed(Inferno::keyCode("GLFW_KEY_D"))) {
 		transform->translate += glm::normalize(glm::cross(transform->rotate, m_camera->up)) * cameraSpeed;
 	}
 	// Up / down movement
-	if (Input::isKeyPressed(keyCode("GLFW_KEY_SPACE"))) {
+	if (Inferno::Input::isKeyPressed(Inferno::keyCode("GLFW_KEY_SPACE"))) {
 		transform->translate.y += cameraSpeed;
 	}
-	if (Input::isKeyPressed(keyCode("GLFW_KEY_LEFT_SHIFT"))) {
+	if (Inferno::Input::isKeyPressed(Inferno::keyCode("GLFW_KEY_LEFT_SHIFT"))) {
 		transform->translate.y -= cameraSpeed;
 	}
 }
-} // namespace Inferno
+
+} // namespace example

@@ -14,20 +14,18 @@
 #define ZOOM_SENSITIVITY 2.5f
 #define MOUSE_SENSITIVITY 0.25f
 
-namespace Inferno {
+namespace example {
 
-struct CameraComponent;
-
-class CameraController final : public NativeScript {
+class CameraController final : public Inferno::NativeScript {
 public:
 	virtual void update(float deltaTime) override
 	{
-		m_camera = &getComponent<CameraComponent>();
+		m_camera = &getComponent<Inferno::CameraComponent>();
 
-		if (m_camera->type == CameraType::Orthographic) {
+		if (m_camera->type == Inferno::CameraType::Orthographic) {
 			updateOrthographic(deltaTime);
 		}
-		else if (m_camera->type == CameraType::Perspective) {
+		else if (m_camera->type == Inferno::CameraType::Perspective) {
 			updatePerspective(deltaTime);
 		}
 	}
@@ -36,7 +34,9 @@ public:
 	void updatePerspective(float deltaTime);
 
 private:
-	CameraComponent* m_camera { nullptr };
+	Inferno::CameraComponent* m_camera { nullptr };
 };
 
-} // namespace Inferno
+BIND_NATIVE(CameraController);
+
+} // namespace example

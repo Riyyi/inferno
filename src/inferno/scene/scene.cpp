@@ -20,7 +20,6 @@
 #include "inferno/component/textareacomponent.h"
 #include "inferno/component/transformcomponent.h"
 #include "inferno/scene/scene.h"
-#include "inferno/script/cameracontroller.h"
 #include "inferno/script/nativescript.h"
 #include "inferno/system/camerasystem.h"
 #include "inferno/system/rendersystem.h"
@@ -69,8 +68,7 @@ void Scene::initialize()
 				addComponent<LuaScriptComponent>(camera, cameraScript.at("name").get<std::string>());
 			}
 			else {
-				// TODO: Allow usage of custom camera classes
-				addComponent<NativeScriptComponent>(camera).bind<CameraController>();
+				addComponent<NativeScriptComponent>(camera, name);
 			}
 		}
 	}

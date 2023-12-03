@@ -92,7 +92,7 @@ void ScriptSystem::cleanup(NativeScriptComponent& nativeScript)
 {
 	if (nativeScript.instance) {
 		nativeScript.instance->destroy();
-		nativeScript.destroy();
+		nativeScript.destroy(nativeScript.instance);
 	}
 }
 

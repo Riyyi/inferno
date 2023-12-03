@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "ruc/meta/assert.h"
+#include <string>
 
 #include "inferno/script/nativescript.h"
 
@@ -15,23 +15,15 @@ namespace Inferno {
 struct NativeScriptComponent {
 	NativeScript* instance { nullptr };
 
-	NativeScript* (*initialize)() { nullptr };
+	NativeScript::InitializeFunction initialize { nullptr };
+	NativeScript::DestroyFunction destroy { nullptr };
 
 	// Dont allow manually setting instance during construction
 	NativeScriptComponent() {}
-
-	template<typename T>
-	void bind()
+	NativeScriptComponent(const std::string& binding)
 	{
-		VERIFY(instance == nullptr, "NativeScript already bound");
-		initialize = []() { return static_cast<NativeScript*>(new T()); };
-	}
-
-	void destroy()
-	{
-		VERIFY(instance, "Attempting to destroy an uninitialized NativeScript");
-		delete instance;
-		instance = nullptr;
+		initialize = NativeScriptBinding::the().initializeBinding(binding);
+		destroy = NativeScriptBinding::the().destroyBinding(binding);
 	}
 };
 
