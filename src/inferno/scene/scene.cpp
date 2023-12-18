@@ -64,8 +64,9 @@ void Scene::initialize()
 	if (cameraJson.exists("script")) {
 		auto& cameraScript = cameraJson.at("script");
 		if (cameraScript.exists("type") && cameraScript.exists("name")) {
+			auto name = cameraScript.at("name").get<std::string>();
 			if (cameraScript.at("type").get<std::string>() == "lua") {
-				addComponent<LuaScriptComponent>(camera, cameraScript.at("name").get<std::string>());
+				addComponent<LuaScriptComponent>(camera, name);
 			}
 			else {
 				addComponent<NativeScriptComponent>(camera, name);
