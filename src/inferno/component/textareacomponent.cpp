@@ -27,7 +27,7 @@ void fromJson(const ruc::Json& json, TextAreaComponent& value)
 		json.at("width").getTo(value.width);
 	}
 	if (json.exists("lines") && json.at("lines").type() == ruc::Json::Type::Number) {
-		json.at("lines").getTo(value.width);
+		json.at("lines").getTo(value.lines);
 	}
 }
 

@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+#include <algorithm> // std::max
+
 #include "ruc/format/log.h"
 #include "ruc/meta/assert.h"
 
@@ -46,9 +48,12 @@ void TextAreaSystem::render()
 		std::shared_ptr<Font> font = FontManager::the().load(textarea.font);
 		// glm::mat4 translate = transform.translate;
 
-		float advance = 0.0f;
+		unsigned char previous = 0;
+		float advanceX = 0.0f;
+		float advanceY = 0.0f;
 		for (auto character : textarea.content) {
-			std::optional<CharacterQuad> quad = calculateCharacterQuad(character, font, advance);
+			std::optional<CharacterQuad> quad = calculateCharacterQuad(character, previous, font, advanceX, advanceY);
+			previous = character;
 
 			if (quad) {
 				RendererCharacter::the().drawCharacter(quad.value(), font->texture());
@@ -57,53 +62,65 @@ void TextAreaSystem::render()
 	}
 }
 
-std::optional<CharacterQuad> TextAreaSystem::calculateCharacterQuad(unsigned char character, std::shared_ptr<Font> font, float& advance)
+std::optional<CharacterQuad> TextAreaSystem::calculateCharacterQuad(unsigned char character, unsigned char previous, std::shared_ptr<Font> font, float& advanceX, float& advanceY)
 {
 	CharacterQuad characterQuad;
 
 	auto c = font->get(character);
 
 	// Texture
-	// ---------------------------------
+	// -------------------------------------
 
 	float textureWidth = static_cast<float>(font->texture()->width());
 	float textureHeight = static_cast<float>(font->texture()->height());
 	VERIFY(textureWidth == textureHeight, "TextAreaSystem read invalid font texture");
 
-	// Skip empty characters
+	// Skip empty characters (like space)
 	if (c->size.x == 0 || c->size.y == 0) {
 		// Jump to the next glyph
-		advance += c->advance / textureWidth;
+		advanceX += c->advance;
 		return {};
 	}
 
 	// Position
-	// ---------------------------------
+	// -------------------------------------
 
-	float quadWidth = c->size.x / textureWidth;
-	float quadHeight = c->size.y / textureHeight;
-	characterQuad.at(0).quad.position = { -quadWidth, -quadHeight, 0.0f }; // bottom left
-	characterQuad.at(1).quad.position = { quadWidth, -quadHeight, 0.0f };  // bottom right
-	characterQuad.at(2).quad.position = { quadWidth, quadHeight, 0.0f };   // top right
-	characterQuad.at(3).quad.position = { -quadWidth, quadHeight, 0.0f };  // top left
-
-	for (auto& quad : characterQuad) {
-		quad.quad.position.x -= 0.5f;
-
-		quad.quad.position.x += c->offset.x / (float)textureWidth;
-		quad.quad.position.y -= c->offset.y / (float)textureHeight;
-
-		quad.quad.position.x += advance;
+	// Kerning
+	if (c->kernings.find(previous) != c->kernings.end()) {
+		advanceX += c->kernings.at(previous);
 	}
 
-	// ruc::debug("character: {} ({}) width: {} height: {} advance: {} x: {}",
-	//       character, (int)character, quadWidth, quadHeight, advance, characterQuad.at(0).quad.position.x);
+	// Line wrapping
+	if (advanceX + c->offset.x + c->size.x > textureWidth) {
+		advanceX = 0;
+		advanceY -= font->lineSpacing();
+	}
+
+	glm::vec2 cursor = { std::max(advanceX + c->offset.x, 0.0f),
+		                 advanceY - c->offset.y };
+	glm::vec2 cursorMax = { cursor.x + c->size.x,
+		                    cursor.y - c->size.y };
+
+	// Scale the values from 0:512 (texture size) to -1:1 (screen space)
+	glm::vec2 cursorScreen = {
+		(cursor.x / textureWidth * 2) - 1,
+		(cursor.y / textureHeight * 2) + 1,
+	};
+	glm::vec2 cursorScreenMax = {
+		(cursorMax.x / textureWidth * 2) - 1,
+		(cursorMax.y / textureHeight * 2) + 1,
+	};
+
+	characterQuad.at(0).quad.position = { cursorScreen.x, cursorScreenMax.y, 0.0f };    // bottom left
+	characterQuad.at(1).quad.position = { cursorScreenMax.x, cursorScreenMax.y, 0.0f }; // bottom right
+	characterQuad.at(2).quad.position = { cursorScreenMax.x, cursorScreen.y, 0.0f };    // top right
+	characterQuad.at(3).quad.position = { cursorScreen.x, cursorScreen.y, 0.0f };       // top left
 
 	// Jump to the next glyph
-	advance += c->advance / textureWidth;
+	advanceX += c->advance;
 
 	// Texture coordinates
-	// ---------------------------------
+	// -------------------------------------
 
 	glm::vec2 x {
 		1 - (textureWidth - c->position.x) / textureWidth,

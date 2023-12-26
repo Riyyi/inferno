@@ -33,7 +33,7 @@ public:
 	void setScene(Scene* scene) { m_scene = scene; }
 
 private:
-	std::optional<CharacterQuad> calculateCharacterQuad(unsigned char character, std::shared_ptr<Font> font, float& advance);
+	std::optional<CharacterQuad> calculateCharacterQuad(unsigned char character, unsigned char previous, std::shared_ptr<Font> font, float& advanceX, float& advanceY);
 
 	Scene* m_scene { nullptr };
 };
