@@ -65,6 +65,10 @@ private:
 
 } // namespace Inferno
 
+// TODO: Move this to ruc
+#define CONCAT(a, b) CONCAT_IMPL(a, b)
+#define CONCAT_IMPL(a, b) a##b
+
 #define BIND_NATIVE_IMPL(name, struct_name)                                                                 \
 	struct struct_name {                                                                                    \
 		struct_name()                                                                                       \
