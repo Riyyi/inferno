@@ -42,9 +42,9 @@
 			"name": "Text",
 			"content": "Hello World!",
 			"font": "assets/fnt/open-sans",
-			"font-size": 10,
-			"width": 150,
-			"lines": 3
+			"font-size": 24,
+			"line-spacing": 1.0,
+			"width": 150
 		}
 	]
 }

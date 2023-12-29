@@ -48,25 +48,86 @@ void TextAreaSystem::render()
 		std::shared_ptr<Font> font = FontManager::the().load(textarea.font);
 		// glm::mat4 translate = transform.translate;
 
-		unsigned char previous = 0;
-		float advanceX = 0.0f;
-		float advanceY = 0.0f;
-		for (auto character : textarea.content) {
-			std::optional<CharacterQuad> quad = calculateCharacterQuad(character, previous, font, advanceX, advanceY);
-			previous = character;
-
-			if (quad) {
-				RendererCharacter::the().drawCharacter(quad.value(), font->texture());
-			}
-		}
+		m_characters.clear();
+		createLines(font, textarea);
+		createQuads(font, textarea);
 	}
 }
 
-std::optional<CharacterQuad> TextAreaSystem::calculateCharacterQuad(unsigned char character, unsigned char previous, std::shared_ptr<Font> font, float& advanceX, float& advanceY)
+using Characters = std::vector<std::shared_ptr<Character>>;
+
+void TextAreaSystem::createLines(std::shared_ptr<Font> font, const TextAreaComponent& textarea)
+{
+	float fontScale = textarea.fontSize / (float)font->size();
+
+	// Texture
+	// -------------------------------------
+
+	float textureWidth = static_cast<float>(font->texture()->width());
+	float textureHeight = static_cast<float>(font->texture()->height());
+	VERIFY(textureWidth == textureHeight, "TextAreaSystem read invalid font texture");
+
+	// -------------------------------------
+
+	char previous = 0;
+	size_t spaceIndex = 0;
+	float lineWidth = 0.0f;
+	float lineWidthSinceLastSpace = 0.0f;
+	for (char character : textarea.content) {
+		auto c = font->get(character);
+		m_characters.push_back(c);
+
+		// Kerning
+		char kerning = 0;
+		if (c->kernings.find(previous) != c->kernings.end()) {
+			kerning = c->kernings.at(previous);
+		}
+
+		lineWidth += (c->advance + c->offset.x + kerning) * fontScale;
+		lineWidthSinceLastSpace += (c->advance + c->offset.x + kerning) * fontScale;
+
+		if (character == ' ') {
+			spaceIndex = m_characters.size() - 1;
+			lineWidthSinceLastSpace = 0;
+		}
+
+		if (lineWidth > textureWidth) {
+			m_characters[spaceIndex] = nullptr;
+			lineWidth = 0;
+			lineWidth = lineWidthSinceLastSpace;
+		}
+
+		previous = character;
+	}
+}
+
+void TextAreaSystem::createQuads(std::shared_ptr<Font> font, const TextAreaComponent& textarea)
+{
+	float fontScale = textarea.fontSize / (float)font->size();
+
+	char previous = 0;
+	float advanceX = 0.0f;
+	float advanceY = 0.0f;
+	for (const auto& character : m_characters) {
+		// Go to the next line on "\n"
+		if (character == nullptr) {
+			advanceX = 0;
+			advanceY -= (font->lineSpacing() * textarea.lineSpacing) * fontScale;
+			continue;
+		}
+
+		std::optional<CharacterQuad> quad = calculateCharacterQuad(character, previous, font, fontScale, advanceX, advanceY);
+		if (quad) {
+			RendererCharacter::the().drawCharacter(quad.value(), font->texture());
+		}
+
+		previous = character->id;
+	}
+}
+
+std::optional<CharacterQuad> TextAreaSystem::calculateCharacterQuad(std::shared_ptr<Character> c, char previous, std::shared_ptr<Font> font, float fontScale, float& advanceX, float& advanceY)
 {
 	CharacterQuad characterQuad;
-
-	auto c = font->get(character);
 
 	// Texture
 	// -------------------------------------
@@ -78,7 +139,7 @@ std::optional<CharacterQuad> TextAreaSystem::calculateCharacterQuad(unsigned cha
 	// Skip empty characters (like space)
 	if (c->size.x == 0 || c->size.y == 0) {
 		// Jump to the next glyph
-		advanceX += c->advance;
+		advanceX += c->advance * fontScale;
 		return {};
 	}
 
@@ -87,19 +148,13 @@ std::optional<CharacterQuad> TextAreaSystem::calculateCharacterQuad(unsigned cha
 
 	// Kerning
 	if (c->kernings.find(previous) != c->kernings.end()) {
-		advanceX += c->kernings.at(previous);
+		advanceX += c->kernings.at(previous) * fontScale;
 	}
 
-	// Line wrapping
-	if (advanceX + c->offset.x + c->size.x > textureWidth) {
-		advanceX = 0;
-		advanceY -= font->lineSpacing();
-	}
-
-	glm::vec2 cursor = { std::max(advanceX + c->offset.x, 0.0f),
-		                 advanceY - c->offset.y };
-	glm::vec2 cursorMax = { cursor.x + c->size.x,
-		                    cursor.y - c->size.y };
+	glm::vec2 cursor = { advanceX + (c->offset.x * fontScale),
+		                 advanceY - (c->offset.y * fontScale) };
+	glm::vec2 cursorMax = { cursor.x + (c->size.x * fontScale),
+		                    cursor.y - (c->size.y * fontScale) };
 
 	// Scale the values from 0:512 (texture size) to -1:1 (screen space)
 	glm::vec2 cursorScreen = {
@@ -117,7 +172,7 @@ std::optional<CharacterQuad> TextAreaSystem::calculateCharacterQuad(unsigned cha
 	characterQuad.at(3).quad.position = { cursorScreen.x, cursorScreen.y, 0.0f };       // top left
 
 	// Jump to the next glyph
-	advanceX += c->advance;
+	advanceX += c->advance * fontScale;
 
 	// Texture coordinates
 	// -------------------------------------

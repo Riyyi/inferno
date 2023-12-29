@@ -55,7 +55,7 @@ void Font::parseFont(const std::string& font)
 		// ---------------------------------
 
 		if (action.compare("info") == 0) {
-			m_size = convert<uint32_t>(findValue("size", columns));
+			m_size = convert<unsigned char>(findValue("size", columns));
 			auto paddings = findValue("padding", columns) | std::views::split(',');
 			size_t i = 0;
 			for (const auto& padding : paddings) {
@@ -81,6 +81,7 @@ void Font::parseFont(const std::string& font)
 			uint32_t width = convert<uint32_t>(findValue("width", columns));
 			uint32_t height = convert<uint32_t>(findValue("height", columns));
 			Character character = {
+				.id = id,
 				.position = {
 					convert<uint32_t>(findValue("x", columns)) + m_padding[Padding::Left],
 					convert<uint32_t>(findValue("y", columns)) + m_padding[Padding::Top],

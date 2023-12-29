@@ -18,9 +18,9 @@ namespace Inferno {
 struct TextAreaComponent {
 	std::string content;
 	std::string font;
-	uint32_t fontSize { 0 };
+	unsigned char fontSize { 0 };
+	float lineSpacing { 1.0f };
 	uint32_t width { 0 };
-	uint32_t lines { 0 };
 
 #if 0
 	TextAreaComponent() {}

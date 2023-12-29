@@ -23,11 +23,11 @@ void fromJson(const ruc::Json& json, TextAreaComponent& value)
 	if (json.exists("font-size") && json.at("font-size").type() == ruc::Json::Type::Number) {
 		json.at("font-size").getTo(value.fontSize);
 	}
+	if (json.exists("line-spacing") && json.at("line-spacing").type() == ruc::Json::Type::Number) {
+		json.at("line-spacing").getTo(value.lineSpacing);
+	}
 	if (json.exists("width") && json.at("width").type() == ruc::Json::Type::Number) {
 		json.at("width").getTo(value.width);
-	}
-	if (json.exists("lines") && json.at("lines").type() == ruc::Json::Type::Number) {
-		json.at("lines").getTo(value.lines);
 	}
 }
 

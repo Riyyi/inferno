@@ -25,6 +25,7 @@ namespace Inferno {
 class Texture;
 
 struct Character {
+	char id;                                          // Character
 	glm::uvec2 position;                              // Position
 	glm::uvec2 size;                                  // Width/height
 	glm::ivec2 offset;                                // Offset from baseline to left / top of glyph
@@ -61,7 +62,7 @@ private:
 	std::string findValue(const std::string& key, const std::vector<std::string>& columns) const;
 
 	std::string m_name;
-	uint32_t m_size = { 0 };
+	unsigned char m_size = { 0 };
 	uint32_t m_lineSpacing = { 0 };
 	std::array<uint32_t, 4> m_padding = { 0 };
 	std::shared_ptr<Texture> m_texture;
