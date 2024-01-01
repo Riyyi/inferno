@@ -1,50 +1,68 @@
 {
 	"init": "assets/lua/scene1-init.lua",
-	"camera": {
-		"name": "Camera",
-		"translate": [ 0.0, 0.0, 1.0 ],
-		"rotate": [ 0.0, 0.0, -1.0 ],
-		"scale": [ 1.0, 1.0, 1.0 ],
-		"type": "perspective",
-		"script": {
-			"type": "lua",
-			"name": "assets/lua/cameracontroller.lua"
-		}
-	},
-	"quad": [
+	"entities": [
 		{
-			"name": "Quad",
-			"translate": [ 0.0, 0.0, 0.0 ],
-			"rotate": [ 0.0, 0.0, 0.0 ],
-			"scale": [ 1.0, 1.0, 1.0 ],
-			"color": [ 1.0, 1.0, 1.0, 1.0 ],
-			"texture": "assets/gfx/test.png"
+			"id": { "id": 12312312 },
+			"tag": { "tag": "Camera" },
+			"transform" : {
+				"translate": [0.0, 0.0, 1.0],
+				"rotate": [0.0, 0.0, -1.0],
+				"scale": [1.0, 1.0, 1.0]
+			},
+			"camera": { "type": "perspective" },
+			"lua-scripts": [
+				{ "path": "assets/lua/cameracontroller.lua" }
+			]
 		},
 		{
-			"name": "Quad 2",
-			"translate": [ 1.1, 0.0, 0.0 ],
-			"rotate": [ 0.0, 0.0, 0.0 ],
-			"scale": [ 1.0, 1.0, 1.0 ],
-			"color": [ 0.5, 0.6, 0.8, 1.0 ],
-			"texture": "assets/gfx/test.png"
+			"id": { "id": 564564564 },
+			"tag": { "tag": "Quad" },
+			"transform" : {
+				"translate": [ 0.0, 0.0, 0.0 ],
+				"rotate": [ 0.0, 0.0, 0.0 ],
+				"scale": [ 1.0, 1.0, 1.0 ]
+			},
+			"sprite": {
+				"color": [ 1.0, 1.0, 1.0, 1.0 ],
+				"texture": "assets/gfx/test.png"
+			}
 		},
 		{
-			"name": "Quad 3",
-			"translate": [ 2.2, 0.0, 0.0 ],
-			"rotate": [ 0.0, 0.0, 0.0 ],
-			"scale": [ 1.0, 1.0, 1.0 ],
-			"color": [ 1.0, 1.0, 1.0, 1.0 ],
-			"texture": "assets/gfx/test-inverted.png"
-		}
-	],
-	"text": [
+			"id": { "id": 97897897 },
+			"tag": { "tag": "Quad 2" },
+			"transform" : {
+				"translate": [ 1.1, 0.0, 0.0 ],
+				"rotate": [ 0.0, 0.0, 0.0 ],
+				"scale": [ 1.0, 1.0, 1.0 ]
+			},
+			"sprite": {
+				"color": [ 0.5, 0.6, 0.8, 1.0 ],
+				"texture": "assets/gfx/test.png"
+			}
+		},
 		{
-			"name": "Text",
-			"content": "Hello World!",
-			"font": "assets/fnt/open-sans",
-			"font-size": 24,
-			"line-spacing": 1.0,
-			"width": 150
+			"id": { "id": 3424242 },
+			"tag": { "tag": "Quad 3" },
+			"transform" : {
+				"translate": [ 2.2, 0.0, 0.0 ],
+				"rotate": [ 0.0, 0.0, 0.0 ],
+				"scale": [ 1.0, 1.0, 1.0 ]
+			},
+			"sprite": {
+				"color": [ 1.0, 1.0, 1.0, 1.0 ],
+				"texture": "assets/gfx/test-inverted.png"
+			}
+		},
+		{
+			"id": { "id": 675754 },
+			"tag": { "tag": "Text" },
+			"text": {
+				"content": "Hello World!",
+				"font": "assets/fnt/open-sans",
+				"font-size": 24,
+				"line-spacing": 1.0,
+				"width": 150
+			}
 		}
 	]
 }

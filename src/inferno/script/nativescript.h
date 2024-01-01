@@ -55,8 +55,8 @@ public:
 		m_detroyBindings.emplace(binding, destroy);
 	}
 
-	NativeScript::InitializeFunction initializeBinding(const std::string& binding) { return m_initializeBindings[binding]; }
-	NativeScript::DestroyFunction destroyBinding(const std::string& binding) { return m_detroyBindings[binding]; }
+	NativeScript::InitializeFunction initializeBinding(const std::string& name) { return m_initializeBindings[name]; }
+	NativeScript::DestroyFunction destroyBinding(const std::string& name) { return m_detroyBindings[name]; }
 
 private:
 	std::unordered_map<std::string, NativeScript::InitializeFunction> m_initializeBindings;

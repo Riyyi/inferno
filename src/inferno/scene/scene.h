@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <cstddef> // size_t
 #include <cstdint> // uint32_t
 #include <memory>  // std::shared_ptr
 
@@ -13,6 +14,8 @@
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
 #include "ruc/format/format.h"
 #include "ruc/json/json.h"
+
+#include "inferno/uid.h"
 
 namespace Inferno {
 
@@ -27,7 +30,7 @@ public:
 	void destroy();
 
 	uint32_t createEntity(const std::string& name = "");
-	uint32_t loadEntity(ruc::Json json);
+	uint32_t createEntityWithUID(UID id, const std::string& name = "");
 	uint32_t findEntity(std::string_view name);
 	void destroyEntity(uint32_t entity);
 
@@ -49,7 +52,8 @@ public:
 		return m_registry->any<T...>(entt::entity { entity });
 	}
 
-	// @Todo Should replace be allowed? could trigger memory leaks with nativescript
+	// TODO: Should replace be allowed? could trigger memory leaks with nativescript
+	// TODO: Replace will make it so an entity cant have multiple scripts
 	template<typename T, typename... P>
 	T& addComponent(uint32_t entity, P&&... parameters) const
 	{
@@ -64,7 +68,7 @@ public:
 		return m_registry->remove_if_exists<T>(entt::entity { entity });
 	}
 
-	// @Todo Should replace be allowed? could trigger memory leaks with nativescript
+	// TODO: Should replace be allowed? could trigger memory leaks with nativescript
 	template<typename T, typename... P>
 	T& getComponent(uint32_t entity, P&&... parameters) const
 	{

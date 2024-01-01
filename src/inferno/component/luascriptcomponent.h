@@ -6,8 +6,10 @@
 
 #pragma once
 
-#include <string>  // std::string
+#include <string>
 #include <utility> // std::move
+
+#include "ruc/json/json.h"
 
 namespace Inferno {
 
@@ -24,4 +26,7 @@ struct LuaScriptComponent {
 	{
 	}
 };
+
+void fromJson(const ruc::Json& json, LuaScriptComponent& value);
+
 } // namespace Inferno

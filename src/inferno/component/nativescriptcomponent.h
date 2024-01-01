@@ -7,6 +7,7 @@
 #pragma once
 
 #include <string>
+#include <utility> // std::move
 
 #include "inferno/script/nativescript.h"
 
@@ -14,17 +15,29 @@ namespace Inferno {
 
 struct NativeScriptComponent {
 	NativeScript* instance { nullptr };
+	std::string name;
 
 	NativeScript::InitializeFunction initialize { nullptr };
 	NativeScript::DestroyFunction destroy { nullptr };
 
 	// Dont allow manually setting instance during construction
 	NativeScriptComponent() {}
-	NativeScriptComponent(const std::string& binding)
+	NativeScriptComponent(const std::string& name)
+		: name(std::move(name))
 	{
-		initialize = NativeScriptBinding::the().initializeBinding(binding);
-		destroy = NativeScriptBinding::the().destroyBinding(binding);
+		bind();
+	}
+
+	void bind()
+	{
+		VERIFY(initialize == nullptr && destroy == nullptr, "NativeScript already bound");
+
+		VERIFY(name != "", "name not set");
+		initialize = NativeScriptBinding::the().initializeBinding(name);
+		destroy = NativeScriptBinding::the().destroyBinding(name);
 	}
 };
+
+void fromJson(const ruc::Json& json, NativeScriptComponent& value);
 
 } // namespace Inferno

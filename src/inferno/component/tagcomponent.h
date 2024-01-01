@@ -9,6 +9,8 @@
 #include <string>  // std::string
 #include <utility> // std::move
 
+#include "ruc/json/json.h"
+
 namespace Inferno {
 
 struct TagComponent {
@@ -22,5 +24,7 @@ struct TagComponent {
 
 	operator const std::string&() const { return tag; }
 };
+
+void fromJson(const ruc::Json& json, TagComponent& value);
 
 } // namespace Inferno

@@ -8,6 +8,7 @@
 
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
 #include "glm/ext/vector_float3.hpp"   // glm::vec3
+#include "ruc/json/json.h"
 
 namespace Inferno {
 
@@ -31,5 +32,7 @@ struct CameraComponent {
 
 	glm::mat4 projection { 1.0f }; // Identity matrix
 };
+
+void fromJson(const ruc::Json& json, CameraComponent& value);
 
 } // namespace Inferno

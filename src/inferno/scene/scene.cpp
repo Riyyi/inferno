@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+#include <cstddef> // size_t
 #include <cstdint> // uint32_t
 #include <limits>  // std::numeric_limits
 
@@ -13,6 +14,7 @@
 #include "ruc/meta/assert.h"
 
 #include "inferno/component/cameracomponent.h"
+#include "inferno/component/id-component.h"
 #include "inferno/component/luascriptcomponent.h"
 #include "inferno/component/nativescriptcomponent.h"
 #include "inferno/component/spritecomponent.h"
@@ -26,6 +28,7 @@
 #include "inferno/system/scriptsystem.h"
 #include "inferno/system/textareasystem.h"
 #include "inferno/system/transformsystem.h"
+#include "inferno/uid.h"
 
 namespace Inferno {
 
@@ -47,54 +50,66 @@ void Scene::initialize()
 
 	auto sceneJson = ruc::Json::parse(ruc::File("assets/scene/scene1.json").data());
 
-	// Camera
-
-	VERIFY(sceneJson.exists("camera"), "scene doesnt contain a camera");
-	auto& cameraJson = sceneJson.at("camera");
-	uint32_t camera = loadEntity(cameraJson);
-
-	auto& cameraComponent = addComponent<CameraComponent>(camera);
-	if (cameraJson.exists("type") && cameraJson.at("type").get<std::string>() == "orthographic") {
-		cameraComponent.type = CameraType::Orthographic;
-	}
-	if (cameraJson.exists("zoom-level") && cameraJson.at("zoom-level").type() == ruc::Json::Type::Number) {
-		cameraComponent.zoomLevel = cameraJson.at("zoom-level").asDouble();
+	if (sceneJson.exists("init")) {
+		// TODO: load either NativeScript or LuaScript?
 	}
 
-	if (cameraJson.exists("script")) {
-		auto& cameraScript = cameraJson.at("script");
-		if (cameraScript.exists("type") && cameraScript.exists("name")) {
-			auto name = cameraScript.at("name").get<std::string>();
-			if (cameraScript.at("type").get<std::string>() == "lua") {
-				addComponent<LuaScriptComponent>(camera, name);
+	// Entities
+	// -------------------------------------
+
+	if (sceneJson.exists("entities")) {
+		const auto& entityJson = sceneJson.at("entities");
+		VERIFY(entityJson.type() == ruc::Json::Type::Array);
+		const auto& entities = entityJson.asArray();
+		for (size_t i = 0; i < entities.size(); ++i) {
+
+			uint32_t entity = createEntity();
+
+			VERIFY(entities.at(i).type() == ruc::Json::Type::Object);
+			const auto& components = entities.at(i);
+
+			// ID is required
+			VERIFY(components.exists("id"), "id not found");
+			auto& id = getComponent<IDComponent>(entity);
+			components.at("id").getTo(id);
+
+			if (components.exists("tag")) {
+				auto& tag = getComponent<TagComponent>(entity);
+				components.at("tag").getTo(tag);
 			}
-			else {
-				addComponent<NativeScriptComponent>(camera, name);
+			if (components.exists("transform")) {
+				auto& transform = getComponent<TransformComponent>(entity);
+				components.at("transform").getTo(transform);
 			}
-		}
-	}
-
-	// Quads
-
-	if (sceneJson.exists("quad") && sceneJson.at("quad").type() == ruc::Json::Type::Array) {
-		auto& quads = sceneJson.at("quad").asArray().elements();
-		for (const auto& quad : quads) {
-			uint32_t quadEntity = loadEntity(quad);
-			addComponent<SpriteComponent>(quadEntity);
-			auto& spriteComponent = getComponent<SpriteComponent>(quadEntity);
-			quad.getTo(spriteComponent);
-		}
-	}
-
-	// Text
-
-	if (sceneJson.exists("text") && sceneJson.at("text").type() == ruc::Json::Type::Array) {
-		auto& texts = sceneJson.at("text").asArray().elements();
-		for (const auto& text : texts) {
-			uint32_t textEntity = loadEntity(text);
-			addComponent<TextAreaComponent>(textEntity);
-			auto& textAreaComponent = getComponent<TextAreaComponent>(textEntity);
-			text.getTo(textAreaComponent);
+			if (components.exists("camera")) {
+				auto& camera = addComponent<CameraComponent>(entity);
+				components.at("camera").getTo(camera);
+			}
+			if (components.exists("lua-scripts")) {
+				VERIFY(components.at("lua-scripts").type() == ruc::Json::Type::Array);
+				const auto& scripts = components.at("lua-scripts").asArray();
+				for (size_t j = 0; j < scripts.size(); ++j) {
+					auto& script = addComponent<LuaScriptComponent>(entity);
+					scripts.at(j).getTo(script);
+				}
+			}
+			if (components.exists("native-scripts")) {
+				VERIFY(components.at("native-scripts").type() == ruc::Json::Type::Array);
+				const auto& scripts = components.at("native-scripts").asArray();
+				for (size_t j = 0; j < scripts.size(); ++j) {
+					auto& script = addComponent<NativeScriptComponent>(entity);
+					scripts.at(j).getTo(script);
+					script.bind();
+				}
+			}
+			if (components.exists("sprite")) {
+				auto& sprite = addComponent<SpriteComponent>(entity);
+				components.at("sprite").getTo(sprite);
+			}
+			if (components.exists("text")) {
+				auto& text = addComponent<TextAreaComponent>(entity);
+				components.at("text").getTo(text);
+			}
 		}
 	}
 
@@ -125,20 +140,15 @@ void Scene::destroy()
 
 uint32_t Scene::createEntity(const std::string& name)
 {
-	uint32_t entity = static_cast<uint32_t>(m_registry->create());
-	addComponent<TagComponent>(entity, name.empty() ? "Unnamed Entity" : name);
-	addComponent<TransformComponent>(entity);
-
-	return entity;
+	return createEntityWithUID(UID(), name);
 }
 
-uint32_t Scene::loadEntity(ruc::Json json)
+uint32_t Scene::createEntityWithUID(UID id, const std::string& name)
 {
-	uint32_t entity = createEntity((json.exists("name"))
-	                                   ? json.at("name").get<std::string>()
-	                                   : "");
-	auto& transform = getComponent<TransformComponent>(entity);
-	json.getTo(transform);
+	uint32_t entity = static_cast<uint32_t>(m_registry->create());
+	addComponent<IDComponent>(entity, id);
+	addComponent<TagComponent>(entity, name.empty() ? "Unnamed Entity" : name);
+	addComponent<TransformComponent>(entity);
 
 	return entity;
 }
