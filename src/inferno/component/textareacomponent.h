@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Riyyi
+ * Copyright (C) 2022-2024 Riyyi
  *
  * SPDX-License-Identifier: MIT
  */
@@ -18,7 +18,7 @@ namespace Inferno {
 struct TextAreaComponent {
 	std::string content;
 	std::string font;
-	unsigned char fontSize { 0 };
+	unsigned char fontSize { 12 };
 	float lineSpacing { 1.0f };
 	uint32_t width { 0 };
 

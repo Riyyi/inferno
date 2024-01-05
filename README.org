@@ -48,3 +48,5 @@ $ cmake .. && make
 - [[https://www.glfw.org/docs/latest/build_guide.html#build_link_cmake_source][Build GLFW using CMake]]
 - [[https://learnopengl.com][Learn OpenGL]]
 - [[https://www.youtube.com/playlist?list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT][Game Engine]] by The Cherno
+- [[https://www.youtube.com/watch?v=mnIQEQoHHCU][OpenGL 3D Game Tutorial 32: Font Rendering]]
+- [[https://youtu.be/d8cfgcJR9Tk][OpenGL 3D Game Tutorial 33: Distance Field Text Rendering]]

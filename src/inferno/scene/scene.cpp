@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Riyyi
+ * Copyright (C) 2022-2024 Riyyi
  *
  * SPDX-License-Identifier: MIT
  */
@@ -8,6 +8,7 @@
 #include <cstdint> // uint32_t
 #include <limits>  // std::numeric_limits
 
+#include "entt/entity/entity.hpp" // ent::entity
 #include "ruc/file.h"
 #include "ruc/format/log.h"
 #include "ruc/json/json.h"
@@ -62,54 +63,7 @@ void Scene::initialize()
 		VERIFY(entityJson.type() == ruc::Json::Type::Array);
 		const auto& entities = entityJson.asArray();
 		for (size_t i = 0; i < entities.size(); ++i) {
-
-			uint32_t entity = createEntity();
-
-			VERIFY(entities.at(i).type() == ruc::Json::Type::Object);
-			const auto& components = entities.at(i);
-
-			// ID is required
-			VERIFY(components.exists("id"), "id not found");
-			auto& id = getComponent<IDComponent>(entity);
-			components.at("id").getTo(id);
-
-			if (components.exists("tag")) {
-				auto& tag = getComponent<TagComponent>(entity);
-				components.at("tag").getTo(tag);
-			}
-			if (components.exists("transform")) {
-				auto& transform = getComponent<TransformComponent>(entity);
-				components.at("transform").getTo(transform);
-			}
-			if (components.exists("camera")) {
-				auto& camera = addComponent<CameraComponent>(entity);
-				components.at("camera").getTo(camera);
-			}
-			if (components.exists("lua-scripts")) {
-				VERIFY(components.at("lua-scripts").type() == ruc::Json::Type::Array);
-				const auto& scripts = components.at("lua-scripts").asArray();
-				for (size_t j = 0; j < scripts.size(); ++j) {
-					auto& script = addComponent<LuaScriptComponent>(entity);
-					scripts.at(j).getTo(script);
-				}
-			}
-			if (components.exists("native-scripts")) {
-				VERIFY(components.at("native-scripts").type() == ruc::Json::Type::Array);
-				const auto& scripts = components.at("native-scripts").asArray();
-				for (size_t j = 0; j < scripts.size(); ++j) {
-					auto& script = addComponent<NativeScriptComponent>(entity);
-					scripts.at(j).getTo(script);
-					script.bind();
-				}
-			}
-			if (components.exists("sprite")) {
-				auto& sprite = addComponent<SpriteComponent>(entity);
-				components.at("sprite").getTo(sprite);
-			}
-			if (components.exists("text")) {
-				auto& text = addComponent<TextAreaComponent>(entity);
-				components.at("text").getTo(text);
-			}
+			loadEntity(entities.at(i));
 		}
 	}
 
@@ -138,6 +92,8 @@ void Scene::destroy()
 	TransformSystem::destroy();
 }
 
+// -----------------------------------------
+
 uint32_t Scene::createEntity(const std::string& name)
 {
 	return createEntityWithUID(UID(), name);
@@ -149,6 +105,68 @@ uint32_t Scene::createEntityWithUID(UID id, const std::string& name)
 	addComponent<IDComponent>(entity, id);
 	addComponent<TagComponent>(entity, name.empty() ? "Unnamed Entity" : name);
 	addComponent<TransformComponent>(entity);
+
+	TransformSystem::the().add(entity);
+
+	return entity;
+}
+
+uint32_t Scene::loadEntity(ruc::Json components, uint32_t parentEntity)
+{
+	VERIFY(components.type() == ruc::Json::Type::Object);
+
+	uint32_t entity = createEntity();
+
+	// At minimum, ID is required
+	VERIFY(components.exists("id"), "id not found");
+	auto& id = getComponent<IDComponent>(entity);
+	components.at("id").getTo(id);
+
+	if (components.exists("tag")) {
+		auto& tag = getComponent<TagComponent>(entity);
+		components.at("tag").getTo(tag);
+	}
+	if (components.exists("transform")) {
+		auto& transform = getComponent<TransformComponent>(entity);
+		components.at("transform").getTo(transform);
+		transform.parent = static_cast<entt::entity>(parentEntity);
+	}
+	if (components.exists("camera")) {
+		auto& camera = addComponent<CameraComponent>(entity);
+		components.at("camera").getTo(camera);
+	}
+	if (components.exists("lua-scripts")) {
+		VERIFY(components.at("lua-scripts").type() == ruc::Json::Type::Array);
+		const auto& scripts = components.at("lua-scripts").asArray();
+		for (size_t i = 0; i < scripts.size(); ++i) {
+			auto& script = addComponent<LuaScriptComponent>(entity);
+			scripts.at(i).getTo(script);
+		}
+	}
+	if (components.exists("native-scripts")) {
+		VERIFY(components.at("native-scripts").type() == ruc::Json::Type::Array);
+		const auto& scripts = components.at("native-scripts").asArray();
+		for (size_t i = 0; i < scripts.size(); ++i) {
+			auto& script = addComponent<NativeScriptComponent>(entity);
+			scripts.at(i).getTo(script);
+			script.bind();
+		}
+	}
+	if (components.exists("sprite")) {
+		auto& sprite = addComponent<SpriteComponent>(entity);
+		components.at("sprite").getTo(sprite);
+	}
+	if (components.exists("text")) {
+		auto& text = addComponent<TextAreaComponent>(entity);
+		components.at("text").getTo(text);
+	}
+	if (components.exists("children")) {
+		VERIFY(components.at("children").type() == ruc::Json::Type::Array);
+		const auto& children = components.at("children").asArray();
+		for (size_t i = 0; i < children.size(); ++i) {
+			loadEntity(components.at("children")[i], entity);
+		}
+	}
 
 	return entity;
 }
@@ -171,6 +189,8 @@ void Scene::destroyEntity(uint32_t entity)
 	ScriptSystem::the().cleanup(entity);
 	m_registry->destroy(entt::entity { entity });
 }
+
+// -----------------------------------------
 
 glm::mat4 Scene::cameraProjectionView()
 {

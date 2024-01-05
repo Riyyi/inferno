@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Riyyi
+ * Copyright (C) 2022,2024 Riyyi
  *
  * SPDX-License-Identifier: MIT
  */
@@ -31,6 +31,7 @@ public:
 
 	uint32_t createEntity(const std::string& name = "");
 	uint32_t createEntityWithUID(UID id, const std::string& name = "");
+	uint32_t loadEntity(ruc::Json components, uint32_t parentEntity = entt::null);
 	uint32_t findEntity(std::string_view name);
 	void destroyEntity(uint32_t entity);
 
