@@ -1,12 +1,13 @@
 /*
- * Copyright (C) 2022 Riyyi
+ * Copyright (C) 2022,2024 Riyyi
  *
  * SPDX-License-Identifier: MIT
  */
 
 #pragma once
 
-#include <memory> //std::shared_ptr
+#include <memory>  //std::shared_ptr
+#include <utility> // std::pair
 
 #include "entt/entity/registry.hpp"    // entt::entity, entt::registry
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
@@ -27,7 +28,10 @@ public:
 
 	void update();
 
-	glm::mat4 projectionView();
+	/**
+	 * @brief Return a pair from the camera component: { projection, view }
+	 */
+	std::pair<glm::mat4, glm::mat4> projectionView();
 
 	void setRegistry(std::shared_ptr<entt::registry> registry) { m_registry = registry; };
 

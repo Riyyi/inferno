@@ -32,7 +32,7 @@ Font::Font(const std::string& name)
 	std::string font = ruc::File(path).data();
 	parseFont(font);
 
-	m_texture = std::make_shared<Texture>(image);
+	m_texture = Texture2D::create(image);
 }
 
 // TODO: Move this to ruc

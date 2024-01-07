@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Riyyi
+ * Copyright (C) 2022,2024 Riyyi
  *
  * SPDX-License-Identifier: MIT
  */
@@ -27,7 +27,13 @@ struct QuadVertex {
 	glm::vec3 position { 0.0f, 0.0f, 0.0f };
 	glm::vec4 color { 1.0f, 1.0f, 1.0f, 1.0f };
 	glm::vec2 textureCoordinates { 0.0f, 0.0f };
-	float textureIndex = 0; // @Todo get int to pass to fragment correctly
+	float textureIndex = 0; // TODO: get int to pass to fragment correctly
+};
+
+struct CubemapVertex {
+	glm::vec3 position { 0.0f, 0.0f, 0.0f };
+	glm::vec4 color { 1.0f, 1.0f, 1.0f, 1.0f };
+	float textureIndex = 0; // TODO: get int to pass to fragment correctly
 };
 
 struct CharacterVertex {
@@ -66,9 +72,10 @@ public:
 
 class Renderer {
 public:
-	static const uint32_t vertexPerQuad = 4;
-	static const uint32_t indexPerQuad = 6;
-	static const uint32_t textureUnitPerBatch = 32;
+	static constexpr const uint32_t vertexPerQuad = 4;
+	static constexpr const uint32_t indexPerQuad = 6;
+	static constexpr const uint32_t quadPerCube = 6;
+	static constexpr const uint32_t textureUnitPerBatch = 32;
 
 protected:
 	Renderer() {}
@@ -108,11 +115,12 @@ public:
 
 	using Singleton<Renderer2D>::destroy;
 
-	static const uint32_t quadCount = 1000;
-	static const uint32_t vertexCount = quadCount * vertexPerQuad;
-	static const uint32_t indexCount = quadCount * indexPerQuad;
+	// When to start a new batch
+	static constexpr const uint32_t quadCount = 1000;
+	static constexpr const uint32_t vertexCount = quadCount * vertexPerQuad;
+	static constexpr const uint32_t indexCount = quadCount * indexPerQuad;
 
-	void beginScene(glm::mat4 cameraProjectionView);
+	void beginScene(glm::mat4 cameraProjectionView, glm::mat4 cameraView);
 	void endScene();
 
 	void drawQuad(const TransformComponent& transform, glm::vec4 color);
@@ -132,6 +140,42 @@ private:
 
 	// Default quad vertex positions
 	glm::vec4 m_vertexPositions[vertexPerQuad];
+};
+// -------------------------------------
+
+class RendererCubemap final
+	: public Renderer
+	, public ruc::Singleton<RendererCubemap> {
+public:
+	RendererCubemap(s);
+	virtual ~RendererCubemap();
+
+	using Singleton<RendererCubemap>::destroy;
+
+	// When to start a new batch
+	static constexpr const uint32_t cubemapCount = 166;
+	static constexpr const uint32_t quadCount = cubemapCount * quadPerCube;
+	static constexpr const uint32_t vertexCount = quadCount * vertexPerQuad;
+	static constexpr const uint32_t indexCount = quadCount * indexPerQuad;
+
+	void beginScene(glm::mat4 cameraProjectionView, glm::mat4 cameraView);
+	void endScene();
+
+	void drawCubemap(const TransformComponent& transform, glm::vec4 color, std::shared_ptr<Texture> texture);
+	void drawCubemap(const TransformComponent& transform, glm::mat4 color, std::shared_ptr<Texture> texture);
+
+private:
+	void loadShader() override;
+	void flush() override;
+	void startBatch() override;
+	void nextBatch() override;
+
+	// CPU quad vertices
+	std::unique_ptr<CubemapVertex[]> m_vertexBufferBase;
+	CubemapVertex* m_vertexBufferPtr { nullptr };
+
+	// Default cubemap vertex positions
+	glm::vec4 m_vertexPositions[vertexPerQuad * quadPerCube];
 };
 
 // -------------------------------------

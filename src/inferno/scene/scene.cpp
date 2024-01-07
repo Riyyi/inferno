@@ -7,6 +7,7 @@
 #include <cstddef> // size_t
 #include <cstdint> // uint32_t
 #include <limits>  // std::numeric_limits
+#include <utility> // std::pair
 
 #include "entt/entity/entity.hpp" // ent::entity
 #include "ruc/file.h"
@@ -15,6 +16,7 @@
 #include "ruc/meta/assert.h"
 
 #include "inferno/component/cameracomponent.h"
+#include "inferno/component/cubemap-component.h"
 #include "inferno/component/id-component.h"
 #include "inferno/component/luascriptcomponent.h"
 #include "inferno/component/nativescriptcomponent.h"
@@ -156,6 +158,10 @@ uint32_t Scene::loadEntity(ruc::Json components, uint32_t parentEntity)
 		auto& sprite = addComponent<SpriteComponent>(entity);
 		components.at("sprite").getTo(sprite);
 	}
+	if (components.exists("cubemap")) {
+		auto& cubemap = addComponent<CubemapComponent>(entity);
+		components.at("cubemap").getTo(cubemap);
+	}
 	if (components.exists("text")) {
 		auto& text = addComponent<TextAreaComponent>(entity);
 		components.at("text").getTo(text);
@@ -192,7 +198,7 @@ void Scene::destroyEntity(uint32_t entity)
 
 // -----------------------------------------
 
-glm::mat4 Scene::cameraProjectionView()
+std::pair<glm::mat4, glm::mat4> Scene::cameraProjectionView()
 {
 	return CameraSystem::the().projectionView();
 }

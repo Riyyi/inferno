@@ -1,8 +1,10 @@
 /*
- * Copyright (C) 2022 Riyyi
+ * Copyright (C) 2022,2024 Riyyi
  *
  * SPDX-License-Identifier: MIT
  */
+
+#include <utility> // std::pair
 
 #include "glm/ext/matrix_clip_space.hpp" // glm::perspective, glm::ortho
 #include "glm/ext/matrix_transform.hpp"  // glm::radians, glm::lookAt
@@ -42,17 +44,17 @@ void CameraSystem::update()
 	}
 }
 
-glm::mat4 CameraSystem::projectionView()
+std::pair<glm::mat4, glm::mat4> CameraSystem::projectionView()
 {
 	auto view = m_registry->view<TransformComponent, CameraComponent>();
 
 	for (auto [entity, transform, camera] : view.each()) {
-		return camera.projection * transform.transform;
+		return { camera.projection, transform.transform };
 	}
 
 	VERIFY_NOT_REACHED();
 
-	return glm::mat4 { 1.0f };
+	return {};
 }
 
 void CameraSystem::updateOrthographic(TransformComponent& transform, CameraComponent& camera)

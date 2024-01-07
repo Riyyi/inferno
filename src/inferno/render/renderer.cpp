@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Riyyi
+ * Copyright (C) 2022,2024 Riyyi
  *
  * SPDX-License-Identifier: MIT
  */
@@ -216,10 +216,10 @@ Renderer2D::~Renderer2D()
 	Renderer::destroy();
 }
 
-void Renderer2D::beginScene(glm::mat4 cameraProjectionView)
+void Renderer2D::beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView)
 {
 	m_shader->bind();
-	m_shader->setFloat("u_projectionView", cameraProjectionView);
+	m_shader->setFloat("u_projectionView", cameraProjection * cameraView);
 	m_shader->unbind();
 }
 
@@ -304,6 +304,184 @@ void Renderer2D::startBatch()
 }
 
 void Renderer2D::nextBatch()
+{
+	flush();
+	startBatch();
+}
+
+// -----------------------------------------
+
+RendererCubemap::RendererCubemap(s)
+{
+	Renderer::initialize();
+
+	// CPU
+	// ---------------------------------
+
+	// Create array for storing quads vertices
+	m_vertexBufferBase = std::make_unique<CubemapVertex[]>(vertexCount);
+	m_vertexBufferPtr = m_vertexBufferBase.get();
+
+	// Set default cubemap vertex positions
+
+	// Back face - v
+	m_vertexPositions[0] = { 0.5f, -0.5f, 0.5f, 1.0f };
+	m_vertexPositions[1] = { -0.5f, -0.5f, 0.5f, 1.0f };
+	m_vertexPositions[2] = { -0.5f, 0.5f, 0.5f, 1.0f };
+	m_vertexPositions[3] = { 0.5f, 0.5f, 0.5f, 1.0f };
+
+	// Left face - v
+	m_vertexPositions[7] = { -0.5f, 0.5f, 0.5f, 1.0f };
+	m_vertexPositions[6] = { -0.5f, 0.5f, -0.5f, 1.0f };
+	m_vertexPositions[5] = { -0.5f, -0.5f, -0.5f, 1.0f };
+	m_vertexPositions[4] = { -0.5f, -0.5f, 0.5f, 1.0f };
+
+	// Right face - v
+	m_vertexPositions[8] = { 0.5f, -0.5f, -0.5f, 1.0f };
+	m_vertexPositions[9] = { 0.5f, -0.5f, 0.5f, 1.0f };
+	m_vertexPositions[10] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	m_vertexPositions[11] = { 0.5f, 0.5f, -0.5f, 1.0f };
+
+	// Front face - v
+	m_vertexPositions[12] = { -0.5f, -0.5f, -0.5f, 1.0f };
+	m_vertexPositions[13] = { 0.5f, -0.5f, -0.5f, 1.0f };
+	m_vertexPositions[14] = { 0.5f, 0.5f, -0.5f, 1.0f };
+	m_vertexPositions[15] = { -0.5f, 0.5f, -0.5f, 1.0f };
+
+	// Top face
+	m_vertexPositions[16] = { -0.5f, 0.5f, -0.5f, 1.0f };
+	m_vertexPositions[17] = { 0.5f, 0.5f, -0.5f, 1.0f };
+	m_vertexPositions[18] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	m_vertexPositions[19] = { -0.5f, 0.5f, 0.5f, 1.0f };
+
+	// Bottom face
+	m_vertexPositions[20] = { -0.5f, -0.5f, -0.5f, 1.0f };
+	m_vertexPositions[21] = { -0.5f, -0.5f, 0.5f, 1.0f };
+	m_vertexPositions[22] = { 0.5f, -0.5f, 0.5f, 1.0f };
+	m_vertexPositions[23] = { 0.5f, -0.5f, -0.5f, 1.0f };
+
+	// Generate indices
+
+	uint32_t* indices = new uint32_t[indexCount];
+
+	uint32_t offset = 0;
+	for (uint32_t i = 0; i < indexCount; i += indexPerQuad) {
+		indices[i + 0] = offset + 0;
+		indices[i + 1] = offset + 1;
+		indices[i + 2] = offset + 2;
+		indices[i + 3] = offset + 2;
+		indices[i + 4] = offset + 3;
+		indices[i + 5] = offset + 0;
+
+		offset += vertexPerQuad;
+	}
+
+	// GPU
+	// ---------------------------------
+
+	// Create vertex buffer
+	auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(CubemapVertex) * vertexCount);
+	vertexBuffer->setLayout({
+		{ BufferElementType::Vec3, "a_position" },
+		{ BufferElementType::Vec4, "a_color" },
+		{ BufferElementType::Float, "a_textureIndex" },
+	});
+	m_vertexArray->addVertexBuffer(vertexBuffer);
+
+	// Create index buffer
+	auto indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(uint32_t) * indexCount);
+	m_vertexArray->setIndexBuffer(indexBuffer);
+	delete[] indices;
+
+	ruc::info("RendererCubemap initialized");
+}
+
+RendererCubemap::~RendererCubemap()
+{
+	Renderer::destroy();
+}
+
+void RendererCubemap::beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView)
+{
+	// We want the skybox fixed in position, so only retain the rotation and scale.
+	// Set the translation of the camera's view matrix to 0, meaning:
+	// x x x 0
+	// x x x 0
+	// x x x 0
+	// 0 0 0 1
+	cameraView = glm::mat4(glm::mat3(cameraView));
+
+	m_shader->bind();
+	m_shader->setFloat("u_projectionView", cameraProjection * cameraView);
+	m_shader->unbind();
+}
+
+void RendererCubemap::endScene()
+{
+	nextBatch();
+}
+
+void RendererCubemap::drawCubemap(const TransformComponent& transform, glm::vec4 color, std::shared_ptr<Texture> texture)
+{
+	drawCubemap(transform, glm::mat4(color, color, color, color), texture);
+}
+
+void RendererCubemap::drawCubemap(const TransformComponent& transform, glm::mat4 color, std::shared_ptr<Texture> texture)
+{
+	// Create a new batch if the quad limit has been reached
+	if (m_quadIndex >= quadCount) {
+		nextBatch();
+	}
+
+	uint32_t textureUnitIndex = addTextureUnit(texture);
+
+	// Add the quads 4 vertices
+	for (uint32_t i = 0; i < vertexPerQuad * quadPerCube; i++) {
+		m_vertexBufferPtr->position = transform.transform * m_vertexPositions[i];
+		m_vertexBufferPtr->color = color[i % 4];
+		m_vertexBufferPtr->textureIndex = (float)textureUnitIndex;
+		m_vertexBufferPtr++;
+	}
+
+	m_quadIndex += quadPerCube;
+}
+
+void RendererCubemap::loadShader()
+{
+	m_shader = ShaderManager::the().load("assets/glsl/batch-cubemap");
+}
+
+void RendererCubemap::flush()
+{
+	if (m_quadIndex == 0) {
+		return;
+	}
+
+	// Upload vertex data to GPU
+	m_vertexArray->getVertexBuffers().at(0)->uploadData(
+		m_vertexBufferBase.get(),
+		m_quadIndex * vertexPerQuad * sizeof(CubemapVertex));
+
+	bind();
+
+	// Render
+	bool depthTest = RenderCommand::depthTest();
+	RenderCommand::setDepthTest(false);
+	RenderCommand::drawIndexed(*m_vertexArray, m_quadIndex * indexPerQuad);
+	RenderCommand::setDepthTest(depthTest);
+
+	unbind();
+}
+
+void RendererCubemap::startBatch()
+{
+	m_quadIndex = 0;
+	m_vertexBufferPtr = m_vertexBufferBase.get();
+
+	m_textureUnitIndex = 1;
+}
+
+void RendererCubemap::nextBatch()
 {
 	flush();
 	startBatch();

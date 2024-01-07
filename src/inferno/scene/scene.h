@@ -9,6 +9,7 @@
 #include <cstddef> // size_t
 #include <cstdint> // uint32_t
 #include <memory>  // std::shared_ptr
+#include <utility> // std::pair
 
 #include "entt/entity/registry.hpp"    // entt::entity, entt::registry
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
@@ -35,7 +36,10 @@ public:
 	uint32_t findEntity(std::string_view name);
 	void destroyEntity(uint32_t entity);
 
-	glm::mat4 cameraProjectionView();
+	/**
+	 * @brief Return a pair from the camera component: { projection, view }
+	 */
+	std::pair<glm::mat4, glm::mat4> cameraProjectionView();
 
 	void validEntity(uint32_t entity) const;
 

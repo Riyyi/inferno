@@ -1,8 +1,10 @@
 /*
- * Copyright (C) 2022 Riyyi
+ * Copyright (C) 2022,2024 Riyyi
  *
  * SPDX-License-Identifier: MIT
  */
+
+#include <utility> // std::pair
 
 #include "glm/gtc/type_ptr.hpp" // glm::make_mat4
 #include "ruc/format/log.h"
@@ -78,6 +80,7 @@ Application::~Application()
 	FontManager::destroy();
 	RendererCharacter::destroy();
 	Renderer2D::destroy();
+	RendererCubemap::destroy();
 	RenderCommand::destroy();
 	TextureManager::destroy();
 	ShaderManager::destroy();
@@ -164,12 +167,15 @@ int Application::run()
 		RenderCommand::clearColor({ 0.2f, 0.3f, 0.3f, 1.0f });
 		RenderCommand::clear();
 
-		Renderer2D::the().beginScene(m_scene->cameraProjectionView()); // camera, lights, environment
+		std::pair<glm::mat4, glm::mat4> projectionView = m_scene->cameraProjectionView();
+		RendererCubemap::the().beginScene(projectionView.first, projectionView.second); // camera, lights, environment
+		Renderer2D::the().beginScene(projectionView.first, projectionView.second);      // camera, lights, environment
 		RendererCharacter::the().beginScene();
 
 		m_scene->render();
 		// RendererCharacter::the().drawCharacter(character, f->texture());
 
+		RendererCubemap::the().endScene();
 		Renderer2D::the().endScene();
 		RendererCharacter::the().endScene();
 
