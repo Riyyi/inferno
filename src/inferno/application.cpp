@@ -23,6 +23,7 @@
 #include "inferno/render/context.h"
 #include "inferno/render/font.h"
 // #include "inferno/render/gltf.h"
+#include "inferno/render/render-command.h"
 #include "inferno/render/renderer.h"
 #include "inferno/render/shader.h"
 #include "inferno/render/texture.h"

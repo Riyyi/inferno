@@ -18,6 +18,7 @@
 #include "inferno/io/input.h"
 #include "inferno/keycodes.h"
 #include "inferno/render/context.h"
+#include "inferno/render/render-command.h"
 #include "inferno/render/renderer.h"
 #include "inferno/settings.h"
 #include "inferno/window.h"
