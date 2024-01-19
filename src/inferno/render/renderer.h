@@ -52,15 +52,25 @@ struct CharacterVertex {
 
 // -------------------------------------
 
+template<typename T>
 class Renderer {
 public:
 	static constexpr const uint32_t vertexPerQuad = 4;
 	static constexpr const uint32_t indexPerQuad = 6;
 	static constexpr const uint32_t quadPerCube = 6;
-	static constexpr const uint32_t textureUnitPerBatch = 32;
+
+	// When to start a new batch
+	static constexpr const uint32_t maxQuads = 20000;
+	static constexpr const uint32_t maxVertices = maxQuads * vertexPerQuad;
+	static constexpr const uint32_t maxIndices = maxQuads * indexPerQuad;
+	static constexpr const uint32_t maxTextureSlots = 32;
+
+	virtual void beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView);
+	virtual void endScene();
 
 protected:
 	Renderer() {}
+	virtual ~Renderer() { destroy(); };
 
 	void initialize();
 	void destroy();
@@ -69,41 +79,47 @@ protected:
 
 	void bind();
 	void unbind();
-	virtual void loadShader() = 0;
-	virtual void flush() = 0;
-	virtual void startBatch() = 0;
-	virtual void nextBatch() = 0;
 
-	uint32_t m_quadIndex = 0;
+	virtual void loadShader() = 0;
+	virtual void flush();
+	virtual void startBatch();
+	virtual void nextBatch();
+
+protected:
+	// CPU quad vertices
+	uint32_t m_quadIndex { 0 };
+	T* m_vertexBufferBase { nullptr };
+	T* m_vertexBufferPtr { nullptr };
 
 	// Texture units
-	static uint32_t m_supportedTextureUnitPerBatch;
-	uint32_t m_textureUnitIndex = 1;
-	std::array<std::shared_ptr<Texture>, textureUnitPerBatch> m_textureUnits;
+	static uint32_t m_maxSupportedTextureSlots;
+	uint32_t m_textureSlotIndex { 1 };
+	std::array<std::shared_ptr<Texture>, maxTextureSlots> m_textureSlots;
 
 	// GPU objects
+	bool m_enableDepthBuffer { true };
 	std::shared_ptr<Shader> m_shader;
 	std::shared_ptr<VertexArray> m_vertexArray;
 };
 
+// TOOD:
+// - Deduplicate flush()
+//   v Add bool for disabling depth buffer
+//   - Add Size for uploadData (this is prob not needed, we got T already)
+// - Decide if its worth to remove template<T> from Renderer, just cast vertexBufferPtr before usage
+
 // -------------------------------------
 
 class Renderer2D final
-	: public Renderer
+	: public Renderer<QuadVertex>
 	, public ruc::Singleton<Renderer2D> {
 public:
 	Renderer2D(s);
-	virtual ~Renderer2D();
+	virtual ~Renderer2D() {};
 
 	using Singleton<Renderer2D>::destroy;
 
-	// When to start a new batch
-	static constexpr const uint32_t quadCount = 1000;
-	static constexpr const uint32_t vertexCount = quadCount * vertexPerQuad;
-	static constexpr const uint32_t indexCount = quadCount * indexPerQuad;
-
-	void beginScene(glm::mat4 cameraProjectionView, glm::mat4 cameraView);
-	void endScene();
+	virtual void beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView) override;
 
 	void drawQuad(const TransformComponent& transform, glm::vec4 color);
 	void drawQuad(const TransformComponent& transform, glm::mat4 color);
@@ -112,13 +128,6 @@ public:
 
 private:
 	void loadShader() override;
-	void flush() override;
-	void startBatch() override;
-	void nextBatch() override;
-
-	// CPU quad vertices
-	std::unique_ptr<QuadVertex[]> m_vertexBufferBase;
-	QuadVertex* m_vertexBufferPtr { nullptr };
 
 	// Default quad vertex positions
 	glm::vec4 m_vertexPositions[vertexPerQuad];
@@ -126,35 +135,21 @@ private:
 // -------------------------------------
 
 class RendererCubemap final
-	: public Renderer
+	: public Renderer<CubemapVertex>
 	, public ruc::Singleton<RendererCubemap> {
 public:
 	RendererCubemap(s);
-	virtual ~RendererCubemap();
+	virtual ~RendererCubemap() {};
 
 	using Singleton<RendererCubemap>::destroy;
 
-	// When to start a new batch
-	static constexpr const uint32_t cubemapCount = 166;
-	static constexpr const uint32_t quadCount = cubemapCount * quadPerCube;
-	static constexpr const uint32_t vertexCount = quadCount * vertexPerQuad;
-	static constexpr const uint32_t indexCount = quadCount * indexPerQuad;
-
-	void beginScene(glm::mat4 cameraProjectionView, glm::mat4 cameraView);
-	void endScene();
+	virtual void beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView) override;
 
 	void drawCubemap(const TransformComponent& transform, glm::vec4 color, std::shared_ptr<Texture> texture);
 	void drawCubemap(const TransformComponent& transform, glm::mat4 color, std::shared_ptr<Texture> texture);
 
 private:
 	void loadShader() override;
-	void flush() override;
-	void startBatch() override;
-	void nextBatch() override;
-
-	// CPU quad vertices
-	std::unique_ptr<CubemapVertex[]> m_vertexBufferBase;
-	CubemapVertex* m_vertexBufferPtr { nullptr };
 
 	// Default cubemap vertex positions
 	glm::vec4 m_vertexPositions[vertexPerQuad * quadPerCube];
@@ -163,32 +158,18 @@ private:
 // -------------------------------------
 
 class RendererCharacter final
-	: public Renderer
+	: public Renderer<CharacterVertex>
 	, public ruc::Singleton<RendererCharacter> {
 public:
 	RendererCharacter(s);
-	virtual ~RendererCharacter();
+	virtual ~RendererCharacter() {};
 
 	using Singleton<RendererCharacter>::destroy;
-
-	static const uint32_t quadCount = 1000;
-	static const uint32_t vertexCount = quadCount * vertexPerQuad;
-	static const uint32_t indexCount = quadCount * indexPerQuad;
-
-	void beginScene();
-	void endScene();
 
 	void drawCharacter(std::array<CharacterVertex, vertexPerQuad>& characterQuad, std::shared_ptr<Texture> texture);
 
 private:
 	void loadShader() override;
-	void flush() override;
-	void startBatch() override;
-	void nextBatch() override;
-
-	// CPU quad vertices
-	std::unique_ptr<CharacterVertex[]> m_vertexBufferBase;
-	CharacterVertex* m_vertexBufferPtr { nullptr };
 };
 
 } // namespace Inferno

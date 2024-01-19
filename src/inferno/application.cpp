@@ -169,9 +169,9 @@ int Application::run()
 		RenderCommand::clear();
 
 		std::pair<glm::mat4, glm::mat4> projectionView = m_scene->cameraProjectionView();
-		RendererCubemap::the().beginScene(projectionView.first, projectionView.second); // camera, lights, environment
-		Renderer2D::the().beginScene(projectionView.first, projectionView.second);      // camera, lights, environment
-		RendererCharacter::the().beginScene();
+		RendererCubemap::the().beginScene(projectionView.first, projectionView.second);   // camera, lights, environment
+		Renderer2D::the().beginScene(projectionView.first, projectionView.second);        // camera, lights, environment
+		RendererCharacter::the().beginScene(projectionView.first, projectionView.second); // camera, lights, environment
 
 		m_scene->render();
 		// RendererCharacter::the().drawCharacter(character, f->texture());

@@ -21,7 +21,7 @@
 namespace Inferno {
 
 using Characters = std::vector<std::shared_ptr<Character>>;
-using CharacterQuad = std::array<CharacterVertex, Renderer::vertexPerQuad>;
+using CharacterQuad = std::array<CharacterVertex, Renderer<void>::vertexPerQuad>;
 
 class Font;
 class Scene;

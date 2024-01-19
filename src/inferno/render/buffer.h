@@ -42,17 +42,17 @@ public:
 	static uint32_t getTypeCount(const BufferElementType type);
 	static uint32_t getTypeGL(const BufferElementType type);
 
-	inline BufferElementType getType() const { return m_type; }
-	inline std::string getName() const { return m_name; }
-	inline uint32_t getSize() const { return m_size; }
-	inline uint32_t getOffset() const { return m_offset; }
-	inline bool getNormalized() const { return m_normalized; }
+	BufferElementType getType() const { return m_type; }
+	std::string getName() const { return m_name; }
+	uint32_t getSize() const { return m_size; }
+	uint32_t getOffset() const { return m_offset; }
+	bool getNormalized() const { return m_normalized; }
 
-	inline void setType(const BufferElementType& type) { m_type = type; }
-	inline void setName(const std::string& name) { m_name = name; }
-	inline void setSize(const uint32_t& size) { m_size = size; }
-	inline void setOffset(const uint32_t& offset) { m_offset = offset; }
-	inline void setNormalized(const bool& normalized) { m_normalized = normalized; }
+	void setType(const BufferElementType& type) { m_type = type; }
+	void setName(const std::string& name) { m_name = name; }
+	void setSize(const uint32_t& size) { m_size = size; }
+	void setOffset(const uint32_t& offset) { m_offset = offset; }
+	void setNormalized(const bool& normalized) { m_normalized = normalized; }
 
 private:
 	BufferElementType m_type;
@@ -70,14 +70,14 @@ public:
 	BufferLayout() {}
 	BufferLayout(const std::initializer_list<BufferElement>& elements);
 
-	inline const std::vector<BufferElement>& getElements() const { return m_elements; }
-	inline uint32_t getStride() const { return m_stride; }
+	const std::vector<BufferElement>& getElements() const { return m_elements; }
+	uint32_t getStride() const { return m_stride; }
 
 	// Iterators
-	inline std::vector<BufferElement>::iterator begin() { return m_elements.begin(); }
-	inline std::vector<BufferElement>::iterator end() { return m_elements.end(); }
-	inline std::vector<BufferElement>::const_iterator begin() const { return m_elements.begin(); }
-	inline std::vector<BufferElement>::const_iterator end() const { return m_elements.end(); }
+	std::vector<BufferElement>::iterator begin() { return m_elements.begin(); }
+	std::vector<BufferElement>::iterator end() { return m_elements.end(); }
+	std::vector<BufferElement>::const_iterator begin() const { return m_elements.begin(); }
+	std::vector<BufferElement>::const_iterator end() const { return m_elements.end(); }
 
 protected:
 	void calculateOffsetsAndStride();
@@ -101,7 +101,7 @@ public:
 
 	void uploadData(const void* data, uint32_t size);
 
-	inline const BufferLayout& getLayout() const { return m_layout; }
+	const BufferLayout& getLayout() const { return m_layout; }
 
 	inline void setLayout(const BufferLayout& layout) { m_layout = layout; }
 
@@ -121,7 +121,7 @@ public:
 	void bind() const;
 	void unbind() const;
 
-	inline uint32_t getCount() const { return m_count; }
+	uint32_t getCount() const { return m_count; }
 
 private:
 	uint32_t m_id { 0 };
@@ -142,8 +142,8 @@ public:
 	void addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer);
 	void setIndexBuffer(std::shared_ptr<IndexBuffer> indexBuffer);
 
-	inline const std::vector<std::shared_ptr<VertexBuffer>>& getVertexBuffers() const { return m_vertexBuffers; }
-	inline std::shared_ptr<IndexBuffer> getIndexBuffer() const { return m_indexBuffer; }
+	std::shared_ptr<VertexBuffer> at(size_t i) const { return m_vertexBuffers.at(i); }
+	std::shared_ptr<IndexBuffer> getIndexBuffer() const { return m_indexBuffer; }
 
 private:
 	uint32_t m_id { 0 };

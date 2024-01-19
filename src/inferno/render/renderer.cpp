@@ -18,111 +18,56 @@
 
 namespace Inferno {
 
-uint32_t Renderer::m_supportedTextureUnitPerBatch = 0;
+template<typename T>
+void Renderer<T>::beginScene(glm::mat4, glm::mat4)
+{
+}
 
-void Renderer::initialize()
+template<typename T>
+void Renderer<T>::endScene()
+{
+	nextBatch();
+}
+
+// -----------------------------------------
+
+template<typename T>
+uint32_t Renderer<T>::m_maxSupportedTextureSlots = 0;
+
+template<typename T>
+void Renderer<T>::initialize()
 {
 	// Get amount of texture units supported by the GPU
-	uint32_t constTextureUnitCount = textureUnitPerBatch;
 	uint32_t gpuTextureUnitCount = RenderCommand::textureUnitAmount();
-	m_supportedTextureUnitPerBatch = std::min(constTextureUnitCount, gpuTextureUnitCount);
+	m_maxSupportedTextureSlots = std::min(maxTextureSlots, gpuTextureUnitCount);
 
 	// Texture unit 0 is reserved for no texture
-	m_textureUnits[0] = nullptr;
+	m_textureSlots[0] = nullptr;
 
 	// Create texture unit samplers
-	int32_t samplers[textureUnitPerBatch];
-	for (uint32_t i = 0; i < textureUnitPerBatch; i++) {
+	int32_t samplers[maxTextureSlots];
+	for (uint32_t i = 0; i < maxTextureSlots; i++) {
 		samplers[i] = i;
 	}
 
 	// Create shader
 	loadShader();
 	m_shader->bind();
-	m_shader->setInt("u_textures", samplers, textureUnitPerBatch);
+	m_shader->setInt("u_textures", samplers, maxTextureSlots);
 	m_shader->unbind();
 
 	// Create vertex array
 	m_vertexArray = std::make_shared<VertexArray>();
-}
-
-void Renderer::destroy()
-{
-}
-
-uint32_t Renderer::addTextureUnit(std::shared_ptr<Texture> texture)
-{
-	if (texture == nullptr) {
-		return 0;
-	}
-
-	// Create a new batch if the texture unit limit has been reached
-	if (m_textureUnitIndex >= m_supportedTextureUnitPerBatch) {
-		nextBatch();
-	}
-
-	// If texure was already added
-	for (uint32_t i = 1; i < m_textureUnitIndex; i++) {
-		if (m_textureUnits[i] == texture) {
-			return i;
-		}
-	}
-
-	// Add texture
-	uint32_t textureUnitIndex = m_textureUnitIndex;
-	m_textureUnits[textureUnitIndex] = texture;
-	m_textureUnitIndex++;
-
-	return textureUnitIndex;
-}
-
-void Renderer::bind()
-{
-	m_shader->bind();
-
-	for (uint32_t i = 1; i < m_textureUnitIndex; i++) {
-		m_textureUnits[i]->bind(i);
-	}
-
-	m_vertexArray->bind();
-}
-
-void Renderer::unbind()
-{
-	m_vertexArray->unbind();
-
-	for (uint32_t i = 1; i < m_textureUnitIndex; i++) {
-		m_textureUnits[i]->unbind();
-	}
-
-	m_shader->unbind();
-}
-
-// -----------------------------------------
-
-Renderer2D::Renderer2D(s)
-{
-	Renderer::initialize();
 
 	// CPU
 	// ---------------------------------
 
-	// Create array for storing quads vertices
-	m_vertexBufferBase = std::make_unique<QuadVertex[]>(vertexCount);
-	m_vertexBufferPtr = m_vertexBufferBase.get();
-
-	// Set default quad vertex positions
-	m_vertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
-	m_vertexPositions[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
-	m_vertexPositions[2] = { 0.5f, 0.5f, 0.0f, 1.0f };
-	m_vertexPositions[3] = { -0.5f, 0.5f, 0.0f, 1.0f };
-
 	// Generate indices
 
-	uint32_t* indices = new uint32_t[indexCount];
+	uint32_t* indices = new uint32_t[maxIndices];
 
 	uint32_t offset = 0;
-	for (uint32_t i = 0; i < indexCount; i += indexPerQuad) {
+	for (uint32_t i = 0; i < maxIndices; i += indexPerQuad) {
 		indices[i + 0] = offset + 0;
 		indices[i + 1] = offset + 1;
 		indices[i + 2] = offset + 2;
@@ -136,8 +81,132 @@ Renderer2D::Renderer2D(s)
 	// GPU
 	// ---------------------------------
 
+	// Create index buffer
+	auto indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(uint32_t) * maxIndices);
+	m_vertexArray->setIndexBuffer(indexBuffer);
+	delete[] indices;
+}
+
+template<typename T>
+void Renderer<T>::destroy()
+{
+	delete[] m_vertexBufferBase;
+}
+
+template<typename T>
+uint32_t Renderer<T>::addTextureUnit(std::shared_ptr<Texture> texture)
+{
+	if (texture == nullptr) {
+		return 0;
+	}
+
+	// Create a new batch if the texture unit limit has been reached
+	if (m_textureSlotIndex >= m_maxSupportedTextureSlots) {
+		nextBatch();
+	}
+
+	// If texure was already added
+	for (uint32_t i = 1; i < m_textureSlotIndex; i++) {
+		if (m_textureSlots[i] == texture) {
+			return i;
+		}
+	}
+
+	// Add texture
+	uint32_t textureSlotIndex = m_textureSlotIndex;
+	m_textureSlots[textureSlotIndex] = texture;
+	m_textureSlotIndex++;
+
+	return textureSlotIndex;
+}
+
+template<typename T>
+void Renderer<T>::bind()
+{
+	m_shader->bind();
+
+	for (uint32_t i = 1; i < m_textureSlotIndex; i++) {
+		m_textureSlots[i]->bind(i);
+	}
+
+	m_vertexArray->bind();
+}
+
+template<typename T>
+void Renderer<T>::unbind()
+{
+	m_vertexArray->unbind();
+
+	for (uint32_t i = 1; i < m_textureSlotIndex; i++) {
+		m_textureSlots[i]->unbind();
+	}
+
+	m_shader->unbind();
+}
+
+template<typename T>
+void Renderer<T>::flush()
+{
+	if (m_quadIndex == 0) {
+		return;
+	}
+
+	// Upload vertex data to GPU
+	m_vertexArray->at(0)->uploadData(
+		m_vertexBufferBase,
+		m_quadIndex * vertexPerQuad * sizeof(T));
+
+	bind();
+
+	// Render
+	bool depthTest = RenderCommand::depthTest();
+	RenderCommand::setDepthTest(m_enableDepthBuffer);
+	RenderCommand::drawIndexed(*m_vertexArray, m_quadIndex * indexPerQuad);
+	RenderCommand::setDepthTest(depthTest);
+
+	unbind();
+}
+
+template<typename T>
+void Renderer<T>::startBatch()
+{
+	m_quadIndex = 0;
+	m_vertexBufferPtr = m_vertexBufferBase;
+
+	m_textureSlotIndex = 1;
+}
+
+template<typename T>
+void Renderer<T>::nextBatch()
+{
+	flush();
+	startBatch();
+}
+
+// -----------------------------------------
+
+Renderer2D::Renderer2D(s)
+{
+	Renderer::initialize();
+
+	// CPU
+	// ---------------------------------
+
+	// Create array for storing quads vertices
+	m_vertexBufferBase = new QuadVertex[maxVertices];
+	m_vertexBufferPtr = m_vertexBufferBase;
+
+	// Set default quad vertex positions
+	m_vertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
+	m_vertexPositions[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
+	m_vertexPositions[2] = { 0.5f, 0.5f, 0.0f, 1.0f };
+	m_vertexPositions[3] = { -0.5f, 0.5f, 0.0f, 1.0f };
+
+	// GPU
+	// ---------------------------------
+
 	// Create vertex buffer
-	auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(QuadVertex) * vertexCount);
+	auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(QuadVertex) * maxVertices);
 	vertexBuffer->setLayout({
 		{ BufferElementType::Vec3, "a_position" },
 		{ BufferElementType::Vec4, "a_color" },
@@ -146,17 +215,7 @@ Renderer2D::Renderer2D(s)
 	});
 	m_vertexArray->addVertexBuffer(vertexBuffer);
 
-	// Create index buffer
-	auto indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(uint32_t) * indexCount);
-	m_vertexArray->setIndexBuffer(indexBuffer);
-	delete[] indices;
-
 	ruc::info("Renderer2D initialized");
-}
-
-Renderer2D::~Renderer2D()
-{
-	Renderer::destroy();
 }
 
 void Renderer2D::beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView)
@@ -164,11 +223,6 @@ void Renderer2D::beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView)
 	m_shader->bind();
 	m_shader->setFloat("u_projectionView", cameraProjection * cameraView);
 	m_shader->unbind();
-}
-
-void Renderer2D::endScene()
-{
-	nextBatch();
 }
 
 void Renderer2D::drawQuad(const TransformComponent& transform, glm::vec4 color)
@@ -189,7 +243,7 @@ void Renderer2D::drawQuad(const TransformComponent& transform, glm::vec4 color, 
 void Renderer2D::drawQuad(const TransformComponent& transform, glm::mat4 color, std::shared_ptr<Texture> texture)
 {
 	// Create a new batch if the quad limit has been reached
-	if (m_quadIndex >= quadCount) {
+	if (m_quadIndex >= maxQuads) {
 		nextBatch();
 	}
 
@@ -219,39 +273,6 @@ void Renderer2D::loadShader()
 	m_shader = ShaderManager::the().load("assets/glsl/batch-quad");
 }
 
-void Renderer2D::flush()
-{
-	if (m_quadIndex == 0) {
-		return;
-	}
-
-	// Upload vertex data to GPU
-	m_vertexArray->getVertexBuffers().at(0)->uploadData(
-		m_vertexBufferBase.get(),
-		m_quadIndex * vertexPerQuad * sizeof(QuadVertex));
-
-	bind();
-
-	// Render
-	RenderCommand::drawIndexed(*m_vertexArray, m_quadIndex * indexPerQuad);
-
-	unbind();
-}
-
-void Renderer2D::startBatch()
-{
-	m_quadIndex = 0;
-	m_vertexBufferPtr = m_vertexBufferBase.get();
-
-	m_textureUnitIndex = 1;
-}
-
-void Renderer2D::nextBatch()
-{
-	flush();
-	startBatch();
-}
-
 // -----------------------------------------
 
 RendererCubemap::RendererCubemap(s)
@@ -262,8 +283,8 @@ RendererCubemap::RendererCubemap(s)
 	// ---------------------------------
 
 	// Create array for storing quads vertices
-	m_vertexBufferBase = std::make_unique<CubemapVertex[]>(vertexCount);
-	m_vertexBufferPtr = m_vertexBufferBase.get();
+	m_vertexBufferBase = new CubemapVertex[maxVertices];
+	m_vertexBufferPtr = m_vertexBufferBase;
 
 	// Set default cubemap vertex positions
 
@@ -303,27 +324,13 @@ RendererCubemap::RendererCubemap(s)
 	m_vertexPositions[22] = { 0.5f, -0.5f, 0.5f, 1.0f };
 	m_vertexPositions[23] = { 0.5f, -0.5f, -0.5f, 1.0f };
 
-	// Generate indices
-
-	uint32_t* indices = new uint32_t[indexCount];
-
-	uint32_t offset = 0;
-	for (uint32_t i = 0; i < indexCount; i += indexPerQuad) {
-		indices[i + 0] = offset + 0;
-		indices[i + 1] = offset + 1;
-		indices[i + 2] = offset + 2;
-		indices[i + 3] = offset + 2;
-		indices[i + 4] = offset + 3;
-		indices[i + 5] = offset + 0;
-
-		offset += vertexPerQuad;
-	}
-
 	// GPU
 	// ---------------------------------
 
+	m_enableDepthBuffer = false;
+
 	// Create vertex buffer
-	auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(CubemapVertex) * vertexCount);
+	auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(CubemapVertex) * maxVertices);
 	vertexBuffer->setLayout({
 		{ BufferElementType::Vec3, "a_position" },
 		{ BufferElementType::Vec4, "a_color" },
@@ -331,17 +338,7 @@ RendererCubemap::RendererCubemap(s)
 	});
 	m_vertexArray->addVertexBuffer(vertexBuffer);
 
-	// Create index buffer
-	auto indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(uint32_t) * indexCount);
-	m_vertexArray->setIndexBuffer(indexBuffer);
-	delete[] indices;
-
 	ruc::info("RendererCubemap initialized");
-}
-
-RendererCubemap::~RendererCubemap()
-{
-	Renderer::destroy();
 }
 
 void RendererCubemap::beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView)
@@ -359,11 +356,6 @@ void RendererCubemap::beginScene(glm::mat4 cameraProjection, glm::mat4 cameraVie
 	m_shader->unbind();
 }
 
-void RendererCubemap::endScene()
-{
-	nextBatch();
-}
-
 void RendererCubemap::drawCubemap(const TransformComponent& transform, glm::vec4 color, std::shared_ptr<Texture> texture)
 {
 	drawCubemap(transform, glm::mat4(color, color, color, color), texture);
@@ -372,13 +364,13 @@ void RendererCubemap::drawCubemap(const TransformComponent& transform, glm::vec4
 void RendererCubemap::drawCubemap(const TransformComponent& transform, glm::mat4 color, std::shared_ptr<Texture> texture)
 {
 	// Create a new batch if the quad limit has been reached
-	if (m_quadIndex >= quadCount) {
+	if (m_quadIndex >= maxQuads) {
 		nextBatch();
 	}
 
 	uint32_t textureUnitIndex = addTextureUnit(texture);
 
-	// Add the quads 4 vertices
+	// Add the quads 4 vertices, 6 times, once per cube side
 	for (uint32_t i = 0; i < vertexPerQuad * quadPerCube; i++) {
 		m_vertexBufferPtr->position = transform.transform * m_vertexPositions[i];
 		m_vertexBufferPtr->color = color[i % 4];
@@ -394,42 +386,6 @@ void RendererCubemap::loadShader()
 	m_shader = ShaderManager::the().load("assets/glsl/batch-cubemap");
 }
 
-void RendererCubemap::flush()
-{
-	if (m_quadIndex == 0) {
-		return;
-	}
-
-	// Upload vertex data to GPU
-	m_vertexArray->getVertexBuffers().at(0)->uploadData(
-		m_vertexBufferBase.get(),
-		m_quadIndex * vertexPerQuad * sizeof(CubemapVertex));
-
-	bind();
-
-	// Render
-	bool depthTest = RenderCommand::depthTest();
-	RenderCommand::setDepthTest(false);
-	RenderCommand::drawIndexed(*m_vertexArray, m_quadIndex * indexPerQuad);
-	RenderCommand::setDepthTest(depthTest);
-
-	unbind();
-}
-
-void RendererCubemap::startBatch()
-{
-	m_quadIndex = 0;
-	m_vertexBufferPtr = m_vertexBufferBase.get();
-
-	m_textureUnitIndex = 1;
-}
-
-void RendererCubemap::nextBatch()
-{
-	flush();
-	startBatch();
-}
-
 // -----------------------------------------
 
 RendererCharacter::RendererCharacter(s)
@@ -440,30 +396,16 @@ RendererCharacter::RendererCharacter(s)
 	// ---------------------------------
 
 	// Create array for storing quads vertices
-	m_vertexBufferBase = std::make_unique<CharacterVertex[]>(vertexCount);
-	m_vertexBufferPtr = m_vertexBufferBase.get();
-
-	// Generate indices
-
-	uint32_t* indices = new uint32_t[indexCount];
-
-	uint32_t offset = 0;
-	for (uint32_t i = 0; i < indexCount; i += indexPerQuad) {
-		indices[i + 0] = offset + 0;
-		indices[i + 1] = offset + 1;
-		indices[i + 2] = offset + 2;
-		indices[i + 3] = offset + 2;
-		indices[i + 4] = offset + 3;
-		indices[i + 5] = offset + 0;
-
-		offset += vertexPerQuad;
-	}
+	m_vertexBufferBase = new CharacterVertex[maxVertices];
+	m_vertexBufferPtr = m_vertexBufferBase;
 
 	// GPU
 	// ---------------------------------
 
+	m_enableDepthBuffer = false;
+
 	// Create vertex buffer
-	auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(CharacterVertex) * vertexCount);
+	auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(CharacterVertex) * maxVertices);
 	vertexBuffer->setLayout({
 		{ BufferElementType::Vec3, "a_position" },
 		{ BufferElementType::Vec4, "a_color" },
@@ -478,32 +420,13 @@ RendererCharacter::RendererCharacter(s)
 	});
 	m_vertexArray->addVertexBuffer(vertexBuffer);
 
-	// Create index buffer
-	auto indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(uint32_t) * indexCount);
-	m_vertexArray->setIndexBuffer(indexBuffer);
-	delete[] indices;
-
 	ruc::info("RendererCharacter initialized");
-}
-
-RendererCharacter::~RendererCharacter()
-{
-	Renderer::destroy();
-}
-
-void RendererCharacter::beginScene()
-{
-}
-
-void RendererCharacter::endScene()
-{
-	nextBatch();
 }
 
 void RendererCharacter::drawCharacter(std::array<CharacterVertex, vertexPerQuad>& characterQuad, std::shared_ptr<Texture> texture)
 {
 	// Create a new batch if the quad limit has been reached
-	if (m_quadIndex >= quadCount) {
+	if (m_quadIndex >= maxQuads) {
 		nextBatch();
 	}
 
@@ -532,42 +455,6 @@ void RendererCharacter::drawCharacter(std::array<CharacterVertex, vertexPerQuad>
 void RendererCharacter::loadShader()
 {
 	m_shader = ShaderManager::the().load("assets/glsl/batch-font");
-}
-
-void RendererCharacter::flush()
-{
-	if (m_quadIndex == 0) {
-		return;
-	}
-
-	// Upload vertex data to GPU
-	m_vertexArray->getVertexBuffers().at(0)->uploadData(
-		m_vertexBufferBase.get(),
-		m_quadIndex * vertexPerQuad * sizeof(CharacterVertex));
-
-	bind();
-
-	// Render
-	bool depthTest = RenderCommand::depthTest();
-	RenderCommand::setDepthTest(false);
-	RenderCommand::drawIndexed(*m_vertexArray, m_quadIndex * indexPerQuad);
-	RenderCommand::setDepthTest(depthTest);
-
-	unbind();
-}
-
-void RendererCharacter::startBatch()
-{
-	m_quadIndex = 0;
-	m_vertexBufferPtr = m_vertexBufferBase.get();
-
-	m_textureUnitIndex = 1;
-}
-
-void RendererCharacter::nextBatch()
-{
-	flush();
-	startBatch();
 }
 
 } // namespace Inferno
