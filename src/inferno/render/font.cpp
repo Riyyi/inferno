@@ -73,14 +73,14 @@ void Font::parseFont(const std::string& font)
 			continue;
 		}
 
-		// Character
+		// Symbol
 		// ---------------------------------
 
 		if (action.compare("char") == 0) {
-			unsigned char id = convert<unsigned char>(findValue("id", columns));
-			uint32_t width = convert<uint32_t>(findValue("width", columns));
-			uint32_t height = convert<uint32_t>(findValue("height", columns));
-			Character character = {
+			auto id = convert<char>(findValue("id", columns));
+			auto width = convert<uint32_t>(findValue("width", columns));
+			auto height = convert<uint32_t>(findValue("height", columns));
+			Symbol symbol = {
 				.id = id,
 				.position = {
 					convert<uint32_t>(findValue("x", columns)) + m_padding[Padding::Left],
@@ -97,7 +97,7 @@ void Font::parseFont(const std::string& font)
 				.advance = convert<uint32_t>(findValue("xadvance", columns)) - m_padding[Padding::Left] - m_padding[Padding::Right]
 			};
 
-			m_characterList.emplace(id, std::make_shared<Character>(character));
+			m_symbolList.emplace(id, std::make_shared<Symbol>(symbol));
 			continue;
 		}
 
@@ -109,10 +109,10 @@ void Font::parseFont(const std::string& font)
 			unsigned char second = convert<unsigned char>(findValue("second", columns));
 			char amount = convert<char>(findValue("amount", columns));
 
-			// Add the kerning of the previous character to this character
-			if (m_characterList.find(second) != m_characterList.end()) {
-				auto character = m_characterList.at(second);
-				character->kernings.emplace(first, amount);
+			// Add the kerning of the previous symbol to this symbol
+			if (m_symbolList.find(second) != m_symbolList.end()) {
+				auto symbol = m_symbolList.at(second);
+				symbol->kernings.emplace(first, amount);
 			}
 
 			continue;
@@ -132,7 +132,7 @@ std::vector<std::string> Font::findColumns(const std::string& line) const
 	size_t index = 0;
 	size_t find = 0;
 	size_t findFirstNotOf = 0;
-	// Loop over line characters
+	// Loop over line symbols
 	while (find != std::string::npos) {
 		find = line.find(" ", index);
 		findFirstNotOf = line.find_first_not_of(" ", index);

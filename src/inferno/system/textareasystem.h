@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Riyyi
+ * Copyright (C) 2022-2024 Riyyi
  *
  * SPDX-License-Identifier: MIT
  */
@@ -14,17 +14,16 @@
 #include "glm/ext/vector_float3.hpp" // glm::vec3
 #include "ruc/singleton.h"
 
-#include "inferno/component/textareacomponent.h"
 #include "inferno/render/font.h"
 #include "inferno/render/renderer.h"
 
 namespace Inferno {
 
-using Characters = std::vector<std::shared_ptr<Character>>;
-using CharacterQuad = std::array<CharacterVertex, Renderer<void>::vertexPerQuad>;
+using Symbols = std::vector<std::shared_ptr<Symbol>>;
+using SymbolQuad = std::array<SymbolVertex, Renderer<void>::vertexPerQuad>;
 
-class Font;
 class Scene;
+class TextAreaComponent;
 
 class TextAreaSystem final : public ruc::Singleton<TextAreaSystem> {
 public:
@@ -39,9 +38,9 @@ private:
 	void createLines(std::shared_ptr<Font> font, const TextAreaComponent& textarea);
 	void createQuads(std::shared_ptr<Font> font, const TextAreaComponent& textarea);
 
-	std::optional<CharacterQuad> calculateCharacterQuad(std::shared_ptr<Character> c, char previous, std::shared_ptr<Font> font, float fontSize, float& advanceX, float& advanceY);
+	std::optional<SymbolQuad> calculateSymbolQuad(std::shared_ptr<Symbol> c, char previous, std::shared_ptr<Font> font, float fontSize, float& advanceX, float& advanceY);
 
-	Characters m_characters;
+	Symbols m_symbols;
 	Scene* m_scene { nullptr };
 };
 

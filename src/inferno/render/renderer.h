@@ -15,28 +15,27 @@
 #include "glm/ext/vector_float4.hpp"   // glm::vec4
 #include "ruc/singleton.h"
 
-#include "inferno/component/transformcomponent.h"
-
 namespace Inferno {
 
 class Shader;
 class Texture;
+class TransformComponent;
 class VertexArray;
 
 struct QuadVertex {
 	glm::vec3 position { 0.0f, 0.0f, 0.0f };
 	glm::vec4 color { 1.0f, 1.0f, 1.0f, 1.0f };
 	glm::vec2 textureCoordinates { 0.0f, 0.0f };
-	float textureIndex = 0; // TODO: get int to pass to fragment correctly
+	float textureIndex = 0;
 };
 
 struct CubemapVertex {
 	glm::vec3 position { 0.0f, 0.0f, 0.0f };
 	glm::vec4 color { 1.0f, 1.0f, 1.0f, 1.0f };
-	float textureIndex = 0; // TODO: get int to pass to fragment correctly
+	float textureIndex = 0;
 };
 
-struct CharacterVertex {
+struct SymbolVertex {
 	QuadVertex quad;
 
 	// Font
@@ -157,16 +156,16 @@ private:
 
 // -------------------------------------
 
-class RendererCharacter final
-	: public Renderer<CharacterVertex>
-	, public ruc::Singleton<RendererCharacter> {
+class RendererFont final
+	: public Renderer<SymbolVertex>
+	, public ruc::Singleton<RendererFont> {
 public:
-	RendererCharacter(s);
-	virtual ~RendererCharacter() {};
+	RendererFont(s);
+	virtual ~RendererFont() {};
 
-	using Singleton<RendererCharacter>::destroy;
+	using Singleton<RendererFont>::destroy;
 
-	void drawCharacter(std::array<CharacterVertex, vertexPerQuad>& characterQuad, std::shared_ptr<Texture> texture);
+	void drawSymbol(std::array<SymbolVertex, vertexPerQuad>& symbolQuad, std::shared_ptr<Texture> texture);
 
 private:
 	void loadShader() override;

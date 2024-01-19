@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Riyyi
+ * Copyright (C) 2022-2024 Riyyi
  *
  * SPDX-License-Identifier: MIT
  */
@@ -11,6 +11,7 @@
 
 #include "inferno/application.h"
 #include "inferno/component/textareacomponent.h"
+#include "inferno/component/transformcomponent.h"
 #include "inferno/render/font.h"
 #include "inferno/render/renderer.h"
 #include "inferno/render/texture.h"
@@ -42,19 +43,19 @@ void TextAreaSystem::render()
 		// Loop through textareas content
 		// Linebreak if width reached
 		// Break if lines AND width reached
-		// Calculate character quad
-		// Submit character quad for rendering
+		// Calculate symbol quad
+		// Submit symbol quad for rendering
 
 		std::shared_ptr<Font> font = FontManager::the().load(textarea.font);
 		// glm::mat4 translate = transform.translate;
 
-		m_characters.clear();
+		m_symbols.clear();
 		createLines(font, textarea);
 		createQuads(font, textarea);
 	}
 }
 
-using Characters = std::vector<std::shared_ptr<Character>>;
+using Symbols = std::vector<std::shared_ptr<Symbol>>;
 
 void TextAreaSystem::createLines(std::shared_ptr<Font> font, const TextAreaComponent& textarea)
 {
@@ -73,9 +74,9 @@ void TextAreaSystem::createLines(std::shared_ptr<Font> font, const TextAreaCompo
 	size_t spaceIndex = 0;
 	float lineWidth = 0.0f;
 	float lineWidthSinceLastSpace = 0.0f;
-	for (char character : textarea.content) {
-		auto c = font->get(character);
-		m_characters.push_back(c);
+	for (char symbol : textarea.content) {
+		auto c = font->get(symbol);
+		m_symbols.push_back(c);
 
 		// Kerning
 		char kerning = 0;
@@ -86,18 +87,18 @@ void TextAreaSystem::createLines(std::shared_ptr<Font> font, const TextAreaCompo
 		lineWidth += (c->advance + kerning) * fontScale;
 		lineWidthSinceLastSpace += (c->advance + kerning) * fontScale;
 
-		if (character == ' ') {
-			spaceIndex = m_characters.size() - 1;
+		if (symbol == ' ') {
+			spaceIndex = m_symbols.size() - 1;
 			lineWidthSinceLastSpace = 0;
 		}
 
 		if (lineWidth > textureWidth) {
-			m_characters[spaceIndex] = nullptr;
+			m_symbols[spaceIndex] = nullptr;
 			lineWidth = 0;
 			lineWidth = lineWidthSinceLastSpace;
 		}
 
-		previous = character;
+		previous = symbol;
 	}
 }
 
@@ -108,26 +109,26 @@ void TextAreaSystem::createQuads(std::shared_ptr<Font> font, const TextAreaCompo
 	char previous = 0;
 	float advanceX = 0.0f;
 	float advanceY = 0.0f;
-	for (const auto& character : m_characters) {
+	for (const auto& symbol : m_symbols) {
 		// Go to the next line on "\n"
-		if (character == nullptr) {
+		if (symbol == nullptr) {
 			advanceX = 0;
 			advanceY -= (font->lineSpacing() * textarea.lineSpacing) * fontScale;
 			continue;
 		}
 
-		std::optional<CharacterQuad> quad = calculateCharacterQuad(character, previous, font, fontScale, advanceX, advanceY);
+		std::optional<SymbolQuad> quad = calculateSymbolQuad(symbol, previous, font, fontScale, advanceX, advanceY);
 		if (quad) {
-			RendererCharacter::the().drawCharacter(quad.value(), font->texture());
+			RendererFont::the().drawSymbol(quad.value(), font->texture());
 		}
 
-		previous = character->id;
+		previous = symbol->id;
 	}
 }
 
-std::optional<CharacterQuad> TextAreaSystem::calculateCharacterQuad(std::shared_ptr<Character> c, char previous, std::shared_ptr<Font> font, float fontScale, float& advanceX, float& advanceY)
+std::optional<SymbolQuad> TextAreaSystem::calculateSymbolQuad(std::shared_ptr<Symbol> c, char previous, std::shared_ptr<Font> font, float fontScale, float& advanceX, float& advanceY)
 {
-	CharacterQuad characterQuad;
+	SymbolQuad symbolQuad;
 
 	// Texture
 	// -------------------------------------
@@ -136,7 +137,7 @@ std::optional<CharacterQuad> TextAreaSystem::calculateCharacterQuad(std::shared_
 	float textureHeight = static_cast<float>(font->texture()->height());
 	VERIFY(textureWidth == textureHeight, "TextAreaSystem read invalid font texture");
 
-	// Skip empty characters (like space)
+	// Skip empty symbols (like space)
 	if (c->size.x == 0 || c->size.y == 0) {
 		// Jump to the next glyph
 		advanceX += c->advance * fontScale;
@@ -167,10 +168,10 @@ std::optional<CharacterQuad> TextAreaSystem::calculateCharacterQuad(std::shared_
 		(cursorMax.y / textureHeight * 2) + 1,
 	};
 
-	characterQuad.at(0).quad.position = { cursorScreen.x, cursorScreenMax.y, 0.0f };    // bottom left
-	characterQuad.at(1).quad.position = { cursorScreenMax.x, cursorScreenMax.y, 0.0f }; // bottom right
-	characterQuad.at(2).quad.position = { cursorScreenMax.x, cursorScreen.y, 0.0f };    // top right
-	characterQuad.at(3).quad.position = { cursorScreen.x, cursorScreen.y, 0.0f };       // top left
+	symbolQuad.at(0).quad.position = { cursorScreen.x, cursorScreenMax.y, 0.0f };    // bottom left
+	symbolQuad.at(1).quad.position = { cursorScreenMax.x, cursorScreenMax.y, 0.0f }; // bottom right
+	symbolQuad.at(2).quad.position = { cursorScreenMax.x, cursorScreen.y, 0.0f };    // top right
+	symbolQuad.at(3).quad.position = { cursorScreen.x, cursorScreen.y, 0.0f };       // top left
 
 	// Jump to the next glyph
 	advanceX += (c->advance + kerning) * fontScale;
@@ -187,12 +188,12 @@ std::optional<CharacterQuad> TextAreaSystem::calculateCharacterQuad(std::shared_
 		(textureHeight - c->position.y) / textureHeight
 	};
 
-	characterQuad.at(0).quad.textureCoordinates = { x.x, y.x };
-	characterQuad.at(1).quad.textureCoordinates = { x.y, y.x };
-	characterQuad.at(2).quad.textureCoordinates = { x.y, y.y };
-	characterQuad.at(3).quad.textureCoordinates = { x.x, y.y };
+	symbolQuad.at(0).quad.textureCoordinates = { x.x, y.x };
+	symbolQuad.at(1).quad.textureCoordinates = { x.y, y.x };
+	symbolQuad.at(2).quad.textureCoordinates = { x.y, y.y };
+	symbolQuad.at(3).quad.textureCoordinates = { x.x, y.y };
 
-	return characterQuad;
+	return symbolQuad;
 }
 
 } // namespace Inferno

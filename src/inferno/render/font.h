@@ -24,13 +24,13 @@ namespace Inferno {
 
 class Texture;
 
-struct Character {
-	char id;                                          // Character
+struct Symbol {
+	char id;                                          // Symbol
 	glm::uvec2 position;                              // Position
 	glm::uvec2 size;                                  // Width/height
 	glm::ivec2 offset;                                // Offset from baseline to left / top of glyph
 	uint32_t advance;                                 // Amount to advance to next glyph
-	std::unordered_map<unsigned char, char> kernings; // Kernings for characters that come before this one
+	std::unordered_map<unsigned char, char> kernings; // Kernings for symbols that come before this one
 };
 
 // -------------------------------------
@@ -52,8 +52,8 @@ public:
 	inline uint32_t lineSpacing() const { return m_lineSpacing; }
 	inline std::shared_ptr<Texture> texture() const { return m_texture; }
 
-	inline std::shared_ptr<Character> get(unsigned char c) const { return m_characterList.at(c); }
-	inline std::shared_ptr<Character> operator[](unsigned char c) const { return m_characterList.at(c); }
+	inline std::shared_ptr<Symbol> get(unsigned char c) const { return m_symbolList.at(c); }
+	inline std::shared_ptr<Symbol> operator[](unsigned char c) const { return m_symbolList.at(c); }
 
 private:
 	void parseFont(const std::string& font);
@@ -66,7 +66,7 @@ private:
 	uint32_t m_lineSpacing = { 0 };
 	std::array<uint32_t, 4> m_padding = { 0 };
 	std::shared_ptr<Texture> m_texture;
-	std::unordered_map<unsigned char, std::shared_ptr<Character>> m_characterList;
+	std::unordered_map<unsigned char, std::shared_ptr<Symbol>> m_symbolList;
 };
 
 // -------------------------------------
@@ -98,7 +98,7 @@ struct ruc::format::Formatter<glm::ivec2> : Formatter<std::vector<int32_t>> {
 // FontManager fm;
 // Font f = fm.load("path/to/font");
 // Font f2("path/to/font");
-// Character c = f['a'];
+// Symbol c = f['a'];
 
 // Look into using signed distance fields for texture map generation ? anti-aliasing for text
 // https://youtu.be/d8cfgcJR9Tk

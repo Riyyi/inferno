@@ -10,6 +10,7 @@
 #include "glad/glad.h"
 #include "ruc/format/log.h"
 
+#include "inferno/component/transformcomponent.h"
 #include "inferno/render/buffer.h"
 #include "inferno/render/render-command.h"
 #include "inferno/render/renderer.h"
@@ -388,7 +389,7 @@ void RendererCubemap::loadShader()
 
 // -----------------------------------------
 
-RendererCharacter::RendererCharacter(s)
+RendererFont::RendererFont(s)
 {
 	Renderer::initialize();
 
@@ -396,7 +397,7 @@ RendererCharacter::RendererCharacter(s)
 	// ---------------------------------
 
 	// Create array for storing quads vertices
-	m_vertexBufferBase = new CharacterVertex[maxVertices];
+	m_vertexBufferBase = new SymbolVertex[maxVertices];
 	m_vertexBufferPtr = m_vertexBufferBase;
 
 	// GPU
@@ -405,7 +406,7 @@ RendererCharacter::RendererCharacter(s)
 	m_enableDepthBuffer = false;
 
 	// Create vertex buffer
-	auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(CharacterVertex) * maxVertices);
+	auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(SymbolVertex) * maxVertices);
 	vertexBuffer->setLayout({
 		{ BufferElementType::Vec3, "a_position" },
 		{ BufferElementType::Vec4, "a_color" },
@@ -420,10 +421,10 @@ RendererCharacter::RendererCharacter(s)
 	});
 	m_vertexArray->addVertexBuffer(vertexBuffer);
 
-	ruc::info("RendererCharacter initialized");
+	ruc::info("RendererFont initialized");
 }
 
-void RendererCharacter::drawCharacter(std::array<CharacterVertex, vertexPerQuad>& characterQuad, std::shared_ptr<Texture> texture)
+void RendererFont::drawSymbol(std::array<SymbolVertex, vertexPerQuad>& symbolQuad, std::shared_ptr<Texture> texture)
 {
 	// Create a new batch if the quad limit has been reached
 	if (m_quadIndex >= maxQuads) {
@@ -434,17 +435,17 @@ void RendererCharacter::drawCharacter(std::array<CharacterVertex, vertexPerQuad>
 
 	// Add the quads 4 vertices
 	for (uint32_t i = 0; i < vertexPerQuad; i++) {
-		m_vertexBufferPtr->quad.position = characterQuad[i].quad.position;
-		m_vertexBufferPtr->quad.color = characterQuad[i].quad.color;
-		m_vertexBufferPtr->quad.textureCoordinates = characterQuad[i].quad.textureCoordinates;
+		m_vertexBufferPtr->quad.position = symbolQuad[i].quad.position;
+		m_vertexBufferPtr->quad.color = symbolQuad[i].quad.color;
+		m_vertexBufferPtr->quad.textureCoordinates = symbolQuad[i].quad.textureCoordinates;
 		m_vertexBufferPtr->quad.textureIndex = (float)textureUnitIndex;
 
-		m_vertexBufferPtr->width = characterQuad[i].width;
-		m_vertexBufferPtr->edge = characterQuad[i].edge;
-		m_vertexBufferPtr->borderWidth = characterQuad[i].borderWidth;
-		m_vertexBufferPtr->borderEdge = characterQuad[i].borderEdge;
-		m_vertexBufferPtr->borderColor = characterQuad[i].borderColor;
-		m_vertexBufferPtr->offset = characterQuad[i].offset;
+		m_vertexBufferPtr->width = symbolQuad[i].width;
+		m_vertexBufferPtr->edge = symbolQuad[i].edge;
+		m_vertexBufferPtr->borderWidth = symbolQuad[i].borderWidth;
+		m_vertexBufferPtr->borderEdge = symbolQuad[i].borderEdge;
+		m_vertexBufferPtr->borderColor = symbolQuad[i].borderColor;
+		m_vertexBufferPtr->offset = symbolQuad[i].offset;
 
 		m_vertexBufferPtr++;
 	}
@@ -452,7 +453,7 @@ void RendererCharacter::drawCharacter(std::array<CharacterVertex, vertexPerQuad>
 	m_quadIndex++;
 }
 
-void RendererCharacter::loadShader()
+void RendererFont::loadShader()
 {
 	m_shader = ShaderManager::the().load("assets/glsl/batch-font");
 }
