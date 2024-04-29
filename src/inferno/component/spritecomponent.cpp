@@ -5,7 +5,8 @@
  */
 
 #include "inferno/component/spritecomponent.h"
-#include "inferno/render/texture.h"
+#include "inferno/asset/asset-manager.h"
+#include "inferno/asset/texture.h"
 
 namespace Inferno {
 
@@ -17,7 +18,7 @@ void fromJson(const ruc::Json& json, SpriteComponent& value)
 		json.at("color").getTo(value.color);
 	}
 	if (json.exists("texture") && json.at("texture").type() == ruc::Json::Type::String) {
-		value.texture = TextureManager::the().load(json.at("texture").asString());
+		value.texture = AssetManager::the().load<Texture2D>(json.at("texture").asString());
 	}
 }
 

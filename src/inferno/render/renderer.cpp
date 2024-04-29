@@ -10,12 +10,13 @@
 #include "glad/glad.h"
 #include "ruc/format/log.h"
 
+#include "inferno/asset/asset-manager.h"
+#include "inferno/asset/shader.h"
+#include "inferno/asset/texture.h"
 #include "inferno/component/transformcomponent.h"
 #include "inferno/render/buffer.h"
 #include "inferno/render/render-command.h"
 #include "inferno/render/renderer.h"
-#include "inferno/render/shader.h"
-#include "inferno/render/texture.h"
 
 namespace Inferno {
 
@@ -271,7 +272,7 @@ void Renderer2D::drawQuad(const TransformComponent& transform, glm::mat4 color, 
 
 void Renderer2D::loadShader()
 {
-	m_shader = ShaderManager::the().load("assets/glsl/batch-quad");
+	m_shader = AssetManager::the().load<Shader>("assets/glsl/batch-quad");
 }
 
 // -----------------------------------------
@@ -384,7 +385,7 @@ void RendererCubemap::drawCubemap(const TransformComponent& transform, glm::mat4
 
 void RendererCubemap::loadShader()
 {
-	m_shader = ShaderManager::the().load("assets/glsl/batch-cubemap");
+	m_shader = AssetManager::the().load<Shader>("assets/glsl/batch-cubemap");
 }
 
 // -----------------------------------------
@@ -455,7 +456,7 @@ void RendererFont::drawSymbol(std::array<SymbolVertex, vertexPerQuad>& symbolQua
 
 void RendererFont::loadShader()
 {
-	m_shader = ShaderManager::the().load("assets/glsl/batch-font");
+	m_shader = AssetManager::the().load<Shader>("assets/glsl/batch-font");
 }
 
 } // namespace Inferno

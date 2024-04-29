@@ -17,16 +17,16 @@
 #include "inferno/event/keyevent.h"
 #include "inferno/event/mouseevent.h"
 // #include "inferno/io/gltffile.h"
+#include "inferno/asset/font.h"
 #include "inferno/io/input.h"
 #include "inferno/keycodes.h"
 #include "inferno/render/buffer.h"
 #include "inferno/render/context.h"
-#include "inferno/render/font.h"
 // #include "inferno/render/gltf.h"
+#include "inferno/asset/shader.h"
+#include "inferno/asset/texture.h"
 #include "inferno/render/render-command.h"
 #include "inferno/render/renderer.h"
-#include "inferno/render/shader.h"
-#include "inferno/render/texture.h"
 #include "inferno/scene/scene.h"
 #include "inferno/settings.h"
 #include "inferno/time.h"
@@ -78,13 +78,11 @@ Application::~Application()
 {
 	m_scene->destroy();
 
-	FontManager::destroy();
 	RendererFont::destroy();
 	Renderer2D::destroy();
 	RendererCubemap::destroy();
 	RenderCommand::destroy();
-	TextureManager::destroy();
-	ShaderManager::destroy();
+	AssetManager::destroy();
 	// Input::destroy();
 
 	Settings::destroy();

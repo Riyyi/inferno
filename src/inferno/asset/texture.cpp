@@ -7,15 +7,13 @@
 #include <climits> // UINT_MAX
 #include <cstdint> // uint8_t, uint32_t
 #include <memory>  // std::shared_ptr
-#include <utility> // std::move
 
 #include "glad/glad.h"
-#include "ruc/format/log.h"
 #include "ruc/meta/assert.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
-#include "inferno/render/texture.h"
+#include "inferno/asset/texture.h"
 
 namespace Inferno {
 
@@ -35,10 +33,9 @@ void Texture::init(uint32_t width, uint32_t height, uint8_t channels)
 
 // -----------------------------------------
 
-std::shared_ptr<Texture> Texture2D::create(const std::string& path)
+std::shared_ptr<Texture2D> Texture2D::create(std::string_view path)
 {
-	auto result = std::shared_ptr<Texture2D>(new Texture2D);
-	result->m_path = path;
+	auto result = std::shared_ptr<Texture2D>(new Texture2D(path));
 
 	int width = 0;
 	int height = 0;
@@ -47,7 +44,7 @@ std::shared_ptr<Texture> Texture2D::create(const std::string& path)
 
 	// Load image data
 	stbi_set_flip_vertically_on_load(1);
-	data = stbi_load(path.c_str(), &width, &height, &channels, STBI_default);
+	data = stbi_load(path.data(), &width, &height, &channels, STBI_default);
 	VERIFY(data, "failed to load image: '{}'", path);
 
 	result->init(width, height, channels);
@@ -115,10 +112,9 @@ void Texture2D::create(unsigned char* data)
 
 // -----------------------------------------
 
-std::shared_ptr<Texture> TextureCubemap::create(const std::string& path)
+std::shared_ptr<TextureCubemap> TextureCubemap::create(std::string_view path)
 {
-	auto result = std::shared_ptr<TextureCubemap>(new TextureCubemap);
-	result->m_path = path;
+	auto result = std::shared_ptr<TextureCubemap>(new TextureCubemap(path));
 
 	result->create();
 
@@ -201,57 +197,7 @@ void TextureCubemap::create()
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
-// -----------------------------------------
-
-TextureManager::TextureManager(s)
-{
-	ruc::info("TextureManager initialized");
-}
-
-TextureManager::~TextureManager()
-{
-}
-
-void TextureManager::add(const std::string& path, std::shared_ptr<Texture> texture)
-{
-	// Construct (key, value) pair and insert it into the unordered_map
-	m_textureList.emplace(std::move(path), std::move(texture));
-}
-
-std::shared_ptr<Texture> TextureManager::load(const std::string& path, Texture::Type type)
-{
-	if (exists(path)) {
-		return get(path);
-	}
-
-	auto texture = (type == Texture::TwoDimensional) ? Texture2D::create(path) : TextureCubemap::create(path);
-	add(path, texture);
-
-	return texture;
-}
-
-std::shared_ptr<Texture> TextureManager::get(const std::string& path)
-{
-	return exists(path) ? m_textureList.at(path) : nullptr;
-}
-
-bool TextureManager::exists(const std::string& path)
-{
-	return m_textureList.find(path) != m_textureList.end();
-}
-
-void TextureManager::remove(const std::string& path)
-{
-	if (exists(path)) {
-		m_textureList.erase(path);
-	}
-}
-
-void TextureManager::remove(std::shared_ptr<Texture> texture)
-{
-	if (exists(texture->path())) {
-		m_textureList.erase(texture->path());
-	}
-}
-
 } // namespace Inferno
+
+// FIXME
+// auto texture = (type == Texture::TwoDimensional) ? Texture2D::create(path) : TextureCubemap::create(path);

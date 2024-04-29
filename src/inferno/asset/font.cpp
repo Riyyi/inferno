@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Riyyi
+ * Copyright (C) 2022-2024 Riyyi
  *
  * SPDX-License-Identifier: MIT
  */
@@ -7,32 +7,32 @@
 #include <array>    // std::array
 #include <charconv> // std;:from_chars
 #include <cstdint>  // int32_t, uint32_t
-#include <limits>   // std::numeric_limits
 #include <ranges>   // std::views::split
 #include <string>   // std::getline
-#include <utility>  // std::move
 
 #include "ruc/file.h"
-#include "ruc/format/log.h"
 #include "ruc/meta/assert.h"
 #include "ruc/meta/concepts.h"
 
-#include "inferno/render/font.h"
-#include "inferno/render/texture.h"
-#include "inferno/util/integer.h"
+#include "inferno/asset/font.h"
+#include "inferno/asset/texture.h"
 
 namespace Inferno {
 
-Font::Font(const std::string& name)
-	: m_name(std::move(name))
+std::shared_ptr<Font> Font::create(std::string_view path)
 {
-	std::string path = name + ".fnt";
-	std::string image = name + ".png";
+	auto result = std::shared_ptr<Font>(new Font(path));
 
-	std::string font = ruc::File(path).data();
-	parseFont(font);
+	auto stringPath = std::string(path);
+	std::string file = stringPath + ".fnt";
+	std::string image = stringPath + ".png";
 
-	m_texture = Texture2D::create(image);
+	std::string font = ruc::File(file).data();
+	result->parseFont(font);
+
+	result->m_texture = Texture2D::create(image);
+
+	return result;
 }
 
 // TODO: Move this to ruc
@@ -165,58 +165,6 @@ std::string Font::findValue(const std::string& key, const std::vector<std::strin
 
 	VERIFY(false, "Font file did not contain key '{}'", key);
 	return "";
-}
-
-// -----------------------------------------
-
-FontManager::FontManager(s)
-{
-	ruc::info("FontManager initialized");
-}
-
-FontManager::~FontManager()
-{
-}
-
-void FontManager::add(const std::string& name, std::shared_ptr<Font> font)
-{
-	// Construct (key, value) pair and insert it into the unordered_map
-	m_fontList.emplace(std::move(name), std::move(font));
-}
-
-std::shared_ptr<Font> FontManager::load(const std::string& name)
-{
-	if (exists(name)) {
-		return get(name);
-	}
-
-	std::shared_ptr<Font> font = std::make_shared<Font>(name);
-	add(name, font);
-	return get(name);
-}
-
-std::shared_ptr<Font> FontManager::get(const std::string& name)
-{
-	return exists(name) ? m_fontList.at(name) : nullptr;
-}
-
-bool FontManager::exists(const std::string& name)
-{
-	return m_fontList.find(name) != m_fontList.end();
-}
-
-void FontManager::remove(const std::string& name)
-{
-	if (exists(name)) {
-		m_fontList.erase(name);
-	}
-}
-
-void FontManager::remove(std::shared_ptr<Font> font)
-{
-	if (exists(font->name())) {
-		m_fontList.erase(font->name());
-	}
 }
 
 } // namespace Inferno

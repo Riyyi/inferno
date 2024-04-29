@@ -6,15 +6,13 @@
 
 #pragma once
 
-#include <cstdint>  // std::uint32_t
 #include <memory>   // std::shared_ptr
 #include <optional> // std::optional
 #include <vector>   // std::vector
 
-#include "glm/ext/vector_float3.hpp" // glm::vec3
 #include "ruc/singleton.h"
 
-#include "inferno/render/font.h"
+#include "inferno/asset/font.h"
 #include "inferno/render/renderer.h"
 
 namespace Inferno {

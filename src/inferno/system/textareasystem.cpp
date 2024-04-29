@@ -4,17 +4,15 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include <algorithm> // std::max
-
 #include "ruc/format/log.h"
 #include "ruc/meta/assert.h"
 
 #include "inferno/application.h"
+#include "inferno/asset/font.h"
+#include "inferno/asset/texture.h"
 #include "inferno/component/textareacomponent.h"
 #include "inferno/component/transformcomponent.h"
-#include "inferno/render/font.h"
 #include "inferno/render/renderer.h"
-#include "inferno/render/texture.h"
 #include "inferno/scene/scene.h"
 #include "inferno/system/textareasystem.h"
 #include "inferno/window.h"
@@ -46,7 +44,7 @@ void TextAreaSystem::render()
 		// Calculate symbol quad
 		// Submit symbol quad for rendering
 
-		std::shared_ptr<Font> font = FontManager::the().load(textarea.font);
+		std::shared_ptr<Font> font = AssetManager::the().load<Font>(textarea.font);
 		// glm::mat4 translate = transform.translate;
 
 		m_symbols.clear();

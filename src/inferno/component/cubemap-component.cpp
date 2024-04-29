@@ -6,9 +6,9 @@
 
 #include "ruc/json/json.h"
 
+#include "inferno/asset/texture.h"
 #include "inferno/component/cubemap-component.h"
 #include "inferno/component/spritecomponent.h" // TODO: Move glm::x toJson/fromJson to separate file
-#include "inferno/render/texture.h"
 
 namespace Inferno {
 
@@ -20,7 +20,7 @@ void fromJson(const ruc::Json& json, CubemapComponent& value)
 		json.at("color").getTo(value.color);
 	}
 	if (json.exists("texture") && json.at("texture").type() == ruc::Json::Type::String) {
-		value.texture = TextureManager::the().load(json.at("texture").asString(), Texture::Type::Cubemap);
+		value.texture = AssetManager::the().load<TextureCubemap>(json.at("texture").asString());
 	}
 }
 

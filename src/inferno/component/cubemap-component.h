@@ -11,7 +11,7 @@
 #include "glm/ext/vector_float4.hpp" // glm::vec4
 #include "ruc/json/json.h"
 
-#include "inferno/render/texture.h"
+#include "inferno/asset/texture.h"
 
 namespace Inferno {
 

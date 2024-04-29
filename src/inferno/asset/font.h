@@ -1,22 +1,24 @@
 /*
- * Copyright (C) 2022 Riyyi
+ * Copyright (C) 2022-2024 Riyyi
  *
  * SPDX-License-Identifier: MIT
  */
 
 #pragma once
 
-#include <array>         // std::array
-#include <cstdint>       // int32_t, uint32_t
-#include <memory>        // std::shared_ptr
-#include <string>        // std::string
+#include <array>   // std::array
+#include <cstdint> // int32_t, uint32_t
+#include <memory>  // std::shared_ptr
+#include <string>  // std::string
+#include <string_view>
 #include <unordered_map> // std::unordered_map
 #include <vector>        // std::vector
 
 #include "glm/ext/vector_int2.hpp"  // glm::ivec2
 #include "glm/ext/vector_uint2.hpp" // glm::uvec2
 #include "ruc/format/format.h"
-#include "ruc/singleton.h"
+
+#include "inferno/asset/asset-manager.h"
 
 #define PADDING 3
 
@@ -35,10 +37,12 @@ struct Symbol {
 
 // -------------------------------------
 
-class Font {
+class Font final : public Asset {
 public:
-	Font(const std::string& name);
 	virtual ~Font() {}
+
+	// Factory function
+	static std::shared_ptr<Font> create(std::string_view path);
 
 	enum Padding {
 		Top = 0,
@@ -47,7 +51,6 @@ public:
 		Left,
 	};
 
-	inline std::string name() const { return m_name; }
 	inline uint32_t size() const { return m_size; }
 	inline uint32_t lineSpacing() const { return m_lineSpacing; }
 	inline std::shared_ptr<Texture> texture() const { return m_texture; }
@@ -56,12 +59,19 @@ public:
 	inline std::shared_ptr<Symbol> operator[](unsigned char c) const { return m_symbolList.at(c); }
 
 private:
+	Font(std::string_view path)
+		: Asset(path)
+	{
+	}
+
 	void parseFont(const std::string& font);
 	std::string findAction(const std::string& line) const;
 	std::vector<std::string> findColumns(const std::string& line) const;
 	std::string findValue(const std::string& key, const std::vector<std::string>& columns) const;
 
-	std::string m_name;
+	virtual bool isFont() const override { return true; }
+
+private:
 	unsigned char m_size = { 0 };
 	uint32_t m_lineSpacing = { 0 };
 	std::array<uint32_t, 4> m_padding = { 0 };
@@ -69,24 +79,12 @@ private:
 	std::unordered_map<unsigned char, std::shared_ptr<Symbol>> m_symbolList;
 };
 
-// -------------------------------------
+// -----------------------------------------
 
-class FontManager final : public ruc::Singleton<FontManager> {
-public:
-	FontManager(s);
-	virtual ~FontManager();
-
-	void add(const std::string& name, std::shared_ptr<Font> font);
-	std::shared_ptr<Font> load(const std::string& name);
-	std::shared_ptr<Font> get(const std::string& name);
-	bool exists(const std::string& name);
-
-	void remove(const std::string& name);
-	void remove(std::shared_ptr<Font> font);
-
-private:
-	std::unordered_map<std::string, std::shared_ptr<Font>> m_fontList;
-};
+// clang-format off
+template<>
+inline bool Asset::fastIs<Font>() const { return isFont(); }
+// clang-format on
 
 } // namespace Inferno
 
