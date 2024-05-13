@@ -8,6 +8,7 @@
 
 #include <cstdint> // int32_t, uint32_t
 #include <memory>  // std::shared_ptr, std::unique_ptr, std::make_shared, std::make_unique
+#include <span>
 
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
 #include "glm/ext/vector_float2.hpp"   // glm::vec2
@@ -49,21 +50,27 @@ struct SymbolVertex {
 	float offset = 0.0f;
 };
 
+struct Vertex {
+	glm::vec3 position { 0.0f, 0.0f, 0.0f };
+	glm::vec3 normal { 1.0f, 1.0f, 1.0f };
+	glm::vec2 textureCoordinates { 0.0f, 0.0f };
+	float textureIndex = 0;
+};
+
 // -------------------------------------
 
 template<typename T>
 class Renderer {
 public:
 	static constexpr const uint32_t vertexPerQuad = 4;
-	static constexpr const uint32_t indexPerQuad = 6;
-	static constexpr const uint32_t quadPerCube = 6;
+	static constexpr const uint32_t elementPerQuad = 6;
 
 	// When to start a new batch
-	static constexpr const uint32_t maxQuads = 20000;
-	static constexpr const uint32_t maxVertices = maxQuads * vertexPerQuad;
-	static constexpr const uint32_t maxIndices = maxQuads * indexPerQuad;
+	static constexpr const uint32_t maxVertices = 60000;
+	static constexpr const uint32_t maxElements = 60000;
 	static constexpr const uint32_t maxTextureSlots = 32;
 
+public:
 	virtual void beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView);
 	virtual void endScene();
 
@@ -79,6 +86,8 @@ protected:
 	void bind();
 	void unbind();
 
+	virtual void createElementBuffer();
+	virtual void uploadElementBuffer() {}
 	virtual void loadShader() = 0;
 	virtual void flush();
 	virtual void startBatch();
@@ -86,7 +95,8 @@ protected:
 
 protected:
 	// CPU quad vertices
-	uint32_t m_quadIndex { 0 };
+	uint32_t m_vertexIndex { 0 };
+	uint32_t m_elementIndex { 0 };
 	T* m_vertexBufferBase { nullptr };
 	T* m_vertexBufferPtr { nullptr };
 
@@ -102,7 +112,7 @@ protected:
 };
 
 // TOOD:
-// - Deduplicate flush()
+// v Deduplicate flush()
 //   v Add bool for disabling depth buffer
 //   - Add Size for uploadData (this is prob not needed, we got T already)
 // - Decide if its worth to remove template<T> from Renderer, just cast vertexBufferPtr before usage
@@ -114,7 +124,7 @@ class Renderer2D final
 	, public ruc::Singleton<Renderer2D> {
 public:
 	Renderer2D(s);
-	virtual ~Renderer2D() {};
+	virtual ~Renderer2D() = default;
 
 	using Singleton<Renderer2D>::destroy;
 
@@ -137,8 +147,11 @@ class RendererCubemap final
 	: public Renderer<CubemapVertex>
 	, public ruc::Singleton<RendererCubemap> {
 public:
+	static constexpr const uint32_t quadPerCube = 6;
+
+public:
 	RendererCubemap(s);
-	virtual ~RendererCubemap() {};
+	virtual ~RendererCubemap() = default;
 
 	using Singleton<RendererCubemap>::destroy;
 
@@ -161,7 +174,7 @@ class RendererFont final
 	, public ruc::Singleton<RendererFont> {
 public:
 	RendererFont(s);
-	virtual ~RendererFont() {};
+	virtual ~RendererFont() = default;
 
 	using Singleton<RendererFont>::destroy;
 
@@ -169,6 +182,33 @@ public:
 
 private:
 	void loadShader() override;
+};
+
+// -------------------------------------
+
+class Renderer3D final
+	: public Renderer<Vertex>
+	, public ruc::Singleton<Renderer3D> {
+public:
+	Renderer3D(s);
+	virtual ~Renderer3D() = default;
+
+	using Singleton<Renderer3D>::destroy;
+
+	virtual void beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView) override;
+
+	void drawModel(std::span<const Vertex> vertices, std::span<const uint32_t> indices, const TransformComponent& transform, std::shared_ptr<Texture> texture);
+
+private:
+	void createElementBuffer() override;
+	void uploadElementBuffer() override;
+	void loadShader() override;
+	void startBatch() override;
+
+private:
+	// CPU element vertices
+	uint32_t* m_elementBufferBase { nullptr };
+	uint32_t* m_elementBufferPtr { nullptr };
 };
 
 } // namespace Inferno

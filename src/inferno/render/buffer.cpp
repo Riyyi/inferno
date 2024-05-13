@@ -321,6 +321,16 @@ void IndexBuffer::unbind() const
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+void IndexBuffer::uploadData(const void* data, uint32_t size)
+{
+	bind();
+
+	// Upload data to the GPU
+	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, size, data);
+
+	unbind();
+}
+
 // -----------------------------------------
 
 VertexArray::VertexArray()

@@ -90,7 +90,7 @@ private:
 // -----------------------------------------
 
 // GPU memory which holds raw vertex data
-class VertexBuffer {
+class VertexBuffer { // Vertex Buffer Object, VBO
 public:
 	VertexBuffer(size_t size);
 	VertexBuffer(float* vertices, size_t size);
@@ -113,13 +113,15 @@ private:
 // -----------------------------------------
 
 // Vertices order of rendering
-class IndexBuffer {
+class IndexBuffer { // Element Buffer Object, EBO
 public:
 	IndexBuffer(uint32_t* indices, size_t size);
 	~IndexBuffer();
 
 	void bind() const;
 	void unbind() const;
+
+	void uploadData(const void* data, uint32_t size);
 
 	uint32_t getCount() const { return m_count; }
 
@@ -131,7 +133,7 @@ private:
 // -----------------------------------------
 
 // Array that holds the vertex attributes configuration
-class VertexArray {
+class VertexArray { // Vertex Array Object, VAO
 public:
 	VertexArray();
 	~VertexArray();

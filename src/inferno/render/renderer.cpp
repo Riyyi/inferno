@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include <algorithm> // std::min
-#include <utility>   // std::move
+#include <algorithm> // std::copy, std::min
+#include <span>
 
 #include "glad/glad.h"
 #include "ruc/format/log.h"
@@ -61,32 +61,7 @@ void Renderer<T>::initialize()
 	// Create vertex array
 	m_vertexArray = std::make_shared<VertexArray>();
 
-	// CPU
-	// ---------------------------------
-
-	// Generate indices
-
-	uint32_t* indices = new uint32_t[maxIndices];
-
-	uint32_t offset = 0;
-	for (uint32_t i = 0; i < maxIndices; i += indexPerQuad) {
-		indices[i + 0] = offset + 0;
-		indices[i + 1] = offset + 1;
-		indices[i + 2] = offset + 2;
-		indices[i + 3] = offset + 2;
-		indices[i + 4] = offset + 3;
-		indices[i + 5] = offset + 0;
-
-		offset += vertexPerQuad;
-	}
-
-	// GPU
-	// ---------------------------------
-
-	// Create index buffer
-	auto indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(uint32_t) * maxIndices);
-	m_vertexArray->setIndexBuffer(indexBuffer);
-	delete[] indices;
+	createElementBuffer();
 }
 
 template<typename T>
@@ -147,23 +122,55 @@ void Renderer<T>::unbind()
 }
 
 template<typename T>
+void Renderer<T>::createElementBuffer()
+{
+	// CPU
+	// ---------------------------------
+
+	// Generate indices
+
+	uint32_t* indices = new uint32_t[maxElements];
+
+	uint32_t offset = 0;
+	for (uint32_t i = 0; i < maxElements; i += elementPerQuad) {
+		indices[i + 0] = offset + 0;
+		indices[i + 1] = offset + 1;
+		indices[i + 2] = offset + 2;
+		indices[i + 3] = offset + 2;
+		indices[i + 4] = offset + 3;
+		indices[i + 5] = offset + 0;
+
+		offset += vertexPerQuad;
+	}
+
+	// GPU
+	// ---------------------------------
+
+	// Create index buffer
+	auto indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(uint32_t) * maxElements);
+	m_vertexArray->setIndexBuffer(indexBuffer);
+	delete[] indices;
+}
+
+template<typename T>
 void Renderer<T>::flush()
 {
-	if (m_quadIndex == 0) {
+	if (m_vertexIndex == 0 || m_elementIndex == 0) {
 		return;
 	}
 
+	// Upload index data to GPU
+	uploadElementBuffer();
+
 	// Upload vertex data to GPU
-	m_vertexArray->at(0)->uploadData(
-		m_vertexBufferBase,
-		m_quadIndex * vertexPerQuad * sizeof(T));
+	m_vertexArray->at(0)->uploadData(m_vertexBufferBase, m_vertexIndex * sizeof(T));
 
 	bind();
 
 	// Render
 	bool depthTest = RenderCommand::depthTest();
 	RenderCommand::setDepthTest(m_enableDepthBuffer);
-	RenderCommand::drawIndexed(*m_vertexArray, m_quadIndex * indexPerQuad);
+	RenderCommand::drawIndexed(m_vertexArray, m_elementIndex);
 	RenderCommand::setDepthTest(depthTest);
 
 	unbind();
@@ -172,7 +179,8 @@ void Renderer<T>::flush()
 template<typename T>
 void Renderer<T>::startBatch()
 {
-	m_quadIndex = 0;
+	m_vertexIndex = 0;
+	m_elementIndex = 0;
 	m_vertexBufferPtr = m_vertexBufferBase;
 
 	m_textureSlotIndex = 1;
@@ -245,7 +253,7 @@ void Renderer2D::drawQuad(const TransformComponent& transform, glm::vec4 color, 
 void Renderer2D::drawQuad(const TransformComponent& transform, glm::mat4 color, std::shared_ptr<Texture> texture)
 {
 	// Create a new batch if the quad limit has been reached
-	if (m_quadIndex >= maxQuads) {
+	if (m_vertexIndex + vertexPerQuad > maxVertices || m_elementIndex + elementPerQuad > maxElements) {
 		nextBatch();
 	}
 
@@ -267,7 +275,8 @@ void Renderer2D::drawQuad(const TransformComponent& transform, glm::mat4 color, 
 		m_vertexBufferPtr++;
 	}
 
-	m_quadIndex++;
+	m_vertexIndex += vertexPerQuad;
+	m_elementIndex += elementPerQuad;
 }
 
 void Renderer2D::loadShader()
@@ -366,7 +375,8 @@ void RendererCubemap::drawCubemap(const TransformComponent& transform, glm::vec4
 void RendererCubemap::drawCubemap(const TransformComponent& transform, glm::mat4 color, std::shared_ptr<Texture> texture)
 {
 	// Create a new batch if the quad limit has been reached
-	if (m_quadIndex >= maxQuads) {
+	if (m_vertexIndex + (vertexPerQuad * quadPerCube) > maxVertices
+	    || m_elementIndex + (elementPerQuad * quadPerCube) > maxElements) {
 		nextBatch();
 	}
 
@@ -380,7 +390,8 @@ void RendererCubemap::drawCubemap(const TransformComponent& transform, glm::mat4
 		m_vertexBufferPtr++;
 	}
 
-	m_quadIndex += quadPerCube;
+	m_vertexIndex += vertexPerQuad * quadPerCube;
+	m_elementIndex += elementPerQuad * quadPerCube;
 }
 
 void RendererCubemap::loadShader()
@@ -428,7 +439,7 @@ RendererFont::RendererFont(s)
 void RendererFont::drawSymbol(std::array<SymbolVertex, vertexPerQuad>& symbolQuad, std::shared_ptr<Texture> texture)
 {
 	// Create a new batch if the quad limit has been reached
-	if (m_quadIndex >= maxQuads) {
+	if (m_vertexIndex + vertexPerQuad > maxVertices || m_elementIndex + elementPerQuad > maxElements) {
 		nextBatch();
 	}
 
@@ -451,12 +462,112 @@ void RendererFont::drawSymbol(std::array<SymbolVertex, vertexPerQuad>& symbolQua
 		m_vertexBufferPtr++;
 	}
 
-	m_quadIndex++;
+	m_vertexIndex += vertexPerQuad;
+	m_elementIndex += elementPerQuad;
 }
 
 void RendererFont::loadShader()
 {
 	m_shader = AssetManager::the().load<Shader>("assets/glsl/batch-font");
+}
+
+// -----------------------------------------
+
+Renderer3D::Renderer3D(s)
+{
+	Renderer::initialize();
+
+	// CPU
+	// ---------------------------------
+
+	// Create array for storing quads vertices
+	m_vertexBufferBase = new Vertex[maxVertices];
+	m_vertexBufferPtr = m_vertexBufferBase;
+
+	// GPU
+	// ---------------------------------
+
+	m_enableDepthBuffer = true;
+
+	// Create vertex buffer
+	auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(Vertex) * maxVertices);
+	vertexBuffer->setLayout({
+		{ BufferElementType::Vec3, "a_position" },
+		{ BufferElementType::Vec3, "a_normal" },
+		{ BufferElementType::Vec2, "a_textureCoordinates" },
+		{ BufferElementType::Float, "a_textureIndex" },
+	});
+	m_vertexArray->addVertexBuffer(vertexBuffer);
+
+	ruc::info("Renderer3D initialized");
+}
+
+void Renderer3D::drawModel(std::span<const Vertex> vertices, std::span<const uint32_t> indices, const TransformComponent& transform, std::shared_ptr<Texture> texture)
+{
+	VERIFY(vertices.size() <= maxVertices, "model vertices too big for buffer");
+	VERIFY(indices.size() <= maxElements, "model elements too big for buffer");
+
+	// Create a new batch if the quad limit has been reached
+	if (m_vertexIndex + vertices.size() > maxVertices || m_elementIndex + indices.size() > maxElements) {
+		nextBatch();
+	}
+
+	uint32_t textureUnitIndex = addTextureUnit(texture);
+
+	// Add the vertices
+	for (auto vertex : vertices) {
+		m_vertexBufferPtr->position = transform.transform * glm::vec4(vertex.position, 1.0f);
+		m_vertexBufferPtr->normal = vertex.normal;
+		m_vertexBufferPtr->textureCoordinates = vertex.textureCoordinates;
+		m_vertexBufferPtr->textureIndex = (float)textureUnitIndex;
+		m_vertexBufferPtr++;
+	}
+
+	std::copy(indices.begin(), indices.end(), m_elementBufferPtr);
+	m_elementBufferPtr += indices.size();
+
+	m_vertexIndex += vertices.size();
+	m_elementIndex += indices.size();
+}
+
+void Renderer3D::beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView)
+{
+	m_shader->bind();
+	m_shader->setFloat("u_projectionView", cameraProjection * cameraView);
+	m_shader->unbind();
+}
+
+void Renderer3D::createElementBuffer()
+{
+	// CPU
+	// ---------------------------------
+
+	// Create array for storing quads vertices
+	m_elementBufferBase = new uint32_t[maxElements];
+	m_elementBufferPtr = m_elementBufferBase;
+
+	// GPU
+	// ---------------------------------
+
+	// Create index buffer
+	auto indexBuffer = std::make_shared<IndexBuffer>(m_elementBufferBase, sizeof(uint32_t) * maxElements);
+	m_vertexArray->setIndexBuffer(indexBuffer);
+}
+
+void Renderer3D::uploadElementBuffer()
+{
+	m_vertexArray->getIndexBuffer()->uploadData(m_elementBufferBase, m_elementIndex * sizeof(uint32_t));
+}
+
+void Renderer3D::loadShader()
+{
+	m_shader = AssetManager::the().load<Shader>("assets/glsl/batch-3d");
+}
+
+void Renderer3D::startBatch()
+{
+	Renderer<Vertex>::startBatch();
+	m_elementBufferPtr = m_elementBufferBase;
 }
 
 } // namespace Inferno

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-#pragma once
+#include <memory> // std::shadred_ptr
 
 #include "glad/glad.h"
 #include "ruc/format/log.h"
@@ -39,9 +39,9 @@ void RenderCommand::clearColor(const glm::vec4& color)
 	glClearColor(color.r, color.g, color.b, color.a);
 }
 
-void RenderCommand::drawIndexed(const VertexArray& vertexArray, uint32_t indexCount)
+void RenderCommand::drawIndexed(std::shared_ptr<VertexArray> vertexArray, uint32_t indexCount)
 {
-	uint32_t count = indexCount ? indexCount : vertexArray.getIndexBuffer()->getCount();
+	uint32_t count = indexCount ? indexCount : vertexArray->getIndexBuffer()->getCount();
 	glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 }
 
