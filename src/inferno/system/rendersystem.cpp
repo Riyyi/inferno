@@ -5,9 +5,11 @@
  */
 
 #include "glm/ext/matrix_transform.hpp" // glm::translate, glm::rotate, glm::scale, glm::radians
+#include "inferno/component/model-component.h"
 #include "ruc/format/log.h"
 
 #include "inferno/component/cubemap-component.h"
+#include "inferno/component/model-component.h"
 #include "inferno/component/spritecomponent.h"
 #include "inferno/component/transformcomponent.h"
 #include "inferno/render/renderer.h"
@@ -36,6 +38,15 @@ void RenderSystem::render()
 
 	for (auto [entity, transform, cubemap] : cubemapView.each()) {
 		RendererCubemap::the().drawCubemap(transform, cubemap.color, cubemap.texture);
+	}
+
+	auto modelView = m_registry->view<TransformComponent, ModelComponent>();
+
+	for (auto [entity, transform, model] : modelView.each()) {
+		Renderer3D::the().drawModel(model.model->vertices(),
+		                            model.model->elements(),
+		                            transform,
+		                            model.model->texture() ? model.model->texture() : model.texture);
 	}
 }
 

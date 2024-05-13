@@ -19,6 +19,7 @@
 #include "inferno/component/cubemap-component.h"
 #include "inferno/component/id-component.h"
 #include "inferno/component/luascriptcomponent.h"
+#include "inferno/component/model-component.h"
 #include "inferno/component/nativescriptcomponent.h"
 #include "inferno/component/spritecomponent.h"
 #include "inferno/component/tagcomponent.h"
@@ -165,6 +166,10 @@ uint32_t Scene::loadEntity(ruc::Json components, uint32_t parentEntity)
 	if (components.exists("text")) {
 		auto& text = addComponent<TextAreaComponent>(entity);
 		components.at("text").getTo(text);
+	}
+	if (components.exists("model")) {
+		auto& text = addComponent<ModelComponent>(entity);
+		components.at("model").getTo(text);
 	}
 	if (components.exists("children")) {
 		VERIFY(components.at("children").type() == ruc::Json::Type::Array);

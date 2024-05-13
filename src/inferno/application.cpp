@@ -80,6 +80,7 @@ Application::~Application()
 
 	RendererFont::destroy();
 	Renderer2D::destroy();
+	Renderer3D::destroy();
 	RendererCubemap::destroy();
 	RenderCommand::destroy();
 	AssetManager::destroy();
@@ -168,6 +169,7 @@ int Application::run()
 
 		std::pair<glm::mat4, glm::mat4> projectionView = m_scene->cameraProjectionView();
 		RendererCubemap::the().beginScene(projectionView.first, projectionView.second); // camera, lights, environment
+		Renderer3D::the().beginScene(projectionView.first, projectionView.second);      // camera, lights, environment
 		Renderer2D::the().beginScene(projectionView.first, projectionView.second);      // camera, lights, environment
 		RendererFont::the().beginScene(projectionView.first, projectionView.second);    // camera, lights, environment
 
@@ -175,6 +177,7 @@ int Application::run()
 		// RendererCharacter::the().drawCharacter(character, f->texture());
 
 		RendererCubemap::the().endScene();
+		Renderer3D::the().endScene();
 		Renderer2D::the().endScene();
 		RendererFont::the().endScene();
 
