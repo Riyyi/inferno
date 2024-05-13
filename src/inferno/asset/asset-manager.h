@@ -31,6 +31,7 @@ public:
 	bool fastIs() const = delete;
 
 	virtual bool isFont() const { return false; }
+	virtual bool isModel() const { return false; }
 	virtual bool isShader() const { return false; }
 	virtual bool isTexture() const { return false; }
 	virtual bool isTexture2D() const { return false; }
