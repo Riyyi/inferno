@@ -12,6 +12,8 @@
 
 #include "inferno/asset/asset-manager.h"
 
+struct aiTexture;
+
 namespace Inferno {
 
 class Texture2D;
@@ -63,6 +65,7 @@ public:
 
 	// Factory function
 	static std::shared_ptr<Texture2D> create(std::string_view path);
+	static std::shared_ptr<Texture2D> create(aiTexture* texture);
 
 	virtual void bind(uint32_t unit = 0) const override;
 	virtual void unbind() const override;

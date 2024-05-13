@@ -8,6 +8,7 @@
 #include <cstdint> // uint8_t, uint32_t
 #include <memory>  // std::shared_ptr
 
+#include "assimp/texture.h"
 #include "glad/glad.h"
 #include "ruc/meta/assert.h"
 #define STB_IMAGE_IMPLEMENTATION
@@ -52,6 +53,32 @@ std::shared_ptr<Texture2D> Texture2D::create(std::string_view path)
 
 	// Clean resources
 	stbi_image_free(data);
+
+	return result;
+}
+
+std::shared_ptr<Texture2D> Texture2D::create(aiTexture* texture)
+{
+	auto result = std::shared_ptr<Texture2D>(new Texture2D(texture->mFilename.C_Str()));
+
+	int width = static_cast<int>(texture->mWidth);
+	int height = static_cast<int>(texture->mHeight);
+	int channels = 0;
+	unsigned char* data = reinterpret_cast<unsigned char*>(texture->pcData);
+	bool isCompressed = height == 0; // height 0 is compression, byte length stored in width variable
+
+	if (isCompressed) {
+		stbi_set_flip_vertically_on_load(0);
+		data = stbi_load_from_memory(data, width, &width, &height, &channels, STBI_default);
+	}
+	else {
+		channels = 4; // ARGB888
+		// TODO: imprement format hints? `archFormatHint'
+		VERIFY_NOT_REACHED();
+	}
+
+	result->init(width, height, channels);
+	result->create(data);
 
 	return result;
 }
@@ -198,6 +225,3 @@ void TextureCubemap::create()
 }
 
 } // namespace Inferno
-
-// FIXME
-// auto texture = (type == Texture::TwoDimensional) ? Texture2D::create(path) : TextureCubemap::create(path);
