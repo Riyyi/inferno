@@ -33,6 +33,7 @@ $ cmake .. && make
 
 * Libraries
 
+- [[https://github.com/assimp/assimp][assimp]]
 # - [[https://github.com/bulletphysics/bullet3][Bullet]]
 - [[https://github.com/skypjack/entt][EnTT]]
 - [[https://github.com/Dav1dde/glad][glad]]

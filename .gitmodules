@@ -19,3 +19,6 @@
 [submodule "inferno/vendor/ruc"]
 	path = vendor/ruc
 	url = https://github.com/Riyyi/ruc
+[submodule "inferno/vendor/assimp"]
+	path = vendor/assimp
+	url = https://github.com/assimp/assimp
