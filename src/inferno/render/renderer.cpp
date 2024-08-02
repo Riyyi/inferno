@@ -129,16 +129,16 @@ void Renderer<T>::createElementBuffer()
 
 	// Generate indices
 
-	uint32_t* indices = new uint32_t[maxElements];
+	uint32_t* elements = new uint32_t[maxElements];
 
 	uint32_t offset = 0;
 	for (uint32_t i = 0; i < maxElements; i += elementPerQuad) {
-		indices[i + 0] = offset + 0;
-		indices[i + 1] = offset + 1;
-		indices[i + 2] = offset + 2;
-		indices[i + 3] = offset + 2;
-		indices[i + 4] = offset + 3;
-		indices[i + 5] = offset + 0;
+		elements[i + 0] = offset + 0;
+		elements[i + 1] = offset + 1;
+		elements[i + 2] = offset + 2;
+		elements[i + 3] = offset + 2;
+		elements[i + 4] = offset + 3;
+		elements[i + 5] = offset + 0;
 
 		offset += vertexPerQuad;
 	}
@@ -147,9 +147,9 @@ void Renderer<T>::createElementBuffer()
 	// ---------------------------------
 
 	// Create index buffer
-	auto indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(uint32_t) * maxElements);
+	auto indexBuffer = std::make_shared<IndexBuffer>(elements, sizeof(uint32_t) * maxElements);
 	m_vertexArray->setIndexBuffer(indexBuffer);
-	delete[] indices;
+	delete[] elements;
 }
 
 template<typename T>
@@ -271,7 +271,7 @@ void Renderer2D::drawQuad(const TransformComponent& transform, glm::mat4 color, 
 		m_vertexBufferPtr->position = transform.transform * m_vertexPositions[i];
 		m_vertexBufferPtr->color = color[i];
 		m_vertexBufferPtr->textureCoordinates = textureCoordinates[i];
-		m_vertexBufferPtr->textureIndex = (float)textureUnitIndex;
+		m_vertexBufferPtr->textureIndex = static_cast<float>(textureUnitIndex);
 		m_vertexBufferPtr++;
 	}
 
@@ -386,7 +386,7 @@ void RendererCubemap::drawCubemap(const TransformComponent& transform, glm::mat4
 	for (uint32_t i = 0; i < vertexPerQuad * quadPerCube; i++) {
 		m_vertexBufferPtr->position = transform.transform * m_vertexPositions[i];
 		m_vertexBufferPtr->color = color[i % 4];
-		m_vertexBufferPtr->textureIndex = (float)textureUnitIndex;
+		m_vertexBufferPtr->textureIndex = static_cast<float>(textureUnitIndex);
 		m_vertexBufferPtr++;
 	}
 
@@ -450,7 +450,7 @@ void RendererFont::drawSymbol(std::array<SymbolVertex, vertexPerQuad>& symbolQua
 		m_vertexBufferPtr->quad.position = symbolQuad[i].quad.position;
 		m_vertexBufferPtr->quad.color = symbolQuad[i].quad.color;
 		m_vertexBufferPtr->quad.textureCoordinates = symbolQuad[i].quad.textureCoordinates;
-		m_vertexBufferPtr->quad.textureIndex = (float)textureUnitIndex;
+		m_vertexBufferPtr->quad.textureIndex = static_cast<float>(textureUnitIndex);
 
 		m_vertexBufferPtr->width = symbolQuad[i].width;
 		m_vertexBufferPtr->edge = symbolQuad[i].edge;
@@ -502,32 +502,38 @@ Renderer3D::Renderer3D(s)
 	ruc::info("Renderer3D initialized");
 }
 
-void Renderer3D::drawModel(std::span<const Vertex> vertices, std::span<const uint32_t> indices, const TransformComponent& transform, std::shared_ptr<Texture> texture)
+void Renderer3D::drawModel(std::span<const Vertex> vertices, std::span<const uint32_t> elements, const TransformComponent& transform, std::shared_ptr<Texture> texture)
 {
+	// ruc::error("drawModel");
+
 	VERIFY(vertices.size() <= maxVertices, "model vertices too big for buffer");
-	VERIFY(indices.size() <= maxElements, "model elements too big for buffer");
+	VERIFY(elements.size() <= maxElements, "model elements too big for buffer");
 
 	// Create a new batch if the quad limit has been reached
-	if (m_vertexIndex + vertices.size() > maxVertices || m_elementIndex + indices.size() > maxElements) {
+	if (m_vertexIndex + vertices.size() > maxVertices || m_elementIndex + elements.size() > maxElements) {
 		nextBatch();
 	}
 
 	uint32_t textureUnitIndex = addTextureUnit(texture);
 
 	// Add the vertices
-	for (auto vertex : vertices) {
+	for (const auto& vertex : vertices) {
 		m_vertexBufferPtr->position = transform.transform * glm::vec4(vertex.position, 1.0f);
 		m_vertexBufferPtr->normal = vertex.normal;
 		m_vertexBufferPtr->textureCoordinates = vertex.textureCoordinates;
-		m_vertexBufferPtr->textureIndex = (float)textureUnitIndex;
+		m_vertexBufferPtr->textureIndex = static_cast<float>(textureUnitIndex);
 		m_vertexBufferPtr++;
 	}
 
-	std::copy(indices.begin(), indices.end(), m_elementBufferPtr);
-	m_elementBufferPtr += indices.size();
+	// Copy element indices to the element buffer
+	for (const auto& element : elements) {
+		// Indices are referenced relative to vertices[0], if there are multiple models in a batch,
+		// then the indices need to be offset by the total amount of vertices
+		*m_elementBufferPtr++ = element + m_vertexIndex;
+	}
 
 	m_vertexIndex += vertices.size();
-	m_elementIndex += indices.size();
+	m_elementIndex += elements.size();
 }
 
 void Renderer3D::beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView)

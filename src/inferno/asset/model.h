@@ -39,7 +39,7 @@ private:
 
 	static void processScene(std::shared_ptr<Model> model, const aiScene* scene);
 	static void processNode(std::shared_ptr<Model> model, aiNode* node, const aiScene* scene);
-	static void processMesh(std::shared_ptr<Model> model, aiMesh* mesh, const aiScene* scene);
+	static void processMesh(std::shared_ptr<Model> model, aiMesh* mesh, const aiScene* scene, aiMatrix4x4 parentTransform = aiMatrix4x4());
 
 	virtual bool isModel() const override { return true; }
 
@@ -50,4 +50,11 @@ private:
 	std::shared_ptr<Texture2D> m_texture;
 };
 
+// clang-format off
+template<>
+inline bool Asset::fastIs<Model>() const { return isModel(); }
+// clang-format on
+
 } // namespace Inferno
+
+// TODO: figure out this weird thing: https://github.com/assimp/assimp/blob/master/BUILDBINARIES_EXAMPLE.bat#L6-L10

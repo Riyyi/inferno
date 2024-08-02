@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include <memory> // std::shadred_ptr
+#include <memory> // std::shared_ptr
 
 #include "glad/glad.h"
 #include "ruc/format/log.h"

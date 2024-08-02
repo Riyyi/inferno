@@ -16,8 +16,6 @@
 #include "inferno/event/event.h"
 #include "inferno/event/keyevent.h"
 #include "inferno/event/mouseevent.h"
-// #include "inferno/io/gltffile.h"
-#include "inferno/asset/font.h"
 #include "inferno/io/input.h"
 #include "inferno/keycodes.h"
 #include "inferno/render/buffer.h"
@@ -54,8 +52,6 @@ Application::Application()
 
 	m_scene = std::make_shared<Scene>();
 	m_scene->initialize();
-
-	// Load assets
 
 	// m_font = FontManager::the().load("assets/fnt/dejavu-sans");
 
@@ -145,12 +141,13 @@ int Application::run()
 	// offset
 #endif
 
+	// m_window->setVSync(false);
 	while (!m_window->shouldClose()) {
 
 		float time = Time::time();
 		float deltaTime = time - m_lastFrameTime;
 		m_lastFrameTime = time;
-		// ruc::debug("Frametime " << deltaTime * 1000 << "ms");
+		// ruc::debug("Frametime {}ms", deltaTime * 1000);
 
 		// Update
 

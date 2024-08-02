@@ -8,8 +8,6 @@
 
 #include <memory> // std::unique_ptr, std::shared_ptr
 
-#include "ruc/singleton.h"
-
 namespace Inferno {
 
 class Event;

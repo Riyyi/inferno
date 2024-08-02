@@ -62,6 +62,8 @@ struct Vertex {
 template<typename T>
 class Renderer {
 public:
+	static constexpr const uint32_t vertexPerFace = 3;
+	static constexpr const uint32_t elementPerFace = 3;
 	static constexpr const uint32_t vertexPerQuad = 4;
 	static constexpr const uint32_t elementPerQuad = 6;
 
