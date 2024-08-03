@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Riyyi
+ * Copyright (C) 2022,2024 Riyyi
  *
  * SPDX-License-Identifier: MIT
  */
@@ -31,9 +31,10 @@ enum class BufferElementType {
 // -----------------------------------------
 
 // Describes one element of the BufferLayout
-class BufferElement {
+class BufferElement final {
 public:
 	BufferElement(BufferElementType type, std::string name, bool normalized = false);
+	~BufferElement() = default;
 
 	uint32_t getTypeSize() const;
 	uint32_t getTypeCount() const;
@@ -65,10 +66,11 @@ private:
 // -----------------------------------------
 
 // Layout that describes raw vertex data
-class BufferLayout {
+class BufferLayout final {
 public:
 	BufferLayout() {}
 	BufferLayout(const std::initializer_list<BufferElement>& elements);
+	~BufferLayout() = default;
 
 	const std::vector<BufferElement>& getElements() const { return m_elements; }
 	uint32_t getStride() const { return m_stride; }
@@ -90,10 +92,10 @@ private:
 // -----------------------------------------
 
 // GPU memory which holds raw vertex data
-class VertexBuffer { // Vertex Buffer Object, VBO
+class VertexBuffer final { // Vertex Buffer Object, VBO
 public:
 	VertexBuffer(size_t size);
-	VertexBuffer(float* vertices, size_t size);
+	VertexBuffer(size_t size, float* vertices);
 	~VertexBuffer();
 
 	void bind() const;
@@ -113,7 +115,7 @@ private:
 // -----------------------------------------
 
 // Vertices order of rendering
-class IndexBuffer { // Element Buffer Object, EBO
+class IndexBuffer final { // Element Buffer Object, EBO
 public:
 	IndexBuffer(uint32_t* indices, size_t size);
 	~IndexBuffer();
@@ -133,7 +135,7 @@ private:
 // -----------------------------------------
 
 // Array that holds the vertex attributes configuration
-class VertexArray { // Vertex Array Object, VAO
+class VertexArray final { // Vertex Array Object, VAO
 public:
 	VertexArray();
 	~VertexArray();

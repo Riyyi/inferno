@@ -36,6 +36,7 @@ public:
 	virtual bool isTexture() const { return false; }
 	virtual bool isTexture2D() const { return false; }
 	virtual bool isTextureCubemap() const { return false; }
+	virtual bool isTextureFramebuffer() const { return false; }
 
 protected:
 	Asset(std::string_view path)

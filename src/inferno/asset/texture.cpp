@@ -25,11 +25,19 @@ Texture::~Texture()
 
 void Texture::init(uint32_t width, uint32_t height, uint8_t channels)
 {
+	init(width, height,
+	     (channels == 3) ? GL_RGB8 : GL_RGBA8,
+	     (channels == 3) ? GL_RGB : GL_RGBA,
+	     GL_UNSIGNED_BYTE);
+}
+
+void Texture::init(uint32_t width, uint32_t height, uint32_t internalFormat, uint32_t dataFormat, uint32_t dataType)
+{
 	m_width = width;
 	m_height = height;
-
-	m_internalFormat = (channels == 3) ? GL_RGB8 : GL_RGBA8;
-	m_dataFormat = (channels == 3) ? GL_RGB : GL_RGBA;
+	m_internalFormat = internalFormat;
+	m_dataFormat = dataFormat;
+	m_dataType = dataType;
 }
 
 // -----------------------------------------
@@ -49,7 +57,7 @@ std::shared_ptr<Texture2D> Texture2D::create(std::string_view path)
 	VERIFY(data, "failed to load image: '{}'", path);
 
 	result->init(width, height, channels);
-	result->create(data);
+	result->createImpl(data);
 
 	// Clean resources
 	stbi_image_free(data);
@@ -78,7 +86,7 @@ std::shared_ptr<Texture2D> Texture2D::create(aiTexture* texture)
 	}
 
 	result->init(width, height, channels);
-	result->create(data);
+	result->createImpl(data);
 
 	return result;
 }
@@ -99,7 +107,7 @@ void Texture2D::unbind() const
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture2D::create(unsigned char* data)
+void Texture2D::createImpl(unsigned char* data)
 {
 	m_id = UINT_MAX;
 
@@ -121,7 +129,7 @@ void Texture2D::create(unsigned char* data)
 		m_width, m_height, // Image width/height
 		0,                 // Always 0 (legacy)
 		m_dataFormat,      // Texture source format
-		GL_UNSIGNED_BYTE,  // Texture source datatype
+		m_dataType,        // Texture source datatype
 		data);             // Image data
 
 	// Set the texture wrapping / filtering options
@@ -143,7 +151,7 @@ std::shared_ptr<TextureCubemap> TextureCubemap::create(std::string_view path)
 {
 	auto result = std::shared_ptr<TextureCubemap>(new TextureCubemap(path));
 
-	result->create();
+	result->createImpl();
 
 	return result;
 }
@@ -164,7 +172,7 @@ void TextureCubemap::unbind() const
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
-void TextureCubemap::create()
+void TextureCubemap::createImpl()
 {
 	m_id = UINT_MAX;
 
@@ -206,7 +214,7 @@ void TextureCubemap::create()
 			m_width, m_height,                  // Image width/height
 			0,                                  // Always 0 (legacy)
 			m_dataFormat,                       // Texture source format
-			GL_UNSIGNED_BYTE,                   // Texture source datatype
+			m_dataType,                         // Texture source datatype
 			data);                              // Image data
 
 		// Clean resources
@@ -222,6 +230,46 @@ void TextureCubemap::create()
 
 	// Unbind texture object
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+}
+
+// -----------------------------------------
+
+std::shared_ptr<TextureFramebuffer> TextureFramebuffer::create(uint32_t width, uint32_t height, uint32_t internalFormat, uint32_t dataFormat, uint32_t dataType)
+{
+	auto result = std::shared_ptr<TextureFramebuffer>(new TextureFramebuffer(""));
+
+	result->init(width, height, internalFormat, dataFormat, dataType);
+	result->createImpl();
+
+	return result;
+}
+
+void TextureFramebuffer::createImpl()
+{
+	m_id = UINT_MAX;
+
+	// Create texture object
+	glGenTextures(1, &m_id);
+
+	// Bind texture object
+	glBindTexture(GL_TEXTURE_2D, m_id);
+
+	// Generate texture
+	glTexImage2D(
+		GL_TEXTURE_2D,     // Texture target
+		0,                 // Midmap level, base starts at level 0
+		m_internalFormat,  // Texture format
+		m_width, m_height, // Image width/height
+		0,                 // Always 0 (legacy)
+		m_dataFormat,      // Texture source format
+		m_dataType,        // Texture source datatype
+		NULL);             // Image data
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// Unbind texture object
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 } // namespace Inferno
