@@ -234,14 +234,32 @@ void TextureCubemap::createImpl()
 
 // -----------------------------------------
 
-std::shared_ptr<TextureFramebuffer> TextureFramebuffer::create(uint32_t width, uint32_t height, uint32_t internalFormat, uint32_t dataFormat, uint32_t dataType)
+std::shared_ptr<TextureFramebuffer> TextureFramebuffer::create(
+	std::string_view path,
+	uint32_t width, uint32_t height, uint32_t internalFormat, uint32_t dataFormat, uint32_t dataType)
 {
-	auto result = std::shared_ptr<TextureFramebuffer>(new TextureFramebuffer(""));
+	auto result = std::shared_ptr<TextureFramebuffer>(new TextureFramebuffer(path));
 
 	result->init(width, height, internalFormat, dataFormat, dataType);
 	result->createImpl();
 
 	return result;
+}
+
+void TextureFramebuffer::bind(uint32_t unit) const
+{
+	// Set active unit
+	glActiveTexture(GL_TEXTURE0 + unit);
+
+	glBindTexture(GL_TEXTURE_2D, m_id);
+
+	// Reset unit
+	glActiveTexture(GL_TEXTURE0);
+}
+
+void TextureFramebuffer::unbind() const
+{
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void TextureFramebuffer::createImpl()

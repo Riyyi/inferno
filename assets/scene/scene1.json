@@ -44,7 +44,7 @@
 			"id": { "id": 97897897 },
 			"tag": { "tag": "Quad 2" },
 			"transform" : {
-				"translate": [ 1.1, 0.0, 0.0 ],
+				"translate": [ 2.5, 0.0, 0.0 ],
 				"rotate": [ 0.0, 0.0, 0.0 ],
 				"scale": [ 1.0, 1.0, 1.0 ]
 			},
@@ -57,7 +57,7 @@
 			"id": { "id": 3424242 },
 			"tag": { "tag": "Quad 3" },
 			"transform" : {
-				"translate": [ 2.2, 1.0, 0.0 ],
+				"translate": [ 5.0, 1.0, 0.0 ],
 				"rotate": [ 0.0, 0.0, -20.0 ],
 				"scale": [ 1.0, 1.0, 1.0 ]
 			},
@@ -70,7 +70,7 @@
 					"id": { "id": 4345472 },
 					"tag": { "tag": "Quad 4" },
 					"transform" : {
-						"translate": [ 0.85, 0.0, 0.0 ],
+						"translate": [ 1.7, 0.0, 0.0 ],
 						"rotate": [ 0.0, 0.0, 0.0 ],
 						"scale": [ 0.5, 0.5, 1.0 ]
 					},
@@ -83,7 +83,7 @@
 							"id": { "id": 5234723 },
 							"tag": { "tag": "Quad 5" },
 							"transform" : {
-								"translate": [ 1.0, 0.0, 0.0 ],
+								"translate": [ 2.0, 0.0, 0.0 ],
 								"rotate": [ 0.0, 0.0, -20.0 ],
 								"scale": [ 0.5, 0.5, 1.0 ]
 							},

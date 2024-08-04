@@ -12,12 +12,14 @@ namespace Inferno {
 
 class Event;
 class Font;
+class Framebuffer;
 class KeyPressEvent;
 class MousePositionEvent;
 class Scene;
 class Window;
 class WindowCloseEvent;
 class WindowResizeEvent;
+struct TransformComponent;
 
 class Application {
 public:
@@ -50,6 +52,7 @@ private:
 
 	std::unique_ptr<Window> m_window;
 	std::shared_ptr<Scene> m_scene;
+	std::unique_ptr<Framebuffer> m_framebuffer;
 
 	//
 	std::shared_ptr<Font> m_font;

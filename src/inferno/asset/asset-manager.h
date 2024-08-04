@@ -6,10 +6,12 @@
 
 #pragma once
 
-#include <memory> // std::shared_ptr
+#include <cstddef> // std::nullptr_t
+#include <memory>  // std::shared_ptr
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#include <utility> // std::forward
 
 #include "ruc/meta/assert.h"
 #include "ruc/meta/types.h"
@@ -62,8 +64,8 @@ public:
 
 	void add(std::string_view path, std::shared_ptr<Asset> asset);
 	bool exists(std::string_view path);
-	void remove(std::string_view path);
-	void remove(std::shared_ptr<Asset> asset);
+	std::nullptr_t remove(std::string_view path);
+	std::nullptr_t remove(std::shared_ptr<Asset> asset);
 
 	template<IsAsset T>
 	std::shared_ptr<T> get(std::string_view path)
@@ -77,14 +79,14 @@ public:
 		return std::static_pointer_cast<T>(asset);
 	}
 
-	template<IsAsset T>
-	std::shared_ptr<T> load(std::string_view path)
+	template<IsAsset T, typename... Args>
+	std::shared_ptr<T> load(std::string_view path, Args&&... args)
 	{
 		if (exists(path)) {
 			return get<T>(path);
 		}
 
-		auto asset = T::create(path);
+		auto asset = T::create(path, std::forward<Args>(args)...);
 		add(path, asset);
 		return asset;
 	}

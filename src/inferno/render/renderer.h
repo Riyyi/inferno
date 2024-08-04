@@ -76,6 +76,8 @@ public:
 	virtual void beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView);
 	virtual void endScene();
 
+	void setEnableDepthBuffer(bool state) { m_enableDepthBuffer = state; }
+
 protected:
 	Renderer() {}
 	virtual ~Renderer() { destroy(); };

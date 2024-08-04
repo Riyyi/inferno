@@ -29,9 +29,14 @@ void RenderCommand::destroy()
 {
 }
 
-void RenderCommand::clear()
+void RenderCommand::clearColorDepthBit()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void RenderCommand::clearColorBit()
+{
+	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void RenderCommand::clearColor(const glm::vec4& color)

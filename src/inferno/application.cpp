@@ -6,11 +6,13 @@
 
 #include <utility> // std::pair
 
+#include "glm/ext/vector_float3.hpp"
 #include "glm/gtc/type_ptr.hpp" // glm::make_mat4
 #include "ruc/format/log.h"
 #include "ruc/meta/assert.h"
 
 #include "inferno/application.h"
+#include "inferno/component/transformcomponent.h"
 #include "inferno/core.h"
 #include "inferno/event/applicationevent.h"
 #include "inferno/event/event.h"
@@ -20,6 +22,7 @@
 #include "inferno/keycodes.h"
 #include "inferno/render/buffer.h"
 #include "inferno/render/context.h"
+#include "inferno/render/framebuffer.h"
 // #include "inferno/render/gltf.h"
 #include "inferno/asset/shader.h"
 #include "inferno/asset/texture.h"
@@ -49,6 +52,11 @@ Application::Application()
 
 	Input::initialize();
 	RenderCommand::initialize();
+
+	m_framebuffer = std::make_unique<Framebuffer>(
+		Framebuffer::Properties { .type = Framebuffer::Type::Color | Framebuffer::Type::Depth | Framebuffer::Type::Stencil,
+	                              .width = m_window->getWidth(),
+	                              .height = m_window->getHeight() });
 
 	m_scene = std::make_shared<Scene>();
 	m_scene->initialize();
@@ -141,6 +149,10 @@ int Application::run()
 	// offset
 #endif
 
+	constexpr glm::vec4 vectorOne { 1.0f, 1.0f, 1.0f, 1.0f };
+	constexpr glm::mat4 matIdentity { 1.0f };
+	constexpr TransformComponent transformIdentity;
+
 	// m_window->setVSync(false);
 	while (!m_window->shouldClose()) {
 
@@ -149,6 +161,7 @@ int Application::run()
 		m_lastFrameTime = time;
 		// ruc::debug("Frametime {}ms", deltaTime * 1000);
 
+		// ---------------------------------
 		// Update
 
 		update();
@@ -157,12 +170,15 @@ int Application::run()
 		m_window->update();
 		m_scene->update(deltaTime);
 
+		// ---------------------------------
 		// Render
+
+		m_framebuffer->bind();
 
 		render();
 
 		RenderCommand::clearColor({ 0.2f, 0.3f, 0.3f, 1.0f });
-		RenderCommand::clear();
+		RenderCommand::clearColorDepthBit();
 
 		std::pair<glm::mat4, glm::mat4> projectionView = m_scene->cameraProjectionView();
 		RendererCubemap::the().beginScene(projectionView.first, projectionView.second); // camera, lights, environment
@@ -177,6 +193,20 @@ int Application::run()
 		Renderer3D::the().endScene();
 		Renderer2D::the().endScene();
 		RendererFont::the().endScene();
+
+		m_framebuffer->unbind();
+
+		// ---------------------------------
+		// Framebuffer
+
+		RenderCommand::clearColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		RenderCommand::clearColorBit();
+
+		Renderer2D::the().setEnableDepthBuffer(false);
+		Renderer2D::the().beginScene(matIdentity, matIdentity);
+		Renderer2D::the().drawQuad(transformIdentity, vectorOne, m_framebuffer->texture(0));
+		Renderer2D::the().endScene();
+		Renderer2D::the().setEnableDepthBuffer(true);
 
 		m_window->render();
 	}
@@ -212,6 +242,7 @@ bool Application::onWindowResize(WindowResizeEvent& e)
 	ruc::info("WindowResizeEvent {}x{}", e.getWidth(), e.getHeight());
 
 	RenderCommand::setViewport(0, 0, e.getWidth(), e.getHeight());
+	m_framebuffer->setSize(e.getWidth(), e.getHeight());
 
 	return true;
 }

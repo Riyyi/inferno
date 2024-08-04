@@ -38,18 +38,22 @@ bool AssetManager::exists(std::string_view path)
 	return m_assetList.find(path.data()) != m_assetList.end();
 }
 
-void AssetManager::remove(std::string_view path)
+std::nullptr_t AssetManager::remove(std::string_view path)
 {
 	if (exists(path)) {
 		m_assetList.erase(path.data());
 	}
+
+	return nullptr;
 }
 
-void AssetManager::remove(std::shared_ptr<Asset> asset)
+std::nullptr_t AssetManager::remove(std::shared_ptr<Asset> asset)
 {
 	if (exists(asset->path())) {
 		m_assetList.erase(asset->path());
 	}
+
+	return nullptr;
 }
 
 } // namespace Inferno

@@ -124,8 +124,8 @@ void Renderer<T>::unbind()
 template<typename T>
 void Renderer<T>::createElementBuffer()
 {
-	// CPU
 	// ---------------------------------
+	// CPU
 
 	// Generate indices
 
@@ -143,8 +143,8 @@ void Renderer<T>::createElementBuffer()
 		offset += vertexPerQuad;
 	}
 
-	// GPU
 	// ---------------------------------
+	// GPU
 
 	// Create index buffer
 	auto indexBuffer = std::make_shared<IndexBuffer>(elements, sizeof(uint32_t) * maxElements);
@@ -199,21 +199,21 @@ Renderer2D::Renderer2D(s)
 {
 	Renderer::initialize();
 
-	// CPU
 	// ---------------------------------
+	// CPU
 
 	// Create array for storing quads vertices
 	m_vertexBufferBase = new QuadVertex[maxVertices];
 	m_vertexBufferPtr = m_vertexBufferBase;
 
 	// Set default quad vertex positions
-	m_vertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
-	m_vertexPositions[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
-	m_vertexPositions[2] = { 0.5f, 0.5f, 0.0f, 1.0f };
-	m_vertexPositions[3] = { -0.5f, 0.5f, 0.0f, 1.0f };
+	m_vertexPositions[0] = { -1.0f, -1.0f, 0.0f, 1.0f };
+	m_vertexPositions[1] = { 1.0f, -1.0f, 0.0f, 1.0f };
+	m_vertexPositions[2] = { 1.0f, 1.0f, 0.0f, 1.0f };
+	m_vertexPositions[3] = { -1.0f, 1.0f, 0.0f, 1.0f };
 
-	// GPU
 	// ---------------------------------
+	// GPU
 
 	// Create vertex buffer
 	auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(QuadVertex) * maxVertices);
@@ -290,8 +290,8 @@ RendererCubemap::RendererCubemap(s)
 {
 	Renderer::initialize();
 
-	// CPU
 	// ---------------------------------
+	// CPU
 
 	// Create array for storing quads vertices
 	m_vertexBufferBase = new CubemapVertex[maxVertices];
@@ -335,8 +335,8 @@ RendererCubemap::RendererCubemap(s)
 	m_vertexPositions[22] = { 0.5f, -0.5f, 0.5f, 1.0f };
 	m_vertexPositions[23] = { 0.5f, -0.5f, -0.5f, 1.0f };
 
-	// GPU
 	// ---------------------------------
+	// GPU
 
 	m_enableDepthBuffer = false;
 
@@ -405,15 +405,15 @@ RendererFont::RendererFont(s)
 {
 	Renderer::initialize();
 
-	// CPU
 	// ---------------------------------
+	// CPU
 
 	// Create array for storing quads vertices
 	m_vertexBufferBase = new SymbolVertex[maxVertices];
 	m_vertexBufferPtr = m_vertexBufferBase;
 
-	// GPU
 	// ---------------------------------
+	// GPU
 
 	m_enableDepthBuffer = false;
 
@@ -477,15 +477,15 @@ Renderer3D::Renderer3D(s)
 {
 	Renderer::initialize();
 
-	// CPU
 	// ---------------------------------
+	// CPU
 
 	// Create array for storing quads vertices
 	m_vertexBufferBase = new Vertex[maxVertices];
 	m_vertexBufferPtr = m_vertexBufferBase;
 
-	// GPU
 	// ---------------------------------
+	// GPU
 
 	m_enableDepthBuffer = true;
 
@@ -545,15 +545,15 @@ void Renderer3D::beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView)
 
 void Renderer3D::createElementBuffer()
 {
-	// CPU
 	// ---------------------------------
+	// CPU
 
 	// Create array for storing quads vertices
 	m_elementBufferBase = new uint32_t[maxElements];
 	m_elementBufferPtr = m_elementBufferBase;
 
-	// GPU
 	// ---------------------------------
+	// GPU
 
 	// Create index buffer
 	auto indexBuffer = std::make_shared<IndexBuffer>(m_elementBufferBase, sizeof(uint32_t) * maxElements);

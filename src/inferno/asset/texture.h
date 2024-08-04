@@ -112,11 +112,11 @@ public:
 
 	// Factory function
 	static std::shared_ptr<TextureFramebuffer> create(
-		uint32_t width, uint32_t height,
-		uint32_t internalFormat, uint32_t dataFormat, uint32_t dataType = GL_UNSIGNED_BYTE);
+		std::string_view path,
+		uint32_t width, uint32_t height, uint32_t internalFormat, uint32_t dataFormat, uint32_t dataType = GL_UNSIGNED_BYTE);
 
-	virtual void bind(uint32_t) const override {}
-	virtual void unbind() const override {}
+	virtual void bind(uint32_t unit) const override;
+	virtual void unbind() const override;
 
 private:
 	TextureFramebuffer(std::string_view path)

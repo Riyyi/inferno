@@ -19,7 +19,8 @@ public:
 	static void initialize();
 	static void destroy();
 
-	static void clear();
+	static void clearColorDepthBit();
+	static void clearColorBit();
 	static void clearColor(const glm::vec4& color);
 	static void drawIndexed(std::shared_ptr<VertexArray> vertexArray, uint32_t indexCount = 0);
 
