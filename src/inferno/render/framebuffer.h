@@ -6,15 +6,15 @@
 
 #pragma once
 
-#include <cstddef> //size_t
+#include <cstddef> // size_t
 #include <cstdint> // uint8_t
 #include <initializer_list>
 #include <memory> // std::shared_ptr
+#include <vector>
 
 #include "glm/ext/vector_float4.hpp" // glm::vec4
 
 #include "inferno/asset/texture.h"
-#include "ruc/format/log.h"
 
 namespace Inferno {
 
@@ -41,7 +41,6 @@ public:
 			: type(type)
 		{
 		}
-		~TypeProperties() {};
 
 		Type type;
 	};

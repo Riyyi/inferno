@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include <cstdint> // int8_t
+#include <cstddef> // size_t
+#include <cstdint> // uint8_t, uint32_t
 
 #include "glad/glad.h"
 #include "ruc/meta/assert.h"
@@ -16,7 +17,15 @@ namespace Inferno {
 
 std::shared_ptr<Framebuffer> Framebuffer::create(const Properties& properties)
 {
+	VERIFY((properties.attachments.size() > 0 && !properties.renderToScreen) || properties.renderToScreen,
+	       "cant have attachments on the default framebuffer");
+
 	auto result = std::shared_ptr<Framebuffer>(new Framebuffer(properties));
+
+	if (!properties.renderToScreen) {
+		result->m_id = UINT_MAX;
+		glGenFramebuffers(1, &result->m_id);
+	}
 
 	result->createTextures();
 
@@ -25,6 +34,10 @@ std::shared_ptr<Framebuffer> Framebuffer::create(const Properties& properties)
 
 Framebuffer::~Framebuffer()
 {
+	if (m_renderToScreen) {
+		return;
+	}
+
 	glDeleteFramebuffers(1, &m_id);
 }
 
