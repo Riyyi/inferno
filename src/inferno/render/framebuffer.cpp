@@ -14,18 +14,13 @@
 
 namespace Inferno {
 
-Framebuffer::Framebuffer(const Properties& init)
-	: m_type(init.type)
-	, m_width(init.width)
-	, m_height(init.height)
+std::shared_ptr<Framebuffer> Framebuffer::create(const Properties& properties)
 {
-	VERIFY(static_cast<int8_t>(init.type) != 0,
-	       "malformed framebuffer type: {}", init.type);
+	auto result = std::shared_ptr<Framebuffer>(new Framebuffer(properties));
 
-	m_id = UINT_MAX;
-	glGenFramebuffers(1, &m_id);
+	result->createTextures();
 
-	createTextures();
+	return result;
 }
 
 Framebuffer::~Framebuffer()
@@ -35,13 +30,6 @@ Framebuffer::~Framebuffer()
 
 // -----------------------------------------
 
-bool Framebuffer::check() const
-{
-	VERIFY(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE,
-	       "malformed framebuffer: {:#x}", glCheckFramebufferStatus(GL_FRAMEBUFFER));
-	return true;
-}
-
 void Framebuffer::bind() const
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_id);
@@ -50,6 +38,13 @@ void Framebuffer::bind() const
 void Framebuffer::unbind() const
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+bool Framebuffer::check() const
+{
+	VERIFY(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE,
+	       "malformed framebuffer: {:#x}", glCheckFramebufferStatus(GL_FRAMEBUFFER));
+	return true;
 }
 
 void Framebuffer::resize(uint32_t width, uint32_t height)
@@ -68,40 +63,55 @@ void Framebuffer::resize(uint32_t width, uint32_t height)
 
 void Framebuffer::createTextures()
 {
+	if (m_renderToScreen) {
+		return;
+	}
+
+	if (m_id) {
+		glDeleteFramebuffers(1, &m_id);
+		m_textures.clear();
+	}
+
+	m_id = UINT_MAX;
+	glGenFramebuffers(1, &m_id);
+
 	bind();
 
-	m_textures[0] = AssetManager::the().remove(FRAMEBUFFER_TEXTURE_COLOR);
-	m_textures[1] = AssetManager::the().remove(FRAMEBUFFER_TEXTURE_DEPTH);
-	m_textures[2] = AssetManager::the().remove(FRAMEBUFFER_TEXTURE_STENCIL);
-	m_textures[3] = AssetManager::the().remove(FRAMEBUFFER_TEXTURE_DEPTH_STENCIL);
+	auto it = m_attachments.begin();
+	uint8_t color_attachment = 0;
 
-	if (m_type & Type::Color) {
-		// Set color attachment 0 out of 32
-		m_textures[0] = AssetManager::the().load<TextureFramebuffer>(
-			FRAMEBUFFER_TEXTURE_COLOR, m_width, m_height, GL_RGB, GL_RGB);
-		m_textures[0]->bind(0);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_textures[0]->id(), 0);
-		m_textures[0]->unbind();
+	size_t size = m_attachments.size();
+	m_textures.resize(size);
+	for (size_t i = 0; i < size; ++i) {
+		TypeProperties type = *(it + i);
+
+		if (type.type == Type::Color) {
+			// Set color attachment 0 out of 32
+			m_textures[i] = (TextureFramebuffer::create(
+				"", m_width, m_height, GL_RGB, GL_RGB));
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + color_attachment, GL_TEXTURE_2D, m_textures[i]->id(), 0);
+		}
+
+		// This combined texture is required for older GPUs
+		if (type.type == Type::Depth24Stencil8) {
+			m_textures[i] = (TextureFramebuffer::create(
+				"", m_width, m_height, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8));
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_textures[i]->id(), 0);
+			continue;
+		}
+
+		if (type.type == Type::Depth32F) {
+			//  FIXME: This isnt a 32-bit float texture
+			m_textures[i] = (TextureFramebuffer::create(
+				"", m_width, m_height, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT));
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_textures[i]->id(), 0);
+			continue;
+		}
 	}
 
-	// This combined texture is required for older GPUs
-	if (m_type & Type::Depth && m_type & Stencil) {
-		m_textures[3] = AssetManager::the().load<TextureFramebuffer>(
-			FRAMEBUFFER_TEXTURE_DEPTH_STENCIL, m_width, m_height, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_textures[3]->id(), 0);
-	}
-	else if (m_type & Type::Depth) {
-		m_textures[1] = AssetManager::the().load<TextureFramebuffer>(
-			FRAMEBUFFER_TEXTURE_DEPTH, m_width, m_height, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_textures[1]->id(), 0);
-	}
-	else if (m_type & Type::Stencil) {
-		m_textures[2] = AssetManager::the().load<TextureFramebuffer>(
-			FRAMEBUFFER_TEXTURE_STENCIL, m_width, m_height, GL_STENCIL_INDEX, GL_STENCIL_INDEX);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_textures[2]->id(), 0);
-	}
-
+	VERIFY(color_attachment <= 32, "maximum color attachments was exceeded: {}/32", color_attachment);
 	check();
+
 	unbind();
 }
 

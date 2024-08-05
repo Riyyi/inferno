@@ -53,10 +53,19 @@ Application::Application()
 	Input::initialize();
 	RenderCommand::initialize();
 
-	m_framebuffer = std::make_unique<Framebuffer>(
-		Framebuffer::Properties { .type = Framebuffer::Type::Color | Framebuffer::Type::Depth | Framebuffer::Type::Stencil,
-	                              .width = m_window->getWidth(),
-	                              .height = m_window->getHeight() });
+	m_framebuffer = Framebuffer::create({
+		.attachments = { Framebuffer::Type::Color, Framebuffer::Type::Depth },
+		.width = m_window->getWidth(),
+		.height = m_window->getHeight(),
+		.clearColor = { 0.2f, 0.3f, 0.3f, 1.0f },
+		.clearBit = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT,
+	});
+
+	m_screenFramebuffer = Framebuffer::create({
+		.renderToScreen = true,
+		.clearColor = { 1.0f, 1.0f, 1.0f, 1.0f },
+		.clearBit = GL_COLOR_BUFFER_BIT,
+	});
 
 	m_scene = std::make_shared<Scene>();
 	m_scene->initialize();
@@ -175,10 +184,10 @@ int Application::run()
 
 		m_framebuffer->bind();
 
-		render();
+		RenderCommand::clearColor(m_framebuffer->clearColor());
+		RenderCommand::clearBit(m_framebuffer->clearBit());
 
-		RenderCommand::clearColor({ 0.2f, 0.3f, 0.3f, 1.0f });
-		RenderCommand::clearBit(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		render();
 
 		std::pair<glm::mat4, glm::mat4> projectionView = m_scene->cameraProjectionView();
 		RendererCubemap::the().beginScene(projectionView.first, projectionView.second); // camera, lights, environment
@@ -199,14 +208,18 @@ int Application::run()
 		// ---------------------------------
 		// Framebuffer
 
-		RenderCommand::clearColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-		RenderCommand::clearBit(GL_COLOR_BUFFER_BIT);
+		m_screenFramebuffer->bind();
+
+		RenderCommand::clearColor(m_screenFramebuffer->clearColor());
+		RenderCommand::clearBit(m_screenFramebuffer->clearBit());
 
 		Renderer2D::the().setEnableDepthBuffer(false);
 		Renderer2D::the().beginScene(matIdentity, matIdentity);
 		Renderer2D::the().drawQuad(transformIdentity, vectorOne, m_framebuffer->texture(0));
 		Renderer2D::the().endScene();
 		Renderer2D::the().setEnableDepthBuffer(true);
+
+		m_screenFramebuffer->unbind();
 
 		m_window->render();
 	}

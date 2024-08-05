@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Riyyi
+ * Copyright (C) 2022,2024 Riyyi
  *
  * SPDX-License-Identifier: MIT
  */
@@ -51,8 +51,9 @@ private:
 	float m_lastFrameTime { 0.0f };
 
 	std::unique_ptr<Window> m_window;
+	std::shared_ptr<Framebuffer> m_framebuffer;
+	std::shared_ptr<Framebuffer> m_screenFramebuffer;
 	std::shared_ptr<Scene> m_scene;
-	std::unique_ptr<Framebuffer> m_framebuffer;
 
 	//
 	std::shared_ptr<Font> m_font;
