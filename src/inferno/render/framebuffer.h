@@ -43,7 +43,7 @@ public:
 	void bind() const;
 	void unbind() const;
 
-	void setSize(uint32_t width, uint32_t height);
+	void resize(uint32_t width, uint32_t height);
 
 	Type type() const { return m_type; }
 	uint32_t width() const { return m_width; }

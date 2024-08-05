@@ -178,7 +178,7 @@ int Application::run()
 		render();
 
 		RenderCommand::clearColor({ 0.2f, 0.3f, 0.3f, 1.0f });
-		RenderCommand::clearColorDepthBit();
+		RenderCommand::clearBit(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		std::pair<glm::mat4, glm::mat4> projectionView = m_scene->cameraProjectionView();
 		RendererCubemap::the().beginScene(projectionView.first, projectionView.second); // camera, lights, environment
@@ -200,7 +200,7 @@ int Application::run()
 		// Framebuffer
 
 		RenderCommand::clearColor({ 1.0f, 1.0f, 1.0f, 1.0f });
-		RenderCommand::clearColorBit();
+		RenderCommand::clearBit(GL_COLOR_BUFFER_BIT);
 
 		Renderer2D::the().setEnableDepthBuffer(false);
 		Renderer2D::the().beginScene(matIdentity, matIdentity);
@@ -242,7 +242,7 @@ bool Application::onWindowResize(WindowResizeEvent& e)
 	ruc::info("WindowResizeEvent {}x{}", e.getWidth(), e.getHeight());
 
 	RenderCommand::setViewport(0, 0, e.getWidth(), e.getHeight());
-	m_framebuffer->setSize(e.getWidth(), e.getHeight());
+	m_framebuffer->resize(e.getWidth(), e.getHeight());
 
 	return true;
 }

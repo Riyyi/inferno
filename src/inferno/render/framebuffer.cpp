@@ -52,7 +52,7 @@ void Framebuffer::unbind() const
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Framebuffer::setSize(uint32_t width, uint32_t height)
+void Framebuffer::resize(uint32_t width, uint32_t height)
 {
 	if (m_width == width && m_height == height) {
 		return;
