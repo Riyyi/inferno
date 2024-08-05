@@ -22,11 +22,6 @@ std::shared_ptr<Framebuffer> Framebuffer::create(const Properties& properties)
 
 	auto result = std::shared_ptr<Framebuffer>(new Framebuffer(properties));
 
-	if (!properties.renderToScreen) {
-		result->m_id = UINT_MAX;
-		glGenFramebuffers(1, &result->m_id);
-	}
-
 	result->createTextures();
 
 	return result;
