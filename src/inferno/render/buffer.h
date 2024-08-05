@@ -18,13 +18,13 @@ namespace Inferno {
 // https://www.khronos.org/opengl/wiki/Data_Type_(GLSL)
 enum class BufferElementType {
 	None = 0,
-	Bool, Bool2, Bool3, Bool4,          // bvec
-	Int, Int2, Int3, Int4,              // ivec
-	Uint, Uint2, Uint3, Uint4,          // uvec
-	Float, Vec2, Vec3, Vec4,            // vec
-	Double, Double2, Double3, Double4,  // dvec
-	Mat2, Mat3, Mat4,                   // mat
-	DoubleMat2, DoubleMat3, DoubleMat4, // dmat
+	Bool, Bool2, Bool3, Bool4,                      // bvec
+	Int, Int2, Int3, Int4,                          // ivec
+	Uint, Uint2, Uint3, Uint4,                      // uvec
+	Float, Vec2, Vec3, Vec4,                        // vec
+	VecDouble, VecDouble2, VecDouble3, VecDouble4,  // dvec
+	Mat2, Mat3, Mat4,                               // mat
+	MatDouble2, MatDouble3, MatDouble4,             // dmat
 };
 // clang-format on
 

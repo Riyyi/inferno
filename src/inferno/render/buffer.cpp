@@ -5,10 +5,9 @@
  */
 
 #include "glad/glad.h"
-
-#include "inferno/core.h"
-#include "inferno/render/buffer.h"
 #include "ruc/meta/assert.h"
+
+#include "inferno/render/buffer.h"
 
 namespace Inferno {
 
@@ -43,57 +42,38 @@ uint32_t BufferElement::getTypeSize(const BufferElementType type)
 	case BufferElementType::None:
 		return 0;
 	case BufferElementType::Bool:
-		return sizeof(bool);
 	case BufferElementType::Bool2:
-		return sizeof(bool) * 2;
 	case BufferElementType::Bool3:
-		return sizeof(bool) * 3;
 	case BufferElementType::Bool4:
-		return sizeof(bool) * 4;
+		return sizeof(bool) * getTypeCount(type);
 	case BufferElementType::Int:
-		return sizeof(int32_t);
 	case BufferElementType::Int2:
-		return sizeof(int32_t) * 2;
 	case BufferElementType::Int3:
-		return sizeof(int32_t) * 3;
 	case BufferElementType::Int4:
-		return sizeof(int32_t) * 4;
+		return sizeof(int32_t) * getTypeCount(type);
 	case BufferElementType::Uint:
-		return sizeof(uint32_t);
 	case BufferElementType::Uint2:
-		return sizeof(uint32_t) * 2;
 	case BufferElementType::Uint3:
-		return sizeof(uint32_t) * 3;
 	case BufferElementType::Uint4:
-		return sizeof(uint32_t) * 4;
+		return sizeof(uint32_t) * getTypeCount(type);
 	case BufferElementType::Float:
-		return sizeof(float);
 	case BufferElementType::Vec2:
-		return sizeof(float) * 2;
 	case BufferElementType::Vec3:
-		return sizeof(float) * 3;
 	case BufferElementType::Vec4:
-		return sizeof(float) * 4;
-	case BufferElementType::Double:
-		return sizeof(double);
-	case BufferElementType::Double2:
-		return sizeof(double);
-	case BufferElementType::Double3:
-		return sizeof(double);
-	case BufferElementType::Double4:
-		return sizeof(double);
+		return sizeof(float) * getTypeCount(type);
+	case BufferElementType::VecDouble:
+	case BufferElementType::VecDouble2:
+	case BufferElementType::VecDouble3:
+	case BufferElementType::VecDouble4:
+		return sizeof(double) * getTypeCount(type);
 	case BufferElementType::Mat2:
-		return sizeof(float) * 2 * 2;
 	case BufferElementType::Mat3:
-		return sizeof(float) * 3 * 3;
 	case BufferElementType::Mat4:
-		return sizeof(float) * 4 * 4;
-	case BufferElementType::DoubleMat2:
-		return sizeof(double) * 2 * 2;
-	case BufferElementType::DoubleMat3:
-		return sizeof(double) * 3 * 3;
-	case BufferElementType::DoubleMat4:
-		return sizeof(double) * 4 * 4;
+		return sizeof(float) * getTypeCount(type);
+	case BufferElementType::MatDouble2:
+	case BufferElementType::MatDouble3:
+	case BufferElementType::MatDouble4:
+		return sizeof(double) * getTypeCount(type);
 	};
 
 	VERIFY(false, "BufferElement unknown BufferElementType size!");
@@ -106,44 +86,28 @@ uint32_t BufferElement::getTypeCount(const BufferElementType type)
 	case BufferElementType::None:
 		return 0;
 	case BufferElementType::Bool:
+	case BufferElementType::Int:
+	case BufferElementType::Uint:
+	case BufferElementType::Float:
+	case BufferElementType::VecDouble:
 		return 1;
 	case BufferElementType::Bool2:
+	case BufferElementType::Int2:
+	case BufferElementType::Uint2:
+	case BufferElementType::Vec2:
+	case BufferElementType::VecDouble2:
 		return 2;
 	case BufferElementType::Bool3:
+	case BufferElementType::Int3:
+	case BufferElementType::Uint3:
+	case BufferElementType::Vec3:
+	case BufferElementType::VecDouble3:
 		return 3;
 	case BufferElementType::Bool4:
-		return 4;
-	case BufferElementType::Int:
-		return 1;
-	case BufferElementType::Int2:
-		return 2;
-	case BufferElementType::Int3:
-		return 3;
 	case BufferElementType::Int4:
-		return 4;
-	case BufferElementType::Uint:
-		return 1;
-	case BufferElementType::Uint2:
-		return 2;
-	case BufferElementType::Uint3:
-		return 3;
 	case BufferElementType::Uint4:
-		return 4;
-	case BufferElementType::Float:
-		return 1;
-	case BufferElementType::Vec2:
-		return 2;
-	case BufferElementType::Vec3:
-		return 3;
 	case BufferElementType::Vec4:
-		return 4;
-	case BufferElementType::Double:
-		return 1;
-	case BufferElementType::Double2:
-		return 2;
-	case BufferElementType::Double3:
-		return 3;
-	case BufferElementType::Double4:
+	case BufferElementType::VecDouble4:
 		return 4;
 	case BufferElementType::Mat2:
 		return 2 * 2;
@@ -151,11 +115,11 @@ uint32_t BufferElement::getTypeCount(const BufferElementType type)
 		return 3 * 3;
 	case BufferElementType::Mat4:
 		return 4 * 4;
-	case BufferElementType::DoubleMat2:
+	case BufferElementType::MatDouble2:
 		return 2 * 2;
-	case BufferElementType::DoubleMat3:
+	case BufferElementType::MatDouble3:
 		return 3 * 3;
-	case BufferElementType::DoubleMat4:
+	case BufferElementType::MatDouble4:
 		return 4 * 4;
 	};
 
@@ -169,56 +133,37 @@ uint32_t BufferElement::getTypeGL(const BufferElementType type)
 	case BufferElementType::None:
 		return GL_NONE;
 	case BufferElementType::Bool:
-		return GL_BOOL;
 	case BufferElementType::Bool2:
-		return GL_BOOL;
 	case BufferElementType::Bool3:
-		return GL_BOOL;
 	case BufferElementType::Bool4:
 		return GL_BOOL;
 	case BufferElementType::Int:
-		return GL_INT;
 	case BufferElementType::Int2:
-		return GL_INT;
 	case BufferElementType::Int3:
-		return GL_INT;
 	case BufferElementType::Int4:
 		return GL_INT;
 	case BufferElementType::Uint:
-		return GL_UNSIGNED_INT;
 	case BufferElementType::Uint2:
-		return GL_UNSIGNED_INT;
 	case BufferElementType::Uint3:
-		return GL_UNSIGNED_INT;
 	case BufferElementType::Uint4:
 		return GL_UNSIGNED_INT;
 	case BufferElementType::Float:
-		return GL_FLOAT;
 	case BufferElementType::Vec2:
-		return GL_FLOAT;
 	case BufferElementType::Vec3:
-		return GL_FLOAT;
 	case BufferElementType::Vec4:
 		return GL_FLOAT;
-	case BufferElementType::Double:
-		return GL_DOUBLE;
-	case BufferElementType::Double2:
-		return GL_DOUBLE;
-	case BufferElementType::Double3:
-		return GL_DOUBLE;
-	case BufferElementType::Double4:
+	case BufferElementType::VecDouble:
+	case BufferElementType::VecDouble2:
+	case BufferElementType::VecDouble3:
+	case BufferElementType::VecDouble4:
 		return GL_DOUBLE;
 	case BufferElementType::Mat2:
-		return GL_FLOAT;
 	case BufferElementType::Mat3:
-		return GL_FLOAT;
 	case BufferElementType::Mat4:
 		return GL_FLOAT;
-	case BufferElementType::DoubleMat2:
-		return GL_DOUBLE;
-	case BufferElementType::DoubleMat3:
-		return GL_DOUBLE;
-	case BufferElementType::DoubleMat4:
+	case BufferElementType::MatDouble2:
+	case BufferElementType::MatDouble3:
+	case BufferElementType::MatDouble4:
 		return GL_DOUBLE;
 	};
 
