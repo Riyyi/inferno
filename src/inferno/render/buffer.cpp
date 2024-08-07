@@ -306,13 +306,63 @@ void VertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer)
 	uint32_t index = 0;
 	for (const auto& element : layout) {
 		glEnableVertexAttribArray(index);
-		glVertexAttribPointer(
-			index,
-			element.getTypeCount(),
-			element.getTypeGL(),
-			element.getNormalized() ? GL_TRUE : GL_FALSE,
-			layout.getStride(),
-			reinterpret_cast<const void*>(element.getOffset()));
+		switch (element.getType()) {
+		case BufferElementType::None:
+			break;
+		case BufferElementType::Int:
+		case BufferElementType::Int2:
+		case BufferElementType::Int3:
+		case BufferElementType::Int4:
+		case BufferElementType::Uint:
+		case BufferElementType::Uint2:
+		case BufferElementType::Uint3:
+		case BufferElementType::Uint4: {
+			glVertexAttribIPointer(
+				index,
+				element.getTypeCount(),
+				element.getTypeGL(),
+				layout.getStride(),
+				reinterpret_cast<const void*>(element.getOffset()));
+			break;
+		}
+		case BufferElementType::Bool:
+		case BufferElementType::Bool2:
+		case BufferElementType::Bool3:
+		case BufferElementType::Bool4:
+		case BufferElementType::Float:
+		case BufferElementType::Vec2:
+		case BufferElementType::Vec3:
+		case BufferElementType::Vec4:
+		case BufferElementType::Mat2:
+		case BufferElementType::Mat3:
+		case BufferElementType::Mat4: {
+			glVertexAttribPointer(
+				index,
+				element.getTypeCount(),
+				element.getTypeGL(),
+				element.getNormalized() ? GL_TRUE : GL_FALSE,
+				layout.getStride(),
+				reinterpret_cast<const void*>(element.getOffset()));
+			break;
+		}
+		case BufferElementType::VecDouble:
+		case BufferElementType::VecDouble2:
+		case BufferElementType::VecDouble3:
+		case BufferElementType::VecDouble4:
+		case BufferElementType::MatDouble2:
+		case BufferElementType::MatDouble3:
+		case BufferElementType::MatDouble4: {
+			glVertexAttribLPointer(
+				index,
+				element.getTypeCount(),
+				element.getTypeGL(),
+				layout.getStride(),
+				reinterpret_cast<const void*>(element.getOffset()));
+			break;
+		}
+		default:
+			VERIFY_NOT_REACHED();
+		};
 
 		index++;
 	}

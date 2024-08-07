@@ -4,7 +4,7 @@ layout(location = 0) out vec4 color;
 
 in vec4 v_color;
 in vec2 v_textureCoordinates;
-in flat float v_textureIndex;
+in flat uint v_textureIndex;
 in float v_width;
 in float v_edge;
 in float v_borderWidth;
@@ -25,7 +25,7 @@ float alpha(float textureAlpha)
 void main()
 {
 	vec4 textureColor = v_color;
-	switch(int(v_textureIndex)) {
+	switch(v_textureIndex) {
 		case 0:  break; // Texture unit 0 is reserved for no texture
 		// case 1: textureColor.a = 1; break;
 		case 1:  textureColor.a = alpha(texture(u_textures[1], v_textureCoordinates).a); break;

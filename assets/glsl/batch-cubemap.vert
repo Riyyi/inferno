@@ -2,11 +2,11 @@
 
 layout(location = 0) in vec3 a_position;
 layout(location = 1) in vec4 a_color;
-layout(location = 2) in float a_textureIndex;
+layout(location = 2) in uint a_textureIndex;
 
 out vec4 v_color;
 out vec3 v_textureCoordinates;
-out flat float v_textureIndex;
+out flat uint v_textureIndex;
 
 uniform mat4 u_projectionView;
 

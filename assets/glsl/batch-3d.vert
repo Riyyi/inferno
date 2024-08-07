@@ -3,11 +3,11 @@
 layout(location = 0) in vec3 a_position;
 layout(location = 1) in vec3 a_normal;
 layout(location = 2) in vec2 a_textureCoordinates;
-layout(location = 3) in float a_textureIndex;
+layout(location = 3) in uint a_textureIndex;
 
 out vec3 v_normal;
 out vec2 v_textureCoordinates;
-out flat float v_textureIndex;
+out flat uint v_textureIndex;
 
 uniform mat4 u_projectionView;
 

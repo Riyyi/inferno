@@ -221,7 +221,7 @@ Renderer2D::Renderer2D(s)
 		{ BufferElementType::Vec3, "a_position" },
 		{ BufferElementType::Vec4, "a_color" },
 		{ BufferElementType::Vec2, "a_textureCoordinates" },
-		{ BufferElementType::Float, "a_textureIndex" },
+		{ BufferElementType::Uint, "a_textureIndex" },
 	});
 	m_vertexArray->addVertexBuffer(vertexBuffer);
 
@@ -271,7 +271,7 @@ void Renderer2D::drawQuad(const TransformComponent& transform, glm::mat4 color, 
 		m_vertexBufferPtr->position = transform.transform * m_vertexPositions[i];
 		m_vertexBufferPtr->color = color[i];
 		m_vertexBufferPtr->textureCoordinates = textureCoordinates[i];
-		m_vertexBufferPtr->textureIndex = static_cast<float>(textureUnitIndex);
+		m_vertexBufferPtr->textureIndex = textureUnitIndex;
 		m_vertexBufferPtr++;
 	}
 
@@ -345,7 +345,7 @@ RendererCubemap::RendererCubemap(s)
 	vertexBuffer->setLayout({
 		{ BufferElementType::Vec3, "a_position" },
 		{ BufferElementType::Vec4, "a_color" },
-		{ BufferElementType::Float, "a_textureIndex" },
+		{ BufferElementType::Uint, "a_textureIndex" },
 	});
 	m_vertexArray->addVertexBuffer(vertexBuffer);
 
@@ -386,7 +386,7 @@ void RendererCubemap::drawCubemap(const TransformComponent& transform, glm::mat4
 	for (uint32_t i = 0; i < vertexPerQuad * quadPerCube; i++) {
 		m_vertexBufferPtr->position = transform.transform * m_vertexPositions[i];
 		m_vertexBufferPtr->color = color[i % 4];
-		m_vertexBufferPtr->textureIndex = static_cast<float>(textureUnitIndex);
+		m_vertexBufferPtr->textureIndex = textureUnitIndex;
 		m_vertexBufferPtr++;
 	}
 
@@ -423,7 +423,7 @@ RendererFont::RendererFont(s)
 		{ BufferElementType::Vec3, "a_position" },
 		{ BufferElementType::Vec4, "a_color" },
 		{ BufferElementType::Vec2, "a_textureCoordinates" },
-		{ BufferElementType::Float, "a_textureIndex" },
+		{ BufferElementType::Uint, "a_textureIndex" },
 		{ BufferElementType::Float, "a_width" },
 		{ BufferElementType::Float, "a_edge" },
 		{ BufferElementType::Float, "a_borderWidth" },
@@ -450,7 +450,7 @@ void RendererFont::drawSymbol(std::array<SymbolVertex, vertexPerQuad>& symbolQua
 		m_vertexBufferPtr->quad.position = symbolQuad[i].quad.position;
 		m_vertexBufferPtr->quad.color = symbolQuad[i].quad.color;
 		m_vertexBufferPtr->quad.textureCoordinates = symbolQuad[i].quad.textureCoordinates;
-		m_vertexBufferPtr->quad.textureIndex = static_cast<float>(textureUnitIndex);
+		m_vertexBufferPtr->quad.textureIndex = textureUnitIndex;
 
 		m_vertexBufferPtr->width = symbolQuad[i].width;
 		m_vertexBufferPtr->edge = symbolQuad[i].edge;
@@ -495,7 +495,7 @@ Renderer3D::Renderer3D(s)
 		{ BufferElementType::Vec3, "a_position" },
 		{ BufferElementType::Vec3, "a_normal" },
 		{ BufferElementType::Vec2, "a_textureCoordinates" },
-		{ BufferElementType::Float, "a_textureIndex" },
+		{ BufferElementType::Uint, "a_textureIndex" },
 	});
 	m_vertexArray->addVertexBuffer(vertexBuffer);
 
@@ -521,7 +521,7 @@ void Renderer3D::drawModel(std::span<const Vertex> vertices, std::span<const uin
 		m_vertexBufferPtr->position = transform.transform * glm::vec4(vertex.position, 1.0f);
 		m_vertexBufferPtr->normal = vertex.normal;
 		m_vertexBufferPtr->textureCoordinates = vertex.textureCoordinates;
-		m_vertexBufferPtr->textureIndex = static_cast<float>(textureUnitIndex);
+		m_vertexBufferPtr->textureIndex = textureUnitIndex;
 		m_vertexBufferPtr++;
 	}
 

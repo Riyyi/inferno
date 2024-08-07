@@ -27,13 +27,13 @@ struct QuadVertex {
 	glm::vec3 position { 0.0f, 0.0f, 0.0f };
 	glm::vec4 color { 1.0f, 1.0f, 1.0f, 1.0f };
 	glm::vec2 textureCoordinates { 0.0f, 0.0f };
-	float textureIndex = 0;
+	uint32_t textureIndex = 0;
 };
 
 struct CubemapVertex {
 	glm::vec3 position { 0.0f, 0.0f, 0.0f };
 	glm::vec4 color { 1.0f, 1.0f, 1.0f, 1.0f };
-	float textureIndex = 0;
+	uint32_t textureIndex = 0;
 };
 
 struct SymbolVertex {
@@ -54,7 +54,7 @@ struct Vertex {
 	glm::vec3 position { 0.0f, 0.0f, 0.0f };
 	glm::vec3 normal { 1.0f, 1.0f, 1.0f };
 	glm::vec2 textureCoordinates { 0.0f, 0.0f };
-	float textureIndex = 0;
+	uint32_t textureIndex = 0;
 };
 
 // -------------------------------------
