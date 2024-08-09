@@ -6,6 +6,7 @@
 
 #include <cstdint> // int32_t, uint32_t
 #include <string_view>
+#include <unordered_map>
 
 #include "glm/fwd.hpp" // glm::mat3, glm::mat4, glm::vec2, glm::vec3
 
@@ -20,17 +21,17 @@ public:
 	// Factory function
 	static std::shared_ptr<Shader> create(std::string_view path);
 
-	int32_t findUniform(std::string_view name) const;
+	int32_t findUniformLocation(std::string_view name);
 
 	void setInt(std::string_view name, int value);
 	void setInt(std::string_view name, int* values, uint32_t count);
-	void setFloat(std::string_view name, float value) const;
-	void setFloat(std::string_view name, float v1, float v2, float v3, float v4) const;
-	void setFloat(std::string_view name, glm::vec2 value) const;
-	void setFloat(std::string_view name, glm::vec3 value) const;
-	void setFloat(std::string_view name, glm::vec4 value) const;
-	void setFloat(std::string_view name, glm::mat3 matrix) const;
-	void setFloat(std::string_view name, glm::mat4 matrix) const;
+	void setFloat(std::string_view name, float value);
+	void setFloat(std::string_view name, float v1, float v2, float v3, float v4);
+	void setFloat(std::string_view name, glm::vec2 value);
+	void setFloat(std::string_view name, glm::vec3 value);
+	void setFloat(std::string_view name, glm::vec4 value);
+	void setFloat(std::string_view name, glm::mat3 matrix);
+	void setFloat(std::string_view name, glm::mat4 matrix);
 
 	void bind() const;
 	void unbind() const;
@@ -52,6 +53,7 @@ private:
 
 private:
 	uint32_t m_id { 0 };
+	std::unordered_map<std::string_view, int32_t> m_uniformLocation;
 };
 
 // -----------------------------------------

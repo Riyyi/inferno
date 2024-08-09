@@ -50,65 +50,72 @@ Shader::~Shader()
 	}
 }
 
-int32_t Shader::findUniform(std::string_view name) const
+int32_t Shader::findUniformLocation(std::string_view name)
 {
+	// Cache uniform locations, prevent going to the GPU every call
+	if (m_uniformLocation.find(name) != m_uniformLocation.end()) {
+		return m_uniformLocation[name];
+	}
+
 	int32_t location = glGetUniformLocation(m_id, name.data());
 	VERIFY(location != -1, "Shader could not find uniform '{}'", name);
+	m_uniformLocation[name] = location;
+
 	return location;
 }
 
 void Shader::setInt(std::string_view name, int value)
 {
 	// Set uniform int
-	glUniform1i(findUniform(name), value);
+	glUniform1i(findUniformLocation(name), value);
 }
 
 void Shader::setInt(std::string_view name, int* values, uint32_t count)
 {
 	// Set uniform int array
-	glUniform1iv(findUniform(name), count, values);
+	glUniform1iv(findUniformLocation(name), count, values);
 }
 
-void Shader::setFloat(std::string_view name, float value) const
+void Shader::setFloat(std::string_view name, float value)
 {
 	// Set uniform float
-	glUniform1f(findUniform(name), value);
+	glUniform1f(findUniformLocation(name), value);
 }
 
-void Shader::setFloat(std::string_view name, float v1, float v2, float v3, float v4) const
+void Shader::setFloat(std::string_view name, float v1, float v2, float v3, float v4)
 {
 	// Set uniform vec4 data
-	glUniform4f(findUniform(name), v1, v2, v3, v4);
+	glUniform4f(findUniformLocation(name), v1, v2, v3, v4);
 }
 
-void Shader::setFloat(std::string_view name, glm::vec2 value) const
+void Shader::setFloat(std::string_view name, glm::vec2 value)
 {
 	// Set uniform vec2 data
-	glUniform2f(findUniform(name), value.x, value.y);
+	glUniform2f(findUniformLocation(name), value.x, value.y);
 }
 
-void Shader::setFloat(std::string_view name, glm::vec3 value) const
+void Shader::setFloat(std::string_view name, glm::vec3 value)
 {
 	// Set uniform vec3 data
-	glUniform3f(findUniform(name), value.x, value.y, value.z);
+	glUniform3f(findUniformLocation(name), value.x, value.y, value.z);
 }
 
-void Shader::setFloat(std::string_view name, glm::vec4 value) const
+void Shader::setFloat(std::string_view name, glm::vec4 value)
 {
 	// Set uniform vec4 data
-	glUniform4f(findUniform(name), value.x, value.y, value.z, value.w);
+	glUniform4f(findUniformLocation(name), value.x, value.y, value.z, value.w);
 }
 
-void Shader::setFloat(std::string_view name, glm::mat3 matrix) const
+void Shader::setFloat(std::string_view name, glm::mat3 matrix)
 {
 	// Set uniform mat3 data
-	glUniformMatrix3fv(findUniform(name), 1, GL_FALSE, glm::value_ptr(matrix));
+	glUniformMatrix3fv(findUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-void Shader::setFloat(std::string_view name, glm::mat4 matrix) const
+void Shader::setFloat(std::string_view name, glm::mat4 matrix)
 {
 	// Set uniform mat4 data
-	glUniformMatrix4fv(findUniform(name), 1, GL_FALSE, glm::value_ptr(matrix));
+	glUniformMatrix4fv(findUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 void Shader::bind() const
