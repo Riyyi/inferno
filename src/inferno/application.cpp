@@ -171,13 +171,18 @@ int Application::run()
 	constexpr glm::mat4 matIdentity { 1.0f };
 	constexpr TransformComponent transformIdentity;
 
-	// m_window->setVSync(false);
+	double gametime = 0;
+	uint64_t frames = 0;
+
 	while (!m_window->shouldClose()) {
 
 		float time = Time::time();
 		float deltaTime = time - m_lastFrameTime;
 		m_lastFrameTime = time;
 		// ruc::debug("Frametime {}ms", deltaTime * 1000);
+
+		gametime += deltaTime;
+		frames++;
 
 		// ---------------------------------
 		// Update
@@ -223,6 +228,8 @@ int Application::run()
 	}
 
 	ruc::debug("Application shutdown");
+
+	ruc::debug("Average frametime: {:.2f}ms", (gametime / frames) * 1000);
 
 	return m_status;
 }

@@ -3,7 +3,7 @@
 		"fullscreen": "windowed",
 		"height": 720,
 		"title": "Inferno",
-		"vsync": true,
+		"vsync": false,
 		"width": 1280
 	}
 }
