@@ -228,13 +228,6 @@ Renderer2D::Renderer2D(s)
 	ruc::info("Renderer2D initialized");
 }
 
-void Renderer2D::beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView)
-{
-	m_shader->bind();
-	m_shader->setFloat("u_projectionView", cameraProjection * cameraView);
-	m_shader->unbind();
-}
-
 void Renderer2D::drawQuad(const TransformComponent& transform, glm::vec4 color)
 {
 	drawQuad(transform, color, nullptr);
@@ -534,13 +527,6 @@ void Renderer3D::drawModel(std::span<const Vertex> vertices, std::span<const uin
 
 	m_vertexIndex += vertices.size();
 	m_elementIndex += elements.size();
-}
-
-void Renderer3D::beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView)
-{
-	m_shader->bind();
-	m_shader->setFloat("u_projectionView", cameraProjection * cameraView);
-	m_shader->unbind();
 }
 
 void Renderer3D::createElementBuffer()

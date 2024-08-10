@@ -132,8 +132,6 @@ public:
 
 	using Singleton<Renderer2D>::destroy;
 
-	virtual void beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView) override;
-
 	void drawQuad(const TransformComponent& transform, glm::vec4 color);
 	void drawQuad(const TransformComponent& transform, glm::mat4 color);
 	void drawQuad(const TransformComponent& transform, glm::vec4 color, std::shared_ptr<Texture> texture);
@@ -198,8 +196,6 @@ public:
 	virtual ~Renderer3D() = default;
 
 	using Singleton<Renderer3D>::destroy;
-
-	virtual void beginScene(glm::mat4 cameraProjection, glm::mat4 cameraView) override;
 
 	void drawModel(std::span<const Vertex> vertices, std::span<const uint32_t> indices, const TransformComponent& transform, std::shared_ptr<Texture> texture);
 

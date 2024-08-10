@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 
+#include <cstddef> // size_t
+#include <cstdint> // int32_t, uint8_t, uint32_t
+#include <memory>  // std::shared_ptr
+#include <string>
+#include <utility> // std::pair
+
 #include "glad/glad.h"
 #include "ruc/meta/assert.h"
 
@@ -61,10 +67,10 @@ uint32_t BufferElement::getTypeSize(const BufferElementType type)
 	case BufferElementType::Vec3:
 	case BufferElementType::Vec4:
 		return sizeof(float) * getTypeCount(type);
-	case BufferElementType::VecDouble:
-	case BufferElementType::VecDouble2:
-	case BufferElementType::VecDouble3:
-	case BufferElementType::VecDouble4:
+	case BufferElementType::Double:
+	case BufferElementType::Vec2Double:
+	case BufferElementType::Vec3Double:
+	case BufferElementType::Vec4Double:
 		return sizeof(double) * getTypeCount(type);
 	case BufferElementType::Mat2:
 	case BufferElementType::Mat3:
@@ -89,25 +95,25 @@ uint32_t BufferElement::getTypeCount(const BufferElementType type)
 	case BufferElementType::Int:
 	case BufferElementType::Uint:
 	case BufferElementType::Float:
-	case BufferElementType::VecDouble:
+	case BufferElementType::Double:
 		return 1;
 	case BufferElementType::Bool2:
 	case BufferElementType::Int2:
 	case BufferElementType::Uint2:
 	case BufferElementType::Vec2:
-	case BufferElementType::VecDouble2:
+	case BufferElementType::Vec2Double:
 		return 2;
 	case BufferElementType::Bool3:
 	case BufferElementType::Int3:
 	case BufferElementType::Uint3:
 	case BufferElementType::Vec3:
-	case BufferElementType::VecDouble3:
+	case BufferElementType::Vec3Double:
 		return 3;
 	case BufferElementType::Bool4:
 	case BufferElementType::Int4:
 	case BufferElementType::Uint4:
 	case BufferElementType::Vec4:
-	case BufferElementType::VecDouble4:
+	case BufferElementType::Vec4Double:
 		return 4;
 	case BufferElementType::Mat2:
 		return 2 * 2;
@@ -152,10 +158,10 @@ uint32_t BufferElement::getTypeGL(const BufferElementType type)
 	case BufferElementType::Vec3:
 	case BufferElementType::Vec4:
 		return GL_FLOAT;
-	case BufferElementType::VecDouble:
-	case BufferElementType::VecDouble2:
-	case BufferElementType::VecDouble3:
-	case BufferElementType::VecDouble4:
+	case BufferElementType::Double:
+	case BufferElementType::Vec2Double:
+	case BufferElementType::Vec3Double:
+	case BufferElementType::Vec4Double:
 		return GL_DOUBLE;
 	case BufferElementType::Mat2:
 	case BufferElementType::Mat3:
@@ -184,7 +190,7 @@ void BufferLayout::calculateOffsetsAndStride()
 	m_stride = 0;
 	for (auto& element : m_elements) {
 		element.setOffset(m_stride);
-		m_stride += element.getSize();
+		m_stride += element.size();
 	}
 }
 
@@ -202,7 +208,7 @@ VertexBuffer::VertexBuffer(size_t size, float* vertices)
 	bind();
 
 	// Upload data to the GPU
-	glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_DYNAMIC_DRAW);
 
 	unbind();
 }
@@ -242,7 +248,7 @@ IndexBuffer::IndexBuffer(uint32_t* indices, size_t size)
 	bind();
 
 	// Upload data to the GPU
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_DYNAMIC_DRAW);
 
 	unbind();
 }
@@ -298,7 +304,7 @@ void VertexArray::unbind() const
 void VertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer)
 {
 	const auto& layout = vertexBuffer->getLayout();
-	VERIFY(layout.getElements().size(), "VertexBuffer has no layout");
+	VERIFY(layout.elements().size(), "VertexBuffer has no layout");
 
 	bind();
 	vertexBuffer->bind();
@@ -306,7 +312,7 @@ void VertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer)
 	uint32_t index = 0;
 	for (const auto& element : layout) {
 		glEnableVertexAttribArray(index);
-		switch (element.getType()) {
+		switch (element.type()) {
 		case BufferElementType::None:
 			break;
 		case BufferElementType::Int:
@@ -321,8 +327,8 @@ void VertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer)
 				index,
 				element.getTypeCount(),
 				element.getTypeGL(),
-				layout.getStride(),
-				reinterpret_cast<const void*>(element.getOffset()));
+				layout.stride(),
+				reinterpret_cast<const void*>(element.offset()));
 			break;
 		}
 		case BufferElementType::Bool:
@@ -340,15 +346,15 @@ void VertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer)
 				index,
 				element.getTypeCount(),
 				element.getTypeGL(),
-				element.getNormalized() ? GL_TRUE : GL_FALSE,
-				layout.getStride(),
-				reinterpret_cast<const void*>(element.getOffset()));
+				element.normalized() ? GL_TRUE : GL_FALSE,
+				layout.stride(),
+				reinterpret_cast<const void*>(element.offset()));
 			break;
 		}
-		case BufferElementType::VecDouble:
-		case BufferElementType::VecDouble2:
-		case BufferElementType::VecDouble3:
-		case BufferElementType::VecDouble4:
+		case BufferElementType::Double:
+		case BufferElementType::Vec2Double:
+		case BufferElementType::Vec3Double:
+		case BufferElementType::Vec4Double:
 		case BufferElementType::MatDouble2:
 		case BufferElementType::MatDouble3:
 		case BufferElementType::MatDouble4: {
@@ -356,8 +362,8 @@ void VertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer)
 				index,
 				element.getTypeCount(),
 				element.getTypeGL(),
-				layout.getStride(),
-				reinterpret_cast<const void*>(element.getOffset()));
+				layout.stride(),
+				reinterpret_cast<const void*>(element.offset()));
 			break;
 		}
 		default:

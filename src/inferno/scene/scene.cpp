@@ -25,6 +25,7 @@
 #include "inferno/component/tagcomponent.h"
 #include "inferno/component/textareacomponent.h"
 #include "inferno/component/transformcomponent.h"
+#include "inferno/render/uniformbuffer.h"
 #include "inferno/scene/scene.h"
 #include "inferno/script/nativescript.h"
 #include "inferno/system/camerasystem.h"
@@ -83,8 +84,17 @@ void Scene::update(float deltaTime)
 
 void Scene::render()
 {
+	auto [projection, view] = CameraSystem::the().projectionView();
+	Uniformbuffer::the().setFloat("Camera", "u_projectionView", projection * view);
+	RendererCubemap::the().beginScene(projection, view); // camera, lights, environment
+
 	RenderSystem::the().render();
 	TextAreaSystem::the().render();
+
+	RendererCubemap::the().endScene();
+	Renderer3D::the().endScene();
+	Renderer2D::the().endScene();
+	RendererFont::the().endScene();
 }
 
 void Scene::destroy()

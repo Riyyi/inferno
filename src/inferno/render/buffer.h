@@ -7,10 +7,11 @@
 #pragma once
 
 #include <cstddef> // size_t
-#include <cstdint> // int32_t, uint32_t
+#include <cstdint> // int32_t, uint8_t, uint32_t
 #include <memory>  // std::shared_ptr
-#include <string>  // std::string
-#include <vector>  // std::vector
+#include <string>
+#include <utility> // std::pair
+#include <vector>
 
 namespace Inferno {
 
@@ -22,7 +23,7 @@ enum class BufferElementType {
 	Int, Int2, Int3, Int4,                          // ivec
 	Uint, Uint2, Uint3, Uint4,                      // uvec
 	Float, Vec2, Vec3, Vec4,                        // vec
-	VecDouble, VecDouble2, VecDouble3, VecDouble4,  // dvec
+	Double, Vec2Double, Vec3Double, Vec4Double,     // dvec
 	Mat2, Mat3, Mat4,                               // mat
 	MatDouble2, MatDouble3, MatDouble4,             // dmat
 };
@@ -43,11 +44,11 @@ public:
 	static uint32_t getTypeCount(const BufferElementType type);
 	static uint32_t getTypeGL(const BufferElementType type);
 
-	BufferElementType getType() const { return m_type; }
-	std::string getName() const { return m_name; }
-	uint32_t getSize() const { return m_size; }
-	uint32_t getOffset() const { return m_offset; }
-	bool getNormalized() const { return m_normalized; }
+	BufferElementType type() const { return m_type; }
+	std::string name() const { return m_name; }
+	uint32_t size() const { return m_size; }
+	uint32_t offset() const { return m_offset; }
+	bool normalized() const { return m_normalized; }
 
 	void setType(const BufferElementType& type) { m_type = type; }
 	void setName(const std::string& name) { m_name = name; }
@@ -72,8 +73,8 @@ public:
 	BufferLayout(const std::initializer_list<BufferElement>& elements);
 	~BufferLayout() = default;
 
-	const std::vector<BufferElement>& getElements() const { return m_elements; }
-	uint32_t getStride() const { return m_stride; }
+	const std::vector<BufferElement>& elements() const { return m_elements; }
+	uint32_t stride() const { return m_stride; }
 
 	// Iterators
 	std::vector<BufferElement>::iterator begin() { return m_elements.begin(); }
@@ -105,7 +106,7 @@ public:
 
 	const BufferLayout& getLayout() const { return m_layout; }
 
-	inline void setLayout(const BufferLayout& layout) { m_layout = layout; }
+	void setLayout(const BufferLayout& layout) { m_layout = layout; }
 
 private:
 	uint32_t m_id { 0 };

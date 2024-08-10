@@ -23,6 +23,7 @@
 #include "inferno/render/buffer.h"
 #include "inferno/render/context.h"
 #include "inferno/render/framebuffer.h"
+#include "inferno/render/uniformbuffer.h"
 // #include "inferno/render/gltf.h"
 #include "inferno/asset/shader.h"
 #include "inferno/asset/texture.h"
@@ -67,6 +68,13 @@ Application::Application()
 		.clearBit = GL_COLOR_BUFFER_BIT,
 	});
 
+	Uniformbuffer::the().setLayout(
+		"Camera", 0,
+		{
+			{ BufferElementType::Mat4, "u_projectionView" },
+		});
+	Uniformbuffer::the().create("Camera");
+
 	m_scene = std::make_shared<Scene>();
 	m_scene->initialize();
 
@@ -90,6 +98,7 @@ Application::Application()
 Application::~Application()
 {
 	m_scene->destroy();
+	Uniformbuffer::destroy();
 
 	RendererFont::destroy();
 	Renderer2D::destroy();
@@ -189,19 +198,8 @@ int Application::run()
 
 		render();
 
-		std::pair<glm::mat4, glm::mat4> projectionView = m_scene->cameraProjectionView();
-		RendererCubemap::the().beginScene(projectionView.first, projectionView.second); // camera, lights, environment
-		Renderer3D::the().beginScene(projectionView.first, projectionView.second);      // camera, lights, environment
-		Renderer2D::the().beginScene(projectionView.first, projectionView.second);      // camera, lights, environment
-		RendererFont::the().beginScene(projectionView.first, projectionView.second);    // camera, lights, environment
-
 		m_scene->render();
 		// RendererCharacter::the().drawCharacter(character, f->texture());
-
-		RendererCubemap::the().endScene();
-		Renderer3D::the().endScene();
-		Renderer2D::the().endScene();
-		RendererFont::the().endScene();
 
 		m_framebuffer->unbind();
 
@@ -214,7 +212,7 @@ int Application::run()
 		RenderCommand::clearBit(m_screenFramebuffer->clearBit());
 
 		Renderer2D::the().setEnableDepthBuffer(false);
-		Renderer2D::the().beginScene(matIdentity, matIdentity);
+		Uniformbuffer::the().setFloat("Camera", "u_projectionView", matIdentity);
 		Renderer2D::the().drawQuad(transformIdentity, vectorOne, m_framebuffer->texture(0));
 		Renderer2D::the().endScene();
 		Renderer2D::the().setEnableDepthBuffer(true);

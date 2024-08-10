@@ -50,16 +50,18 @@ Shader::~Shader()
 	}
 }
 
-int32_t Shader::findUniformLocation(std::string_view name)
+// -----------------------------------------
+
+uint32_t Shader::findUniformLocation(std::string_view name)
 {
 	// Cache uniform locations, prevent going to the GPU every call
-	if (m_uniformLocation.find(name) != m_uniformLocation.end()) {
-		return m_uniformLocation[name];
+	if (m_uniformLocations.find(name) != m_uniformLocations.end()) {
+		return m_uniformLocations[name];
 	}
 
 	int32_t location = glGetUniformLocation(m_id, name.data());
 	VERIFY(location != -1, "Shader could not find uniform '{}'", name);
-	m_uniformLocation[name] = location;
+	m_uniformLocations[name] = static_cast<uint32_t>(location);
 
 	return location;
 }
@@ -127,6 +129,8 @@ void Shader::unbind() const
 {
 	glUseProgram(0);
 }
+
+// -----------------------------------------
 
 uint32_t Shader::compileShader(int32_t type, const char* source) const
 {

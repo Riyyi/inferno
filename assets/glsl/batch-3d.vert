@@ -9,7 +9,10 @@ out vec3 v_normal;
 out vec2 v_textureCoordinates;
 out flat uint v_textureIndex;
 
-uniform mat4 u_projectionView;
+layout(std140, binding = 0) uniform Camera
+{
+	mat4 u_projectionView;
+};
 
 void main()
 {

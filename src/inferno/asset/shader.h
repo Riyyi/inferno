@@ -21,7 +21,7 @@ public:
 	// Factory function
 	static std::shared_ptr<Shader> create(std::string_view path);
 
-	int32_t findUniformLocation(std::string_view name);
+	uint32_t findUniformLocation(std::string_view name);
 
 	void setInt(std::string_view name, int value);
 	void setInt(std::string_view name, int* values, uint32_t count);
@@ -53,7 +53,7 @@ private:
 
 private:
 	uint32_t m_id { 0 };
-	std::unordered_map<std::string_view, int32_t> m_uniformLocation;
+	std::unordered_map<std::string_view, uint32_t> m_uniformLocations;
 };
 
 // -----------------------------------------
