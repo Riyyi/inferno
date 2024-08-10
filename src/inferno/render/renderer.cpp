@@ -548,7 +548,7 @@ void Renderer3D::createElementBuffer()
 
 void Renderer3D::uploadElementBuffer()
 {
-	m_vertexArray->getIndexBuffer()->uploadData(m_elementBufferBase, m_elementIndex * sizeof(uint32_t));
+	m_vertexArray->indexBuffer()->uploadData(m_elementBufferBase, m_elementIndex * sizeof(uint32_t));
 }
 
 void Renderer3D::loadShader()

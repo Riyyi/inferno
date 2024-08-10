@@ -104,7 +104,7 @@ public:
 
 	void uploadData(const void* data, uint32_t size);
 
-	const BufferLayout& getLayout() const { return m_layout; }
+	const BufferLayout& layout() const { return m_layout; }
 
 	void setLayout(const BufferLayout& layout) { m_layout = layout; }
 
@@ -126,7 +126,7 @@ public:
 
 	void uploadData(const void* data, uint32_t size);
 
-	uint32_t getCount() const { return m_count; }
+	uint32_t count() const { return m_count; }
 
 private:
 	uint32_t m_id { 0 };
@@ -148,7 +148,7 @@ public:
 	void setIndexBuffer(std::shared_ptr<IndexBuffer> indexBuffer);
 
 	std::shared_ptr<VertexBuffer> at(size_t i) const { return m_vertexBuffers.at(i); }
-	std::shared_ptr<IndexBuffer> getIndexBuffer() const { return m_indexBuffer; }
+	std::shared_ptr<IndexBuffer> indexBuffer() const { return m_indexBuffer; }
 
 private:
 	uint32_t m_id { 0 };

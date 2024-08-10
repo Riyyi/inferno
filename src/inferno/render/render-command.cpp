@@ -42,7 +42,7 @@ void RenderCommand::clearColor(const glm::vec4& color)
 
 void RenderCommand::drawIndexed(std::shared_ptr<VertexArray> vertexArray, uint32_t indexCount)
 {
-	uint32_t count = indexCount ? indexCount : vertexArray->getIndexBuffer()->getCount();
+	uint32_t count = indexCount ? indexCount : vertexArray->indexBuffer()->count();
 	glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 }
 

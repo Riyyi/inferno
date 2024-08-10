@@ -303,7 +303,7 @@ void VertexArray::unbind() const
 
 void VertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer)
 {
-	const auto& layout = vertexBuffer->getLayout();
+	const auto& layout = vertexBuffer->layout();
 	VERIFY(layout.elements().size(), "VertexBuffer has no layout");
 
 	bind();
