@@ -217,7 +217,7 @@ int Application::run()
 		RenderCommand::clearBit(m_screenFramebuffer->clearBit());
 
 		Renderer2D::the().setEnableDepthBuffer(false);
-		Uniformbuffer::the().setFloat("Camera", "u_projectionView", matIdentity);
+		Uniformbuffer::the().setValue("Camera", "u_projectionView", matIdentity);
 		Renderer2D::the().drawQuad(transformIdentity, vectorOne, m_framebuffer->texture(0));
 		Renderer2D::the().endScene();
 		Renderer2D::the().setEnableDepthBuffer(true);

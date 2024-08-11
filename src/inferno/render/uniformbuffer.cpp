@@ -5,11 +5,13 @@
  */
 
 #include <cstddef> // size_t
-#include <cstdint> // int32_t, uint8_t
+#include <cstdint> // int32_t, uint32_t, uint8_t
 #include <string_view>
 
 #include "glad/glad.h"
-#include "glm/gtc/type_ptr.hpp" // glm::value_ptr
+#include "glm/ext/matrix_float2x2.hpp" // glm::mat2
+#include "glm/ext/matrix_float3x3.hpp" // glm::mat3
+#include "glm/gtc/type_ptr.hpp"        // glm::value_ptr
 #include "ruc/meta/assert.h"
 
 #include "inferno/render/buffer.h"
@@ -44,6 +46,7 @@ void Uniformbuffer::setLayout(std::string_view blockName, uint8_t bindingPoint, 
 	}
 
 	UniformbufferBlock& block = m_blocks[blockName];
+	block.bindingPoint = bindingPoint;
 
 	// Example block layout:
 	// - mat3
@@ -207,18 +210,36 @@ void Uniformbuffer::create(std::string_view blockName)
 	glBindBufferBase(GL_UNIFORM_BUFFER, block.bindingPoint, block.id);
 }
 
-void Uniformbuffer::setFloat(std::string_view blockName, std::string_view member, glm::mat4 matrix)
+void Uniformbuffer::setValue(std::string_view blockName, std::string_view member, bool value)
 {
-	VERIFY(exists(blockName), "uniformbuffer block doesnt exist");
+	CHECK_SET_CALL(blockName, member);
 
-	const UniformbufferBlock& block = m_blocks[blockName];
+	glBindBuffer(GL_UNIFORM_BUFFER, block.id);
+	uint32_t tmp = static_cast<uint32_t>(value);
+	glBufferSubData(GL_UNIFORM_BUFFER, block.uniformLocations.at(member.data()), sizeof(uint32_t), &tmp);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
 
-	VERIFY(block.uniformLocations.find(member.data()) != block.uniformLocations.end(),
-	       "uniformbuffer block member doesnt exist");
+void Uniformbuffer::setValue(std::string_view blockName, std::string_view member, glm::mat2 value)
+{
+	CHECK_SET_CALL(blockName, member);
 
-	// Note: Uniformbuffers are bound to a binding point for the entire pipeline,
-	//       it remains accessible without needing to rebind it every time
-	glBufferSubData(GL_UNIFORM_BUFFER, block.uniformLocations.at(member.data()), sizeof(glm::mat4), glm::value_ptr(matrix));
+	// Write only the first 2 rows (32 bytes), additional values are padded with 0
+	glBindBuffer(GL_UNIFORM_BUFFER, block.id);
+	glm::mat4 tmp = static_cast<glm::mat4>(value);
+	glBufferSubData(GL_UNIFORM_BUFFER, block.uniformLocations.at(member.data()), sizeof(glm::vec4) * 2, glm::value_ptr(tmp));
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+void Uniformbuffer::setValue(std::string_view blockName, std::string_view member, glm::mat3 value)
+{
+	CHECK_SET_CALL(blockName, member);
+
+	// Write only the first 3 rows (48 bytes), additional values are padded with 0
+	glBindBuffer(GL_UNIFORM_BUFFER, block.id);
+	glm::mat4 tmp = static_cast<glm::mat4>(value);
+	glBufferSubData(GL_UNIFORM_BUFFER, block.uniformLocations.at(member.data()), sizeof(glm::vec4) * 3, glm::value_ptr(tmp));
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 } // namespace Inferno

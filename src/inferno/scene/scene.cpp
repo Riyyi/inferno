@@ -85,7 +85,7 @@ void Scene::update(float deltaTime)
 void Scene::render()
 {
 	auto [projection, view] = CameraSystem::the().projectionView();
-	Uniformbuffer::the().setFloat("Camera", "u_projectionView", projection * view);
+	Uniformbuffer::the().setValue("Camera", "u_projectionView", projection * view);
 	RendererCubemap::the().beginScene(projection, view); // camera, lights, environment
 
 	RenderSystem::the().render();

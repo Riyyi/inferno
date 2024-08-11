@@ -9,10 +9,18 @@
 #include <string_view>
 #include <unordered_map>
 
-#include "glm/ext/matrix_float4x4.hpp" // glm::mat4
+#include "glad/glad.h"
+#include "glm/ext/matrix_float2x2.hpp" // glm::mat2
+#include "glm/ext/matrix_float3x3.hpp" // glm::mat3
 #include "ruc/singleton.h"
 
 #include "inferno/render/buffer.h"
+
+#define CHECK_SET_CALL(blockName, member)                                              \
+	VERIFY(exists(blockName), "uniformbuffer block doesnt exist");                     \
+	const UniformbufferBlock& block = m_blocks[blockName];                             \
+	VERIFY(block.uniformLocations.find(member.data()) != block.uniformLocations.end(), \
+	       "uniformbuffer block member doesnt exist");
 
 namespace Inferno {
 
@@ -31,7 +39,19 @@ public:
 	void setLayout(std::string_view blockName, uint8_t bindingPoint, const BufferLayout& layout);
 	void create(std::string_view blockName);
 
-	void setFloat(std::string_view blockName, std::string_view member, glm::mat4 matrix);
+	template<typename T>
+	void setValue(std::string_view blockName, std::string_view member, T value)
+	{
+		CHECK_SET_CALL(blockName, member);
+
+		glBindBuffer(GL_UNIFORM_BUFFER, block.id);
+		glBufferSubData(GL_UNIFORM_BUFFER, block.uniformLocations.at(member.data()), sizeof(T), &value);
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	}
+	// Exceptions:
+	void setValue(std::string_view blockName, std::string_view member, bool value);
+	void setValue(std::string_view blockName, std::string_view member, glm::mat2 value);
+	void setValue(std::string_view blockName, std::string_view member, glm::mat3 value);
 
 	bool exists(std::string_view blockName) const { return m_blocks.find(blockName) != m_blocks.end(); }
 
