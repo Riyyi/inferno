@@ -16,6 +16,7 @@
 namespace Inferno {
 
 struct ModelComponent {
+	glm::vec4 color { 1.0f };
 	std::shared_ptr<Model> model;
 	std::shared_ptr<Texture2D> texture;
 };

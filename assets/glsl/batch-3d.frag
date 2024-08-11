@@ -3,6 +3,7 @@
 layout(location = 0) out vec4 color;
 
 in vec3 v_normal;
+in vec4 v_color;
 in vec2 v_textureCoordinates;
 in flat uint v_textureIndex;
 
@@ -10,7 +11,7 @@ uniform sampler2D u_textures[32];
 
 void main()
 {
-	vec4 textureColor = vec4(1.0f);
+	vec4 textureColor = v_color;
 	switch(v_textureIndex) {
 		case 0:  break; // Texture unit 0 is reserved for no texture
 		case 1:  textureColor *= texture(u_textures[1],  v_textureCoordinates); break;

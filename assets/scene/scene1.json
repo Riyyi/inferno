@@ -35,8 +35,9 @@
 				"rotate": [ 0.0, 0.0, 0.0 ],
 				"scale": [ 1.0, 1.0, 1.0 ]
 			},
-			"sprite": {
+			"model": {
 				"color": [ 1.0, 1.0, 1.0, 1.0 ],
+				"model": "assets/model/quad.obj",
 				"texture": "assets/gfx/test.png"
 			}
 		},
@@ -48,8 +49,9 @@
 				"rotate": [ 0.0, 0.0, 0.0 ],
 				"scale": [ 1.0, 1.0, 1.0 ]
 			},
-			"sprite": {
+			"model": {
 				"color": [ 0.5, 0.6, 0.8, 1.0 ],
+				"model": "assets/model/quad.obj",
 				"texture": "assets/gfx/test.png"
 			}
 		},
@@ -61,8 +63,9 @@
 				"rotate": [ 0.0, 0.0, -20.0 ],
 				"scale": [ 1.0, 1.0, 1.0 ]
 			},
-			"sprite": {
+			"model": {
 				"color": [ 1.0, 1.0, 1.0, 1.0 ],
+				"model": "assets/model/quad.obj",
 				"texture": "assets/gfx/test-inverted.png"
 			},
 			"children": [
@@ -74,8 +77,9 @@
 						"rotate": [ 0.0, 0.0, 0.0 ],
 						"scale": [ 0.5, 0.5, 1.0 ]
 					},
-					"sprite": {
+					"model": {
 						"color": [ 1.0, 1.0, 1.0, 1.0 ],
+						"model": "assets/model/quad.obj",
 						"texture": "assets/gfx/test-inverted.png"
 					},
 					"children": [
@@ -87,8 +91,9 @@
 								"rotate": [ 0.0, 0.0, -20.0 ],
 								"scale": [ 0.5, 0.5, 1.0 ]
 							},
-							"sprite": {
+							"model": {
 								"color": [ 1.0, 1.0, 1.0, 1.0 ],
+								"model": "assets/model/quad.obj",
 								"texture": "assets/gfx/test-inverted.png"
 							}
 						}

@@ -46,6 +46,7 @@ void RenderSystem::render()
 		Renderer3D::the().drawModel(model.model->vertices(),
 		                            model.model->elements(),
 		                            transform,
+		                            model.color,
 		                            model.model->texture() ? model.model->texture() : model.texture);
 	}
 }

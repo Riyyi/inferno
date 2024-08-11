@@ -24,16 +24,16 @@ class TransformComponent;
 class VertexArray;
 
 struct QuadVertex {
-	glm::vec3 position { 0.0f, 0.0f, 0.0f };
-	glm::vec4 color { 1.0f, 1.0f, 1.0f, 1.0f };
-	glm::vec2 textureCoordinates { 0.0f, 0.0f };
-	uint32_t textureIndex = 0;
+	glm::vec3 position { 0.0f };
+	glm::vec4 color { 1.0f };
+	glm::vec2 textureCoordinates { 0.0f };
+	uint32_t textureIndex { 0 };
 };
 
 struct CubemapVertex {
-	glm::vec3 position { 0.0f, 0.0f, 0.0f };
-	glm::vec4 color { 1.0f, 1.0f, 1.0f, 1.0f };
-	uint32_t textureIndex = 0;
+	glm::vec3 position { 0.0f };
+	glm::vec4 color { 1.0f };
+	uint32_t textureIndex { 0 };
 };
 
 struct SymbolVertex {
@@ -45,16 +45,17 @@ struct SymbolVertex {
 	// Outline
 	float borderWidth = 0.7f;
 	float borderEdge = 0.1f;
-	glm::vec4 borderColor { 1.0f, 1.0f, 1.0f, 1.0f };
+	glm::vec4 borderColor { 1.0f };
 	// Dropshadow
 	float offset = 0.0f;
 };
 
 struct Vertex {
-	glm::vec3 position { 0.0f, 0.0f, 0.0f };
-	glm::vec3 normal { 1.0f, 1.0f, 1.0f };
-	glm::vec2 textureCoordinates { 0.0f, 0.0f };
-	uint32_t textureIndex = 0;
+	glm::vec3 position { 0.0f };
+	glm::vec3 normal { 1.0f };
+	glm::vec4 color { 1.0f };
+	glm::vec2 textureCoordinates { 0.0f };
+	uint32_t textureIndex { 0 };
 };
 
 // -------------------------------------
@@ -197,7 +198,7 @@ public:
 
 	using Singleton<Renderer3D>::destroy;
 
-	void drawModel(std::span<const Vertex> vertices, std::span<const uint32_t> indices, const TransformComponent& transform, std::shared_ptr<Texture> texture);
+	void drawModel(std::span<const Vertex> vertices, std::span<const uint32_t> indices, const TransformComponent& transform, glm::vec4 color, std::shared_ptr<Texture> texture);
 
 private:
 	void createElementBuffer() override;

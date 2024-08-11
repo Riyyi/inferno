@@ -8,6 +8,7 @@
 #include <span>
 
 #include "glad/glad.h"
+#include "glm/ext/vector_float4.hpp" // glm::vec4
 #include "ruc/format/log.h"
 
 #include "inferno/asset/asset-manager.h"
@@ -274,7 +275,7 @@ void Renderer2D::drawQuad(const TransformComponent& transform, glm::mat4 color, 
 
 void Renderer2D::loadShader()
 {
-	m_shader = AssetManager::the().load<Shader>("assets/glsl/batch-quad");
+	m_shader = AssetManager::the().load<Shader>("assets/glsl/batch-2d");
 }
 
 // -----------------------------------------
@@ -487,6 +488,7 @@ Renderer3D::Renderer3D(s)
 	vertexBuffer->setLayout({
 		{ BufferElementType::Vec3, "a_position" },
 		{ BufferElementType::Vec3, "a_normal" },
+		{ BufferElementType::Vec4, "a_color" },
 		{ BufferElementType::Vec2, "a_textureCoordinates" },
 		{ BufferElementType::Uint, "a_textureIndex" },
 	});
@@ -495,7 +497,7 @@ Renderer3D::Renderer3D(s)
 	ruc::info("Renderer3D initialized");
 }
 
-void Renderer3D::drawModel(std::span<const Vertex> vertices, std::span<const uint32_t> elements, const TransformComponent& transform, std::shared_ptr<Texture> texture)
+void Renderer3D::drawModel(std::span<const Vertex> vertices, std::span<const uint32_t> elements, const TransformComponent& transform, glm::vec4 color, std::shared_ptr<Texture> texture)
 {
 	// ruc::error("drawModel");
 
@@ -513,6 +515,7 @@ void Renderer3D::drawModel(std::span<const Vertex> vertices, std::span<const uin
 	for (const auto& vertex : vertices) {
 		m_vertexBufferPtr->position = transform.transform * glm::vec4(vertex.position, 1.0f);
 		m_vertexBufferPtr->normal = vertex.normal;
+		m_vertexBufferPtr->color = color;
 		m_vertexBufferPtr->textureCoordinates = vertex.textureCoordinates;
 		m_vertexBufferPtr->textureIndex = textureUnitIndex;
 		m_vertexBufferPtr++;
