@@ -139,12 +139,31 @@ static std::unordered_map<std::string_view, int> keys({
 	{ MAP_KEY(GLFW_KEY_MENU) },
 });
 
+static std::unordered_map<std::string_view, int> modifiers({
+	{ MAP_KEY(GLFW_MOD_SHIFT) },
+	{ MAP_KEY(GLFW_MOD_CONTROL) },
+	{ MAP_KEY(GLFW_MOD_ALT) },
+	{ MAP_KEY(GLFW_MOD_SUPER) },
+	{ MAP_KEY(GLFW_MOD_CAPS_LOCK) }, // State, not really a modifier
+	{ MAP_KEY(GLFW_MOD_NUM_LOCK) },  // State, not really a modifier
+});
+
 // -----------------------------------------
 
+// Example usage:
+//   event.getKey() == keyCode("GLFW_KEY_ESCAPE")
 int keyCode(std::string_view name)
 {
 	VERIFY(keys.find(name) != keys.end(), "could not find key code: {}", name);
 	return keys.at(name);
+}
+
+// Example usage:
+//   event.getMods() & keyMod("GLFW_MOD_SHIFT")
+int keyMod(std::string_view name)
+{
+	VERIFY(modifiers.find(name) != modifiers.end(), "could not find key modifier: {}", name);
+	return modifiers.at(name);
 }
 
 std::string_view keyName(int key)

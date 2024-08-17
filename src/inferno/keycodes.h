@@ -13,6 +13,8 @@
 namespace Inferno {
 
 int keyCode(std::string_view name);
-std::string_view keyName(int);
+int keyMod(std::string_view name);
+
+std::string_view keyName(int key);
 
 } // namespace Inferno

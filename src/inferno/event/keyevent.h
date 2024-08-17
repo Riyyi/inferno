@@ -14,24 +14,27 @@ namespace Inferno {
 
 class KeyEvent : public Event {
 public:
-	inline int getKey() const { return m_key; }
+	int getKey() const { return m_key; }
+	int getMods() const { return m_mods; }
 
 	EVENT_CLASS_CATEGORY(InputEventCategory | KeyEventCategory)
 
 protected:
-	KeyEvent(int key)
+	KeyEvent(int key, int mods)
 		: m_key(key)
+		, m_mods(mods)
 	{
 	}
 
 private:
-	int m_key;
+	int m_key { 0 };
+	int m_mods { 0 };
 };
 
-class KeyPressEvent : public KeyEvent {
+class KeyPressEvent final : public KeyEvent {
 public:
-	KeyPressEvent(int key)
-		: KeyEvent(key)
+	KeyPressEvent(int key, int mods)
+		: KeyEvent(key, mods)
 	{
 	}
 
@@ -45,10 +48,10 @@ public:
 	EVENT_CLASS_TYPE(KeyPress)
 };
 
-class KeyReleaseEvent : public KeyEvent {
+class KeyReleaseEvent final : public KeyEvent {
 public:
-	KeyReleaseEvent(int key)
-		: KeyEvent(key)
+	KeyReleaseEvent(int key, int mods)
+		: KeyEvent(key, mods)
 	{
 	}
 
@@ -59,13 +62,13 @@ public:
 		return ss.str();
 	}
 
-	EVENT_CLASS_TYPE(KeyPress)
+	EVENT_CLASS_TYPE(KeyRelease)
 };
 
-class KeyRepeatEvent : public KeyEvent {
+class KeyRepeatEvent final : public KeyEvent {
 public:
-	KeyRepeatEvent(int key)
-		: KeyEvent(key)
+	KeyRepeatEvent(int key, int mods)
+		: KeyEvent(key, mods)
 	{
 	}
 
@@ -76,7 +79,7 @@ public:
 		return ss.str();
 	}
 
-	EVENT_CLASS_TYPE(KeyPress)
+	EVENT_CLASS_TYPE(KeyRepeat)
 };
 
 } // namespace Inferno

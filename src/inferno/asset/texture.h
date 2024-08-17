@@ -22,6 +22,9 @@ class Texture : public Asset {
 public:
 	virtual ~Texture();
 
+	static void savePNG(std::string_view path, std::shared_ptr<Texture> texture);
+	static void saveScreenshotPNG(std::string_view path, uint32_t width, uint32_t height);
+
 	void init(uint32_t width, uint32_t height, uint8_t channels);
 	void init(uint32_t width, uint32_t height, uint32_t internalFormat, uint32_t dataFormat, uint32_t dataType);
 

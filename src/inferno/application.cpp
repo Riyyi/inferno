@@ -274,6 +274,11 @@ bool Application::onKeyPress(KeyPressEvent& e)
 		m_window->setShouldClose(true);
 	}
 
+	if (e.getKey() == keyCode("GLFW_KEY_F12")) {
+		ruc::info("Taking screenshot..");
+		Texture::saveScreenshotPNG("screenshot.png", m_window->getWidth(), m_window->getHeight());
+	}
+
 	return true;
 }
 

@@ -122,17 +122,17 @@ void Window::initialize()
 
 		switch (action) {
 		case GLFW_PRESS: {
-			KeyPressEvent event(key);
+			KeyPressEvent event(key, mods);
 			w.m_eventCallback(event);
 			break;
 		}
 		case GLFW_RELEASE: {
-			KeyReleaseEvent event(key);
+			KeyReleaseEvent event(key, mods);
 			w.m_eventCallback(event);
 			break;
 		}
 		case GLFW_REPEAT: {
-			KeyRepeatEvent event(key);
+			KeyRepeatEvent event(key, mods);
 			w.m_eventCallback(event);
 			break;
 		}

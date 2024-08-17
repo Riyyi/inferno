@@ -13,6 +13,8 @@
 #include "ruc/meta/assert.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb/stb_image_write.h"
 
 #include "inferno/asset/texture.h"
 
@@ -22,6 +24,51 @@ Texture::~Texture()
 {
 	glDeleteTextures(1, &m_id);
 }
+
+// -----------------------------------------
+
+void Texture::savePNG(std::string_view path, std::shared_ptr<Texture> texture)
+{
+	texture->bind();
+
+	// Allocate memory
+	uint32_t dataFormat = texture->m_dataFormat == GL_RGBA ? 4 : 3;
+	size_t dataSize = texture->m_width * texture->m_height * dataFormat;
+	std::vector<unsigned char> data(dataSize);
+
+	// Read texture data from the GPU
+	glGetTexImage(GL_TEXTURE_2D, 0, texture->m_dataFormat, texture->m_dataType, data.data());
+
+	// Write image to a file
+	stbi_flip_vertically_on_write(1);
+	stbi_write_png(
+		path.data(),
+		texture->m_width,
+		texture->m_height,
+		dataFormat,
+		data.data(),
+		texture->m_width * dataFormat);
+
+	texture->unbind();
+}
+
+void Texture::saveScreenshotPNG(std::string_view path, uint32_t width, uint32_t height)
+{
+	// Allocate memory
+	size_t dataSize = width * height * 4;
+	std::vector<unsigned char> data(dataSize);
+
+	// Set the pack alignment to 1 (to avoid row alignment issues)
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+
+	// Read the pixels from the default framebuffer
+	glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data.data());
+
+	stbi_flip_vertically_on_write(1);
+	stbi_write_png(path.data(), width, height, 4, data.data(), width * 4);
+}
+
+// -----------------------------------------
 
 void Texture::init(uint32_t width, uint32_t height, uint8_t channels)
 {
