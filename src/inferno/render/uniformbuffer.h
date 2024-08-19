@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+#include <cstddef> // size_t
 #include <cstdint> // uint8_t, uint32_t
 #include <string>
 #include <string_view>
@@ -36,16 +37,17 @@ public:
 	Uniformbuffer(s);
 	~Uniformbuffer();
 
+	void setLayout(std::string_view blockName, const UniformbufferBlock& block);
 	void setLayout(std::string_view blockName, uint8_t bindingPoint, const BufferLayout& layout);
 	void create(std::string_view blockName);
 
-	template<typename T>
-	void setValue(std::string_view blockName, std::string_view member, T value)
+	template<typename T> // Capture value by reference, instead of decaying to pointer
+	void setValue(std::string_view blockName, std::string_view member, T&& value, size_t size = 0)
 	{
 		CHECK_SET_CALL(blockName, member);
 
 		glBindBuffer(GL_UNIFORM_BUFFER, block.id);
-		glBufferSubData(GL_UNIFORM_BUFFER, block.uniformLocations.at(member.data()), sizeof(T), &value);
+		glBufferSubData(GL_UNIFORM_BUFFER, block.uniformLocations.at(member.data()), (size) ? size : sizeof(T), &value);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 	// Exceptions:

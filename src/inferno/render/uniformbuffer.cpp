@@ -37,9 +37,21 @@ Uniformbuffer::~Uniformbuffer()
 
 // -----------------------------------------
 
+void Uniformbuffer::setLayout(std::string_view blockName, const UniformbufferBlock& block)
+{
+	VERIFY(block.size && block.bindingPoint && block.uniformLocations.size(),
+	       "invalid uniformbuffer block definition: {}", blockName);
+
+	VERIFY(block.bindingPoint < m_maxBindingPoints,
+	       "uniformbuffer exceeded binding points: {}/{}", block.bindingPoint, m_maxBindingPoints);
+
+	m_blocks[blockName] = block;
+}
+
 void Uniformbuffer::setLayout(std::string_view blockName, uint8_t bindingPoint, const BufferLayout& layout)
 {
-	VERIFY(bindingPoint < m_maxBindingPoints, "{} < {}", bindingPoint, m_maxBindingPoints);
+	VERIFY(bindingPoint < m_maxBindingPoints,
+	       "uniformbuffer exceeded binding points: {}/{}", bindingPoint, m_maxBindingPoints);
 
 	if (!exists(blockName)) {
 		m_blocks[blockName] = {};
@@ -212,34 +224,17 @@ void Uniformbuffer::create(std::string_view blockName)
 
 void Uniformbuffer::setValue(std::string_view blockName, std::string_view member, bool value)
 {
-	CHECK_SET_CALL(blockName, member);
-
-	glBindBuffer(GL_UNIFORM_BUFFER, block.id);
-	uint32_t tmp = static_cast<uint32_t>(value);
-	glBufferSubData(GL_UNIFORM_BUFFER, block.uniformLocations.at(member.data()), sizeof(uint32_t), &tmp);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	setValue(blockName, member, static_cast<uint32_t>(value), sizeof(uint32_t));
 }
 
 void Uniformbuffer::setValue(std::string_view blockName, std::string_view member, glm::mat2 value)
 {
-	CHECK_SET_CALL(blockName, member);
-
-	// Write only the first 2 rows (32 bytes), additional values are padded with 0
-	glBindBuffer(GL_UNIFORM_BUFFER, block.id);
-	glm::mat4 tmp = static_cast<glm::mat4>(value);
-	glBufferSubData(GL_UNIFORM_BUFFER, block.uniformLocations.at(member.data()), sizeof(glm::vec4) * 2, glm::value_ptr(tmp));
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	setValue(blockName, member, static_cast<glm::mat4>(value), sizeof(glm::vec4) * 2);
 }
 
 void Uniformbuffer::setValue(std::string_view blockName, std::string_view member, glm::mat3 value)
 {
-	CHECK_SET_CALL(blockName, member);
-
-	// Write only the first 3 rows (48 bytes), additional values are padded with 0
-	glBindBuffer(GL_UNIFORM_BUFFER, block.id);
-	glm::mat4 tmp = static_cast<glm::mat4>(value);
-	glBufferSubData(GL_UNIFORM_BUFFER, block.uniformLocations.at(member.data()), sizeof(glm::vec4) * 3, glm::value_ptr(tmp));
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	setValue(blockName, member, static_cast<glm::mat4>(value), sizeof(glm::vec4) * 3);
 }
 
 } // namespace Inferno

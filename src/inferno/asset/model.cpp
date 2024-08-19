@@ -40,7 +40,7 @@ std::shared_ptr<Model> Model::create(std::string_view path)
 void Model::processScene(std::shared_ptr<Model> model, const aiScene* scene)
 {
 	VERIFY(scene->HasMeshes(), "malformed model");
-	VERIFY(scene->mNumTextures < 2, "unsupported model type");
+	VERIFY(scene->mNumTextures < 2, "unsupported model type: {}/1", scene->mNumTextures);
 
 	if (scene->mNumTextures == 1) {
 		aiTexture* texture = scene->mTextures[0];
