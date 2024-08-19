@@ -112,6 +112,7 @@ protected:
 
 	// GPU objects
 	bool m_enableDepthBuffer { true };
+	uint32_t m_colorAttachmentCount { 1 };
 	std::shared_ptr<Shader> m_shader;
 	std::shared_ptr<VertexArray> m_vertexArray;
 };
@@ -124,7 +125,7 @@ protected:
 
 // -------------------------------------
 
-class Renderer2D final
+class Renderer2D
 	: public Renderer<QuadVertex>
 	, public ruc::Singleton<Renderer2D> {
 public:
@@ -138,15 +139,20 @@ public:
 	void drawQuad(const TransformComponent& transform, glm::vec4 color, std::shared_ptr<Texture> texture);
 	void drawQuad(const TransformComponent& transform, glm::mat4 color, std::shared_ptr<Texture> texture);
 
-private:
-	void loadShader() override;
+protected:
+	Renderer2D() { Renderer2D::initialize(); } // Needed for derived classes
+
+	void initialize();
 
 	// Default quad vertex positions
 	glm::vec4 m_vertexPositions[vertexPerQuad];
+
+private:
+	virtual void loadShader() override;
 };
 // -------------------------------------
 
-class RendererCubemap final
+class RendererCubemap
 	: public Renderer<CubemapVertex>
 	, public ruc::Singleton<RendererCubemap> {
 public:
@@ -163,8 +169,13 @@ public:
 	void drawCubemap(const TransformComponent& transform, glm::vec4 color, std::shared_ptr<Texture> texture);
 	void drawCubemap(const TransformComponent& transform, glm::mat4 color, std::shared_ptr<Texture> texture);
 
+protected:
+	RendererCubemap() { RendererCubemap::initialize(); } // Needed for derived classes
+
+	void initialize();
+
 private:
-	void loadShader() override;
+	virtual void loadShader() override;
 
 	// Default cubemap vertex positions
 	glm::vec4 m_vertexPositions[vertexPerQuad * quadPerCube];
@@ -210,6 +221,49 @@ private:
 	// CPU element vertices
 	uint32_t* m_elementBufferBase { nullptr };
 	uint32_t* m_elementBufferPtr { nullptr };
+};
+
+// -----------------------------------------
+
+class RendererPostProcess final
+	: public Renderer2D
+	, public ruc::Singleton<RendererPostProcess> {
+public:
+	RendererPostProcess(ruc::Singleton<RendererPostProcess>::s)
+		: Renderer2D()
+	{
+	}
+	virtual ~RendererPostProcess() = default;
+
+	using Singleton<RendererPostProcess>::the;
+	using Singleton<RendererPostProcess>::destroy;
+
+	void drawQuad(const TransformComponent& transform, std::shared_ptr<Texture> albedo, std::shared_ptr<Texture> position, std::shared_ptr<Texture> normal);
+
+private:
+	virtual void loadShader() override;
+};
+
+// -----------------------------------------
+
+class RendererLightCube final
+	: public RendererCubemap
+	, public ruc::Singleton<RendererLightCube> {
+public:
+	RendererLightCube(ruc::Singleton<RendererLightCube>::s)
+		: RendererCubemap()
+	{
+		m_enableDepthBuffer = true;
+	}
+	virtual ~RendererLightCube() = default;
+
+	using Singleton<RendererLightCube>::the;
+	using Singleton<RendererLightCube>::destroy;
+
+	void beginScene(glm::mat4, glm::mat4) override {}
+
+private:
+	virtual void loadShader() override;
 };
 
 } // namespace Inferno

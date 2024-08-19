@@ -6,7 +6,8 @@
 
 #pragma once
 
-#include <memory> // std::shadred_ptr
+#include <cstdint> // int32_t, uint32_t
+#include <memory>  // std::shadred_ptr
 
 #include "glm/ext/vector_float4.hpp" // glm::vec4
 
@@ -25,6 +26,7 @@ public:
 
 	static void setViewport(int32_t x, int32_t y, uint32_t width, uint32_t height);
 	static void setDepthTest(bool enabled);
+	static void setColorAttachmentCount(uint32_t count);
 
 	static bool depthTest();
 	static int32_t textureUnitAmount();

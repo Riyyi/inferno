@@ -53,9 +53,22 @@ std::pair<glm::mat4, glm::mat4> CameraSystem::projectionView()
 	}
 
 	VERIFY_NOT_REACHED();
-
 	return {};
 }
+
+glm::vec3 CameraSystem::translate()
+{
+	auto view = m_registry->view<TransformComponent, CameraComponent>();
+
+	for (auto [entity, transform, camera] : view.each()) {
+		return transform.translate;
+	}
+
+	VERIFY_NOT_REACHED();
+	return {};
+}
+
+// -----------------------------------------
 
 void CameraSystem::updateOrthographic(TransformComponent& transform, CameraComponent& camera)
 {

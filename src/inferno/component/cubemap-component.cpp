@@ -22,6 +22,9 @@ void fromJson(const ruc::Json& json, CubemapComponent& value)
 	if (json.exists("texture") && json.at("texture").type() == ruc::Json::Type::String) {
 		value.texture = AssetManager::the().load<TextureCubemap>(json.at("texture").asString());
 	}
+	if (json.exists("isLight")) {
+		json.at("isLight").getTo(value.isLight);
+	}
 }
 
 } // namespace Inferno

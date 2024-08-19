@@ -13,6 +13,7 @@
 #include "glad/glad.h"
 #include "glm/ext/matrix_float2x2.hpp" // glm::mat2
 #include "glm/ext/matrix_float3x3.hpp" // glm::mat3
+#include "glm/ext/vector_float3.hpp"   // glm::vec3
 #include "ruc/singleton.h"
 
 #include "inferno/render/buffer.h"
@@ -24,6 +25,23 @@
 	       "uniformbuffer block member doesnt exist");
 
 namespace Inferno {
+
+// Uniform block layouts, using std140 memory layout rules
+
+#define MAX_DIRECTIONAL_LIGHTS 32
+struct UniformDirectionalLight {
+	glm::vec3 direction { 0 };
+	float __padding0 { 0 };
+
+	glm::vec3 ambient { 0 };
+	float __padding1 { 0 };
+	glm::vec3 diffuse { 0 };
+	float __padding2 { 0 };
+	glm::vec3 specular { 0 };
+	float __padding3 { 0 };
+};
+
+// -----------------------------------------
 
 struct UniformbufferBlock {
 	uint32_t id { 0 };

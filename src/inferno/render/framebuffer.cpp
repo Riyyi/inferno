@@ -36,6 +36,14 @@ Framebuffer::~Framebuffer()
 	glDeleteFramebuffers(1, &m_id);
 }
 
+void Framebuffer::copyBuffer(std::shared_ptr<Framebuffer> from, std::shared_ptr<Framebuffer> to, uint32_t bits, uint32_t filter)
+{
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, from->m_id);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // write to default framebuffer
+	glBlitFramebuffer(0, 0, from->m_width, from->m_height, 0, 0, to->m_width, to->m_height, bits, filter);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 // -----------------------------------------
 
 void Framebuffer::bind() const
@@ -86,22 +94,47 @@ void Framebuffer::createTextures()
 	bind();
 
 	auto it = m_attachments.begin();
-	uint8_t color_attachment = 0;
+	m_colorAttachmentCount = 0;
 
 	size_t size = m_attachments.size();
 	m_textures.resize(size);
 	for (size_t i = 0; i < size; ++i) {
 		TypeProperties type = *(it + i);
 
-		if (type.type == Type::Color) {
+		if (type.type == Type::RGB8) {
 			// Set color attachment 0 out of 32
-			m_textures[i] = (TextureFramebuffer::create(
-				"", m_width, m_height, GL_RGB, GL_RGB));
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + color_attachment, GL_TEXTURE_2D, m_textures[i]->id(), 0);
+			m_textures[i] = TextureFramebuffer::create("", m_width, m_height, GL_RGB8, GL_RGB);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + m_colorAttachmentCount, GL_TEXTURE_2D, m_textures[i]->id(), 0);
+			m_colorAttachmentCount++;
+			continue;
+		}
+
+		if (type.type == Type::RGBA8) { // Color
+			// Set color attachment 0 out of 32
+			m_textures[i] = TextureFramebuffer::create("", m_width, m_height, GL_RGBA8, GL_RGBA);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + m_colorAttachmentCount, GL_TEXTURE_2D, m_textures[i]->id(), 0);
+			m_colorAttachmentCount++;
+			continue;
+		}
+
+		if (type.type == Type::RGBA16F) {
+			// Set color attachment 0 out of 32
+			m_textures[i] = TextureFramebuffer::create("", m_width, m_height, GL_RGBA16F, GL_RGBA, GL_FLOAT);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + m_colorAttachmentCount, GL_TEXTURE_2D, m_textures[i]->id(), 0);
+			m_colorAttachmentCount++;
+			continue;
+		}
+
+		if (type.type == Type::RGBA32F) {
+			// Set color attachment 0 out of 32
+			m_textures[i] = TextureFramebuffer::create("", m_width, m_height, GL_RGBA32F, GL_RGBA, GL_FLOAT);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + m_colorAttachmentCount, GL_TEXTURE_2D, m_textures[i]->id(), 0);
+			m_colorAttachmentCount++;
+			continue;
 		}
 
 		// This combined texture is required for older GPUs
-		if (type.type == Type::Depth24Stencil8) {
+		if (type.type == Type::Depth24Stencil8) { // Depth
 			m_textures[i] = (TextureFramebuffer::create(
 				"", m_width, m_height, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8));
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_textures[i]->id(), 0);
@@ -117,7 +150,7 @@ void Framebuffer::createTextures()
 		}
 	}
 
-	VERIFY(color_attachment <= 32, "maximum color attachments was exceeded: {}/32", color_attachment);
+	VERIFY(m_colorAttachmentCount <= 32, "maximum color attachments was exceeded: {}/32", m_colorAttachmentCount);
 	check();
 
 	unbind();

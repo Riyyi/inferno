@@ -9,7 +9,7 @@
 #include <limits>  // std::numeric_limits
 #include <utility> // std::pair
 
-#include "entt/entity/entity.hpp" // ent::entity
+#include "entt/entity/fwd.hpp" // ent::entity
 #include "ruc/file.h"
 #include "ruc/format/log.h"
 #include "ruc/json/json.h"
@@ -25,6 +25,7 @@
 #include "inferno/component/tagcomponent.h"
 #include "inferno/component/textareacomponent.h"
 #include "inferno/component/transformcomponent.h"
+#include "inferno/render/renderer.h"
 #include "inferno/render/uniformbuffer.h"
 #include "inferno/scene/scene.h"
 #include "inferno/script/nativescript.h"
@@ -84,17 +85,7 @@ void Scene::update(float deltaTime)
 
 void Scene::render()
 {
-	auto [projection, view] = CameraSystem::the().projectionView();
-	Uniformbuffer::the().setValue("Camera", "u_projectionView", projection * view);
-	RendererCubemap::the().beginScene(projection, view); // camera, lights, environment
-
 	RenderSystem::the().render();
-	TextAreaSystem::the().render();
-
-	RendererCubemap::the().endScene();
-	Renderer3D::the().endScene();
-	Renderer2D::the().endScene();
-	RendererFont::the().endScene();
 }
 
 void Scene::destroy()

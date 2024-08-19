@@ -51,8 +51,6 @@ private:
 	float m_lastFrameTime { 0.0f };
 
 	std::unique_ptr<Window> m_window;
-	std::shared_ptr<Framebuffer> m_framebuffer;
-	std::shared_ptr<Framebuffer> m_screenFramebuffer;
 	std::shared_ptr<Scene> m_scene;
 
 	//

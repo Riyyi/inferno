@@ -1,7 +1,10 @@
 #version 450 core
 
-layout(location = 0) out vec4 color;
+layout(location = 0) out vec4 albedoSpec; // RGB diffuse color
+layout(location = 1) out vec4 position;
+layout(location = 2) out vec4 normal;
 
+in vec3 v_position;
 in vec3 v_normal;
 in vec4 v_color;
 in vec2 v_textureCoordinates;
@@ -46,5 +49,9 @@ void main()
 		case 30: textureColor *= texture(u_textures[30], v_textureCoordinates); break;
 		case 31: textureColor *= texture(u_textures[31], v_textureCoordinates); break;
 	}
-    color = textureColor;
+
+	albedoSpec.rgb = textureColor.rgb;
+	albedoSpec.a = 1.0; // TODO: read specular from model material
+	position = vec4(v_position, 1.0f);
+	normal = vec4(normalize(v_normal), 1.0f);
 }

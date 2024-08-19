@@ -10,7 +10,6 @@
 #include <cstdint> // int32_t, uint8_t, uint32_t
 #include <memory>  // std::shared_ptr
 #include <string>
-#include <utility> // std::pair
 #include <vector>
 
 namespace Inferno {

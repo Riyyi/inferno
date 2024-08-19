@@ -18,6 +18,7 @@ namespace Inferno {
 struct CubemapComponent {
 	glm::vec4 color { 1.0f };
 	std::shared_ptr<Texture> texture;
+	bool isLight { false };
 };
 
 void fromJson(const ruc::Json& json, CubemapComponent& value);

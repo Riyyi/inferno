@@ -24,11 +24,14 @@ public:
 		None = 0,
 
 		// Color
-		RGBA8 = 1,
+		RGB8 = 1,
+		RGBA8 = 2,
+		RGBA16F = 3,
+		RGBA32F = 4,
 
 		// Depth/stencil
-		Depth32F = 2,
-		Depth24Stencil8 = 3,
+		Depth24Stencil8 = 5,
+		Depth32F = 6,
 
 		// Defaults
 		Color = RGBA8,
@@ -59,12 +62,14 @@ public:
 
 	// Factory function
 	static std::shared_ptr<Framebuffer> create(const Properties& properties);
+	static void copyBuffer(std::shared_ptr<Framebuffer> from, std::shared_ptr<Framebuffer> to, uint32_t bits, uint32_t filter);
 
 	void bind() const;
 	void unbind() const;
 	bool check() const;
 	void resize(uint32_t width, uint32_t height);
 
+	uint8_t colorAttachmentCount() const { return m_colorAttachmentCount; }
 	uint32_t id() const { return m_id; }
 	uint32_t width() const { return m_width; }
 	uint32_t height() const { return m_height; }
@@ -87,6 +92,7 @@ private:
 
 private:
 	bool m_renderToScreen { false };
+	uint8_t m_colorAttachmentCount { 1 };
 	uint32_t m_id { 0 };
 	uint32_t m_width { 0 };
 	uint32_t m_height { 0 };

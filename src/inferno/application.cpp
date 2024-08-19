@@ -24,6 +24,7 @@
 #include "inferno/render/context.h"
 #include "inferno/render/framebuffer.h"
 #include "inferno/render/uniformbuffer.h"
+#include "inferno/system/rendersystem.h"
 // #include "inferno/render/gltf.h"
 #include "inferno/asset/shader.h"
 #include "inferno/asset/texture.h"
@@ -53,27 +54,7 @@ Application::Application()
 
 	Input::initialize();
 	RenderCommand::initialize();
-
-	m_framebuffer = Framebuffer::create({
-		.attachments = { Framebuffer::Type::Color, Framebuffer::Type::Depth },
-		.width = m_window->getWidth(),
-		.height = m_window->getHeight(),
-		.clearColor = { 0.2f, 0.3f, 0.3f, 1.0f },
-		.clearBit = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT,
-	});
-
-	m_screenFramebuffer = Framebuffer::create({
-		.renderToScreen = true,
-		.clearColor = { 1.0f, 1.0f, 1.0f, 1.0f },
-		.clearBit = GL_COLOR_BUFFER_BIT,
-	});
-
-	Uniformbuffer::the().setLayout(
-		"Camera", 0,
-		{
-			{ BufferElementType::Mat4, "u_projectionView" },
-		});
-	Uniformbuffer::the().create("Camera");
+	RenderSystem::the().initialize(m_window->getWidth(), m_window->getHeight());
 
 	m_scene = std::make_shared<Scene>();
 	m_scene->initialize();
@@ -104,6 +85,8 @@ Application::~Application()
 	Renderer2D::destroy();
 	Renderer3D::destroy();
 	RendererCubemap::destroy();
+	RendererPostProcess::destroy();
+	RendererLightCube::destroy();
 	RenderCommand::destroy();
 	AssetManager::destroy();
 	// Input::destroy();
@@ -167,10 +150,6 @@ int Application::run()
 	// offset
 #endif
 
-	constexpr glm::vec4 vectorOne { 1.0f, 1.0f, 1.0f, 1.0f };
-	constexpr glm::mat4 matIdentity { 1.0f };
-	constexpr TransformComponent transformIdentity;
-
 	double gametime = 0;
 	uint64_t frames = 0;
 
@@ -196,33 +175,7 @@ int Application::run()
 		// ---------------------------------
 		// Render
 
-		m_framebuffer->bind();
-
-		RenderCommand::clearColor(m_framebuffer->clearColor());
-		RenderCommand::clearBit(m_framebuffer->clearBit());
-
-		render();
-
 		m_scene->render();
-		// RendererCharacter::the().drawCharacter(character, f->texture());
-
-		m_framebuffer->unbind();
-
-		// ---------------------------------
-		// Framebuffer
-
-		m_screenFramebuffer->bind();
-
-		RenderCommand::clearColor(m_screenFramebuffer->clearColor());
-		RenderCommand::clearBit(m_screenFramebuffer->clearBit());
-
-		Renderer2D::the().setEnableDepthBuffer(false);
-		Uniformbuffer::the().setValue("Camera", "u_projectionView", matIdentity);
-		Renderer2D::the().drawQuad(transformIdentity, vectorOne, m_framebuffer->texture(0));
-		Renderer2D::the().endScene();
-		Renderer2D::the().setEnableDepthBuffer(true);
-
-		m_screenFramebuffer->unbind();
 
 		m_window->render();
 	}
@@ -259,8 +212,7 @@ bool Application::onWindowResize(WindowResizeEvent& e)
 {
 	ruc::info("WindowResizeEvent {}x{}", e.getWidth(), e.getHeight());
 
-	RenderCommand::setViewport(0, 0, e.getWidth(), e.getHeight());
-	m_framebuffer->resize(e.getWidth(), e.getHeight());
+	RenderSystem::the().resize(e.getWidth(), e.getHeight());
 
 	return true;
 }

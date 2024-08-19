@@ -32,6 +32,7 @@ public:
 	 * @brief Return a pair from the camera component: { projection, view }
 	 */
 	std::pair<glm::mat4, glm::mat4> projectionView();
+	glm::vec3 translate();
 
 	void setRegistry(std::shared_ptr<entt::registry> registry) { m_registry = registry; };
 

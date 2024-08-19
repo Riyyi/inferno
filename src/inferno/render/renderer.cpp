@@ -171,6 +171,7 @@ void Renderer<T>::flush()
 	// Render
 	bool depthTest = RenderCommand::depthTest();
 	RenderCommand::setDepthTest(m_enableDepthBuffer);
+	RenderCommand::setColorAttachmentCount(m_colorAttachmentCount);
 	RenderCommand::drawIndexed(m_vertexArray, m_elementIndex);
 	RenderCommand::setDepthTest(depthTest);
 
@@ -198,6 +199,11 @@ void Renderer<T>::nextBatch()
 
 Renderer2D::Renderer2D(s)
 {
+	Renderer2D::initialize();
+}
+
+void Renderer2D::initialize()
+{
 	Renderer::initialize();
 
 	// ---------------------------------
@@ -215,6 +221,8 @@ Renderer2D::Renderer2D(s)
 
 	// ---------------------------------
 	// GPU
+
+	m_enableDepthBuffer = false;
 
 	// Create vertex buffer
 	auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(QuadVertex) * maxVertices);
@@ -275,12 +283,17 @@ void Renderer2D::drawQuad(const TransformComponent& transform, glm::mat4 color, 
 
 void Renderer2D::loadShader()
 {
-	m_shader = AssetManager::the().load<Shader>("assets/glsl/batch-2d");
+	m_shader = AssetManager::the().load<Shader>("assets/glsl/post-process");
 }
 
 // -----------------------------------------
 
 RendererCubemap::RendererCubemap(s)
+{
+	RendererCubemap::initialize();
+}
+
+void RendererCubemap::initialize()
 {
 	Renderer::initialize();
 
@@ -354,10 +367,10 @@ void RendererCubemap::beginScene(glm::mat4 cameraProjection, glm::mat4 cameraVie
 	// x x x 0
 	// x x x 0
 	// 0 0 0 1
-	cameraView = glm::mat4(glm::mat3(cameraView));
+	// cameraView = glm::mat4(glm::mat3(cameraView));
 
 	m_shader->bind();
-	m_shader->setFloat("u_projectionView", cameraProjection * cameraView);
+	m_shader->setFloat("u_projectionView2", cameraProjection * cameraView);
 	m_shader->unbind();
 }
 
@@ -482,6 +495,7 @@ Renderer3D::Renderer3D(s)
 	// GPU
 
 	m_enableDepthBuffer = true;
+	m_colorAttachmentCount = 3;
 
 	// Create vertex buffer
 	auto vertexBuffer = std::make_shared<VertexBuffer>(sizeof(Vertex) * maxVertices);
@@ -501,8 +515,8 @@ void Renderer3D::drawModel(std::span<const Vertex> vertices, std::span<const uin
 {
 	// ruc::error("drawModel");
 
-	VERIFY(vertices.size() <= maxVertices, "model vertices too big for buffer");
-	VERIFY(elements.size() <= maxElements, "model elements too big for buffer");
+	VERIFY(vertices.size() <= maxVertices, "model vertices too big for buffer, {}/{}", vertices.size(), maxVertices);
+	VERIFY(elements.size() <= maxElements, "model elements too big for buffer, {}/{}", elements.size(), maxElements);
 
 	// Create a new batch if the quad limit has been reached
 	if (m_vertexIndex + vertices.size() > maxVertices || m_elementIndex + elements.size() > maxElements) {
@@ -512,9 +526,10 @@ void Renderer3D::drawModel(std::span<const Vertex> vertices, std::span<const uin
 	uint32_t textureUnitIndex = addTextureUnit(texture);
 
 	// Add the vertices
+	glm::mat3 normalMatrix = glm::mat3(glm::transpose(glm::inverse(transform.transform)));
 	for (const auto& vertex : vertices) {
 		m_vertexBufferPtr->position = transform.transform * glm::vec4(vertex.position, 1.0f);
-		m_vertexBufferPtr->normal = vertex.normal;
+		m_vertexBufferPtr->normal = normalMatrix * vertex.normal; // take non-uniform scaling into consideration
 		m_vertexBufferPtr->color = color;
 		m_vertexBufferPtr->textureCoordinates = vertex.textureCoordinates;
 		m_vertexBufferPtr->textureIndex = textureUnitIndex;
@@ -563,6 +578,48 @@ void Renderer3D::startBatch()
 {
 	Renderer<Vertex>::startBatch();
 	m_elementBufferPtr = m_elementBufferBase;
+}
+
+// -----------------------------------------
+
+void RendererPostProcess::drawQuad(const TransformComponent& transform, std::shared_ptr<Texture> albedo, std::shared_ptr<Texture> position, std::shared_ptr<Texture> normal)
+{
+	nextBatch();
+
+	constexpr glm::vec2 textureCoordinates[] = {
+		{ 0.0f, 0.0f },
+		{ 1.0f, 0.0f },
+		{ 1.0f, 1.0f },
+		{ 0.0f, 1.0f }
+	};
+
+	uint32_t textureUnitIndex = addTextureUnit(albedo);
+	addTextureUnit(position);
+	addTextureUnit(normal);
+
+	// Add the quads 4 vertices
+	for (uint32_t i = 0; i < vertexPerQuad; i++) {
+		m_vertexBufferPtr->position = transform.transform * m_vertexPositions[i];
+		m_vertexBufferPtr->textureCoordinates = textureCoordinates[i];
+		m_vertexBufferPtr->textureIndex = textureUnitIndex;
+		m_vertexBufferPtr++;
+	}
+
+	m_vertexIndex += vertexPerQuad;
+	m_elementIndex += elementPerQuad;
+}
+
+void RendererPostProcess::loadShader()
+{
+	ruc::error("POSTPROCESSING!");
+	m_shader = AssetManager::the().load<Shader>("assets/glsl/post-process");
+}
+
+// -----------------------------------------
+
+void RendererLightCube::loadShader()
+{
+	m_shader = AssetManager::the().load<Shader>("assets/glsl/lightsource");
 }
 
 } // namespace Inferno
