@@ -1,0 +1,326 @@
+#+TITLE: Memory Layout
+#+AUTHOR: Riyyi
+#+LANGUAGE: en
+#+OPTIONS: toc:nil
+
+This chapter is about the memory layout of interface blocks in GLSL.
+An interface block is a group of variables, a struct if you will.
+
+There are 4 types of memory layouts that can be used, where the first two aren't
+widely used as those are implementation dependent and require querying the
+OpenGL API for memory offsets.
+
+- packed
+- shared
+- std140
+- std430
+
+** std140
+
+This type is usable in Uniform Buffer Objects (=UBO=) and Shader Storage Buffer
+Objects (=SSBO=).
+
+** std430
+
+This type is only usable in Shader Storage Buffer Objects (=SSBO=).
+
+Main points:
+- Memory is organized into chunks.
+- One chunk has 4 slots, 4 bytes per slot.
+- Can't fit? Move to next chunk.
+- An interface block is at least the size of 1 chunk.
+
+The rules:
+
+- Scalar =bool=, =int=, =uint=, =float=, and =double=
+
+#+BEGIN_SRC
+Both the size and alignment are the size of the scalar in basic machine types
+(e.g., sizeof(GLfloat))
+#+END_SRC
+
+- Two-componment Vectors (e.g., =ivec2=)
+
+#+BEGIN_SRC
+Both the size and alignment are twice the size of the underlying scalar type.
+#+END_SRC
+
+- Three-component Vectors (e.g., =vec3=) and Four-component Vectors (e.g., =vec4=)
+
+#+BEGIN_SRC
+Both the size and alignment are four times the size of the scalar type. However,
+this is only true when the member is part of an array or nested structure
+#+END_SRC
+
+- Array of Scalars and Vectors
+
+#+BEGIN_SRC
+The size of each element in the array will be the same size of the element type,
+where three-component vectors are rounded up to the size four-component
+vectors. This is also the array's alignment. The array's size will be the
+element size times the number of elements.
+#+END_SRC
+
+- Column-major matrix or an array of column-major matrices of size C columns and R rows
+
+#+BEGIN_SRC
+Same layout as an array of N vectors each with R components, where N is the
+total number of columns present.
+#+END_SRC
+
+- Row-major matrix or an array of row-major matrices of size R rows and C columns
+
+#+BEGIN_SRC
+Same layout as an array of N vectors each with C components, where N is the
+total number of rows present.
+#+END_SRC
+
+Both =GLSL= and the =GLM= math library we're using have column-major matrices!
+
+- Single-structure definition or an array of structures
+
+#+BEGIN_SRC
+Structure alignment is the same as the alignment of the biggest structure
+member, where three-component vectors are rounded up to the size of
+four-component vectors. Each structure will start on this alignment, and its
+size will be the space neeeded by its members, according to the previous rules,
+rounded up to a multiple of the structure alignment.
+#+END_SRC
+
+All of the examples described in the following segments are verified by querying
+the OpenGL API.
+
+*** Scalars
+
+These types take up 1 (or 2 with =double=) slot and can appear after anything.
+In the example below you can see that due to the larger alignment, the ~double~
+is forced to the next chunk.
+
+#+BEGIN_SRC glsl
+//        Var    Size    Alignment    Offset
+bool      a; //   4       4            0
+int       b; //   4       4            4
+uint      c; //   4       4            8
+double    d; //   8       8           16
+float     e; //   4       4           24
+#+END_SRC
+
+#+BEGIN_SRC
+Chunks:
+[a][b][c][ ] #1
+[d][d][e][ ] #2
+#+END_SRC
+
+*** Two-component Vectors
+
+**** Float
+
+A Vec2 takes up 2 slots, so will be in the first or last half of a chunk.
+
+#+BEGIN_SRC glsl
+//        Var    Size    Alignment    Offset
+vec2      a; //   8       8            0
+float     b; //   4       4            8
+#+END_SRC
+
+#+BEGIN_SRC
+Chunks:
+[a][a][b][ ] #1
+#+END_SRC
+
+#+BEGIN_SRC glsl
+//        Var    Size    Alignment    Offset
+float     a; //   4       4            0
+vec2      b; //   8       8            8
+#+END_SRC
+
+#+BEGIN_SRC
+Chunks:
+[a][ ][b][b] #1
+#+END_SRC
+
+**** Double
+
+#+BEGIN_SRC glsl
+//        Var    Size    Alignment    Offset
+float     a; //   4       4            0
+dvec2     b; //  16      16           16
+#+END_SRC
+
+#+BEGIN_SRC
+Chunks:
+[a][ ][ ][ ] #1
+[b][b][b][b] #2
+#+END_SRC
+
+*** Three-component and Four-component Vectors
+
+A Vec3 takes up 3 slots, the alignment is 4 slots so only fits at the start of a
+chunk.
+
+#+BEGIN_SRC glsl
+//        Var    Size    Alignment    Offset
+vec3      a; //  12      16            0
+float     b; //   4       4           12
+vec4      c; //  16      16           16
+#+END_SRC
+
+#+BEGIN_SRC
+Chunks:
+[a][a][a][b] #1
+[c][c][c][c] #2
+#+END_SRC
+
+#+BEGIN_SRC glsl
+//        Var    Size    Alignment    Offset
+float     a; //   4       4            0
+vec3      b; //  12      16           16
+vec4      c; //  16      16           32
+#+END_SRC
+
+#+BEGIN_SRC
+Chunks:
+[a][ ][ ][ ] #1
+[b][b][b][ ] #2
+[c][c][c][c] #3
+#+END_SRC
+
+*** Array of Scalars and Vectors
+
+#+BEGIN_SRC glsl
+//        Var    Size    Alignment    Offset
+float[3]  a; //  12       4            0
+float     b; //   4       4           12
+float     c; //   4       4           16
+float[3]  d; //  12       4           20
+#+END_SRC
+
+#+BEGIN_SRC
+Chunks:
+[a][a][a][b] #1
+[c][d][d][d] #1
+#+END_SRC
+
+*Note* the optimizations in the alignment and strides are not applicable to
+~vec3~ elements, these remain unchanged from =std140=.
+
+#+BEGIN_SRC glsl
+//        Var    Size    Alignment    Offset
+float     a; //   4       4            0
+vec3[3]   b; //  48      16           16
+float     c; //   4       4           64
+float     d; //   4       4           68
+vec2[2]   e; //  16       8           72
+float     f; //   4       4           88
+#+END_SRC
+
+#+BEGIN_SRC
+Chunks:
+[a][ ][ ][ ] #1, offset:  0
+[b][b][b][ ] #2, offset: 16
+[b][b][b][ ] #3, offset: 32
+[b][b][b][ ] #4, offset: 48
+[c][d][e][e] #5, offset: 64
+[e][e][f][ ] #6, offset: 80
+#+END_SRC
+
+*Note* the offset needs to be a multiple of the alignment, forcing an entire
+empty chunk in the example below.
+
+#+BEGIN_SRC glsl
+//        Var    Size    Alignment    Offset
+float     a; //   4       4             0
+dvec2[2]  b; //  32      16            16
+dvec3[2]  c; //  64      32            64
+float     d; //   4       4           128
+#+END_SRC
+
+#+BEGIN_SRC
+Chunks:
+[a][ ][ ][ ] #1, offset:   0
+[d][d][d][d] #2, offset:  16
+[d][d][d][d] #3, offset:  32
+[ ][ ][ ][ ] #4, offset:  48
+[c][c][c][c] #5, offset:  64
+[c][c][ ][ ] #6, offset:  80
+[c][c][c][c] #7, offset:  96
+[c][c][ ][ ] #8, offset: 112
+[d][ ][ ][ ] #9, offset: 128
+#+END_SRC
+
+*** Matrices
+
+Alignment is the same as an array of 1 “row” of the matrix.
+No padding between the “rows” of a matrix, but will pad at the end.
+
+#+BEGIN_SRC glsl
+//        Var    Size    Alignment    Offset
+float     a; //   4       4             0
+mat2      b; //  16       8             8
+vec2      c; //   4       4            24
+float     d; //   4       4            32
+mat2[2]   e; //  32       8            40
+float     f; //   4       4            72
+#+END_SRC
+
+#+BEGIN_SRC
+Chunks:
+[a][ ][b][b] #1, offset:   0
+[b][b][c][c] #2, offset:  16
+[d][ ][e][e] #3, offset:  32
+[e][e][e][e] #4, offset:  48
+[e][e][f][ ] #5, offset:  64
+#+END_SRC
+
+TODO: Add more examples
+
+*** Structs
+
+Alignment same as biggest struct member. Size is the size of all members,
+rounded up to a multiple of the alignment.
+
+In the example below you can see that the ~Stuff~ struct, including padding
+between members, is 20 bytes in size. To make that a multiple of the alignment
+additional padding needs to be put at the end, to make the total size 24 bytes.
+
+Each element in the array of structs will apply the alignment again, as seen
+with ~Stuff[1].a~.
+
+#+BEGIN_SRC glsl
+struct Stuff {
+	float a;
+	vec2 b;
+	float c;
+};
+
+//        Var    Size    Alignment    Offset
+Stuff     a; //  20       8
+        a.a; //   4       4            0
+        a.b; //   8       8            8
+        a.c; //   4       4           16
+float     b; //   4       4           24
+Stuff[2]  c; //  44       8
+        c.a; //   4       4           32
+        c.b; //   8       8           40
+        c.c; //   4       4           48
+float     d; //   4       4           80
+#+END_SRC
+
+#+BEGIN_SRC
+Chunks:
+[a][ ][a][a] #1, offset:   0
+[a][ ][b][ ] #2, offset:  16
+[c][ ][c][c] #3, offset:  32
+[c][ ][c][ ] #4, offset:  48
+[c][c][c][ ] #5, offset:  64
+[d][ ][ ][ ] #6, offset:  80
+#+END_SRC
+
+TODO: Add more examples
+
+* References
+
+- https://learnopengl.com/Advanced-OpenGL/Advanced-GLSL
+- https://www.khronos.org/opengl/wiki/Interface_Block_(GLSL)#Memory_layout
+- [[https://www.oreilly.com/library/view/opengl-programming-guide/9780132748445/app09lev1sec2.html][The std140 Layout Rules]]
+- [[https://www.youtube.com/watch?v=JPvbRko9lBg][(YouTube) WebGL 2: Uniform Buffer Objects]]
