@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+#pragma once
+
 #include <cstdint> // int32_t, uint32_t
 #include <string_view>
 #include <unordered_map>

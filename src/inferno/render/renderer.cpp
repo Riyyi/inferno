@@ -35,9 +35,6 @@ void Renderer<T>::endScene()
 // -----------------------------------------
 
 template<typename T>
-uint32_t Renderer<T>::m_maxSupportedTextureSlots = 0;
-
-template<typename T>
 void Renderer<T>::initialize()
 {
 	// Get amount of texture units supported by the GPU

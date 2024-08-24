@@ -25,8 +25,8 @@ struct DirectionalLight {
 	vec3 specular;
 };
 
-const int MAX_DIRECTIONAL_LIGHTS = 32;
-layout(std140, binding = 1) uniform DirectionalLights {
+const int MAX_DIRECTIONAL_LIGHTS = 4;
+layout(std430, binding = 0) buffer DirectionalLights {
 	DirectionalLight u_directionalLight[MAX_DIRECTIONAL_LIGHTS];
 };
 

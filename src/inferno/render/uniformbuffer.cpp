@@ -59,6 +59,7 @@ void Uniformbuffer::setLayout(std::string_view blockName, uint8_t bindingPoint, 
 
 	UniformbufferBlock& block = m_blocks[blockName];
 	block.bindingPoint = bindingPoint;
+	block.uniformLocations.clear();
 
 	// Example block layout:
 	// - mat3

@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 
+#pragma once
+
 #include <cstddef> // size_t
 #include <cstdint> // uint8_t, uint32_t
 #include <string>
@@ -13,35 +15,17 @@
 #include "glad/glad.h"
 #include "glm/ext/matrix_float2x2.hpp" // glm::mat2
 #include "glm/ext/matrix_float3x3.hpp" // glm::mat3
-#include "glm/ext/vector_float3.hpp"   // glm::vec3
 #include "ruc/singleton.h"
 
 #include "inferno/render/buffer.h"
 
-#define CHECK_SET_CALL(blockName, member)                                              \
-	VERIFY(exists(blockName), "uniformbuffer block doesnt exist");                     \
+#define CHECK_UNIFORM_SET_CALL(blockName, member)                                      \
+	VERIFY(exists(blockName), "uniformbuffer block doesnt exist: {}", blockName);      \
 	const UniformbufferBlock& block = m_blocks[blockName];                             \
 	VERIFY(block.uniformLocations.find(member.data()) != block.uniformLocations.end(), \
-	       "uniformbuffer block member doesnt exist");
+	       "uniformbuffer member doesnt exist: {}", member);
 
 namespace Inferno {
-
-// Uniform block layouts, using std140 memory layout rules
-
-#define MAX_DIRECTIONAL_LIGHTS 32
-struct UniformDirectionalLight {
-	glm::vec3 direction { 0 };
-	float __padding0 { 0 };
-
-	glm::vec3 ambient { 0 };
-	float __padding1 { 0 };
-	glm::vec3 diffuse { 0 };
-	float __padding2 { 0 };
-	glm::vec3 specular { 0 };
-	float __padding3 { 0 };
-};
-
-// -----------------------------------------
 
 struct UniformbufferBlock {
 	uint32_t id { 0 };
@@ -62,7 +46,7 @@ public:
 	template<typename T> // Capture value by reference, instead of decaying to pointer
 	void setValue(std::string_view blockName, std::string_view member, T&& value, size_t size = 0)
 	{
-		CHECK_SET_CALL(blockName, member);
+		CHECK_UNIFORM_SET_CALL(blockName, member);
 
 		glBindBuffer(GL_UNIFORM_BUFFER, block.id);
 		glBufferSubData(GL_UNIFORM_BUFFER, block.uniformLocations.at(member.data()), (size) ? size : sizeof(T), &value);

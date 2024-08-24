@@ -16,6 +16,8 @@
 #include "inferno/render/framebuffer.h"
 #include "inferno/render/render-command.h"
 #include "inferno/render/renderer.h"
+#include "inferno/render/shader-storage-buffer.h"
+#include "inferno/render/shader-structs.h"
 #include "inferno/render/uniformbuffer.h"
 #include "inferno/system/camerasystem.h"
 #include "inferno/system/rendersystem.h"
@@ -57,16 +59,8 @@ void RenderSystem::initialize(uint32_t width, uint32_t height)
 		});
 	Uniformbuffer::the().create("Camera");
 
-	Uniformbuffer::the().setLayout(
-		"DirectionalLights",
-		{
-			.size = sizeof(UniformDirectionalLight) * MAX_DIRECTIONAL_LIGHTS,
-			.bindingPoint = 1,
-			.uniformLocations = {
-				{ "u_directionalLight", 0 },
-			},
-		});
-	Uniformbuffer::the().create("DirectionalLights");
+	ShaderStorageBuffer::the().setLayout("DirectionalLights", 0, RendererPostProcess::the().shaderID());
+	ShaderStorageBuffer::the().create("DirectionalLights");
 
 	ruc::info("RenderSystem initialized");
 }
@@ -137,15 +131,21 @@ void RenderSystem::renderGeometry()
 	Uniformbuffer::the().setValue("Camera", "u_projectionView", projection * view);
 	Uniformbuffer::the().setValue("Camera", "u_position", translate);
 
-	static UniformDirectionalLight directionalLights[1] = {
+	static DirectionalLightBlock directionalLights[2] = {
 		{
 			.direction = { -8.0f, -8.0f, -8.0f },
 			.ambient = { 0.1f, 0.1f, 0.1f },
 			.diffuse = { 1.0f, 1.0f, 1.0f },
 			.specular = { 1.0f, 1.0f, 1.0f },
 		},
+		{
+			.direction = { 8.0f, 8.0f, 8.0f },
+			.ambient = { 0.1f, 0.1f, 0.1f },
+			.diffuse = { 1.0f, 1.0f, 1.0f },
+			.specular = { 1.0f, 0.0f, 0.0f },
+		},
 	};
-	Uniformbuffer::the().setValue("DirectionalLights", "u_directionalLight", directionalLights);
+	ShaderStorageBuffer::the().setValue("DirectionalLights", "u_directionalLight", directionalLights);
 
 	auto modelView = m_registry->view<TransformComponent, ModelComponent>();
 

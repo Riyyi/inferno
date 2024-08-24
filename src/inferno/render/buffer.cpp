@@ -42,7 +42,7 @@ uint32_t BufferElement::getTypeGL() const
 	return BufferElement::getTypeGL(m_type);
 }
 
-uint32_t BufferElement::getTypeSize(const BufferElementType type)
+uint32_t BufferElement::getTypeSize(BufferElementType type)
 {
 	switch (type) {
 	case BufferElementType::None:
@@ -86,7 +86,7 @@ uint32_t BufferElement::getTypeSize(const BufferElementType type)
 	return 0;
 }
 
-uint32_t BufferElement::getTypeCount(const BufferElementType type)
+uint32_t BufferElement::getTypeCount(BufferElementType type)
 {
 	switch (type) {
 	case BufferElementType::None:
@@ -133,7 +133,7 @@ uint32_t BufferElement::getTypeCount(const BufferElementType type)
 	return 0;
 }
 
-uint32_t BufferElement::getTypeGL(const BufferElementType type)
+uint32_t BufferElement::getTypeGL(BufferElementType type)
 {
 	switch (type) {
 	case BufferElementType::None:
@@ -174,6 +174,58 @@ uint32_t BufferElement::getTypeGL(const BufferElementType type)
 	};
 
 	VERIFY(false, "BufferElement unknown BufferElementType GL!");
+	return 0;
+}
+
+uint32_t BufferElement::getGLTypeSize(uint32_t type)
+{
+	switch (type) {
+	case GL_BOOL:
+	case GL_INT:
+	case GL_UNSIGNED_INT:
+	case GL_FLOAT:
+		return 4;
+	case GL_BOOL_VEC2:
+	case GL_INT_VEC2:
+	case GL_UNSIGNED_INT_VEC2:
+	case GL_FLOAT_VEC2:
+		return 4 * 2;
+	case GL_BOOL_VEC3:
+	case GL_INT_VEC3:
+	case GL_UNSIGNED_INT_VEC3:
+	case GL_FLOAT_VEC3:
+		return 4 * 3;
+	case GL_BOOL_VEC4:
+	case GL_INT_VEC4:
+	case GL_UNSIGNED_INT_VEC4:
+	case GL_FLOAT_VEC4:
+		return 4 * 4;
+	case GL_FLOAT_MAT2:
+		return 4 * 2 * 2;
+	case GL_FLOAT_MAT3:
+		return 4 * 3 * 3;
+	case GL_FLOAT_MAT4:
+		return 4 * 4 * 4;
+
+	case GL_DOUBLE:
+		return 8;
+	case GL_DOUBLE_VEC2:
+		return 8 * 2;
+	case GL_DOUBLE_VEC3:
+		return 8 * 3;
+	case GL_DOUBLE_VEC4:
+		return 8 * 4;
+	case GL_DOUBLE_MAT2:
+		return 8 * 2 * 2;
+	case GL_DOUBLE_MAT3:
+		return 8 * 3 * 3;
+	case GL_DOUBLE_MAT4:
+		return 8 * 4 * 4;
+
+	default:
+		VERIFY_NOT_REACHED();
+	};
+
 	return 0;
 }
 

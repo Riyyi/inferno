@@ -16,9 +16,10 @@
 #include "glm/ext/vector_float4.hpp"   // glm::vec4
 #include "ruc/singleton.h"
 
+#include "inferno/asset/shader.h"
+
 namespace Inferno {
 
-class Shader;
 class Texture;
 class TransformComponent;
 class VertexArray;
@@ -79,6 +80,8 @@ public:
 
 	void setEnableDepthBuffer(bool state) { m_enableDepthBuffer = state; }
 
+	uint32_t shaderID() const { return m_shader->id(); }
+
 protected:
 	Renderer() {}
 	virtual ~Renderer() { destroy(); };
@@ -106,7 +109,7 @@ protected:
 	T* m_vertexBufferPtr { nullptr };
 
 	// Texture units
-	static uint32_t m_maxSupportedTextureSlots;
+	static inline uint32_t m_maxSupportedTextureSlots { 0 };
 	uint32_t m_textureSlotIndex { 1 };
 	std::array<std::shared_ptr<Texture>, maxTextureSlots> m_textureSlots;
 

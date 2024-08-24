@@ -16,7 +16,7 @@ namespace Inferno {
 
 // clang-format off
 // https://www.khronos.org/opengl/wiki/Data_Type_(GLSL)
-enum class BufferElementType {
+enum class BufferElementType : uint8_t {
 	None = 0,
 	Bool, Bool2, Bool3, Bool4,                      // bvec
 	Int, Int2, Int3, Int4,                          // ivec
@@ -39,9 +39,10 @@ public:
 	uint32_t getTypeSize() const;
 	uint32_t getTypeCount() const;
 	uint32_t getTypeGL() const;
-	static uint32_t getTypeSize(const BufferElementType type);
-	static uint32_t getTypeCount(const BufferElementType type);
-	static uint32_t getTypeGL(const BufferElementType type);
+	static uint32_t getTypeSize(BufferElementType type);
+	static uint32_t getTypeCount(BufferElementType type);
+	static uint32_t getTypeGL(BufferElementType type);
+	static uint32_t getGLTypeSize(uint32_t type);
 
 	BufferElementType type() const { return m_type; }
 	std::string name() const { return m_name; }
@@ -49,11 +50,11 @@ public:
 	uint32_t offset() const { return m_offset; }
 	bool normalized() const { return m_normalized; }
 
-	void setType(const BufferElementType& type) { m_type = type; }
+	void setType(BufferElementType type) { m_type = type; }
 	void setName(const std::string& name) { m_name = name; }
-	void setSize(const uint32_t& size) { m_size = size; }
-	void setOffset(const uint32_t& offset) { m_offset = offset; }
-	void setNormalized(const bool& normalized) { m_normalized = normalized; }
+	void setSize(uint32_t size) { m_size = size; }
+	void setOffset(uint32_t offset) { m_offset = offset; }
+	void setNormalized(bool normalized) { m_normalized = normalized; }
 
 private:
 	BufferElementType m_type;
