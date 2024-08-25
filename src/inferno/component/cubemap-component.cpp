@@ -8,7 +8,7 @@
 
 #include "inferno/asset/texture.h"
 #include "inferno/component/cubemap-component.h"
-#include "inferno/component/spritecomponent.h" // TODO: Move glm::x toJson/fromJson to separate file
+#include "inferno/component/serialize.h" // not detected as used by clang-tidy
 
 namespace Inferno {
 

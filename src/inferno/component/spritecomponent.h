@@ -23,10 +23,3 @@ struct SpriteComponent {
 void fromJson(const ruc::Json& json, SpriteComponent& value);
 
 } // namespace Inferno
-
-namespace glm {
-
-void toJson(ruc::Json& json, const vec4& value);
-void fromJson(const ruc::Json& json, vec4& value);
-
-} // namespace glm

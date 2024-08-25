@@ -6,9 +6,6 @@
 
 #pragma once
 
-#include <cstdint> // uint32_t
-#include <optional>
-
 #include "entt/entity/entity.hpp"      // entt::null
 #include "entt/entity/fwd.hpp"         // entt::entity
 #include "glm/ext/matrix_float4x4.hpp" // glm::mat4
@@ -30,33 +27,6 @@ struct TransformComponent {
 void fromJson(const ruc::Json& json, TransformComponent& value);
 
 } // namespace Inferno
-
-namespace glm {
-
-void toJson(ruc::Json& json, const vec3& value);
-void fromJson(const ruc::Json& json, vec3& value);
-
-} // namespace glm
-
-template<>
-struct ruc::format::Formatter<glm::vec2> : Formatter<std::vector<float>> {
-	void format(Builder& builder, glm::vec2 value) const;
-};
-
-template<>
-struct ruc::format::Formatter<glm::vec3> : Formatter<std::vector<float>> {
-	void format(Builder& builder, glm::vec3 value) const;
-};
-
-template<>
-struct ruc::format::Formatter<glm::vec4> : Formatter<std::vector<float>> {
-	void format(Builder& builder, glm::vec4 value) const;
-};
-
-template<>
-struct ruc::format::Formatter<glm::mat4> : Formatter<glm::vec4> {
-	void format(Builder& builder, glm::mat4 value) const;
-};
 
 template<>
 struct ruc::format::Formatter<Inferno::TransformComponent> : Formatter<glm::vec3> {
