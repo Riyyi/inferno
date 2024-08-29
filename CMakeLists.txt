@@ -11,6 +11,7 @@ endif()
 # Options
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 option(INFERNO_BUILD_EXAMPLES "Build the Inferno example programs" ${INFERNO_STANDALONE})
+option(INFERNO_BUILD_WARNINGS "Build with warnings enabled" ${INFERNO_STANDALONE})
 
 # ------------------------------------------
 
@@ -25,10 +26,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Compiler flags used for all build types
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
-# -Wall      = All warnings about contructions that are easily avoidable
-# -Wextra    = Extra warning flags not covered by -Wall
-# -Wpedantic = Warnings for compiler extensions not part of the standard
+set(COMPILE_FLAGS_DEPS -w)
+if(INFERNO_BUILD_WARNINGS)
+	set(COMPILE_FLAGS_PROJECT -Wall -Wextra -Wpedantic)
+	# -Wall      = All warnings about contructions that are easily avoidable
+	# -Wextra    = Extra warning flags not covered by -Wall
+	# -Wpedantic = Warnings for compiler extensions not part of the standard
+else()
+	set(COMPILE_FLAGS_PROJECT ${COMPILE_FLAGS_DEPS})
+endif()
 
 # Set default build type if not specified
 set(DEFAULT_BUILD_TYPE Release)
@@ -42,14 +48,20 @@ endif()
 # Set build type specific compiler flags
 message("--- ${CMAKE_BUILD_TYPE} ---")
 if(${CMAKE_BUILD_TYPE} STREQUAL Debug)
-	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -g -pg")
-	# -Og = Optimizations that do not interfere with debugging
-	# -g  = Produce debugging information in OS's native format
-	# -pg = Generate profile information for analysis with gprof
+	# Optimizations that do not interfere with debugging
+	string(APPEND CMAKE_CXX_FLAGS_DEBUG " -Og")
+	# Produce debugging information in OS's native format
+	string(APPEND CMAKE_CXX_FLAGS_DEBUG " -g")
+	# Generate profile information for analysis with gprof
 	# $ gprof <PROJECT> gmon.out > profile-data.txt
+	string(APPEND CMAKE_CXX_FLAGS_DEBUG " -pg")
+	# Enable ASan (Address Sanitizer) and UBSan (Undefined Behavior Sanitizer)
+	string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address,undefined")
+	# Do not omit frame pointer, which helps with debugging.
+	string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fno-omit-frame-pointer")
 elseif(${CMAKE_BUILD_TYPE} STREQUAL Release)
-	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
-	# -O3 = Optimizations that increase compilation time and performance
+	# Optimizations that increase compilation time and performance
+	string(APPEND CMAKE_CXX_FLAGS_RELEASE " -O3")
 endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

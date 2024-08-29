@@ -33,3 +33,4 @@ target_include_directories(${ENGINE}-dependencies PUBLIC
 	"glad/include"
 	"lua")
 target_link_libraries(${ENGINE}-dependencies glfw ruc ruc-test assimp)
+target_compile_options(${ENGINE}-dependencies PRIVATE ${COMPILE_FLAGS_DEPS})

@@ -10,6 +10,7 @@ target_include_directories(${ENGINE} PUBLIC
 	"../vendor/sol2/include"
 	"../vendor/stb")
 target_link_libraries(${ENGINE} ${ENGINE}-dependencies)
+target_compile_options(${ENGINE} PRIVATE ${COMPILE_FLAGS_PROJECT})
 
 # ------------------------------------------
 
