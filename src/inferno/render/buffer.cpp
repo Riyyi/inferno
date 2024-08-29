@@ -424,10 +424,11 @@ void VertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer> vertexBuffer)
 
 		index++;
 	}
-	m_vertexBuffers.push_back(std::move(vertexBuffer));
 
 	unbind();
 	vertexBuffer->unbind();
+
+	m_vertexBuffers.push_back(std::move(vertexBuffer));
 }
 
 void VertexArray::setIndexBuffer(std::shared_ptr<IndexBuffer> indexBuffer)
@@ -435,10 +436,10 @@ void VertexArray::setIndexBuffer(std::shared_ptr<IndexBuffer> indexBuffer)
 	bind();
 	indexBuffer->bind();
 
-	m_indexBuffer = std::move(indexBuffer);
-
 	unbind();
 	indexBuffer->unbind();
+
+	m_indexBuffer = std::move(indexBuffer);
 }
 
 } // namespace Inferno

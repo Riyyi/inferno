@@ -550,20 +550,20 @@ void Renderer3D::createElementBuffer()
 	// CPU
 
 	// Create array for storing quads vertices
-	m_elementBufferBase = new uint32_t[maxElements];
-	m_elementBufferPtr = m_elementBufferBase;
+	m_elementBufferBase = std::make_unique<uint32_t[]>(maxElements);
+	m_elementBufferPtr = m_elementBufferBase.get();
 
 	// ---------------------------------
 	// GPU
 
 	// Create index buffer
-	auto indexBuffer = std::make_shared<IndexBuffer>(m_elementBufferBase, sizeof(uint32_t) * maxElements);
+	auto indexBuffer = std::make_shared<IndexBuffer>(m_elementBufferBase.get(), sizeof(uint32_t) * maxElements);
 	m_vertexArray->setIndexBuffer(indexBuffer);
 }
 
 void Renderer3D::uploadElementBuffer()
 {
-	m_vertexArray->indexBuffer()->uploadData(m_elementBufferBase, m_elementIndex * sizeof(uint32_t));
+	m_vertexArray->indexBuffer()->uploadData(m_elementBufferBase.get(), m_elementIndex * sizeof(uint32_t));
 }
 
 void Renderer3D::loadShader()
@@ -574,7 +574,7 @@ void Renderer3D::loadShader()
 void Renderer3D::startBatch()
 {
 	Renderer<Vertex>::startBatch();
-	m_elementBufferPtr = m_elementBufferBase;
+	m_elementBufferPtr = m_elementBufferBase.get();
 }
 
 // -----------------------------------------

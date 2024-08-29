@@ -222,7 +222,7 @@ private:
 
 private:
 	// CPU element vertices
-	uint32_t* m_elementBufferBase { nullptr };
+	std::unique_ptr<uint32_t[]> m_elementBufferBase { nullptr };
 	uint32_t* m_elementBufferPtr { nullptr };
 };
 
