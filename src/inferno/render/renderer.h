@@ -105,7 +105,7 @@ protected:
 	// CPU quad vertices
 	uint32_t m_vertexIndex { 0 };
 	uint32_t m_elementIndex { 0 };
-	T* m_vertexBufferBase { nullptr };
+	std::unique_ptr<T[]> m_vertexBufferBase { nullptr };
 	T* m_vertexBufferPtr { nullptr };
 
 	// Texture units
@@ -133,7 +133,7 @@ class Renderer2D
 	, public ruc::Singleton<Renderer2D> {
 public:
 	Renderer2D(s);
-	virtual ~Renderer2D() = default;
+	virtual ~Renderer2D();
 
 	using Singleton<Renderer2D>::destroy;
 
@@ -163,7 +163,7 @@ public:
 
 public:
 	RendererCubemap(s);
-	virtual ~RendererCubemap() = default;
+	virtual ~RendererCubemap();
 
 	using Singleton<RendererCubemap>::destroy;
 
@@ -191,7 +191,7 @@ class RendererFont final
 	, public ruc::Singleton<RendererFont> {
 public:
 	RendererFont(s);
-	virtual ~RendererFont() = default;
+	virtual ~RendererFont();
 
 	using Singleton<RendererFont>::destroy;
 
@@ -208,7 +208,7 @@ class Renderer3D final
 	, public ruc::Singleton<Renderer3D> {
 public:
 	Renderer3D(s);
-	virtual ~Renderer3D() = default;
+	virtual ~Renderer3D();
 
 	using Singleton<Renderer3D>::destroy;
 
@@ -236,7 +236,7 @@ public:
 		: Renderer2D()
 	{
 	}
-	virtual ~RendererPostProcess() = default;
+	virtual ~RendererPostProcess();
 
 	using Singleton<RendererPostProcess>::the;
 	using Singleton<RendererPostProcess>::destroy;
@@ -258,7 +258,7 @@ public:
 	{
 		m_enableDepthBuffer = true;
 	}
-	virtual ~RendererLightCube() = default;
+	virtual ~RendererLightCube();
 
 	using Singleton<RendererLightCube>::the;
 	using Singleton<RendererLightCube>::destroy;

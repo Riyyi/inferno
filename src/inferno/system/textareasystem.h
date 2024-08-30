@@ -18,7 +18,7 @@
 namespace Inferno {
 
 using Symbols = std::vector<std::shared_ptr<Symbol>>;
-using SymbolQuad = std::array<SymbolVertex, Renderer<void>::vertexPerQuad>;
+using SymbolQuad = std::array<SymbolVertex, RendererFont::vertexPerQuad>;
 
 class Scene;
 class TextAreaComponent;

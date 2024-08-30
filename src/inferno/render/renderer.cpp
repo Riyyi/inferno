@@ -65,7 +65,6 @@ void Renderer<T>::initialize()
 template<typename T>
 void Renderer<T>::destroy()
 {
-	delete[] m_vertexBufferBase;
 }
 
 template<typename T>
@@ -161,7 +160,7 @@ void Renderer<T>::flush()
 	uploadElementBuffer();
 
 	// Upload vertex data to GPU
-	m_vertexArray->at(0)->uploadData(m_vertexBufferBase, m_vertexIndex * sizeof(T));
+	m_vertexArray->at(0)->uploadData(m_vertexBufferBase.get(), m_vertexIndex * sizeof(T));
 
 	bind();
 
@@ -180,7 +179,7 @@ void Renderer<T>::startBatch()
 {
 	m_vertexIndex = 0;
 	m_elementIndex = 0;
-	m_vertexBufferPtr = m_vertexBufferBase;
+	m_vertexBufferPtr = m_vertexBufferBase.get();
 
 	m_textureSlotIndex = 1;
 }
@@ -199,6 +198,10 @@ Renderer2D::Renderer2D(s)
 	Renderer2D::initialize();
 }
 
+Renderer2D::~Renderer2D()
+{
+}
+
 void Renderer2D::initialize()
 {
 	Renderer::initialize();
@@ -207,8 +210,8 @@ void Renderer2D::initialize()
 	// CPU
 
 	// Create array for storing quads vertices
-	m_vertexBufferBase = new QuadVertex[maxVertices];
-	m_vertexBufferPtr = m_vertexBufferBase;
+	m_vertexBufferBase = std::make_unique<QuadVertex[]>(maxVertices);
+	m_vertexBufferPtr = m_vertexBufferBase.get();
 
 	// Set default quad vertex positions
 	m_vertexPositions[0] = { -1.0f, -1.0f, 0.0f, 1.0f };
@@ -290,6 +293,10 @@ RendererCubemap::RendererCubemap(s)
 	RendererCubemap::initialize();
 }
 
+RendererCubemap::~RendererCubemap()
+{
+}
+
 void RendererCubemap::initialize()
 {
 	Renderer::initialize();
@@ -298,8 +305,8 @@ void RendererCubemap::initialize()
 	// CPU
 
 	// Create array for storing quads vertices
-	m_vertexBufferBase = new CubemapVertex[maxVertices];
-	m_vertexBufferPtr = m_vertexBufferBase;
+	m_vertexBufferBase = std::make_unique<CubemapVertex[]>(maxVertices);
+	m_vertexBufferPtr = m_vertexBufferBase.get();
 
 	// Set default cubemap vertex positions
 
@@ -413,8 +420,8 @@ RendererFont::RendererFont(s)
 	// CPU
 
 	// Create array for storing quads vertices
-	m_vertexBufferBase = new SymbolVertex[maxVertices];
-	m_vertexBufferPtr = m_vertexBufferBase;
+	m_vertexBufferBase = std::make_unique<SymbolVertex[]>(maxVertices);
+	m_vertexBufferPtr = m_vertexBufferBase.get();
 
 	// ---------------------------------
 	// GPU
@@ -438,6 +445,10 @@ RendererFont::RendererFont(s)
 	m_vertexArray->addVertexBuffer(vertexBuffer);
 
 	ruc::info("RendererFont initialized");
+}
+
+RendererFont::~RendererFont()
+{
 }
 
 void RendererFont::drawSymbol(std::array<SymbolVertex, vertexPerQuad>& symbolQuad, std::shared_ptr<Texture> texture)
@@ -485,8 +496,8 @@ Renderer3D::Renderer3D(s)
 	// CPU
 
 	// Create array for storing quads vertices
-	m_vertexBufferBase = new Vertex[maxVertices];
-	m_vertexBufferPtr = m_vertexBufferBase;
+	m_vertexBufferBase = std::make_unique<Vertex[]>(maxVertices);
+	m_vertexBufferPtr = m_vertexBufferBase.get();
 
 	// ---------------------------------
 	// GPU
@@ -506,6 +517,10 @@ Renderer3D::Renderer3D(s)
 	m_vertexArray->addVertexBuffer(vertexBuffer);
 
 	ruc::info("Renderer3D initialized");
+}
+
+Renderer3D::~Renderer3D()
+{
 }
 
 void Renderer3D::drawModel(std::span<const Vertex> vertices, std::span<const uint32_t> elements, const TransformComponent& transform, glm::vec4 color, std::shared_ptr<Texture> texture)
@@ -579,6 +594,10 @@ void Renderer3D::startBatch()
 
 // -----------------------------------------
 
+RendererPostProcess::~RendererPostProcess()
+{
+}
+
 void RendererPostProcess::drawQuad(const TransformComponent& transform, std::shared_ptr<Texture> albedo, std::shared_ptr<Texture> position, std::shared_ptr<Texture> normal)
 {
 	nextBatch();
@@ -613,6 +632,10 @@ void RendererPostProcess::loadShader()
 }
 
 // -----------------------------------------
+
+RendererLightCube::~RendererLightCube()
+{
+}
 
 void RendererLightCube::loadShader()
 {
