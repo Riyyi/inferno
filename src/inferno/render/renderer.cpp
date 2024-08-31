@@ -283,7 +283,7 @@ void Renderer2D::drawQuad(const TransformComponent& transform, glm::mat4 color, 
 
 void Renderer2D::loadShader()
 {
-	m_shader = AssetManager::the().load<Shader>("assets/glsl/post-process");
+	m_shader = AssetManager::the().load<Shader>("assets/glsl/batch-2d");
 }
 
 // -----------------------------------------
@@ -371,10 +371,10 @@ void RendererCubemap::beginScene(glm::mat4 cameraProjection, glm::mat4 cameraVie
 	// x x x 0
 	// x x x 0
 	// 0 0 0 1
-	// cameraView = glm::mat4(glm::mat3(cameraView));
+	cameraView = glm::mat4(glm::mat3(cameraView));
 
 	m_shader->bind();
-	m_shader->setFloat("u_projectionView2", cameraProjection * cameraView);
+	m_shader->setFloat("u_projectionView", cameraProjection * cameraView);
 	m_shader->unbind();
 }
 
@@ -594,6 +594,13 @@ void Renderer3D::startBatch()
 
 // -----------------------------------------
 
+RendererPostProcess::RendererPostProcess(s)
+{
+	Renderer2D::initialize();
+
+	ruc::info("RendererPostProcess initialized");
+}
+
 RendererPostProcess::~RendererPostProcess()
 {
 }
@@ -627,11 +634,19 @@ void RendererPostProcess::drawQuad(const TransformComponent& transform, std::sha
 
 void RendererPostProcess::loadShader()
 {
-	ruc::error("POSTPROCESSING!");
 	m_shader = AssetManager::the().load<Shader>("assets/glsl/post-process");
 }
 
 // -----------------------------------------
+
+RendererLightCube::RendererLightCube(s)
+{
+	RendererCubemap::initialize();
+
+	m_enableDepthBuffer = true;
+
+	ruc::info("RendererLightCube initialized");
+}
 
 RendererLightCube::~RendererLightCube()
 {

@@ -143,7 +143,7 @@ public:
 	void drawQuad(const TransformComponent& transform, glm::mat4 color, std::shared_ptr<Texture> texture);
 
 protected:
-	Renderer2D() { Renderer2D::initialize(); } // Needed for derived classes
+	Renderer2D() {} // Needed for derived classes
 
 	void initialize();
 
@@ -173,7 +173,7 @@ public:
 	void drawCubemap(const TransformComponent& transform, glm::mat4 color, std::shared_ptr<Texture> texture);
 
 protected:
-	RendererCubemap() { RendererCubemap::initialize(); } // Needed for derived classes
+	RendererCubemap() {} // Needed for derived classes
 
 	void initialize();
 
@@ -232,14 +232,12 @@ class RendererPostProcess final
 	: public Renderer2D
 	, public ruc::Singleton<RendererPostProcess> {
 public:
-	RendererPostProcess(ruc::Singleton<RendererPostProcess>::s)
-		: Renderer2D()
-	{
-	}
-	virtual ~RendererPostProcess();
-
+	using Singleton<RendererPostProcess>::s;
 	using Singleton<RendererPostProcess>::the;
 	using Singleton<RendererPostProcess>::destroy;
+
+	RendererPostProcess(s);
+	virtual ~RendererPostProcess();
 
 	void drawQuad(const TransformComponent& transform, std::shared_ptr<Texture> albedo, std::shared_ptr<Texture> position, std::shared_ptr<Texture> normal);
 
@@ -253,15 +251,12 @@ class RendererLightCube final
 	: public RendererCubemap
 	, public ruc::Singleton<RendererLightCube> {
 public:
-	RendererLightCube(ruc::Singleton<RendererLightCube>::s)
-		: RendererCubemap()
-	{
-		m_enableDepthBuffer = true;
-	}
-	virtual ~RendererLightCube();
-
+	using Singleton<RendererLightCube>::s;
 	using Singleton<RendererLightCube>::the;
 	using Singleton<RendererLightCube>::destroy;
+
+	RendererLightCube(s);
+	virtual ~RendererLightCube();
 
 	void beginScene(glm::mat4, glm::mat4) override {}
 

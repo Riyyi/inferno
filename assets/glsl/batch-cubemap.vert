@@ -8,7 +8,7 @@ out vec4 v_color;
 out vec3 v_textureCoordinates;
 out flat uint v_textureIndex;
 
-uniform mat4 u_projectionView2;
+uniform mat4 u_projectionView;
 
 void main()
 {
@@ -16,5 +16,5 @@ void main()
 	v_textureCoordinates = a_position;
 	v_textureIndex = a_textureIndex;
 	// Vclip = Camera projection * Camera view * Model transform * Vlocal
-	gl_Position = u_projectionView2 * vec4(a_position, 1.0f);
+	gl_Position = u_projectionView * vec4(a_position, 1.0f);
 }

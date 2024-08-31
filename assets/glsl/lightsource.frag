@@ -10,5 +10,8 @@ uniform samplerCube u_textures[32];
 
 void main()
 {
+	// Prevent u_textures variable from getting optimized away
+	if (texture(u_textures[0], vec3(0.0f)).x > 99999.0f) { discard; }
+
 	color = v_color;
 }
